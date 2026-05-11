@@ -130,7 +130,7 @@
   }
   </script>
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://partner.googleadservices.com https://*.monetag.com; img-src * data: blob:; connect-src https://fapi.binance.com wss://fstream.binance.com https://pagead2.googlesyndication.com https://*.monetag.com; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.monetag.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://*.monetag.com https://cdnjs.cloudflare.com;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com; img-src * data:; connect-src https://fapi.binance.com wss://fstream.binance.com;" />
 
   <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fapi.binance.com" crossorigin />
@@ -862,6 +862,17 @@
       margin-bottom: 6px;
     }
 
+    .ad-placeholder {
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 6px;
+      color: var(--muted-2);
+      font-size: 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
 
     /* ============================================
        RANKINGS SECTION
@@ -1607,6 +1618,49 @@
     }
     .timestamp { display: none; }
 
+    /* Ad Banner Styles */
+    .cg-banner-wrap {
+      margin: 6px 0;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .cg-banner-inner {
+      position: relative;
+      background: #000;
+      line-height: 0;
+    }
+    .cg-banner-pc img, .cg-banner-m img {
+      width: 100%;
+      display: block;
+      max-height: 90px;
+      object-fit: cover;
+    }
+    .cg-banner-m { display: none; }
+    .cg-banner-close, .cg-banner-close-m {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      border: none;
+      padding: 0;
+    }
+    .cg-banner-close-m { display: none; }
+    @media (max-width: 768px) {
+      .cg-banner-pc { display: none; }
+      .cg-banner-m { display: block; }
+      .cg-banner-close { display: none; }
+      .cg-banner-close-m { display: flex; }
+    }
 
     /* Enhanced suggest menu */
     .ticker-suggest-menu {
@@ -3137,149 +3191,7 @@
       color: var(--muted-2);
     }
 
-
-    /* ════════════════════════════════════════════
-       AD CONTAINER STYLES
-       Optimized for Google AdSense & Monetag
-       ════════════════════════════════════════════ */
-    .ad-container {
-      margin: 12px 0;
-      padding: 8px;
-      background: rgba(0, 0, 0, 0.22);
-      border: 1px dashed rgba(255, 255, 255, 0.12);
-      border-radius: 8px;
-      text-align: center;
-      min-height: 90px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      transition: opacity 0.3s ease;
-    }
-
-    .ad-container .ad-label {
-      font-size: 0.65rem;
-      color: var(--muted-2);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 4px;
-      font-weight: 400;
-    }
-
-    .ad-container ins.adsbygoogle {
-      display: block;
-      width: 100%;
-    }
-
-    .ad-container .monetag-ad {
-      display: none; /* Shown via JS when Monetag is active */
-      width: 100%;
-      min-height: 90px;
-    }
-
-    .ad-top-banner {
-      min-height: 90px;
-    }
-
-    .ad-mid-rectangle {
-      min-height: 250px;
-      max-width: 336px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .ad-bottom-banner {
-      min-height: 90px;
-    }
-
-    /* Hide ad containers when ads are blocked or not loaded */
-    .ad-container[data-ad-loaded="false"] {
-      opacity: 0.3;
-    }
-
-    .ad-container[data-ad-loaded="true"] {
-      opacity: 1;
-      border-style: solid;
-      border-color: rgba(255, 255, 255, 0.06);
-    }
-
-    /* Responsive ad sizing */
-    @media (max-width: 768px) {
-      .ad-top-banner,
-      .ad-bottom-banner {
-        min-height: 50px;
-      }
-      .ad-mid-rectangle {
-        min-height: 200px;
-        max-width: 300px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .ad-container {
-        padding: 6px;
-        margin: 8px 0;
-      }
-      .ad-mid-rectangle {
-        min-height: 180px;
-        max-width: 100%;
-      }
-    }
-
   </style>
-  <!-- ════════════════════════════════════════════
-       GOOGLE ADSENSE VERIFICATION META
-       Replace CONTENT with your AdSense verification code
-       ════════════════════════════════════════════ -->
-  <meta name="google-adsense-platform-account" content="ca-pub-XXXXXXXXXXXXXXXX">
-  <meta name="google-adsense-platform-domain" content="multipers.com">
-
-  <!-- ════════════════════════════════════════════
-       MONETAG VERIFICATION META
-       Replace CONTENT with your Monetag verification code
-       ════════════════════════════════════════════ -->
-  <meta name="monetag" content="YOUR_MONETAG_SITE_ID">
-
-  <!-- ════════════════════════════════════════════
-       AD CONFIGURATION - EDIT THESE VALUES
-       ════════════════════════════════════════════ -->
-  <script>
-    window.AD_CONFIG = {
-      // === GOOGLE ADSENSE ===
-      // Replace with your AdSense Publisher ID (ca-pub-XXXXXXXXXXXXXXXX)
-      adsenseClientId: 'ca-pub-XXXXXXXXXXXXXXXX',
-
-      // Ad Unit IDs for each slot (replace with your actual ad unit IDs)
-      adsenseSlots: {
-        topBanner:      'XXXXXXXXXX',   // Top leaderboard (728x90 or responsive)
-        midRectangle:   'XXXXXXXXXX',   // Mid-page medium rectangle (300x250)
-        bottomBanner:   'XXXXXXXXXX'    // Bottom banner
-      },
-
-      // === MONETAG ===
-      // Replace with your Monetag Site ID
-      monetagSiteId: 'YOUR_MONETAG_SITE_ID',
-
-      // Enable/disable ad networks
-      enableAdsense: true,
-      enableMonetag: true,
-
-      // Lazy load ads (load only when scrolled into view)
-      lazyLoadAds: true,
-
-      // Ad refresh interval in seconds (0 = no refresh)
-      adRefreshInterval: 0
-    };
-  </script>
-
-  <!-- Google AdSense Auto Ads Script -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
-     crossorigin="anonymous" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" id="adsenseScript"></script>
-
-  <!-- Monetag Script -->
-  <script async src="//YOUR_MONETAG_SITE_ID.monetag.com/tag.js" id="monetagScript"></script>
-
 </head>
 
 <body>
@@ -4715,7 +4627,7 @@
     // Covers all major + mid-cap symbols. API fetch updates prices/volumes.
     // ════════════════════════════════════════════
     const FALLBACK_TICKERS = [
-      "BTC"
+      "BTCUSDT","ETHUSDT"
     ];
 
     const buildFallbackTickerItems = () => {
@@ -5089,24 +5001,21 @@
           </div>
           <div class="status-text" id="statusText"><span class="live-indicator connecting"></span> Connecting...</div>
         </div>
-         <!-- ════════════════════════════════════════════
-             AD SLOT 1: TOP BANNER (Leaderboard / Responsive)
-             Google AdSense + Monetag
-             ════════════════════════════════════════════ -->
-        <div class="ad-container ad-top-banner" id="adTopBanner">
-          <div class="ad-label">Advertisement</div>
 
-          <!-- Google AdSense Responsive Ad Unit -->
-          <ins class="adsbygoogle"
-               style="display:block; min-height:90px;"
-               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-               data-ad-slot="XXXXXXXXXX"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-
-          <!-- Monetag Ad Container (fallback/alternate) -->
-          <div class="monetag-ad" id="monetagTopBanner" data-zone="top_banner"></div>
+         <!-- Ad Section 1 -->
+        <div class="cg-banner-wrap" id="cgBanner">
+          <div class="cg-banner-inner">
+            <div class="cg-banner-pc"><img alt="bitunix" src="https://cdn.coinglasscdn.com/static/bitunix/20260128/pc/en.gif"></div>
+            <div class="cg-banner-m"><img alt="bitunix" src="https://cdn.coinglasscdn.com/static/bitunix/20260128/m/en.gif"></div>
+            <button class="cg-banner-close" id="cgBannerClose" aria-label="Close ad">
+              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" font-size="16px" color="#000" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: rgb(0, 0, 0);"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368 144 144m224 0L144 368"></path></svg>
+            </button>
+            <button class="cg-banner-close-m" id="cgBannerCloseM" aria-label="Close ad">
+              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" font-size="16px" color="#000" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: rgb(0, 0, 0);"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368 144 144m224 0L144 368"></path></svg>
+            </button>
+          </div>
         </div>
+
         <div class="status-row">
           <h3>Multi Timeframes</h3>
           <div class="status-header-info">
@@ -5190,24 +5099,13 @@
         </div>
 
 
-        <!-- ════════════════════════════════════════════
-             AD SLOT 2: MID-PAGE RECTANGLE
-             Google AdSense + Monetag
-             ════════════════════════════════════════════ -->
-        <div class="ad-container ad-mid-rectangle" id="adMidRectangle">
+        <!-- Ad Section 2 
+        <div class="ad-section" id="adSection2">
           <div class="ad-label">Advertisement</div>
-
-          <!-- Google AdSense Responsive Ad Unit -->
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-               data-ad-slot="XXXXXXXXXX"></ins>
-
-          <!-- Monetag Ad Container -->
-          <div class="monetag-ad" id="monetagMidRectangle" data-zone="mid_rectangle"></div>
-        </div>
+          <div class="ad-placeholder" id="adPlaceholder2">
+            <div class="ad-mock">Ad Space 2 - Responsive</div>
+          </div>
+        </div> -->
 
 
         <!-- ==========================================
@@ -5237,24 +5135,13 @@
           </div>
         </div>
 
-        <!-- ════════════════════════════════════════════
-             AD SLOT 3: BOTTOM BANNER
-             Google AdSense + Monetag
-             ════════════════════════════════════════════ -->
-        <div class="ad-container ad-bottom-banner" id="adBottomBanner">
+        <!-- Ad Section 3 
+        <div class="ad-section" id="adSection3">
           <div class="ad-label">Advertisement</div>
-
-          <!-- Google AdSense Responsive Ad Unit -->
-          <ins class="adsbygoogle"
-               style="display:block; min-height:90px;"
-               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-               data-ad-slot="XXXXXXXXXX"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-
-          <!-- Monetag Ad Container -->
-          <div class="monetag-ad" id="monetagBottomBanner" data-zone="bottom_banner"></div>
-        </div>
+          <div class="ad-placeholder" id="adPlaceholder3">
+            <div class="ad-mock">Ad Space 3 - Responsive</div>
+          </div>
+        </div>-->
 
         <!-- Rankings Section -->
         <div class="rankings-section" id="rankingsSection">
@@ -7570,34 +7457,13 @@
         });
       }
 
-      // ════════════════════════════════════════════
-      // AD SETUP GUIDE (for publishers)
-      // ════════════════════════════════════════════
-      // 
-      // STEP 1: GOOGLE ADSENSE
-      //   a) Replace "ca-pub-XXXXXXXXXXXXXXXX" with your AdSense Publisher ID
-      //   b) Replace "XXXXXXXXXX" in data-ad-slot attributes with your Ad Unit IDs
-      //   c) Add your domain to AdSense Sites (multipers.com)
-      //   d) Place the AdSense verification code in <head> meta tag
-      //
-      // STEP 2: MONETAG (publishers.monetag.com)
-      //   a) Replace "YOUR_MONETAG_SITE_ID" with your Monetag Site ID
-      //   b) Add your domain to Monetag dashboard
-      //   c) Monetag script auto-loads from their CDN
-      //
-      // STEP 3: AD CONFIG OBJECT (line ~45 in <head>)
-      //   Edit window.AD_CONFIG to enable/disable networks and set options:
-      //   - enableAdsense: true/false
-      //   - enableMonetag: true/false  
-      //   - lazyLoadAds: true (recommended for performance)
-      //   - adRefreshInterval: 0 (seconds, 0 = no auto-refresh)
-      //
-      // AD SLOTS AVAILABLE:
-      //   #adTopBanner     - Top leaderboard (responsive, min 90px)
-      //   #adMidRectangle  - Mid-page rectangle (300x250 / fluid)
-      //   #adBottomBanner  - Bottom banner (responsive, min 90px)
-      //
-      // ════════════════════════════════════════════
+      // ===== Ad banner close =====
+      const cgBanner = document.getElementById('cgBanner');
+      const cgBannerClose = document.getElementById('cgBannerClose');
+      const cgBannerCloseM = document.getElementById('cgBannerCloseM');
+      function hideBanner() { if (cgBanner) cgBanner.style.display = 'none'; }
+      if (cgBannerClose) cgBannerClose.addEventListener('click', hideBanner);
+      if (cgBannerCloseM) cgBannerCloseM.addEventListener('click', hideBanner);
 
       // ===== Footer page modal links =====
       const pageContents = {
@@ -7657,177 +7523,6 @@
       if (pageModalClose) pageModalClose.addEventListener('click', closePage);
       if (pageModalBackdrop) pageModalBackdrop.addEventListener('click', closePage);
 
-    };
-
-
-    // ════════════════════════════════════════════
-    // AD MANAGER - Google AdSense + Monetag
-    // ════════════════════════════════════════════
-    const AdManager = {
-      config: window.AD_CONFIG || {},
-      observers: [],
-      refreshTimers: [],
-
-      init() {
-        this.updateScriptTags();
-        if (this.config.lazyLoadAds) {
-          this.setupLazyLoading();
-        } else {
-          this.loadAllAds();
-        }
-        this.setupMonetag();
-      },
-
-      // Update script src attributes with actual IDs from config
-      updateScriptTags() {
-        const adsenseScript = document.getElementById('adsenseScript');
-        if (adsenseScript && this.config.adsenseClientId && this.config.adsenseClientId !== 'ca-pub-XXXXXXXXXXXXXXXX') {
-          const clientId = this.config.adsenseClientId;
-          adsenseScript.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`;
-          adsenseScript.setAttribute('data-ad-client', clientId);
-          // Update all ins tags
-          document.querySelectorAll('ins.adsbygoogle').forEach(ins => {
-            ins.setAttribute('data-ad-client', clientId);
-          });
-        }
-
-        const monetagScript = document.getElementById('monetagScript');
-        if (monetagScript && this.config.monetagSiteId && this.config.monetagSiteId !== 'YOUR_MONETAG_SITE_ID') {
-          monetagScript.src = `//${this.config.monetagSiteId}.monetag.com/tag.js`;
-        }
-
-        // Update ad slots from config
-        if (this.config.adsenseSlots) {
-          const slots = this.config.adsenseSlots;
-          const containers = [
-            { el: document.querySelector('#adTopBanner ins.adsbygoogle'), slot: slots.topBanner },
-            { el: document.querySelector('#adMidRectangle ins.adsbygoogle'), slot: slots.midRectangle },
-            { el: document.querySelector('#adBottomBanner ins.adsbygoogle'), slot: slots.bottomBanner }
-          ];
-          containers.forEach(({ el, slot }) => {
-            if (el && slot && slot !== 'XXXXXXXXXX') {
-              el.setAttribute('data-ad-slot', slot);
-            }
-          });
-        }
-      },
-
-      // Lazy load ads using IntersectionObserver
-      setupLazyLoading() {
-        if (!('IntersectionObserver' in window)) {
-          this.loadAllAds();
-          return;
-        }
-
-        const adContainers = document.querySelectorAll('.ad-container');
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              this.loadAd(entry.target);
-              observer.unobserve(entry.target);
-            }
-          });
-        }, {
-          rootMargin: '200px 0px',
-          threshold: 0.01
-        });
-
-        adContainers.forEach(container => observer.observe(container));
-        this.observers.push(observer);
-      },
-
-      loadAllAds() {
-        document.querySelectorAll('.ad-container').forEach(container => this.loadAd(container));
-      },
-
-      loadAd(container) {
-        if (!container) return;
-
-        // Load Google AdSense
-        if (this.config.enableAdsense !== false) {
-          const adsenseIns = container.querySelector('ins.adsbygoogle');
-          if (adsenseIns) {
-            const clientId = adsenseIns.getAttribute('data-ad-client');
-            const slotId = adsenseIns.getAttribute('data-ad-slot');
-            // Only push if both client and slot are configured (not placeholders)
-            if (clientId && clientId !== 'ca-pub-XXXXXXXXXXXXXXXX' && 
-                slotId && slotId !== 'XXXXXXXXXX') {
-              try {
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
-                container.setAttribute('data-ad-loaded', 'true');
-              } catch (e) {
-                console.warn('AdSense load failed:', e);
-              }
-            }
-          }
-        }
-
-        // Load Monetag
-        if (this.config.enableMonetag !== false) {
-          const monetagEl = container.querySelector('.monetag-ad');
-          if (monetagEl && this.config.monetagSiteId && this.config.monetagSiteId !== 'YOUR_MONETAG_SITE_ID') {
-            monetagEl.style.display = 'block';
-            // Monetag auto-initializes via their script; just ensure container is visible
-          }
-        }
-
-        // Setup refresh if configured
-        if (this.config.adRefreshInterval > 0) {
-          const timer = setInterval(() => {
-            this.refreshAd(container);
-          }, this.config.adRefreshInterval * 1000);
-          this.refreshTimers.push(timer);
-        }
-      },
-
-      refreshAd(container) {
-        if (!container || document.hidden) return;
-        const adsenseIns = container.querySelector('ins.adsbygoogle');
-        if (adsenseIns) {
-          // Remove and re-add to force refresh
-          const parent = adsenseIns.parentNode;
-          const clone = adsenseIns.cloneNode(true);
-          parent.replaceChild(clone, adsenseIns);
-          try {
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-          } catch (e) {}
-        }
-      },
-
-      setupMonetag() {
-        // Monetag typically auto-initializes when their script loads
-        // This method can be extended for custom Monetag integrations
-        if (this.config.monetagSiteId && this.config.monetagSiteId !== 'YOUR_MONETAG_SITE_ID') {
-          window.monetag = window.monetag || {};
-          window.monetag.siteId = this.config.monetagSiteId;
-        }
-      },
-
-      destroy() {
-        this.observers.forEach(obs => obs.disconnect());
-        this.refreshTimers.forEach(timer => clearInterval(timer));
-        this.observers = [];
-        this.refreshTimers = [];
-      }
-    };
-
-    // ════════════════════════════════════════════
-    // AD BLOCK DETECTION
-    // ════════════════════════════════════════════
-    const detectAdBlock = async () => {
-      return new Promise((resolve) => {
-        const testAd = document.createElement('div');
-        testAd.innerHTML = '&nbsp;';
-        testAd.className = 'adsbox';
-        testAd.style.position = 'absolute';
-        testAd.style.left = '-9999px';
-        document.body.appendChild(testAd);
-        setTimeout(() => {
-          const isBlocked = testAd.offsetHeight === 0;
-          testAd.remove();
-          resolve(isBlocked);
-        }, 100);
-      });
     };
 
     // Initialize everything when DOM is ready
@@ -7953,33 +7648,14 @@
     window.addEventListener('offline', handleNetworkOffline);
     window.addEventListener('online', handleNetworkOnline);
 
-    // ════════════════════════════════════════════
-    // INITIALIZE ADS
-    // ════════════════════════════════════════════
-    const initAds = async () => {
-      try {
-        const adBlocked = await detectAdBlock();
-        if (adBlocked) {
-          console.warn('Ad blocker detected. Ads will not be displayed.');
-          document.querySelectorAll('.ad-container').forEach(el => {
-            el.style.display = 'none';
-          });
-          return;
-        }
-        AdManager.init();
-      } catch (e) {
-        console.warn('Ad initialization error:', e);
-      }
-    };
-
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
         initUI();
-        loadSymbol(state.symbol).then(() => { start(); revealFooter(); initAds(); });
+        loadSymbol(state.symbol).then(() => { start(); revealFooter(); });
       });
     } else {
       initUI();
-      loadSymbol(state.symbol).then(() => { start(); revealFooter(); initAds(); });
+      loadSymbol(state.symbol).then(() => { start(); revealFooter(); });
     }
 
     function revealFooter() {
@@ -8047,5 +7723,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 
 </body>
-
+<!-- VERSION NOTE: 1 -->
 </html>
