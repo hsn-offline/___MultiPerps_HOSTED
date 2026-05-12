@@ -4693,7 +4693,7 @@
     // Covers all major + mid-cap symbols. API fetch updates prices/volumes.
     // ════════════════════════════════════════════
     const FALLBACK_TICKERS = [
-      
+      "BTCUSDT","ETHUSDT"
     ];
 
     const buildFallbackTickerItems = () => {
@@ -6926,7 +6926,7 @@
       initChartsState();
 
       if (state.elements.tickerInput) {
-        state.elements.tickerInput.value = state.urlSymbolMode ? toDisplayTicker(state.symbol) : loadStored(STORAGE.tickerInput, toDisplayTicker(state.symbol));
+        state.elements.tickerInput.value = state.urlSymbolMode ? toDisplayTicker(state.symbol) : '';
         state.elements.tickerInput.removeAttribute('list');
         state.elements.tickerInput.setAttribute('autocomplete', 'off');
         state.elements.tickerInput.addEventListener('focus', () => {
