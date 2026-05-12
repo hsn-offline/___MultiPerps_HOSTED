@@ -130,11 +130,20 @@
   }
   </script>
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com; img-src * data:; connect-src https://fapi.binance.com wss://fstream.binance.com;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://partner.googleadservices.com https://www.google.com https://www.gstatic.com; img-src * data: blob:; connect-src https://fapi.binance.com wss://fstream.binance.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com;" />
 
   <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fapi.binance.com" crossorigin />
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+  <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
+  <link rel="preconnect" href="https://adservice.google.com" />
+
+  <!-- Google AdSense
+       Replace ca-pub-XXXXXXXXXXXXXXXX with your actual publisher ID.
+       This script loads the AdSense runtime once for all ad units on the page.
+  -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
   <!-- Favicon -->
   <link rel="icon"
@@ -845,35 +854,37 @@
     }
 
     /* ============================================
-       AD SECTION
+       GOOGLE ADSENSE SECTION
        ============================================ */
     .ad-section {
-      margin: 16px 0;
+      margin: 16px auto;
       padding: 8px;
-      background: rgba(0, 0, 0, 0.22);
-      border: 1px dashed rgba(255, 255, 255, 0.12);
-      border-radius: 8px;
       text-align: center;
+      max-width: 728px;
+      transition: opacity 0.3s ease, max-height 0.3s ease;
+      overflow: hidden;
+    }
+
+    .ad-section.ad-hidden {
+      opacity: 0;
+      max-height: 0;
+      margin: 0;
+      padding: 0;
+      pointer-events: none;
     }
 
     .ad-label {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: var(--muted-2);
       text-transform: uppercase;
       letter-spacing: 2px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
-    .ad-placeholder {
+    .ad-section ins.adsbygoogle {
+      display: block;
       min-height: 90px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.35);
-      border-radius: 6px;
-      color: var(--muted-2);
-      font-size: 0.85rem;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: transparent;
     }
 
     /* ============================================
@@ -2392,6 +2403,13 @@
     .ad-label {
       font-weight: 400;
       letter-spacing: 2px;
+    }
+
+    /* Google AdSense responsive adjustments */
+    @media (max-width: 768px) {
+      .ad-section {
+        max-width: 100%;
+      }
     }
 
     @media (max-width: 768px) {
@@ -5143,12 +5161,7 @@
         </div>
 
 
-        <!-- Ad Section 2 -->
-        <div class="ad-section" id="adSection2">
-          <div class="ad-placeholder" id="adPlaceholder2">
-            <div class="ad-mock">Ad Space 2 - Responsive</div>
-          </div>
-        </div> 
+
 
 
         <!-- ==========================================
@@ -5178,11 +5191,15 @@
           </div>
         </div>
 
-        <!-- Ad Section 3 -->
+        <!-- Google AdSense Section-->
         <div class="ad-section" id="adSection3">
-          <div class="ad-placeholder" id="adPlaceholder3">
-            <div class="ad-mock">Ad Space 3 - Responsive</div>
-          </div>
+          <div class="ad-label">Advertisement</div>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
         </div>
 
         <!-- Rankings Section -->
@@ -7786,6 +7803,55 @@
   <!-- html2canvas for screenshot capture (deferred for performance) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 
+  <!-- Ad Blocker Detection & Google Ad Push -->
+  <script>
+  (function() {
+    // Push the ad slot (Google AdSense requires this for each <ins> unit)
+    var adIns = document.querySelector('#adSection3 ins.adsbygoogle');
+    if (adIns) {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    }
+
+    // --- Ad-blocker detection ---
+    // We create a bait element that ad-blockers typically hide.
+    // If it stays hidden after a short delay, we consider an ad blocker active.
+    var bait = document.createElement('div');
+    bait.className = 'ad-banner ads adsbox ad-placement ad_wrapper';
+    bait.style.cssText = 'position:absolute;top:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;';
+    bait.innerHTML = '&nbsp;';
+    document.body.appendChild(bait);
+
+    function checkAdBlocker() {
+      var adSection = document.getElementById('adSection3');
+      if (!adSection) return;
+
+      // Check if the bait element was hidden by an ad blocker
+      var blocked = false;
+      if (bait.offsetHeight === 0 || bait.offsetParent === null ||
+          getComputedStyle(bait).display === 'none' ||
+          getComputedStyle(bait).visibility === 'hidden') {
+        blocked = true;
+      }
+
+      // Also check if Google AdSense script was blocked from loading
+      if (typeof adsbygoogle === 'undefined') {
+        blocked = true;
+      }
+
+      if (blocked) {
+        adSection.classList.add('ad-hidden');
+      }
+
+      // Clean up bait element
+      if (bait.parentNode) {
+        bait.parentNode.removeChild(bait);
+      }
+    }
+
+    // Give ad blockers a moment to act before checking
+    setTimeout(checkAdBlocker, 500);
+  })();
+  </script>
 </body>
 <!-- VERSION NOTE: 1 -->
 </html>
