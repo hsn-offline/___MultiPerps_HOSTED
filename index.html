@@ -2983,6 +2983,15 @@
       text-shadow: 0 0 8px rgba(255, 71, 87, 0.35);
     }
 
+    /* RT Price + Copy Button Group — keeps them side-by-side on mobile */
+    .rt-price-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+    }
+
     /* Alert Copy RT Price Button */
     .alert-copy-rt-btn {
       padding: 3px 7px !important;
@@ -5041,7 +5050,7 @@
           <div class="status-text" id="statusText"><span class="live-indicator connecting"></span> Connecting...</div>
         </div>
 
-         <!-- Ad Section 1 
+         <!-- Ad Section 1-->
         <div class="cg-banner-wrap" id="cgBanner">
           <div class="cg-banner-inner">
             <div class="cg-banner-pc"><img alt="bitunix" src="https://cdn.coinglasscdn.com/static/bitunix/20260128/pc/en.gif"></div>
@@ -5053,7 +5062,7 @@
               <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" font-size="16px" color="#000" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: rgb(0, 0, 0);"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368 144 144m224 0L144 368"></path></svg>
             </button>
           </div>
-        </div>-->
+        </div>
 
         <div class="status-row">
           <h3>Multi Timeframes</h3>
@@ -5093,8 +5102,7 @@
               <button class="control-btn" id="removeAlert1" type="button" style="padding:4px 8px;font-size:0.75rem;">✕</button>
               <span class="alert-live-status" id="alertLive1"><span class="alert-live-dot"></span>Active</span>
               <button class="control-btn alert-load-btn" id="alertLoad1" type="button" title="Load this ticker in chart">Load</button>
-              <span class="alert-rt-price" id="alertRtPrice1" title="Real-time price">--</span>
-              <button class="control-btn alert-copy-rt-btn" id="alertCopyRt1" type="button" title="Copy real-time price">⧉</button>
+              <span class="rt-price-group"><span class="alert-rt-price" id="alertRtPrice1" title="Real-time price">--</span><button class="control-btn alert-copy-rt-btn" id="alertCopyRt1" type="button" title="Copy real-time price">⧉</button></span>
               <span class="alert-slot-log" id="alertLog1"></span>
             </div>
             <div class="alert-field" id="alertSlot2">
@@ -5104,8 +5112,7 @@
               <button class="control-btn" id="removeAlert2" type="button" style="padding:4px 8px;font-size:0.75rem;">✕</button>
               <span class="alert-live-status" id="alertLive2"><span class="alert-live-dot"></span>Active</span>
               <button class="control-btn alert-load-btn" id="alertLoad2" type="button" title="Load this ticker in chart">Load</button>
-              <span class="alert-rt-price" id="alertRtPrice2" title="Real-time price">--</span>
-              <button class="control-btn alert-copy-rt-btn" id="alertCopyRt2" type="button" title="Copy real-time price">⧉</button>
+              <span class="rt-price-group"><span class="alert-rt-price" id="alertRtPrice2" title="Real-time price">--</span><button class="control-btn alert-copy-rt-btn" id="alertCopyRt2" type="button" title="Copy real-time price">⧉</button></span>
               <span class="alert-slot-log" id="alertLog2"></span>
             </div>
             <div class="alert-field" id="alertSlot3">
@@ -5115,8 +5122,7 @@
               <button class="control-btn" id="removeAlert3" type="button" style="padding:4px 8px;font-size:0.75rem;">✕</button>
               <span class="alert-live-status" id="alertLive3"><span class="alert-live-dot"></span>Active</span>
               <button class="control-btn alert-load-btn" id="alertLoad3" type="button" title="Load this ticker in chart">Load</button>
-              <span class="alert-rt-price" id="alertRtPrice3" title="Real-time price">--</span>
-              <button class="control-btn alert-copy-rt-btn" id="alertCopyRt3" type="button" title="Copy real-time price">⧉</button>
+              <span class="rt-price-group"><span class="alert-rt-price" id="alertRtPrice3" title="Real-time price">--</span><button class="control-btn alert-copy-rt-btn" id="alertCopyRt3" type="button" title="Copy real-time price">⧉</button></span>
               <span class="alert-slot-log" id="alertLog3"></span>
             </div>
             <div class="alert-field" id="alertSlot4">
@@ -5126,8 +5132,7 @@
               <button class="control-btn" id="removeAlert4" type="button" style="padding:4px 8px;font-size:0.75rem;">✕</button>
               <span class="alert-live-status" id="alertLive4"><span class="alert-live-dot"></span>Active</span>
               <button class="control-btn alert-load-btn" id="alertLoad4" type="button" title="Load this ticker in chart">Load</button>
-              <span class="alert-rt-price" id="alertRtPrice4" title="Real-time price">--</span>
-              <button class="control-btn alert-copy-rt-btn" id="alertCopyRt4" type="button" title="Copy real-time price">⧉</button>
+              <span class="rt-price-group"><span class="alert-rt-price" id="alertRtPrice4" title="Real-time price">--</span><button class="control-btn alert-copy-rt-btn" id="alertCopyRt4" type="button" title="Copy real-time price">⧉</button></span>
               <span class="alert-slot-log" id="alertLog4"></span>
             </div>
           </div>
@@ -5138,13 +5143,12 @@
         </div>
 
 
-        <!-- Ad Section 2 
+        <!-- Ad Section 2 -->
         <div class="ad-section" id="adSection2">
-          <div class="ad-label">Advertisement</div>
           <div class="ad-placeholder" id="adPlaceholder2">
             <div class="ad-mock">Ad Space 2 - Responsive</div>
           </div>
-        </div> -->
+        </div> 
 
 
         <!-- ==========================================
@@ -5174,13 +5178,12 @@
           </div>
         </div>
 
-        <!-- Ad Section 3 
+        <!-- Ad Section 3 -->
         <div class="ad-section" id="adSection3">
-          <div class="ad-label">Advertisement</div>
           <div class="ad-placeholder" id="adPlaceholder3">
             <div class="ad-mock">Ad Space 3 - Responsive</div>
           </div>
-        </div>-->
+        </div>
 
         <!-- Rankings Section -->
         <div class="rankings-section" id="rankingsSection">
@@ -7523,9 +7526,14 @@
           <div class="modal-section"><p>Set up to four price alerts per ticker directly on the dashboard. When the market price crosses your specified level (above or below), MultiPerps triggers an audio notification and a visual popup.</p></div>
           <div class="modal-section"><p>Alert thresholds are saved per symbol in your browser's local storage, so they persist between sessions. Alerts fire reliably on every cross while the site remains open. A 3-second cooldown prevents duplicate spam after each trigger.</p></div>
           <div class="modal-section"><p><strong>Note:</strong> Alerts only trigger while this browser tab is open and active.</p></div>`,
-        usdt: `<h2>USDT</h2>
-          <div class="modal-section"><p>USDT (Tether) is the primary quote currency for all data displayed on MultiPerps. Every ticker shown is a USDT-margined perpetual futures contract traded on Binance.</p></div>
-          <div class="modal-section"><p>Volume, open interest, and funding rate calculations are all denominated in USDT equivalent. For donation addresses, please contact us on X/Twitter.</p></div>`
+        usdt: `<h2>Donation</h2>
+          <div class="modal-section"><p>Support MultiPerps development with a USDT donation on BNB Smart Chain (BSC / BEP-20).</p></div>
+          <div class="modal-section">
+            <div class="donation-box" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between;">
+              <span style="word-break:break-all;font-family:monospace;font-size:0.9rem;">0xf3b9080c6712f17d2b5af235f4dd16c2fc9c40fb</span>
+              <button class="copy-price-btn donation-copy-btn" data-copy="0xf3b9080c6712f17d2b5af235f4dd16c2fc9c40fb" type="button" title="Copy address to clipboard" style="flex-shrink:0;">⧉</button>
+            </div>
+          </div>`
       };
 
       const pageModal = document.getElementById('pageModal');
@@ -7539,6 +7547,23 @@
         pageModalBody.innerHTML = content;
         pageModal.classList.add('active');
         document.body.style.overflow = 'hidden';
+      }
+
+      // Delegated copy handler for donation address button in page modal
+      if (pageModalBody) {
+        pageModalBody.addEventListener('click', async (e) => {
+          const btn = e.target.closest('.donation-copy-btn');
+          if (!btn) return;
+          const text = btn.getAttribute('data-copy');
+          if (!text) return;
+          const ok = await copyText(text);
+          btn.classList.add('copied');
+          btn.textContent = ok ? 'Copied' : 'Failed';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.textContent = '⧉';
+          }, 1200);
+        });
       }
 
       function closePage() {
@@ -7731,7 +7756,7 @@
         <div class="footer-col-title">Resources</div>
         <a href="#" data-page="alerts">Dashboard Alerts Guide</a>
         <a href="#" data-page="Blog">Trading Blog</a>
-        <a href="#" data-page="usdt">USDT Explained</a>
+        <a href="#" data-page="usdt">Donation</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Follow Us</div>
