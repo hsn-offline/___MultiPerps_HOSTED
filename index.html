@@ -1243,6 +1243,14 @@
         grid-template-columns: repeat(1, minmax(0, 1fr));
       }
 
+      .chart-header {
+        flex-wrap: wrap;
+      }
+
+      .kline-rsi {
+        margin-left: auto;
+      }
+
       .chart-container {
         height: 184px;
       }
@@ -2410,18 +2418,23 @@
         justify-content: flex-end;
         flex: 1 1 auto;
       }
-      /* Multi-alert mobile: wrap alert fields for smaller screens */
+      /* Multi-alert mobile: single column, wrap alert fields */
+      .multi-alert-inputs {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
       .multi-alert-inputs .alert-field {
         flex-wrap: wrap;
         gap: 5px;
+        padding: 8px 10px;
       }
       .multi-alert-inputs .alert-price-input[placeholder="Ticker"] {
-        flex: 0 0 70px;
-        min-width: 60px;
+        flex: 0 0 80px;
+        min-width: 65px;
       }
       .multi-alert-inputs .alert-price-input[placeholder="Price"] {
-        flex: 1 1 55px;
-        min-width: 50px;
+        flex: 1 1 60px;
+        min-width: 55px;
       }
       .alert-rt-price {
         font-size: 0.78rem;
@@ -2436,6 +2449,12 @@
         padding: 3px 7px !important;
         font-size: 0.68rem !important;
       }
+      .multi-alert-panel {
+        padding: 10px 10px;
+      }
+      .multi-alert-header {
+        margin-bottom: 8px;
+      }
     }
     @media (max-width: 480px) {
       body {
@@ -2445,8 +2464,16 @@
         min-width: 0;
       }
       /* Multi-alert compact mobile layout */
+      .multi-alert-panel {
+        padding: 8px 8px;
+        border-radius: 8px;
+      }
+      .multi-alert-header h3 {
+        font-size: 1rem;
+      }
       .multi-alert-inputs .alert-field {
         gap: 4px;
+        padding: 6px 8px;
       }
       .multi-alert-inputs .alert-label {
         font-size: 0.78rem;
@@ -2500,9 +2527,6 @@
       .status-header-info {
         justify-content: flex-end;
         flex: 1 1 auto;
-      }
-      .multi-alert-inputs {
-        grid-template-columns: 1fr;
       }
     }
 
@@ -3077,8 +3101,8 @@
        MULTI-ALERT PANEL
        ============================================ */
     .multi-alert-panel {
-      margin: 10px 0;
-      padding: 12px;
+      margin: 12px 0;
+      padding: 14px 16px;
       background: var(--section-bg);
       border: 1px solid var(--section-border);
       border-radius: 10px;
@@ -3111,6 +3135,10 @@
       align-items: center;
       gap: 6px;
       min-width: 0;
+      padding: 6px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      flex-wrap: wrap;
     }
     .multi-alert-inputs .alert-label {
       font-size: 0.85rem;
@@ -3132,7 +3160,7 @@
       color: var(--muted-2);
       flex: 0 0 100%;
       margin-left: calc(7ch + 12px);  /* align with ticker input: "Alert N" label + gap */
-      padding: 0 2px;
+      padding: 2px 2px 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
