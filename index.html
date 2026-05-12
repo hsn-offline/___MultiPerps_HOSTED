@@ -239,8 +239,8 @@
     }
 
     .ticker-title {
-      font-size: 1.2rem;
-      font-weight: bold;
+      font-size: 1.1rem;
+      font-weight: normal;
       color: var(--warn);
       white-space: nowrap;
       line-height: 1.05;
@@ -248,8 +248,8 @@
     }
 
     .header-price {
-      font-size: 1.2rem;
-      font-weight: 700;
+      font-size: 1.1rem;
+      font-weight: normal;
       color: var(--text);
       white-space: nowrap;
       line-height: 1.05;
@@ -696,8 +696,9 @@
 
     .status-row {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
+      flex-wrap: wrap;
       margin-bottom: 6px;
       padding: 4px 6px;
       background: transparent;
@@ -1320,11 +1321,11 @@
         flex-wrap: wrap;
       }
       .status-row h3 {
-        width: auto;
+        width: 100%;
       }
       .status-header-info {
-        justify-content: flex-end;
-        flex: 1 1 auto;
+        justify-content: flex-start;
+        flex: 0 1 auto;
       }
 
       .rankings-grid {
@@ -1355,7 +1356,7 @@
       }
 
       .ticker-title {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         color: var(--accent-2);
         white-space: normal;
         width: 100%;
@@ -1363,7 +1364,7 @@
       }
 
       .header-price {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
       }
 
       .price-value {
@@ -1602,7 +1603,7 @@
     }
     .status-row {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
@@ -1618,7 +1619,7 @@
       font-weight: 700;
       margin: 0;
       text-align: left;
-      flex: 0 0 auto;
+      flex: 0 0 100%;
     }
     .status-header-info {
       display: flex;
@@ -1626,8 +1627,8 @@
       gap: 6px;
       min-width: 0;
       flex-wrap: wrap;
-      justify-content: flex-end;
-      flex: 1 1 auto;
+      justify-content: flex-start;
+      flex: 0 1 auto;
     }
     .network-sign {
       font-size: 1rem;
@@ -1798,11 +1799,11 @@
         gap: 8px;
       }
       .status-row h3 {
-        width: auto;
+        width: 100%;
       }
       .status-header-info {
-        justify-content: flex-end;
-        flex: 1 1 auto;
+        justify-content: flex-start;
+        flex: 0 1 auto;
       }
     }
     @media (max-width: 1140px) {
@@ -2319,11 +2320,11 @@
       -moz-osx-font-smoothing: grayscale;
     }
     .ticker-title {
-      font-weight: 800;
+      font-weight: normal;
       letter-spacing: 0.3px;
     }
     .header-price {
-      font-weight: 800;
+      font-weight: normal;
       letter-spacing: 0.2px;
     }
     .chart-title {
@@ -2412,11 +2413,11 @@
         gap: 6px;
       }
       .status-row h3 {
-        width: auto;
+        width: 100%;
       }
       .status-header-info {
-        justify-content: flex-end;
-        flex: 1 1 auto;
+        justify-content: flex-start;
+        flex: 0 1 auto;
       }
       /* Multi-alert mobile: single column, wrap alert fields */
       .multi-alert-inputs {
@@ -2522,11 +2523,11 @@
         gap: 8px;
       }
       .status-row h3 {
-        width: auto;
+        width: 100%;
       }
       .status-header-info {
-        justify-content: flex-end;
-        flex: 1 1 auto;
+        justify-content: flex-start;
+        flex: 0 1 auto;
       }
     }
 
