@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Primary SEO Meta Tags -->
-  <title>MultiPerps — Free Real-Time Binance Futures Dashboard | Multi-Timeframe Charts, Price Alerts &amp; Market Rankings</title>
+  <title>MultiPerps — Real-Time Binance Futures Dashboard | Multi-Timeframe Charts, Price Alerts &amp; Market Rankings</title>
   <meta name="description" content="MultiPerps is a free real-time Binance Futures dashboard with live multi-timeframe candlestick charts (1m to 1M), price alerts, open interest rankings, funding rates, and multi-ticker tracking for USDT perpetual contracts. No sign-up required." />
   <meta name="keywords" content="Binance Futures, crypto dashboard, real-time charts, candlestick charts, multi-timeframe analysis, price alerts, USDT perpetual, open interest, funding rates, crypto trading, BTC futures, ETH futures, crypto market rankings, free crypto tool, MultiPerps, Binance USDT-M, live crypto charts, futures trading dashboard" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -142,13 +142,9 @@
   <!-- Google AdSense-->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5711107782432526"
      crossorigin="anonymous"></script>
-  <!-- Monetag Ad Integration -->
-  <meta name="monetag" content="6bf989461a8ea0a7a2c89275f2f6b566">
-  <!-- Zone 11000968: In-Page Push (overlay format - auto-displays) -->
-  <script data-zone="11000968" src="https://nap5k.com/tag.min.js" defer></script>
-  <!-- Zone 11000907: Vignette Banner (overlay format - auto-displays on navigation) -->
-  <script data-zone="11000907" src="https://n6wxm.com/vignette.min.js" defer></script>
-  <!-- Favicon -->
+  <!-- bitmedia.io meta (stay) -->
+   
+ <!-- Favicon -->
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.85em' font-size='85' fill='%2326e0d2' font-family='Arial, sans-serif'%3EM%3C/text%3E%3C/svg%3E"
     type="image/svg+xml" />
@@ -5200,11 +5196,17 @@
           <div class="status-text" id="statusText"><span class="live-indicator connecting"></span> Connecting...</div>
         </div>
 
-         <!-- Monetag Ad Zone Container -->
+         <!-- Ad Section 1-->
         <div class="cg-banner-wrap" id="cgBanner">
-          <div id="monetag-banner-1" style="min-height:90px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.2); border-radius:8px;">
-            <!-- Banner/Native ad will render here if you add a banner zone -->
-            <span style="color:var(--muted-2); font-size:0.75rem;">Advertisement</span>
+          <div class="cg-banner-inner">
+            <div class="cg-banner-pc"><img alt="bitunix" src="https://cdn.coinglasscdn.com/static/bitunix/20260128/pc/en.gif"></div>
+            <div class="cg-banner-m"><img alt="bitunix" src="https://cdn.coinglasscdn.com/static/bitunix/20260128/m/en.gif"></div>
+            <button class="cg-banner-close" id="cgBannerClose" aria-label="Close ad">
+              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" font-size="16px" color="#000" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: rgb(0, 0, 0);"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368 144 144m224 0L144 368"></path></svg>
+            </button>
+            <button class="cg-banner-close-m" id="cgBannerCloseM" aria-label="Close ad">
+              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" font-size="16px" color="#000" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: rgb(0, 0, 0);"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368 144 144m224 0L144 368"></path></svg>
+            </button>
           </div>
         </div>
 
@@ -5317,13 +5319,15 @@
           </div>
         </div>
 
-        <!-- Monetag Ad Zone Container -->
+        <!-- Google AdSense Section-->
         <div class="ad-section" id="adSection3">
           <div class="ad-label">Advertisement</div>
-          <div id="monetag-banner-2" style="min-height:90px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.2); border-radius:8px;">
-            <!-- Banner/Native ad will render here if you add a banner zone -->
-            <span style="color:var(--muted-2); font-size:0.75rem;">Advertisement</span>
-          </div>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXX"
+               data-ad-slot="XXXXXXXXXX"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
         </div>
 
         <!-- Rankings Section -->
@@ -7994,10 +7998,18 @@
   <!-- html2canvas for screenshot capture (deferred for performance) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 
-  <!-- Ad Blocker Detection -->
+  <!-- Ad Blocker Detection & Google Ad Push -->
   <script>
   (function() {
+    // Push the ad slot (Google AdSense requires this for each <ins> unit)
+    var adIns = document.querySelector('#adSection3 ins.adsbygoogle');
+    if (adIns) {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    }
+
     // --- Ad-blocker detection ---
+    // We create a bait element that ad-blockers typically hide.
+    // If it stays hidden after a short delay, we consider an ad blocker active.
     var bait = document.createElement('div');
     bait.className = 'ad-banner ads adsbox ad-placement ad_wrapper';
     bait.style.cssText = 'position:absolute;top:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;';
@@ -8005,35 +8017,34 @@
     document.body.appendChild(bait);
 
     function checkAdBlocker() {
-      var adSections = ['adSection3', 'cgBanner'];
-      var blocked = false;
+      var adSection = document.getElementById('adSection3');
+      if (!adSection) return;
 
-      // Check if bait was hidden
+      // Check if the bait element was hidden by an ad blocker
+      var blocked = false;
       if (bait.offsetHeight === 0 || bait.offsetParent === null ||
           getComputedStyle(bait).display === 'none' ||
           getComputedStyle(bait).visibility === 'hidden') {
         blocked = true;
       }
 
-      // Check if Monetag scripts failed to load
-      var monetagScripts = document.querySelectorAll('script[src*="nap5k.com"], script[src*="n6wxm.com"]');
-      if (monetagScripts.length === 0) {
+      // Also check if Google AdSense script was blocked from loading
+      if (typeof adsbygoogle === 'undefined') {
         blocked = true;
       }
 
-      // Hide ad sections if blocked
       if (blocked) {
-        adSections.forEach(function(id) {
-          var el = document.getElementById(id);
-          if (el) el.classList.add('ad-hidden');
-        });
+        adSection.classList.add('ad-hidden');
       }
 
-      // Clean up bait
-      if (bait.parentNode) bait.parentNode.removeChild(bait);
+      // Clean up bait element
+      if (bait.parentNode) {
+        bait.parentNode.removeChild(bait);
+      }
     }
 
-    setTimeout(checkAdBlocker, 1500);
+    // Give ad blockers a moment to act before checking
+    setTimeout(checkAdBlocker, 500);
   })();
   </script>
 </body>
