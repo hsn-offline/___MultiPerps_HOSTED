@@ -130,7 +130,7 @@
   }
   </script>
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://partner.googleadservices.com https://www.google.com https://www.gstatic.com https://nap5k.com https://*.nap5k.com https://n6wxm.com https://*.n6wxm.com; img-src * data: blob:; connect-src https://fapi.binance.com wss://fstream.binance.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://nap5k.com https://*.nap5k.com https://n6wxm.com https://*.n6wxm.com; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com https://nap5k.com https://*.nap5k.com https://n6wxm.com https://*.n6wxm.com;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://partner.googleadservices.com https://www.google.com https://www.gstatic.com; img-src * data: blob:; connect-src https://fapi.binance.com wss://fstream.binance.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com;" />
 
   <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fapi.binance.com" crossorigin />
@@ -138,17 +138,16 @@
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
   <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
   <link rel="preconnect" href="https://adservice.google.com" />
-  <!-- Preconnect for Monetag ad domains -->
-  <link rel="preconnect" href="https://nap5k.com" />
-  <link rel="preconnect" href="https://n6wxm.com" />
 
   <!-- Google AdSense-->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5711107782432526"
      crossorigin="anonymous"></script>
-  <!-- monetag verification meta (stays in head) -->
+  <!-- Monetag Ad Integration -->
   <meta name="monetag" content="6bf989461a8ea0a7a2c89275f2f6b566">
-  <script>(function(s){s.dataset.zone='11000968',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-  <script>(function(s){s.dataset.zone='11000907',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+  <!-- Zone 11000968: In-Page Push (overlay format - auto-displays) -->
+  <script data-zone="11000968" src="https://nap5k.com/tag.min.js" defer></script>
+  <!-- Zone 11000907: Vignette Banner (overlay format - auto-displays on navigation) -->
+  <script data-zone="11000907" src="https://n6wxm.com/vignette.min.js" defer></script>
   <!-- Favicon -->
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.85em' font-size='85' fill='%2326e0d2' font-family='Arial, sans-serif'%3EM%3C/text%3E%3C/svg%3E"
@@ -5201,10 +5200,11 @@
           <div class="status-text" id="statusText"><span class="live-indicator connecting"></span> Connecting...</div>
         </div>
 
-         <!-- Ad Section 1-->
+         <!-- Monetag Ad Zone Container -->
         <div class="cg-banner-wrap" id="cgBanner">
-          <div id="monetag-inpage-div[2]" style="min-height:90px;">
-            <!-- Paste Monetag In-Page Push code here -->
+          <div id="monetag-banner-1" style="min-height:90px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.2); border-radius:8px;">
+            <!-- Banner/Native ad will render here if you add a banner zone -->
+            <span style="color:var(--muted-2); font-size:0.75rem;">Advertisement</span>
           </div>
         </div>
 
@@ -5317,13 +5317,12 @@
           </div>
         </div>
 
-        <!-- Google AdSense Section-->
+        <!-- Monetag Ad Zone Container -->
         <div class="ad-section" id="adSection3">
           <div class="ad-label">Advertisement</div>
-          <!-- Monetag Banner/Native Ad Placeholder -->
-          <div id="monetag-ad-container" class="monetag-ad-wrapper" style="display:block; min-height:90px; background:transparent;">
-            <!-- Paste your Monetag ad code here -->
-            <!-- Example formats supported: Banner, Native -->
+          <div id="monetag-banner-2" style="min-height:90px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.2); border-radius:8px;">
+            <!-- Banner/Native ad will render here if you add a banner zone -->
+            <span style="color:var(--muted-2); font-size:0.75rem;">Advertisement</span>
           </div>
         </div>
 
@@ -7995,18 +7994,10 @@
   <!-- html2canvas for screenshot capture (deferred for performance) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 
-  <!-- Ad Blocker Detection & Google Ad Push -->
+  <!-- Ad Blocker Detection -->
   <script>
   (function() {
-    // Push the ad slot (Google AdSense requires this for each <ins> unit)
-    var adIns = document.querySelector('#adSection3 ins.adsbygoogle');
-    if (adIns) {
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    }
-
     // --- Ad-blocker detection ---
-    // We create a bait element that ad-blockers typically hide.
-    // If it stays hidden after a short delay, we consider an ad blocker active.
     var bait = document.createElement('div');
     bait.className = 'ad-banner ads adsbox ad-placement ad_wrapper';
     bait.style.cssText = 'position:absolute;top:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;';
@@ -8014,34 +8005,35 @@
     document.body.appendChild(bait);
 
     function checkAdBlocker() {
-      var adSection = document.getElementById('adSection3');
-      if (!adSection) return;
-
-      // Check if the bait element was hidden by an ad blocker
+      var adSections = ['adSection3', 'cgBanner'];
       var blocked = false;
+
+      // Check if bait was hidden
       if (bait.offsetHeight === 0 || bait.offsetParent === null ||
           getComputedStyle(bait).display === 'none' ||
           getComputedStyle(bait).visibility === 'hidden') {
         blocked = true;
       }
 
-      // Also check if Google AdSense script was blocked from loading
-      if (typeof adsbygoogle === 'undefined') {
+      // Check if Monetag scripts failed to load
+      var monetagScripts = document.querySelectorAll('script[src*="nap5k.com"], script[src*="n6wxm.com"]');
+      if (monetagScripts.length === 0) {
         blocked = true;
       }
 
+      // Hide ad sections if blocked
       if (blocked) {
-        adSection.classList.add('ad-hidden');
+        adSections.forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) el.classList.add('ad-hidden');
+        });
       }
 
-      // Clean up bait element
-      if (bait.parentNode) {
-        bait.parentNode.removeChild(bait);
-      }
+      // Clean up bait
+      if (bait.parentNode) bait.parentNode.removeChild(bait);
     }
 
-    // Give ad blockers a moment to act before checking
-    setTimeout(checkAdBlocker, 500);
+    setTimeout(checkAdBlocker, 1500);
   })();
   </script>
 </body>
