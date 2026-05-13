@@ -130,7 +130,7 @@
   }
   </script>
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://partner.googleadservices.com https://www.google.com https://www.gstatic.com; img-src * data: blob:; connect-src https://fapi.binance.com wss://fstream.binance.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://partner.googleadservices.com https://www.google.com https://www.gstatic.com https://ads.bitmedia.io https://cdn2.bitmedia.io; img-src * data: blob:; connect-src https://fapi.binance.com wss://fstream.binance.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://ads.bitmedia.io https://cdn2.bitmedia.io; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com https://ads.bitmedia.io;" />
 
   <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fapi.binance.com" crossorigin />
@@ -138,11 +138,14 @@
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
   <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
   <link rel="preconnect" href="https://adservice.google.com" />
+  <link rel="preconnect" href="https://ads.bitmedia.io" />
+  <link rel="preconnect" href="https://cdn2.bitmedia.io" />
 
   <!-- Google AdSense-->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5711107782432526"
      crossorigin="anonymous"></script>
-  <!-- bitmedia.io meta (stay) -->
+  <!-- bitmedia.io — load ad script once for all zones -->
+  <script async src="https://cdn2.bitmedia.io/js/ad.js"></script>
    
  <!-- Favicon -->
   <link rel="icon"
@@ -853,7 +856,7 @@
     }
 
     /* ============================================
-       GOOGLE ADSENSE SECTION
+       AD SECTION (Bitmedia + AdSense fallback)
        ============================================ */
     .ad-section {
       margin: 16px auto;
@@ -1649,48 +1652,55 @@
     }
     .timestamp { display: none; }
 
-    /* Ad Banner Styles */
-    .cg-banner-wrap {
-      margin: 6px 0;
-      position: relative;
+    /* ============================================
+       BITMEDIA AD SECTION — Non-intrusive styling
+       ============================================ */
+    .bm-ad-wrap {
+      margin: 8px 0;
+      padding: 6px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 8px;
       overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.08);
+      max-height: 130px;
+      transition: opacity 0.4s ease, max-height 0.4s ease;
     }
-    .cg-banner-inner {
-      position: relative;
-      background: #000;
+    .bm-ad-wrap.bm-ad-hidden {
+      opacity: 0;
+      max-height: 0;
+      margin: 0;
+      padding: 0;
+      pointer-events: none;
+    }
+    .bm-ad-wrap .ad-label {
+      font-size: 0.6rem;
+      color: var(--muted-2);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+    .bm-ad-container {
       line-height: 0;
     }
-    .cg-banner-pc img, .cg-banner-m img {
-      width: 100%;
+    .bm-ad-container iframe {
+      max-width: 100%;
       display: block;
-      max-height: 90px;
-      object-fit: cover;
-    }
-    .cg-banner-m { display: none; }
-    .cg-banner-close, .cg-banner-close-m {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      width: 22px;
-      height: 22px;
-      background: rgba(255,255,255,0.9);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 2;
+      margin: 0 auto;
       border: none;
-      padding: 0;
     }
-    .cg-banner-close-m { display: none; }
+    /* Mid-page ad slightly more spacious */
+    .bm-ad-mid {
+      max-height: 140px;
+      margin: 12px 0;
+    }
     @media (max-width: 768px) {
-      .cg-banner-pc { display: none; }
-      .cg-banner-m { display: block; }
-      .cg-banner-close { display: none; }
-      .cg-banner-close-m { display: flex; }
+      .bm-ad-wrap {
+        max-height: 110px;
+      }
+      .bm-ad-mid {
+        max-height: 120px;
+      }
     }
 
     /* Enhanced suggest menu */
@@ -3165,9 +3175,7 @@
     .copy-price-btn,
     .ranking-card-refresh,
     .tracker-remove,
-    .blog-back-btn,
-    .cg-banner-close,
-    .cg-banner-close-m {
+    .blog-back-btn {
       padding: 6px 14px;
       border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(255, 255, 255, 0.04);
@@ -3241,16 +3249,9 @@
       border-color: rgba(37, 99, 235, 0.7);
       color: #93bfff;
     }
-    /* Close ad buttons */
-    .cg-banner-close, .cg-banner-close-m {
-      background: rgba(255,255,255,0.9);
-      color: #000;
-      border: none;
-      border-radius: 4px;
-      width: 22px;
-      height: 22px;
-      padding: 0;
-      font-size: 0.7rem;
+    /* Bitmedia ad containers on touch */
+    .bm-ad-wrap {
+      max-height: 110px;
     }
 
     /* ============================================
@@ -5196,17 +5197,18 @@
           <div class="status-text" id="statusText"><span class="live-indicator connecting"></span> Connecting...</div>
         </div>
 
-         <!-- Ad Section 1-->
-        <div class="cg-banner-wrap" id="cgBanner">
-          <div class="cg-banner-inner">
-            <div class="cg-banner-pc"><img alt="bitunix" src="https://cdn.coinglasscdn.com/static/bitunix/20260128/pc/en.gif"></div>
-            <div class="cg-banner-m"><img alt="bitunix" src="https://cdn.coinglasscdn.com/static/bitunix/20260128/m/en.gif"></div>
-            <button class="cg-banner-close" id="cgBannerClose" aria-label="Close ad">
-              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" font-size="16px" color="#000" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: rgb(0, 0, 0);"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368 144 144m224 0L144 368"></path></svg>
-            </button>
-            <button class="cg-banner-close-m" id="cgBannerCloseM" aria-label="Close ad">
-              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" font-size="16px" color="#000" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: rgb(0, 0, 0);"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368 144 144m224 0L144 368"></path></svg>
-            </button>
+         <!-- Bitmedia Ad — Leaderboard (728x90) below header -->
+        <div class="bm-ad-wrap" id="bmAdTop">
+          <div class="ad-label">Advertisement</div>
+          <div class="bm-ad-container" id="bm-ad-top-banner">
+            <!-- Bitmedia ad zone — lazy-loaded via IntersectionObserver.
+                 Replace YOUR_ZONE_ID_TOP with your actual Bitmedia zone ID
+                 from https://publisher.bitmedia.io/dashboard
+                 The data-bm-src is set initially; JS swaps it to src on viewport entry. -->
+            <iframe data-bm-src="https://ads.bitmedia.io/view/YOUR_ZONE_ID_TOP"
+                    width="728" height="90" frameborder="0" scrolling="no"
+                    style="max-width:100%;display:block;margin:0 auto;border:none;"
+                    title="Advertisement"></iframe>
           </div>
         </div>
 
@@ -5319,15 +5321,19 @@
           </div>
         </div>
 
-        <!-- Google AdSense Section-->
-        <div class="ad-section" id="adSection3">
+        <!-- Bitmedia Ad — Pre-Rankings Banner -->
+        <div class="bm-ad-wrap bm-ad-mid" id="bmAdMid">
           <div class="ad-label">Advertisement</div>
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-XXXXXXXXXXXXXX"
-               data-ad-slot="XXXXXXXXXX"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
+          <div class="bm-ad-container" id="bm-ad-mid-banner">
+            <!-- Bitmedia ad zone — lazy-loaded via IntersectionObserver.
+                 Replace YOUR_ZONE_ID_MID with your actual Bitmedia zone ID
+                 from https://publisher.bitmedia.io/dashboard
+                 The data-bm-src is set initially; JS swaps it to src on viewport entry. -->
+            <iframe data-bm-src="https://ads.bitmedia.io/view/YOUR_ZONE_ID_MID"
+                    width="728" height="90" frameborder="0" scrolling="no"
+                    style="max-width:100%;display:block;margin:0 auto;border:none;"
+                    title="Advertisement"></iframe>
+          </div>
         </div>
 
         <!-- Rankings Section -->
@@ -7686,13 +7692,25 @@
         });
       }
 
-      // ===== Ad banner close =====
-      const cgBanner = document.getElementById('cgBanner');
-      const cgBannerClose = document.getElementById('cgBannerClose');
-      const cgBannerCloseM = document.getElementById('cgBannerCloseM');
-      function hideBanner() { if (cgBanner) cgBanner.style.display = 'none'; }
-      if (cgBannerClose) cgBannerClose.addEventListener('click', hideBanner);
-      if (cgBannerCloseM) cgBannerCloseM.addEventListener('click', hideBanner);
+      // ===== Bitmedia ad lazy-load & fallback =====
+      // Bitmedia iframes are already in the HTML. We lazy-load them
+      // only after the page is interactive so they don't block first paint.
+      const bmIframes = document.querySelectorAll('.bm-ad-container iframe[data-bm-src]');
+      if (bmIframes.length) {
+        const bmLazyObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const iframe = entry.target;
+              if (iframe.dataset.bmSrc) {
+                iframe.src = iframe.dataset.bmSrc;
+                delete iframe.dataset.bmSrc;
+              }
+              bmLazyObserver.unobserve(iframe);
+            }
+          });
+        }, { rootMargin: '200px' });
+        bmIframes.forEach(iframe => bmLazyObserver.observe(iframe));
+      }
 
       // ===== Footer page modal links =====
       const pageContents = {
@@ -7998,15 +8016,9 @@
   <!-- html2canvas for screenshot capture (deferred for performance) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 
-  <!-- Ad Blocker Detection & Google Ad Push -->
+  <!-- Ad Blocker Detection & Bitmedia Ad Fallback -->
   <script>
   (function() {
-    // Push the ad slot (Google AdSense requires this for each <ins> unit)
-    var adIns = document.querySelector('#adSection3 ins.adsbygoogle');
-    if (adIns) {
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    }
-
     // --- Ad-blocker detection ---
     // We create a bait element that ad-blockers typically hide.
     // If it stays hidden after a short delay, we consider an ad blocker active.
@@ -8017,8 +8029,8 @@
     document.body.appendChild(bait);
 
     function checkAdBlocker() {
-      var adSection = document.getElementById('adSection3');
-      if (!adSection) return;
+      var bmAdTop = document.getElementById('bmAdTop');
+      var bmAdMid = document.getElementById('bmAdMid');
 
       // Check if the bait element was hidden by an ad blocker
       var blocked = false;
@@ -8028,13 +8040,10 @@
         blocked = true;
       }
 
-      // Also check if Google AdSense script was blocked from loading
-      if (typeof adsbygoogle === 'undefined') {
-        blocked = true;
-      }
-
       if (blocked) {
-        adSection.classList.add('ad-hidden');
+        // Hide Bitmedia ad containers gracefully (collapse to zero height)
+        if (bmAdTop) bmAdTop.classList.add('bm-ad-hidden');
+        if (bmAdMid) bmAdMid.classList.add('bm-ad-hidden');
       }
 
       // Clean up bait element
