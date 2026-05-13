@@ -7389,7 +7389,7 @@
             });
 
             const tickerName = state.symbol.replace('USDT','');
-            const text = `@MultiPerps Charts — ${tickerName} multi-timeframe view\n\nwww.MultiPerps.com #MultiPerps`;
+            const text = `@MultiPerps Charts — ${tickerName} multi-timeframe view\n\nwww.MultiPerps.com #MultiPerps #${tickerName}`;
 
             // Create composite canvas: image on top, text below
             const textLines = text.split('\n');
@@ -7435,11 +7435,28 @@
             ctx.fillStyle = '#d0d0d0';
             ctx.fillText(afterTicker, startX + beforeWidth + tickerWidth, textY0);
 
-            // Remaining lines: centered, default color
-            ctx.textAlign = 'center';
-            ctx.fillStyle = '#d0d0d0';
+            // Line 3 (last non-empty): "www.MultiPerps.com #MultiPerps #TICKER" — color the ticker hashtag
+            ctx.textAlign = 'left';
             for (let i = 1; i < textLines.length; i++) {
-              ctx.fillText(textLines[i], compositeCanvas.width / 2, chartCanvas.height + textPadding + (i + 1) * textLineHeight);
+              const yPos = chartCanvas.height + textPadding + (i + 1) * textLineHeight;
+              const lineText = textLines[i];
+              if (lineText.includes('#MultiPerps')) {
+                const hashPrefix = 'www.MultiPerps.com #MultiPerps ';
+                const hashTicker = '#' + tickerName;
+                const prefixWidth = ctx.measureText(hashPrefix).width;
+                const tickerHashWidth = ctx.measureText(hashTicker).width;
+                const totalW = prefixWidth + tickerHashWidth;
+                const sx = (compositeCanvas.width - totalW) / 2;
+                ctx.fillStyle = '#d0d0d0';
+                ctx.fillText(hashPrefix, sx, yPos);
+                ctx.fillStyle = '#ffcc80';
+                ctx.fillText(hashTicker, sx + prefixWidth, yPos);
+              } else {
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#d0d0d0';
+                ctx.fillText(lineText, compositeCanvas.width / 2, yPos);
+                ctx.textAlign = 'left';
+              }
             }
 
             compositeCanvas.toBlob(async (blob) => {
