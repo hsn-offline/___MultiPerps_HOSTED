@@ -3496,8 +3496,14 @@
         if (!raw) return [];
         const parsed = JSON.parse(raw);
         if (!Array.isArray(parsed)) return [];
-        // Filter out _pendingRemoval entries (transient state, shouldn't persist)
-        return parsed.filter(a => a && !a._pendingRemoval).slice(0, 4);
+        // Preserve array indices: convert invalid/_pendingRemoval entries to null
+        // so that slot positions (Alert 1, 2, 3, 4) remain correct.
+        const result = parsed.map(a => (a && !a._pendingRemoval && a.ticker) ? a : null).slice(0, 4);
+        // Trim trailing nulls to keep the array compact
+        while (result.length > 0 && result[result.length - 1] === null) {
+          result.pop();
+        }
+        return result;
       } catch { return []; }
     };
 
@@ -4384,10 +4390,15 @@
 
     const renderAlertSlots = () => {
       const alerts = state.multiAlerts;
+      const activeEl = document.activeElement;
       for (let i = 0; i < 4; i++) {
         const tickerInput = document.getElementById(`alertTicker${i + 1}`);
         const priceInput = document.getElementById(`alertPrice${i + 1}`);
         if (!tickerInput || !priceInput) continue;
+        // Skip overwriting inputs that the user is currently editing,
+        // so mid-typing in one slot isn't lost when another slot triggers renderAlertSlots().
+        const isEditingThisSlot = (activeEl === tickerInput || activeEl === priceInput);
+        if (isEditingThisSlot) continue;
         if (alerts[i] && !alerts[i]._pendingRemoval && alerts[i].ticker) {
           tickerInput.value = alerts[i].ticker.replace('USDT', '');
           priceInput.value = alerts[i].price;
@@ -4445,21 +4456,22 @@
       const sym = normalizeSymbol(ticker);
       const p = parseAlertPrice(price);
       if (!sym || !Number.isFinite(p)) return false;
-      // Replace the first _pendingRemoval slot if one exists
-      const pendingIdx = state.multiAlerts.findIndex(a => a && a._pendingRemoval);
-      if (pendingIdx !== -1) {
-        state.multiAlerts[pendingIdx] = { ticker: sym, price: p, lastTriggered: 0 };
+      // Find the first empty (null) slot to maintain correct index positions
+      const emptyIdx = state.multiAlerts.findIndex(a => !a || a._pendingRemoval);
+      if (emptyIdx !== -1) {
+        state.multiAlerts[emptyIdx] = { ticker: sym, price: p, lastTriggered: 0 };
         saveMultiAlerts(state.multiAlerts);
         renderAlertSlots();
         startMultiAlertMonitor();
         return true;
       }
-      // Count only active (non-pending) alerts
+      // Count only active (non-null, non-pending) alerts
       const activeCount = state.multiAlerts.filter(a => a && !a._pendingRemoval).length;
       if (activeCount >= 4) {
         showToast('Alert Limit', 'Maximum 4 alerts allowed. Remove one to add a new alert.', 'down');
         return false;
       }
+      // No empty slots found — append at the end (correct index)
       state.multiAlerts.push({ ticker: sym, price: p, lastTriggered: 0 });
       saveMultiAlerts(state.multiAlerts);
       renderAlertSlots();
@@ -4468,29 +4480,29 @@
     };
 
     const removeMultiAlert = (index) => {
-      if (index < 0 || index >= state.multiAlerts.length) return;
+      if (index < 0 || index >= 4) return;
       // Prevent double-removal if change event already removed this alert
       if (state._removeInProgress === index) return;
       state._removeInProgress = index;
       try {
-        state.multiAlerts.splice(index, 1);
-        // Re-key alert logs: shift logs for slots after the removed one
+        // Set the slot to null instead of splicing to maintain correct index positions
+        // (splice would shift later alerts to wrong slots)
+        if (index < state.multiAlerts.length) {
+          state.multiAlerts[index] = null;
+        }
+        // Trim trailing nulls to keep array compact
+        while (state.multiAlerts.length > 0 && state.multiAlerts[state.multiAlerts.length - 1] === null) {
+          state.multiAlerts.pop();
+        }
         const removedSlot = index + 1;
         delete state.alertLog[removedSlot];
-        for (let s = removedSlot; s < 4; s++) {
-          if (state.alertLog[s + 1] !== undefined) {
-            state.alertLog[s] = state.alertLog[s + 1];
-            delete state.alertLog[s + 1];
-          } else {
-            delete state.alertLog[s];
-          }
-        }
-        delete state.alertLog[5]; // cleanup overflow
         saveAlertLogHistory(state.alertLog);
         saveMultiAlerts(state.multiAlerts);
         renderAlertSlots();
         restoreAlertLogUI();
-        if (state.multiAlerts.length === 0) stopMultiAlertMonitor();
+        // Check if any active alerts remain
+        const hasActive = state.multiAlerts.some(a => a && a.ticker && Number.isFinite(a.price));
+        if (!hasActive) stopMultiAlertMonitor();
       } finally {
         state._removeInProgress = null;
       }
@@ -4499,25 +4511,44 @@
     const updateMultiAlert = (index, ticker, price) => {
       const sym = normalizeSymbol(ticker);
       const p = parseAlertPrice(price);
-      if (!sym || !Number.isFinite(p)) {
-        // Don't auto-remove on change event — let the X button handle explicit removal.
-        // Just clear the data for this slot without splicing (avoids double-removal race).
-        if (index < state.multiAlerts.length) {
-          state.multiAlerts[index] = { ticker: '', price: 0, lastTriggered: 0, _pendingRemoval: true };
+
+      if (sym && Number.isFinite(p)) {
+        // Complete valid alert — save it
+        // Pad array with nulls up to the target index to maintain correct slot positions
+        while (state.multiAlerts.length <= index && state.multiAlerts.length < 4) {
+          state.multiAlerts.push(null);
+        }
+        if (index < 4) {
+          state.multiAlerts[index] = { ticker: sym, price: p, lastTriggered: 0 };
           saveMultiAlerts(state.multiAlerts);
           renderAlertSlots();
-          stopMultiAlertMonitor();
+          startMultiAlertMonitor();
         }
         return;
       }
-      if (index < state.multiAlerts.length) {
-        state.multiAlerts[index] = { ticker: sym, price: p, lastTriggered: 0 };
-      } else if (state.multiAlerts.length < 4) {
-        state.multiAlerts.push({ ticker: sym, price: p, lastTriggered: 0 });
+
+      // Incomplete data (only ticker or only price filled, or both empty)
+      const hasTicker = ticker && String(ticker).trim().length > 0;
+      const hasPrice = price && String(price).trim().length > 0;
+
+      if (hasTicker || hasPrice) {
+        // User is still typing (one field filled, the other empty)
+        // Do NOT clear the slot or re-render — preserve their in-progress work.
+        // The 'input' event handlers will save once both fields are valid.
+        return;
       }
-      saveMultiAlerts(state.multiAlerts);
-      renderAlertSlots();
-      startMultiAlertMonitor();
+
+      // Both fields explicitly empty AND slot previously had data — clear it
+      if (index < state.multiAlerts.length && state.multiAlerts[index] !== null) {
+        state.multiAlerts[index] = null;
+        while (state.multiAlerts.length > 0 && state.multiAlerts[state.multiAlerts.length - 1] === null) {
+          state.multiAlerts.pop();
+        }
+        saveMultiAlerts(state.multiAlerts);
+        renderAlertSlots();
+        const hasActive = state.multiAlerts.some(a => a && a.ticker && Number.isFinite(a.price));
+        if (!hasActive) stopMultiAlertMonitor();
+      }
     };
 
     const fetchWithTimeout = async (url, timeoutMs) => {
@@ -7125,10 +7156,12 @@
             const sym = normalizeSymbol(ticker);
             const p = parseAlertPrice(price);
             if (sym && Number.isFinite(p)) {
+              // Pad array with nulls up to this index to maintain correct slot positions
+              while (state.multiAlerts.length <= i && state.multiAlerts.length < 4) {
+                state.multiAlerts.push(null);
+              }
               if (i < state.multiAlerts.length) {
                 state.multiAlerts[i] = { ticker: sym, price: p, lastTriggered: state.multiAlerts[i]?.lastTriggered || 0 };
-              } else if (state.multiAlerts.length < 4) {
-                state.multiAlerts.push({ ticker: sym, price: p, lastTriggered: 0 });
               }
               saveMultiAlerts(state.multiAlerts);
               startMultiAlertMonitor();
@@ -7150,10 +7183,12 @@
             const sym = normalizeSymbol(ticker);
             const p = parseAlertPrice(price);
             if (sym && Number.isFinite(p)) {
+              // Pad array with nulls up to this index to maintain correct slot positions
+              while (state.multiAlerts.length <= i && state.multiAlerts.length < 4) {
+                state.multiAlerts.push(null);
+              }
               if (i < state.multiAlerts.length) {
                 state.multiAlerts[i] = { ticker: sym, price: p, lastTriggered: state.multiAlerts[i]?.lastTriggered || 0 };
-              } else if (state.multiAlerts.length < 4) {
-                state.multiAlerts.push({ ticker: sym, price: p, lastTriggered: 0 });
               }
               saveMultiAlerts(state.multiAlerts);
               startMultiAlertMonitor();
@@ -7165,29 +7200,7 @@
           // the 'change' event and cause double-removal race condition
           removeBtn.addEventListener('mousedown', (e) => e.preventDefault());
           removeBtn.addEventListener('click', () => {
-            // If this slot has a _pendingRemoval marker, clean it up
-            if (i < state.multiAlerts.length && state.multiAlerts[i]?._pendingRemoval) {
-              state.multiAlerts.splice(i, 1);
-              // Re-key alert logs
-              const removedSlot = i + 1;
-              delete state.alertLog[removedSlot];
-              for (let s = removedSlot; s < 4; s++) {
-                if (state.alertLog[s + 1] !== undefined) {
-                  state.alertLog[s] = state.alertLog[s + 1];
-                  delete state.alertLog[s + 1];
-                } else {
-                  delete state.alertLog[s];
-                }
-              }
-              delete state.alertLog[5];
-              saveAlertLogHistory(state.alertLog);
-              saveMultiAlerts(state.multiAlerts);
-              renderAlertSlots();
-              restoreAlertLogUI();
-              if (state.multiAlerts.length === 0) stopMultiAlertMonitor();
-            } else {
-              removeMultiAlert(i);
-            }
+            removeMultiAlert(i);
           });
         }
         // Wire up Load button - loads the alert's ticker in the main chart
