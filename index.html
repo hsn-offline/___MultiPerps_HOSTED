@@ -142,6 +142,8 @@
   <!-- Google AdSense-->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5711107782432526"
      crossorigin="anonymous"></script>
+  <!-- monetag add-->
+  <meta name="monetag" content="6bf989461a8ea0a7a2c89275f2f6b566">
 
   <!-- Favicon -->
   <link rel="icon"
@@ -2081,6 +2083,135 @@
     .page-modal-content .modal-section {
       margin-bottom: 16px;
     }
+    /* ===== Share Modal ===== */
+    .share-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .share-modal.active { display: flex; }
+    .share-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+    }
+    .share-modal-box {
+      position: relative;
+      background: linear-gradient(135deg, var(--bg-1), var(--bg-0));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 28px 24px 24px;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: var(--shadow);
+      z-index: 1;
+    }
+    .share-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.6rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: all 140ms ease;
+    }
+    .share-modal-close:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.08);
+    }
+    .share-modal-title {
+      color: var(--accent);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: 0.3px;
+    }
+    .share-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .share-step:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .share-step-num {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(38, 224, 210, 0.12);
+      border: 1px solid rgba(38, 224, 210, 0.3);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .share-step-num.done {
+      background: rgba(76, 175, 80, 0.15);
+      border-color: rgba(76, 175, 80, 0.5);
+      color: var(--good);
+    }
+    .share-step-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .share-step-label {
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .share-copy-btn {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.22);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 5px 9px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      line-height: 1;
+      user-select: none;
+      flex-shrink: 0;
+      transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease, color 140ms ease;
+    }
+    .share-copy-btn:hover {
+      border-color: rgba(255, 255, 255, 0.26);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+    .share-copy-btn.copied {
+      border-color: rgba(76, 175, 80, 0.6);
+      color: var(--good);
+    }
+    .share-copy-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .donation-box {
       background: rgba(0,0,0,0.3);
       border: 1px solid rgba(255,255,255,0.1);
@@ -5092,9 +5223,9 @@
         <div class="chart-list">${intervalSections}</div>
         <div class="chart-share-row">
           <div class="chart-action-buttons">
-            <button id="tradeBtn" class="control-btn trade-btn" title="Open Binance Futures">Trade</button>
+            <button id="tradeBtn" class="control-btn trade-btn" title="Open Binance Futures">Trade Now</button>
             <button class="control-btn share-btn" id="chartShareBtn" type="button">
-              <span style="margin-right:6px"></span>Share
+              <span style="margin-right:6px">𝕏</span>Share
             </button>
           </div>
         </div>        
@@ -5192,12 +5323,11 @@
         <!-- Google AdSense Section-->
         <div class="ad-section" id="adSection3">
           <div class="ad-label">Advertisement</div>
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-XXXXXXXXXXXXXX"
-               data-ad-slot="XXXXXXXXXX"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
+          <!-- Monetag Banner/Native Ad Placeholder -->
+          <div id="monetag-ad-container" class="monetag-ad-wrapper" style="display:block; min-height:90px; background:transparent;">
+            <!-- Paste your Monetag ad code here -->
+            <!-- Example formats supported: Banner, Native -->
+          </div>
         </div>
 
         <!-- Rankings Section -->
@@ -7367,15 +7497,66 @@
             if (blogModalClose) blogModalClose.addEventListener('click', closeBlogModal);
       if (blogModalBackdrop) blogModalBackdrop.addEventListener('click', closeBlogModal);
 
-      // ===== Chart Share Button =====
+      // ===== Chart Share Button — Two-Step Modal =====
       const chartShareBtn = document.getElementById('chartShareBtn');
+      const shareModal = document.getElementById('shareModal');
+      const shareModalBackdrop = document.getElementById('shareModalBackdrop');
+      const shareModalClose = document.getElementById('shareModalClose');
+      const shareCopyChartBtn = document.getElementById('shareCopyChartBtn');
+      const shareOpenPostBtn = document.getElementById('shareOpenPostBtn');
+      const shareStep1Num = document.getElementById('shareStep1Num');
+      const shareStep2Num = document.getElementById('shareStep2Num');
+
+      // Share text generated per ticker
+      let currentShareText = '';
+
+      function openShareModal() {
+        if (!shareModal) return;
+        const tickerName = state.symbol.replace('USDT','');
+        currentShareText = `@MultiPerps Charts — ${tickerName} multi-timeframe view\n\nwww.MultiPerps.com #MultiPerps #${tickerName}\n\n`;
+        // Reset step states
+        if (shareStep1Num) { shareStep1Num.textContent = '1'; shareStep1Num.classList.remove('done'); }
+        if (shareStep2Num) { shareStep2Num.textContent = '2'; shareStep2Num.classList.remove('done'); }
+        if (shareCopyChartBtn) { shareCopyChartBtn.textContent = '⧉'; shareCopyChartBtn.classList.remove('copied'); shareCopyChartBtn.disabled = false; }
+        if (shareOpenPostBtn) { shareOpenPostBtn.textContent = 'Open'; shareOpenPostBtn.classList.remove('copied'); shareOpenPostBtn.disabled = false; }
+        shareModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeShareModal() {
+        if (!shareModal) return;
+        shareModal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
       if (chartShareBtn) {
-        chartShareBtn.addEventListener('click', async () => {
+        chartShareBtn.addEventListener('click', openShareModal);
+      }
+      if (shareModalClose) shareModalClose.addEventListener('click', closeShareModal);
+      if (shareModalBackdrop) shareModalBackdrop.addEventListener('click', closeShareModal);
+
+      // Step 1: Open X (Twitter) compose with pre-filled text
+      if (shareOpenPostBtn) {
+        shareOpenPostBtn.addEventListener('click', () => {
+          const encodedText = encodeURIComponent(currentShareText);
+          window.open('https://x.com/intent/tweet?text=' + encodedText, '_blank');
+          shareOpenPostBtn.classList.add('copied');
+          shareOpenPostBtn.textContent = '✓';
+          if (shareStep1Num) { shareStep1Num.textContent = '✓'; shareStep1Num.classList.add('done'); }
+          setTimeout(() => {
+            if (shareOpenPostBtn) { shareOpenPostBtn.textContent = 'Open'; shareOpenPostBtn.classList.remove('copied'); }
+          }, 3000);
+        });
+      }
+
+      // Step 2: Capture chart and copy image to clipboard
+      if (shareCopyChartBtn) {
+        shareCopyChartBtn.addEventListener('click', async () => {
           const chartList = document.querySelector('.chart-list');
           if (!chartList) return;
           try {
-            chartShareBtn.innerHTML = '<span style="margin-right:6px">⏳</span> Capturing...';
-            chartShareBtn.disabled = true;
+            shareCopyChartBtn.textContent = '⏳';
+            shareCopyChartBtn.disabled = true;
 
             if (typeof html2canvas !== 'function') {
               throw new Error('html2canvas not loaded');
@@ -7465,15 +7646,13 @@
               }
 
               try {
-                // Copy both image and text to clipboard together
-                const textBlob = new Blob([text], { type: 'text/plain' });
+                // Copy image to clipboard
                 await navigator.clipboard.write([
-                  new ClipboardItem({
-                    'image/png': blob,
-                    'text/plain': textBlob
-                  })
+                  new ClipboardItem({ 'image/png': blob })
                 ]);
-                chartShareBtn.innerHTML = '<span style="margin-right:6px">✅</span> Copied!';
+                shareCopyChartBtn.classList.add('copied');
+                shareCopyChartBtn.textContent = '✓';
+                if (shareStep2Num) { shareStep2Num.textContent = '✓'; shareStep2Num.classList.add('done'); }
               } catch {
                 // Fallback: download the composite image
                 try {
@@ -7483,49 +7662,25 @@
                   a.download = 'MultiPerps-charts.png';
                   a.click();
                   URL.revokeObjectURL(url);
-                  chartShareBtn.innerHTML = '<span style="margin-right:6px">✅</span> Downloaded';
+                  shareCopyChartBtn.classList.add('copied');
+                  shareCopyChartBtn.textContent = '✓';
+                  if (shareStep2Num) { shareStep2Num.textContent = '✓'; shareStep2Num.classList.add('done'); }
                 } catch {
-                  chartShareBtn.innerHTML = '<span style="margin-right:6px">❌</span> Failed';
+                  shareCopyChartBtn.textContent = '✗';
                 }
               }
 
-              // Share on X / other apps via Web Share API (image + text)
-              try {
-                if (navigator.share && navigator.canShare) {
-                  const imageFile = new File([blob], 'MultiPerps-charts.png', { type: 'image/png' });
-                  const shareData = { text: text, files: [imageFile] };
-                  if (navigator.canShare(shareData)) {
-                    await navigator.share(shareData);
-                  } else {
-                    // Web Share available but cannot share files — fall back to Twitter intent
-                    const encodedText = encodeURIComponent(text);
-                    window.open('https://twitter.com/intent/tweet?text=' + encodedText, '_blank');
-                  }
-                } else {
-                  // Web Share API not available — fall back to Twitter intent
-                  const encodedText = encodeURIComponent(text);
-                  window.open('https://twitter.com/intent/tweet?text=' + encodedText, '_blank');
-                }
-              } catch (shareErr) {
-                // User cancelled the share sheet (AbortError) — do nothing
-                if (shareErr.name !== 'AbortError') {
-                  // Other error — fall back to Twitter intent
-                  const encodedText = encodeURIComponent(text);
-                  window.open('https://twitter.com/intent/tweet?text=' + encodedText, '_blank');
-                }
-              }
-
+              shareCopyChartBtn.disabled = false;
               setTimeout(() => {
-                chartShareBtn.innerHTML = '<span style="margin-right:6px"></span>Share';
-                chartShareBtn.disabled = false;
-              }, 2000);
+                if (shareCopyChartBtn) { shareCopyChartBtn.textContent = '⧉'; shareCopyChartBtn.classList.remove('copied'); }
+              }, 4000);
             }, 'image/png');
           } catch (err) {
-            console.error('Share failed:', err);
-            chartShareBtn.innerHTML = '<span style="margin-right:6px">❌</span> Failed';
+            console.error('Chart capture failed:', err);
+            shareCopyChartBtn.textContent = '✗';
+            shareCopyChartBtn.disabled = false;
             setTimeout(() => {
-              chartShareBtn.innerHTML = '<span style="margin-right:6px"></span>Share';
-              chartShareBtn.disabled = false;
+              if (shareCopyChartBtn) { shareCopyChartBtn.textContent = '⧉'; shareCopyChartBtn.classList.remove('copied'); }
             }, 2000);
           }
         });
@@ -7804,6 +7959,31 @@
 
 
   <!-- Page Modal for Multi-Page Navigation -->
+  <!-- Share Modal -->
+  <div id="shareModal" class="share-modal" role="dialog" aria-label="Share Charts" aria-modal="true">
+    <div class="share-modal-backdrop" id="shareModalBackdrop"></div>
+    <div class="share-modal-box">
+      <button class="share-modal-close" id="shareModalClose" aria-label="Close share modal">&times;</button>
+      <div class="share-modal-title">Two-step Share</div>
+
+      <div class="share-step">
+        <div class="share-step-num" id="shareStep1Num">1</div>
+        <div class="share-step-body">
+          <div class="share-step-label">Open X to Post</div>
+          <button class="share-copy-btn" id="shareOpenPostBtn" type="button">Open</button>
+        </div>
+      </div>
+
+      <div class="share-step">
+        <div class="share-step-num" id="shareStep2Num">2</div>
+        <div class="share-step-body">
+          <div class="share-step-label">Copy Chart to Paste</div>
+          <button class="share-copy-btn" id="shareCopyChartBtn" type="button">⧉</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="pageModal" class="page-modal" role="dialog" aria-label="Information" aria-modal="true">
     <div class="page-modal-backdrop" id="pageModalBackdrop"></div>
     <div class="page-modal-content">
@@ -7822,7 +8002,7 @@
   <script>
   (function() {
     // Push the ad slot (Google AdSense requires this for each <ins> unit)
-    var adIns = document.querySelector('#adSection3 ins.adsbygoogle');
+    var adIns = document.querySelector('#adSection3 #monetag-ad-container');
     if (adIns) {
       (adsbygoogle = window.adsbygoogle || []).push({});
     }
