@@ -7519,7 +7519,7 @@
       function openShareModal() {
         if (!shareModal) return;
         const tickerName = state.symbol.replace('USDT','');
-        currentShareText = `MultiPerps Charts — ${tickerName} multi-timeframe view\n\nwww.MultiPerps.com #MultiPerps $${tickerName}\n\n`;
+        currentShareText = `MultiPerps Charts — $${tickerName} multi-timeframe view \n\n #MultiPerps \n www.MultiPerps.com \n\n`;
         // Reset step states
         if (shareStep1Num) { shareStep1Num.textContent = '1'; shareStep1Num.classList.remove('done'); }
         if (shareStep2Num) { shareStep2Num.textContent = '2'; shareStep2Num.classList.remove('done'); }
