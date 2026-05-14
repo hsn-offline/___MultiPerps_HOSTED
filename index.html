@@ -59,7 +59,7 @@
       "Market rankings (volume, gainers, losers)",
       "Multi-ticker simultaneous tracking",
       "No sign-up required",
-      "Zero tracking and privacy-first"
+      "Privacy-respecting with local data storage"
     ]
   }
   </script>
@@ -91,7 +91,7 @@
         "name": "Does MultiPerps track my data?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. MultiPerps is privacy-first. There are no cookies, analytics trackers, or third-party advertising identifiers. All preferences and alert data are stored locally in your browser."
+          "text": "MultiPerps respects your privacy. We use Google Analytics to understand site usage and improve the experience. No personal data is sold or shared. All price alert and preference data are stored locally in your browser."
         }
       },
       {
@@ -130,7 +130,7 @@
   }
   </script>
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://partner.googleadservices.com https://www.google.com https://www.gstatic.com https://ads.bitmedia.io https://cdn2.bitmedia.io; img-src * data: blob:; connect-src https://fapi.binance.com wss://fstream.binance.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://ads.bitmedia.io https://cdn2.bitmedia.io; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com https://ads.bitmedia.io;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://partner.googleadservices.com https://www.google.com https://www.gstatic.com https://www.googletagmanager.com; img-src * data: blob:; connect-src https://fapi.binance.com wss://fstream.binance.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://www.googletagmanager.com; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com;" />
 
   <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fapi.binance.com" crossorigin />
@@ -138,15 +138,19 @@
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
   <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
   <link rel="preconnect" href="https://adservice.google.com" />
-  <link rel="preconnect" href="https://ads.bitmedia.io" />
-  <link rel="preconnect" href="https://cdn2.bitmedia.io" />
 
   <!-- Google AdSense-->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5711107782432526"
      crossorigin="anonymous"></script>
-  <!-- bitmedia.io — load ad script once for all zones -->
-  <script async src="https://cdn2.bitmedia.io/js/ad.js"></script>
-   
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
  <!-- Favicon -->
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.85em' font-size='85' fill='%2326e0d2' font-family='Arial, sans-serif'%3EM%3C/text%3E%3C/svg%3E"
@@ -856,24 +860,16 @@
     }
 
     /* ============================================
-       AD SECTION (Bitmedia + AdSense fallback)
+       AD SECTION
        ============================================ */
     .ad-section {
       margin: 16px auto;
       padding: 8px;
       text-align: center;
       max-width: 728px;
-      transition: opacity 0.3s ease, max-height 0.3s ease;
       overflow: hidden;
     }
 
-    .ad-section.ad-hidden {
-      opacity: 0;
-      max-height: 0;
-      margin: 0;
-      padding: 0;
-      pointer-events: none;
-    }
 
     .ad-label {
       font-size: 0.65rem;
@@ -1652,56 +1648,7 @@
     }
     .timestamp { display: none; }
 
-    /* ============================================
-       BITMEDIA AD SECTION — Non-intrusive styling
-       ============================================ */
-    .bm-ad-wrap {
-      margin: 8px 0;
-      padding: 6px;
-      text-align: center;
-      background: rgba(0, 0, 0, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 8px;
-      overflow: hidden;
-      max-height: 130px;
-      transition: opacity 0.4s ease, max-height 0.4s ease;
-    }
-    .bm-ad-wrap.bm-ad-hidden {
-      opacity: 0;
-      max-height: 0;
-      margin: 0;
-      padding: 0;
-      pointer-events: none;
-    }
-    .bm-ad-wrap .ad-label {
-      font-size: 0.6rem;
-      color: var(--muted-2);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 4px;
-    }
-    .bm-ad-container {
-      line-height: 0;
-    }
-    .bm-ad-container iframe {
-      max-width: 100%;
-      display: block;
-      margin: 0 auto;
-      border: none;
-    }
-    /* Mid-page ad slightly more spacious */
-    .bm-ad-mid {
-      max-height: 140px;
-      margin: 12px 0;
-    }
-    @media (max-width: 768px) {
-      .bm-ad-wrap {
-        max-height: 110px;
-      }
-      .bm-ad-mid {
-        max-height: 120px;
-      }
-    }
+
 
     /* Enhanced suggest menu */
     .ticker-suggest-menu {
@@ -2944,7 +2891,7 @@
     /* Sticky Navigation Bar */
     .sticky-nav {
       position: sticky;
-      top: 0;
+      top: 48px;
       z-index: 100;
       display: flex;
       justify-content: center;
@@ -3249,10 +3196,6 @@
       border-color: rgba(37, 99, 235, 0.7);
       color: #93bfff;
     }
-    /* Bitmedia ad containers on touch */
-    .bm-ad-wrap {
-      max-height: 110px;
-    }
 
     /* ============================================
        MULTI-ALERT PANEL
@@ -3386,10 +3329,233 @@
       color: var(--muted-2);
     }
 
+
+    /* ============================================
+       SITE NAVIGATION
+       ============================================ */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 3000;
+      background: rgba(7, 8, 20, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 48px;
+      gap: 12px;
+    }
+    .nav-brand {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+      letter-spacing: -0.5px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      white-space: nowrap;
+      transition: color 140ms ease, background 140ms ease;
+    }
+    .nav-link:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .nav-link.active {
+      color: var(--accent);
+      background: rgba(38, 224, 210, 0.1);
+    }
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 6px;
+      padding: 4px 8px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    @media (max-width: 640px) {
+      .nav-hamburger { display: inline-flex; align-items: center; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 48px;
+        left: 0;
+        right: 0;
+        background: rgba(7, 8, 20, 0.96);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .nav-links.open { display: flex; }
+      .nav-link { width: 100%; padding: 10px 14px; }
+    }
+
+
+    /* ============================================
+       HASH-BASED ROUTING & PAGE SECTIONS
+       ============================================ */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* Content page styles */
+    .content-page {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+    .content-page h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+    .content-page h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 28px 0 12px;
+    }
+    .content-page h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent-2);
+      margin: 22px 0 10px;
+    }
+    .content-page p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+    .content-page ul, .content-page ol {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.75;
+      margin-bottom: 14px;
+      padding-left: 24px;
+    }
+    .content-page li { margin-bottom: 6px; }
+    .content-page a {
+      color: var(--accent-2);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .content-page a:hover { color: var(--accent); }
+
+    /* Blog card styles */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .blog-card {
+      background: var(--card);
+      border: 1px solid var(--section-border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 140ms ease, transform 140ms ease;
+    }
+    .blog-card:hover {
+      border-color: rgba(255,255,255,0.16);
+      transform: translateY(-2px);
+    }
+    .blog-card-body {
+      padding: 18px;
+    }
+    .blog-card-date {
+      font-size: 0.78rem;
+      color: var(--muted-2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .blog-card-title {
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .blog-card-excerpt {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .blog-card-link {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 140ms ease;
+    }
+    .blog-card-link:hover { color: var(--accent-2); }
+
+    .blog-full-article {
+      display: none;
+    }
+    .blog-full-article.active {
+      display: block;
+    }
+    .blog-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: color 140ms ease;
+    }
+    .blog-back-btn:hover { color: var(--accent-2); }
+
+    @media (max-width: 640px) {
+      .blog-grid { grid-template-columns: 1fr; }
+      .content-page { padding: 20px 14px 40px; }
+      .content-page h1 { font-size: 1.5rem; }
+    }
+
   </style>
 </head>
 
 <body>
+  <nav class="site-nav" aria-label="Site navigation">
+    <a href="#/" class="nav-brand">MultiPerps</a>
+    <button class="nav-hamburger" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
+    <div class="nav-links" id="nav-links">
+      <a href="#/" class="nav-link active">Dashboard</a>
+      <a href="#/about" class="nav-link">About</a>
+      <a href="#/blog" class="nav-link">Blog</a>
+      <a href="#/privacy" class="nav-link">Privacy</a>
+      <a href="#/terms" class="nav-link">Terms</a>
+    </div>
+  </nav>
+
   <!-- Skip to content link for accessibility -->
   <a href="#mainContent" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to main content</a>
 
@@ -3403,7 +3569,7 @@
       <li>Price alerts with audio notifications — set up to 4 alerts per ticker, persistent across sessions</li>
       <li>Live market rankings: top volume, top gainers, top losers, open interest leaders, funding rate extremes</li>
       <li>Multi-ticker simultaneous tracking with independent chart views</li>
-      <li>Zero tracking, zero accounts, 100% privacy — no cookies, no analytics, no sign-up required</li>
+      <li>Privacy-respecting with local data storage — no sign-up required, alert data stays in your browser</li>
       <li>Mobile-responsive dark theme interface optimized for long trading sessions</li>
     </ul>
     <h2>Supported Cryptocurrency Futures</h2>
@@ -3431,10 +3597,23 @@
     <h3>Is MultiPerps free?</h3>
     <p>Yes, MultiPerps is 100% free with no accounts, subscriptions, or hidden fees.</p>
     <h3>Does MultiPerps track my data?</h3>
-    <p>No. MultiPerps is privacy-first with no cookies, no analytics trackers, and no third-party advertising identifiers.</p>
+    <p>MultiPerps respects your privacy. We use Google Analytics to understand site usage and improve the experience. No personal data is sold or shared. All price alert and preference data are stored locally in your browser.</p>
     <h3>What timeframes does MultiPerps support?</h3>
     <p>MultiPerps supports nine timeframes simultaneously: 1m, 5m, 15m, 30m, 1h, 4h, 1d, 1w, and 1M — all updating in real time via Binance WebSocket feeds.</p>
   </div>
+
+  <div id="page-dashboard" class="page-section active">
+
+        <div class="ad-section">
+          <div class="ad-label">Advertisement</div>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-5711107782432526"
+               data-ad-slot="auto"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
 
   <nav class="sticky-nav" id="stickyNav" aria-label="Dashboard navigation">
     <button class="nav-btn" data-nav="charts" type="button">Multi Time</button>
@@ -5228,21 +5407,6 @@
           <div class="status-text" id="statusText"><span class="live-indicator connecting"></span> Connecting...</div>
         </div>
 
-         <!-- Bitmedia Ad — Leaderboard (728x90) below header -->
-        <div class="bm-ad-wrap" id="bmAdTop">
-          <div class="ad-label">Advertisement</div>
-          <div class="bm-ad-container" id="bm-ad-top-banner">
-            <!-- Bitmedia ad zone — lazy-loaded via IntersectionObserver.
-                 Replace YOUR_ZONE_ID_TOP with your actual Bitmedia zone ID
-                 from https://publisher.bitmedia.io/dashboard
-                 The data-bm-src is set initially; JS swaps it to src on viewport entry. -->
-            <iframe data-bm-src="https://ads.bitmedia.io/view/YOUR_ZONE_ID_TOP"
-                    width="728" height="90" frameborder="0" scrolling="no"
-                    style="max-width:100%;display:block;margin:0 auto;border:none;"
-                    title="Advertisement"></iframe>
-          </div>
-        </div>
-
         <div class="status-row">
           <h3>Multi Timeframes</h3>
           <div class="status-header-info">
@@ -5349,21 +5513,6 @@
           </div>
           <div class="multi-ticker-grid" id="multiTickerGrid">
             <!-- 4 tracker slots generated by JS -->
-          </div>
-        </div>
-
-        <!-- Bitmedia Ad — Pre-Rankings Banner -->
-        <div class="bm-ad-wrap bm-ad-mid" id="bmAdMid">
-          <div class="ad-label">Advertisement</div>
-          <div class="bm-ad-container" id="bm-ad-mid-banner">
-            <!-- Bitmedia ad zone — lazy-loaded via IntersectionObserver.
-                 Replace YOUR_ZONE_ID_MID with your actual Bitmedia zone ID
-                 from https://publisher.bitmedia.io/dashboard
-                 The data-bm-src is set initially; JS swaps it to src on viewport entry. -->
-            <iframe data-bm-src="https://ads.bitmedia.io/view/YOUR_ZONE_ID_MID"
-                    width="728" height="90" frameborder="0" scrolling="no"
-                    style="max-width:100%;display:block;margin:0 auto;border:none;"
-                    title="Advertisement"></iframe>
           </div>
         </div>
 
@@ -7712,25 +7861,6 @@
         });
       }
 
-      // ===== Bitmedia ad lazy-load & fallback =====
-      // Bitmedia iframes are already in the HTML. We lazy-load them
-      // only after the page is interactive so they don't block first paint.
-      const bmIframes = document.querySelectorAll('.bm-ad-container iframe[data-bm-src]');
-      if (bmIframes.length) {
-        const bmLazyObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const iframe = entry.target;
-              if (iframe.dataset.bmSrc) {
-                iframe.src = iframe.dataset.bmSrc;
-                delete iframe.dataset.bmSrc;
-              }
-              bmLazyObserver.unobserve(iframe);
-            }
-          });
-        }, { rootMargin: '200px' });
-        bmIframes.forEach(iframe => bmLazyObserver.observe(iframe));
-      }
 
       // ===== Footer page modal links =====
       const pageContents = {
@@ -7801,9 +7931,7 @@
         link.addEventListener('click', (e) => {
           e.preventDefault();
           const page = link.getAttribute('data-page');
-          if (page === 'Blog') {
-            openBlogModal();
-          } else if (page) {
+          if (page) {
             openPage(page);
           }
         });
@@ -7956,11 +8084,384 @@
   </script>
 
   <!-- Blog Modal -->
+  </div><!-- end page-dashboard -->
+
   <div id="blogModal" class="page-modal blog-modal" role="dialog" aria-label="Trading Blog" aria-modal="true">
     <div class="page-modal-backdrop" id="blogModalBackdrop"></div>
     <div class="page-modal-content blog-modal-content">
       <button class="page-modal-close" id="blogModalClose" aria-label="Close blog modal">&times;</button>
       <div id="blogModalBody"></div>
+    </div>
+  </div>
+
+
+  <!-- ============================================
+       PAGE: ABOUT
+       ============================================ -->
+  <div id="page-about" class="page-section">
+    <div class="content-page">
+      <h1>About MultiPerps</h1>
+      <p>MultiPerps is a free, real-time Binance USDT-M Futures dashboard built for traders who want instant, multi-timeframe visibility into the perpetual contracts market. Designed with simplicity and speed in mind, MultiPerps streams live candlestick data across nine timeframes simultaneously — from 1-minute to monthly — so you never have to switch tabs to see the bigger picture.</p>
+
+      <h2>Why MultiPerps Exists</h2>
+      <p>Most crypto charting platforms force you into a single-timeframe view or require paid subscriptions for real-time data. MultiPerps was created to solve this problem: a single, distraction-free screen where every timeframe updates in real time via Binance WebSocket feeds, at zero cost and with zero sign-up friction. Whether you are a scalper watching the 1-minute chart or a swing trader monitoring daily candles, MultiPerps puts all the data on one screen.</p>
+
+      <h2>Key Features</h2>
+      <ul>
+        <li><strong>Multi-Timeframe Charts:</strong> View 1m, 5m, 15m, 30m, 1h, 4h, daily, weekly, and monthly candlestick charts simultaneously, all updating in real time.</li>
+        <li><strong>Price Alerts:</strong> Set up to four price alerts per ticker with audio notifications and visual popups. Alerts persist across browser sessions using local storage.</li>
+        <li><strong>Market Rankings:</strong> Track top volume, top gainers, top losers, open interest leaders, and funding rate extremes across all Binance USDT-M perpetual contracts.</li>
+        <li><strong>Multi-Ticker Dashboard:</strong> Monitor up to four tickers side by side on the same screen for instant comparison.</li>
+        <li><strong>Share Charts:</strong> Generate shareable chart images with a single click, perfect for social media or trading communities.</li>
+        <li><strong>Privacy-Respecting:</strong> We use Google Analytics for site improvement only. Your alert data, preferences, and trading activity are stored locally in your browser — never sold or shared.</li>
+      </ul>
+
+      <h2>Data Source</h2>
+      <p>All market data is sourced directly from the Binance Futures API via real-time WebSocket connections (wss://fstream.binance.com) and REST endpoints (https://fapi.binance.com). MultiPerps does not store, modify, or delay any market data. Prices, open interest, and funding rates reflect exactly what Binance reports, in real time.</p>
+
+      <h2>Open and Free</h2>
+      <p>MultiPerps is and will remain 100% free. There are no accounts, no subscriptions, and no premium tiers. The project is supported by non-intrusive advertising. We believe every trader deserves access to professional-grade charting tools regardless of their budget.</p>
+    </div>
+  </div>
+
+  <!-- ============================================
+       PAGE: BLOG
+       ============================================ -->
+  <div id="page-blog" class="page-section">
+    <div class="content-page">
+      <h1>Blog</h1>
+      <p>Insights, guides, and analysis for Binance Futures traders.</p>
+
+      <div id="blog-listing" class="blog-grid">
+        <div class="blog-card" onclick="showBlogArticle(1)">
+          <div class="blog-card-body">
+            <div class="blog-card-date">Jan 15, 2025</div>
+            <div class="blog-card-title">Understanding Binance USDT-M Perpetual Futures: A Complete Guide</div>
+            <div class="blog-card-excerpt">A comprehensive introduction to USDT-margined perpetual contracts on Binance, covering margin mechanics, funding rates, and how they differ from traditional futures.</div>
+            <span class="blog-card-link">Read more &rarr;</span>
+          </div>
+        </div>
+        <div class="blog-card" onclick="showBlogArticle(2)">
+          <div class="blog-card-body">
+            <div class="blog-card-date">Feb 10, 2025</div>
+            <div class="blog-card-title">How to Read Candlestick Charts for Crypto Futures Trading</div>
+            <div class="blog-card-excerpt">Master the essentials of candlestick chart reading — from basic patterns like doji and hammers to advanced multi-candle formations for crypto futures trading.</div>
+            <span class="blog-card-link">Read more &rarr;</span>
+          </div>
+        </div>
+        <div class="blog-card" onclick="showBlogArticle(3)">
+          <div class="blog-card-body">
+            <div class="blog-card-date">Mar 5, 2025</div>
+            <div class="blog-card-title">What Are Funding Rates and Why Do They Matter?</div>
+            <div class="blog-card-excerpt">Funding rates keep perpetual futures anchored to spot prices. Learn how positive and negative funding works, and how extreme rates signal trend exhaustion.</div>
+            <span class="blog-card-link">Read more &rarr;</span>
+          </div>
+        </div>
+        <div class="blog-card" onclick="showBlogArticle(4)">
+          <div class="blog-card-body">
+            <div class="blog-card-date">Apr 2, 2025</div>
+            <div class="blog-card-title">Open Interest Explained: What It Tells You About Market Sentiment</div>
+            <div class="blog-card-excerpt">Open interest reveals how much capital is committed to a futures market. Discover the four OI scenarios that help traders predict trend strength and reversals.</div>
+            <span class="blog-card-link">Read more &rarr;</span>
+          </div>
+        </div>
+        <div class="blog-card" onclick="showBlogArticle(5)">
+          <div class="blog-card-body">
+            <div class="blog-card-date">May 10, 2025</div>
+            <div class="blog-card-title">Top 5 Multi-Timeframe Analysis Strategies for Futures Traders</div>
+            <div class="blog-card-excerpt">Discover the five most effective multi-timeframe strategies used by professional futures traders to align entries, manage risk, and avoid false breakouts.</div>
+            <span class="blog-card-link">Read more &rarr;</span>
+          </div>
+        </div>
+        <div class="blog-card" onclick="showBlogArticle(6)">
+          <div class="blog-card-body">
+            <div class="blog-card-date">Jun 18, 2025</div>
+            <div class="blog-card-title">How to Use Price Alerts Effectively in Volatile Markets</div>
+            <div class="blog-card-excerpt">Price alerts are only useful if set strategically. Learn how to place alerts at key support and resistance levels and manage them across volatile crypto markets.</div>
+            <span class="blog-card-link">Read more &rarr;</span>
+          </div>
+        </div>
+        <div class="blog-card" onclick="showBlogArticle(7)">
+          <div class="blog-card-body">
+            <div class="blog-card-date">Jul 22, 2025</div>
+            <div class="blog-card-title">Liquidation Cascades: Understanding the Mechanics of Crypto Futures Wipeouts</div>
+            <div class="blog-card-excerpt">Liquidation cascades are among the most dramatic events in crypto futures. Understand the mechanics behind these self-reinforcing sell-offs and how to protect your positions.</div>
+            <span class="blog-card-link">Read more &rarr;</span>
+          </div>
+        </div>
+        <div class="blog-card" onclick="showBlogArticle(8)">
+          <div class="blog-card-body">
+            <div class="blog-card-date">Aug 14, 2025</div>
+            <div class="blog-card-title">Binance Futures vs. Spot Trading: Key Differences Every Trader Should Know</div>
+            <div class="blog-card-excerpt">Futures and spot trading serve entirely different purposes. This guide breaks down leverage, funding, liquidation, and risk management differences every trader needs to understand.</div>
+            <span class="blog-card-link">Read more &rarr;</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="blog-articles">
+        <!-- Blog Article 1 -->
+        <div class="blog-full-article" id="blog-article-1">
+          <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
+          <h1>Understanding Binance USDT-M Perpetual Futures: A Complete Guide</h1>
+          <p>Binance USDT-M perpetual futures are among the most popular derivatives in the cryptocurrency market. Unlike traditional futures contracts that have a fixed expiry date, perpetual futures never expire — they continue indefinitely as long as you maintain sufficient margin in your account. This unique structure makes them incredibly flexible for both short-term scalping and long-term position holding.</p>
+          <h2>What Are USDT-Margined Perpetual Contracts?</h2>
+          <p>USDT-margined (USDT-M) perpetual contracts are settled in USDT, meaning you deposit USDT as collateral and your profits and losses are also denominated in USDT. This is different from coin-margined contracts, where the collateral and settlement are in the underlying cryptocurrency like Bitcoin or Ethereum. USDT-M contracts are simpler to manage because your account balance is always in a stablecoin, eliminating the volatility risk of the collateral itself.</p>
+          <h2>How Margin and Leverage Work</h2>
+          <p>On Binance Futures, you can trade with leverage ranging from 1x to 125x depending on the contract. Leverage amplifies both your potential gains and losses. With 10x leverage, a 1% price move results in a 10% gain or loss on your margin. With 20x leverage, that same 1% move becomes a 20% swing. This is why risk management is absolutely critical in futures trading — a small adverse move can liquidate your entire position.</p>
+          <p>Binance uses a tiered margin system where higher position sizes require higher initial margin percentages. This protects the exchange from systemic risk and encourages responsible position sizing among traders. Always calculate your liquidation price before entering a trade and ensure you have a stop-loss in place.</p>
+          <h2>Funding Rates: The Price of Perpetuity</h2>
+          <p>Since perpetual contracts never expire, they need a mechanism to keep the futures price close to the spot price. This mechanism is the funding rate. Every eight hours, longs pay shorts or shorts pay longs depending on whether the perpetual price trades above or below the spot price. Positive funding means longs pay shorts (market is bullish and overleveraged), while negative funding means shorts pay longs (market is bearish and overleveraged).</p>
+          <h2>Getting Started on Binance Futures</h2>
+          <ul>
+            <li>Complete identity verification (KYC) on Binance</li>
+            <li>Transfer USDT from your spot wallet to your futures wallet</li>
+            <li>Select your desired contract and set your leverage level</li>
+            <li>Place your order — market, limit, or stop-limit</li>
+            <li>Monitor your position and manage risk with stop-losses</li>
+          </ul>
+          <p>MultiPerps provides real-time multi-timeframe charts, funding rate tracking, and open interest data for all Binance USDT-M perpetual contracts, giving you the edge you need to trade these markets effectively.</p>
+        </div>
+
+        <!-- Blog Article 2 -->
+        <div class="blog-full-article" id="blog-article-2">
+          <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
+          <h1>How to Read Candlestick Charts for Crypto Futures Trading</h1>
+          <p>Candlestick charts are the most widely used visualization tool in cryptocurrency trading. Each candlestick represents price action over a specific time period — the open, high, low, and close. Understanding how to read these patterns is fundamental to making informed trading decisions on Binance Futures or any crypto market.</p>
+          <h2>Anatomy of a Candlestick</h2>
+          <p>A candlestick consists of two parts: the body and the wicks (also called shadows). The body represents the range between the open and close prices. If the close is higher than the open, the candle is typically colored green (bullish). If the close is lower, it is colored red (bearish). The upper wick extends from the body to the highest price reached during the period, and the lower wick extends to the lowest price.</p>
+          <h2>Essential Single-Candle Patterns</h2>
+          <ul>
+            <li><strong>Doji:</strong> The open and close are nearly identical, showing indecision in the market. A doji after a strong trend often signals a potential reversal.</li>
+            <li><strong>Hammer:</strong> A small body at the top with a long lower wick. This appears at the bottom of a downtrend and suggests buyers are stepping in.</li>
+            <li><strong>Shooting Star:</strong> The opposite of a hammer — a small body at the bottom with a long upper wick. Appears at the top of an uptrend and signals potential bearish reversal.</li>
+            <li><strong>Marubozu:</strong> A candle with no wicks, meaning the open equals the low and the close equals the high (bullish) or vice versa (bearish). Shows strong conviction in one direction.</li>
+          </ul>
+          <h2>Multi-Candle Formations</h2>
+          <p>Patterns involving two or more candles carry more weight than single-candle signals. The engulfing pattern occurs when a large candle completely engulfs the previous candle's body — a bullish engulfing at the bottom of a downtrend or a bearish engulfing at the top of an uptrend. Three white soldiers (three consecutive bullish candles) and three black crows (three consecutive bearish candles) are strong continuation signals.</p>
+          <h2>Context Is Everything</h2>
+          <p>No candlestick pattern should be traded in isolation. A hammer at the bottom of a multi-week downtrend on the daily chart is far more significant than a hammer on a 5-minute chart during a choppy session. Always consider the broader context: the trend direction, support and resistance levels, volume, and higher timeframe alignment. MultiPerps displays nine timeframes simultaneously, making it easy to confirm candlestick patterns across multiple intervals before committing to a trade.</p>
+        </div>
+
+        <!-- Blog Article 3 -->
+        <div class="blog-full-article" id="blog-article-3">
+          <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
+          <h1>What Are Funding Rates and Why Do They Matter?</h1>
+          <p>Funding rates are the mechanism that keeps perpetual futures prices anchored to the underlying spot market. Unlike traditional futures that converge to the spot price at expiry, perpetual contracts have no expiry — so they rely on periodic funding payments between long and short position holders to maintain price parity. Understanding funding rates is essential for anyone trading Binance perpetual futures.</p>
+          <h2>How Funding Rates Work</h2>
+          <p>On Binance, funding is exchanged every eight hours between long and short position holders. When the funding rate is positive, longs pay shorts — this happens when the perpetual price trades above the spot price, indicating bullish sentiment and overleveraged long positions. When the rate is negative, shorts pay longs, indicating bearish sentiment. The size of the funding rate is proportional to the spread between perpetual and spot prices.</p>
+          <h2>Funding Rates as a Sentiment Indicator</h2>
+          <p>Extreme funding rates are powerful contrarian signals. When funding rates reach very high positive levels, it means the market is crowded on the long side — everyone is already bullish and overleveraged. This makes the market vulnerable to a long liquidation cascade if price dips even slightly. Conversely, extremely negative funding suggests the market is heavily short, creating conditions for a short squeeze rally.</p>
+          <h2>Practical Trading Strategies</h2>
+          <ul>
+            <li><strong>Funding rate arbitrage:</strong> Go long on spot and short on perpetual to collect positive funding payments with minimal directional risk.</li>
+            <li><strong>Contrarian entry:</strong> Look for extreme funding rates as potential reversal signals — high positive funding near resistance suggests caution for longs.</li>
+            <li><strong>Trend confirmation:</strong> Moderate positive funding with rising open interest confirms a healthy uptrend with new capital entering the market.</li>
+          </ul>
+          <p>MultiPerps displays the top positive and negative funding rates across all Binance USDT-M perpetual contracts in real time, helping you spot these extremes before the rest of the market catches on.</p>
+        </div>
+
+        <!-- Blog Article 4 -->
+        <div class="blog-full-article" id="blog-article-4">
+          <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
+          <h1>Open Interest Explained: What It Tells You About Market Sentiment</h1>
+          <p>Open interest (OI) is one of the most important yet underutilized metrics in crypto futures trading. It represents the total number of outstanding derivative contracts that have not been settled. Unlike volume, which measures trading activity over a period, open interest tells you how much capital is currently committed to a market. This distinction is crucial for understanding market dynamics and predicting potential price moves.</p>
+          <h2>The Four Open Interest Scenarios</h2>
+          <ul>
+            <li><strong>Rising price + Rising OI:</strong> Strong trend confirmation. New money is entering long positions, pushing prices higher. This is the healthiest uptrend scenario — ride the momentum.</li>
+            <li><strong>Rising price + Falling OI:</strong> Weak rally warning. Short covering is driving the price increase, not new buying pressure. Once shorts have covered, the rally may stall.</li>
+            <li><strong>Falling price + Rising OI:</strong> Strong downtrend. New short positions are being opened aggressively. Avoid long trades and look for short setups aligned with the trend.</li>
+            <li><strong>Falling price + Falling OI:</strong> Exhaustion signal. Longs are capitulating and closing positions. Once selling pressure exhausts itself, watch for a potential reversal.</li>
+          </ul>
+          <h2>Why Open Interest Matters More Than Volume</h2>
+          <p>Volume tells you how much was traded, but not whether positions are being opened or closed. A high-volume day could be driven entirely by position closing (falling OI), which has very different implications than new positions being opened (rising OI). By tracking OI alongside price, you get a much clearer picture of whether a trend is supported by new capital or running on fumes.</p>
+          <h2>Using OI in Your Trading Strategy</h2>
+          <p>Monitor sudden spikes in open interest before major events — they often signal an impending volatile move. When OI and funding rates both reach extremes simultaneously, it frequently precedes a significant price correction as overcrowded positions get liquidated. MultiPerps tracks OI rankings in real time across all Binance USDT-M perpetual contracts, giving you instant visibility into where the smart money is positioning.</p>
+        </div>
+
+        <!-- Blog Article 5 -->
+        <div class="blog-full-article" id="blog-article-5">
+          <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
+          <h1>Top 5 Multi-Timeframe Analysis Strategies for Futures Traders</h1>
+          <p>Multi-timeframe analysis is the cornerstone of professional trading. Instead of relying on a single chart interval, experienced traders examine price action across multiple timeframes to build a complete market picture. This approach dramatically reduces false signals and helps you trade with the trend rather than against it. Here are the five most effective strategies for applying multi-timeframe analysis to Binance Futures.</p>
+          <h2>Strategy 1: The Top-Down Trend Filter</h2>
+          <p>Start with the daily or weekly chart to determine the macro trend direction. Only look for trades in the direction of this higher timeframe trend. If the daily chart is bullish, restrict your search to long setups on lower timeframes. This single filter — trading only with the higher timeframe trend — eliminates a significant portion of losing trades that beginners take by fighting the dominant direction.</p>
+          <h2>Strategy 2: The Timeframe Confluence Entry</h2>
+          <p>Wait for alignment across at least three timeframes before entering a trade. For example, a long setup might require the 4-hour chart showing a bullish structure, the 1-hour chart forming a basing pattern at support, and the 15-minute chart producing a bullish reversal candlestick pattern. When multiple timeframes agree, your probability of success increases substantially. MultiPerps makes this effortless by displaying all nine timeframes simultaneously.</p>
+          <h2>Strategy 3: Support and Resistance Multi-Scale</h2>
+          <p>Key support and resistance levels on the daily chart are far more significant than those on the 5-minute chart. Map your levels on the higher timeframe first, then zoom into lower timeframes for precise entries near these zones. A support level that appears on both the daily and 4-hour chart is much stronger than one visible only on the 15-minute chart.</p>
+          <h2>Strategy 4: The Pullback-to-Trend Strategy</h2>
+          <p>Identify the trend on the 4-hour or daily chart, then wait for a pullback to a key moving average or support zone. Use the 15-minute or 5-minute chart to time your entry as price bounces from the pullback zone. This strategy combines the reliability of higher-timeframe trends with the precision of lower-timeframe entries, giving you both a favorable risk-reward ratio and tight stop placement.</p>
+          <h2>Strategy 5: Divergence Across Timeframes</h2>
+          <p>RSI divergence on the daily chart is far more significant than on the 5-minute chart. When you spot divergence on a higher timeframe, switch to lower timeframes to look for confirming reversal patterns. Divergence on the 4-hour chart combined with a breakdown on the 1-hour chart creates a high-confidence reversal setup. MultiPerps displays RSI indicators on all nine timeframes simultaneously, making cross-timeframe divergence scanning remarkably efficient.</p>
+        </div>
+
+        <!-- Blog Article 6 -->
+        <div class="blog-full-article" id="blog-article-6">
+          <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
+          <h1>How to Use Price Alerts Effectively in Volatile Markets</h1>
+          <p>Price alerts are one of the simplest yet most powerful tools available to crypto traders. When used correctly, they help you act on opportunities without staring at charts all day. In volatile crypto markets, where Bitcoin can move thousands of dollars in minutes, well-placed alerts ensure you never miss critical levels while freeing you from screen-watching burnout.</p>
+          <h2>Placing Alerts at Key Levels</h2>
+          <p>The most effective alerts are placed at structurally significant price levels, not arbitrary round numbers. Identify support and resistance zones on the daily and 4-hour charts first. These are levels where price has previously reversed, consolidated, or broken out with volume. Set alerts just above resistance to catch breakouts and just below support to catch breakdowns. The slight offset ensures your alert triggers early enough to act while avoiding false triggers from price wicks.</p>
+          <h2>The Four-Alert System</h2>
+          <p>MultiPerps allows up to four price alerts per ticker, which is sufficient for most trading strategies when used thoughtfully. Dedicate one alert to your primary entry level, one to your stop-loss level (so you can manage the trade proactively), one to a breakout level above resistance, and one to a key support level below current price. This four-zone approach covers the most critical price levels for any single position or watchlist entry.</p>
+          <h2>Managing Alerts in Real Time</h2>
+          <p>Crypto markets move fast, and yesterday's key levels may not be relevant today. Review and update your alerts at least once per trading session. After a significant breakout or breakdown, re-anchor your alerts to new support and resistance levels. MultiPerps alerts persist across browser sessions using local storage, so you won't lose your levels if you accidentally close the tab — but you should still review them regularly to ensure they reflect the current market structure.</p>
+          <h2>Alert Psychology: Acting Without Hesitation</h2>
+          <p>The purpose of an alert is to prompt action, not just awareness. Before setting an alert, decide exactly what you will do when it triggers — enter a long, close a short, move your stop-loss, or simply observe. Having a pre-defined action plan eliminates the hesitation that often causes traders to miss moves. When the alert fires, execute your plan. Discipline in following through on alert-triggered actions is what separates consistent traders from those who constantly second-guess themselves.</p>
+        </div>
+
+        <!-- Blog Article 7 -->
+        <div class="blog-full-article" id="blog-article-7">
+          <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
+          <h1>Liquidation Cascades: Understanding the Mechanics of Crypto Futures Wipeouts</h1>
+          <p>Liquidation cascades are among the most dramatic and devastating events in cryptocurrency futures markets. In a matter of minutes, billions of dollars in positions can be wiped out as forced selling triggers more forced selling in a self-reinforcing downward spiral. Understanding how these cascades work is essential for protecting your capital — and potentially profiting from the chaos.</p>
+          <h2>What Triggers a Liquidation Cascade?</h2>
+          <p>A liquidation cascade begins when a significant price move triggers forced closures of leveraged positions. In crypto futures, exchanges automatically close positions that fall below the maintenance margin requirement. When a large number of long positions are liquidated simultaneously, the forced selling pushes price even lower, which triggers more long liquidations, which pushes price even further down — creating a cascade effect that accelerates with each round of liquidations.</p>
+          <h2>The Anatomy of a Cascade</h2>
+          <p>Phase one begins with an initial catalyst — often a large sell order, negative news, or a rejection at major resistance. Phase two is the first wave of liquidations as highly leveraged positions hit their liquidation prices. Phase three is the acceleration: the forced selling from phase two pushes price into the liquidation zones of moderately leveraged positions, creating a second, larger wave. Phase four is the exhaustion: once most leveraged positions have been wiped out, selling pressure subsides and price often bounces sharply in a "dead cat bounce" or genuine reversal.</p>
+          <h2>How to Protect Yourself</h2>
+          <ul>
+            <li><strong>Use reasonable leverage:</strong> The higher your leverage, the closer your liquidation price is to your entry. With 20x leverage, a 5% adverse move liquidates you. With 5x leverage, you can withstand a 20% move.</li>
+            <li><strong>Always use stop-losses:</strong> A stop-loss exits your position before the exchange force-liquidates it. You control the exit price rather than being liquidated at the worst possible time.</li>
+            <li><strong>Monitor open interest and funding:</strong> Extremely high OI combined with high positive funding is a warning sign that the market is vulnerable to a long liquidation cascade. MultiPerps displays both metrics in real time.</li>
+            <li><strong>Reduce position size before major events:</strong> Options expirations, economic data releases, and exchange maintenance periods are common cascade triggers.</li>
+          </ul>
+          <h2>Opportunities After a Cascade</h2>
+          <p>After a liquidation cascade, the market often presents excellent trading opportunities. With leveraged positions wiped out and funding rates reset, the market is cleaner and less crowded. Watch for a V-shaped recovery or a retest of the cascade low. These post-cascade setups can offer some of the best risk-reward ratios in crypto trading — but only enter with confirmation, not anticipation.</p>
+        </div>
+
+        <!-- Blog Article 8 -->
+        <div class="blog-full-article" id="blog-article-8">
+          <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
+          <h1>Binance Futures vs. Spot Trading: Key Differences Every Trader Should Know</h1>
+          <p>Binance offers both spot and futures markets, but they operate on fundamentally different principles. Understanding these differences is critical before committing capital to either market. While spot trading is straightforward — you buy an asset and hold it — futures trading introduces leverage, funding rates, liquidation mechanics, and contract specifications that add both opportunity and risk.</p>
+          <h2>Leverage and Capital Efficiency</h2>
+          <p>The most obvious difference is leverage. Spot trading is 1:1 — you need $50,000 to buy $50,000 worth of Bitcoin. On Binance Futures, you can control that same $50,000 position with as little as $400 at 125x leverage (though this is extremely risky). Lower leverage levels like 3x-10x offer a more reasonable balance between capital efficiency and risk management. Leverage allows you to diversify your capital across multiple positions or hold cash reserves while maintaining market exposure.</p>
+          <h2>Funding Costs vs. No Carrying Cost</h2>
+          <p>Spot positions have no carrying cost — once you buy Bitcoin, you hold it indefinitely with no additional fees. Futures positions, however, are subject to funding rates every eight hours. Over time, these funding payments can significantly impact your returns, especially if you are holding a position against the funding direction. A long position in a market with persistently high positive funding can cost you a substantial amount in funding payments over weeks or months. Always factor funding costs into your trade calculations.</p>
+          <h2>Liquidation Risk</h2>
+          <p>In spot trading, the worst that can happen is your asset loses value — but you still own it. In futures trading, leveraged positions can be liquidated if the price moves against you beyond your maintenance margin. Liquidation means your position is forcibly closed at a loss, and you may lose your entire margin. This is the fundamental risk of futures that does not exist in spot markets. Risk management through stop-losses and reasonable leverage is not optional in futures — it is essential for survival.</p>
+          <h2>Short Selling</h2>
+          <p>On Binance spot, short selling is not directly possible — you can only profit from price increases. On futures, going short is as simple as clicking the sell button. This makes futures the primary market for traders who want to profit from both rising and falling markets. The ability to short also enables hedging strategies, where you can protect your spot holdings by taking a short futures position during uncertain market conditions.</p>
+          <h2>Which Is Right for You?</h2>
+          <p>Spot trading is ideal for long-term investors who believe in the fundamental value of cryptocurrencies and want to accumulate over time. Futures trading is better suited for active traders who want to capitalize on both rising and falling markets, use leverage to amplify returns, and employ sophisticated strategies like hedging and arbitrage. Many experienced traders use both markets simultaneously — holding core positions in spot while actively trading futures for shorter-term opportunities. MultiPerps supports both approaches with real-time data for all Binance USDT-M perpetual contracts.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       PAGE: PRIVACY POLICY
+       ============================================ -->
+  <div id="page-privacy" class="page-section">
+    <div class="content-page">
+      <h1>Privacy Policy</h1>
+      <p><em>Last updated: May 14, 2026</em></p>
+
+      <h2>1. Information We Collect</h2>
+      <p>MultiPerps uses Google Analytics (GA4) to collect anonymous usage data. This includes pages visited, time spent on the site, device information (browser type, screen resolution, operating system), and general geographic location (country or city level, not precise). We do not collect personal identification information such as names, email addresses, or phone numbers.</p>
+
+      <h2>2. How We Use Information</h2>
+      <p>The data collected through Google Analytics is used solely to understand how visitors use our site, identify popular features, diagnose technical issues, and improve the overall user experience. We do not use this data for targeted advertising or sell it to any third party.</p>
+
+      <h2>3. Third-Party Services</h2>
+      <h3>Google Analytics</h3>
+      <p>We use Google Analytics 4 to collect and analyze website usage data. Google Analytics uses cookies and similar technologies to gather information about how visitors interact with our site. The data collected is subject to Google's Privacy Policy. For more information, see <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>.</p>
+      <h3>Google AdSense</h3>
+      <p>We use Google AdSense to display advertisements. AdSense may use cookies to serve personalized or non-personalized ads based on your browsing history. You can learn more about how Google uses cookies for advertising at <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</p>
+
+      <h2>4. Cookies</h2>
+      <p>Our site uses cookies through the following mechanisms:</p>
+      <ul>
+        <li><strong>Google Analytics cookies:</strong> Used to distinguish users and generate anonymous usage statistics. These cookies collect information about how visitors use our site, including the number of visitors, the pages they visit, and the pages they came from.</li>
+        <li><strong>Google AdSense cookies:</strong> Used to serve relevant advertisements and measure ad effectiveness. These may include cookies for interest-based advertising.</li>
+      </ul>
+      <p>You can control cookies through your browser settings. Most browsers allow you to refuse cookies or delete existing cookies. Note that disabling cookies may affect the functionality of some features on our site.</p>
+
+      <h2>5. Local Storage</h2>
+      <p>MultiPerps uses your browser's local storage to save user preferences and data. This includes:</p>
+      <ul>
+        <li>Price alert thresholds and configurations</li>
+        <li>Favorite ticker selections</li>
+        <li>Symbol search history</li>
+        <li>Dashboard layout preferences</li>
+      </ul>
+      <p>This data is stored exclusively on your device and is never transmitted to our servers or any third party. You can clear this data at any time by clearing your browser's local storage.</p>
+
+      <h2>6. Data Sharing</h2>
+      <p>We do not sell, trade, or rent your personal information to any third party. Anonymous usage data collected by Google Analytics is processed by Google according to their privacy policy. Ad-related data is processed by Google AdSense according to their respective policies. No personal identification data is shared between MultiPerps and any other entity.</p>
+
+      <h2>7. Your Rights</h2>
+      <p>You have the right to:</p>
+      <ul>
+        <li>Opt out of Google Analytics tracking by installing the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a></li>
+        <li>Control cookie settings through your browser preferences</li>
+        <li>Clear local storage data through your browser settings</li>
+        <li>Use ad-blocking extensions to limit ad-related tracking</li>
+      </ul>
+
+      <h2>8. Children's Privacy</h2>
+      <p>MultiPerps is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided personal information, please contact us and we will take steps to remove such information.</p>
+
+      <h2>9. Changes to This Privacy Policy</h2>
+      <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated "Last updated" date. Your continued use of the site after any changes constitutes acceptance of the revised policy.</p>
+
+      <h2>10. Contact Us</h2>
+      <p>If you have questions about this Privacy Policy, please contact us at <a href="mailto:support@multiperps.com">support@multiperps.com</a>.</p>
+    </div>
+  </div>
+
+  <!-- ============================================
+       PAGE: TERMS OF SERVICE
+       ============================================ -->
+  <div id="page-terms" class="page-section">
+    <div class="content-page">
+      <h1>Terms of Service</h1>
+      <p><em>Last updated: May 14, 2026</em></p>
+
+      <h2>1. Acceptance of Terms</h2>
+      <p>By accessing and using MultiPerps (the "Service"), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Service. Your continued use of the Service following any changes to these terms constitutes acceptance of those changes.</p>
+
+      <h2>2. Description of Service</h2>
+      <p>MultiPerps is a free, real-time Binance USDT-M Futures dashboard that provides live multi-timeframe candlestick charts, price alerts, market rankings, and multi-ticker tracking for USDT perpetual contracts. The Service is provided at no cost and does not require user registration or accounts.</p>
+
+      <h2>3. No Financial Advice</h2>
+      <p><strong>CRITICAL DISCLAIMER:</strong> MultiPerps is an informational and educational tool only. Nothing on this website constitutes financial advice, investment advice, trading advice, or any other form of professional advice. The data, charts, rankings, and alerts provided by MultiPerps are for informational purposes only and should not be interpreted as a recommendation to buy, sell, or hold any cryptocurrency or financial instrument. Cryptocurrency futures trading carries substantial risk of loss and may not be suitable for all investors. You should always conduct your own research and consult with a qualified financial advisor before making any investment decisions.</p>
+
+      <h2>4. Data Accuracy Disclaimer</h2>
+      <p>All market data displayed on MultiPerps is sourced from the Binance Futures API via real-time WebSocket connections and REST endpoints. While we strive to display accurate and timely data, MultiPerps does not guarantee the accuracy, completeness, or timeliness of any data. Data may experience delays, interruptions, or errors due to network issues, API limitations, or other technical factors. You should always verify critical price and market data directly on Binance or other official exchange platforms before making trading decisions.</p>
+
+      <h2>5. No Warranty / "As Is"</h2>
+      <p>The Service is provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the Service will be uninterrupted, secure, or error-free.</p>
+
+      <h2>6. Limitation of Liability</h2>
+      <p>To the maximum extent permitted by applicable law, MultiPerps and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, use, or goodwill, arising out of or related to your use of or inability to use the Service. This includes damages arising from trading losses based on data displayed on the Service, service interruptions, or any other cause of action. In no event shall our total liability exceed the amount of zero dollars ($0), as the Service is provided free of charge.</p>
+
+      <h2>7. Intellectual Property</h2>
+      <p>The Service and its original content, features, and functionality are owned by MultiPerps and are protected by international copyright, trademark, and other intellectual property laws. Our trademarks and trade dress may not be used in connection with any product or service without prior written consent. Market data displayed on the Service is sourced from Binance and is subject to Binance's own terms of use.</p>
+
+      <h2>8. User Conduct</h2>
+      <p>By using MultiPerps, you agree not to:</p>
+      <ul>
+        <li>Attempt to gain unauthorized access to any part of the Service or its related systems</li>
+        <li>Use the Service for any unlawful purpose or in violation of any applicable laws or regulations</li>
+        <li>Scrape, automate, or redistribute data obtained through the Service at scale without permission</li>
+        <li>Interfere with or disrupt the Service or servers or networks connected to the Service</li>
+        <li>Use the Service to transmit any malicious code, viruses, or harmful content</li>
+      </ul>
+
+      <h2>9. Third-Party Links</h2>
+      <p>The Service may contain links to third-party websites, including Binance. These links are provided for convenience only and do not signify endorsement. We are not responsible for the content, privacy practices, or terms of use of any third-party website. You access third-party websites at your own risk.</p>
+
+      <h2>10. Modifications to Terms</h2>
+      <p>We reserve the right to modify or replace these Terms of Service at any time. Changes will be posted on this page with an updated "Last updated" date. Your continued use of the Service after any modifications constitutes acceptance of the revised terms. We encourage you to review these terms periodically.</p>
+
+      <h2>11. Governing Law</h2>
+      <p>These Terms of Service shall be governed by and construed in accordance with applicable laws, without regard to conflict of law provisions. Any disputes arising under these terms shall be resolved in the appropriate courts of competent jurisdiction.</p>
+
+      <h2>12. Contact Us</h2>
+      <p>If you have questions about these Terms of Service, please contact us at <a href="mailto:support@multiperps.com">support@multiperps.com</a>.</p>
     </div>
   </div>
 
@@ -7972,15 +8473,14 @@
       </div>
       <div class="footer-col">
         <div class="footer-col-title">About</div>
-        <a href="#" data-page="about">About MultiPerps</a>
-        <a href="#" data-page="disclaimer">Disclaimer</a>
-        <a href="#" data-page="terms">Terms of Use</a>
-        <a href="#" data-page="privacy">Privacy Policy</a>
+        <a href="#/about">About MultiPerps</a>
+        <a href="#/blog">Blog</a>
+        <a href="#/privacy">Privacy Policy</a>
+        <a href="#/terms">Terms of Service</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Resources</div>
         <a href="#" data-page="alerts">Dashboard Alerts Guide</a>
-        <a href="#" data-page="Blog">Trading Blog</a>
         <a href="#" data-page="usdt">Donation</a>
       </div>
       <div class="footer-col">
@@ -8036,12 +8536,10 @@
   <!-- html2canvas for screenshot capture (deferred for performance) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 
-  <!-- Ad Blocker Detection & Bitmedia Ad Fallback -->
+  <!-- Ad Blocker Detection -->
   <script>
   (function() {
-    // --- Ad-blocker detection ---
-    // We create a bait element that ad-blockers typically hide.
-    // If it stays hidden after a short delay, we consider an ad blocker active.
+    // Simple ad-blocker detection
     var bait = document.createElement('div');
     bait.className = 'ad-banner ads adsbox ad-placement ad_wrapper';
     bait.style.cssText = 'position:absolute;top:-9999px;left:-9999px;width:1px;height:1px;overflow:hidden;';
@@ -8049,32 +8547,115 @@
     document.body.appendChild(bait);
 
     function checkAdBlocker() {
-      var bmAdTop = document.getElementById('bmAdTop');
-      var bmAdMid = document.getElementById('bmAdMid');
-
-      // Check if the bait element was hidden by an ad blocker
       var blocked = false;
       if (bait.offsetHeight === 0 || bait.offsetParent === null ||
           getComputedStyle(bait).display === 'none' ||
           getComputedStyle(bait).visibility === 'hidden') {
         blocked = true;
       }
-
-      if (blocked) {
-        // Hide Bitmedia ad containers gracefully (collapse to zero height)
-        if (bmAdTop) bmAdTop.classList.add('bm-ad-hidden');
-        if (bmAdMid) bmAdMid.classList.add('bm-ad-hidden');
-      }
-
       // Clean up bait element
       if (bait.parentNode) {
         bait.parentNode.removeChild(bait);
       }
     }
 
-    // Give ad blockers a moment to act before checking
     setTimeout(checkAdBlocker, 500);
   })();
+  </script>
+
+  <!-- Hash-Based Routing & Blog Navigation -->
+  <script>
+  // Hash-based routing
+  function navigateTo(hash) {
+    window.location.hash = hash;
+  }
+
+  function handleRoute() {
+    const hash = window.location.hash || '#/';
+    const route = hash.replace('#/', '').replace('#', '') || 'dashboard';
+
+    // Hide all pages
+    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+
+    // Deactivate all nav links
+    document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+
+    // Handle blog sub-routes
+    if (route.startsWith('blog/')) {
+      const articleId = route.replace('blog/', '');
+      document.getElementById('page-blog').classList.add('active');
+      showBlogArticle(articleId);
+      setActiveNav('blog');
+    } else {
+      // Show the correct page
+      const pageMap = {
+        '': 'page-dashboard',
+        'dashboard': 'page-dashboard',
+        'about': 'page-about',
+        'blog': 'page-blog',
+        'privacy': 'page-privacy',
+        'terms': 'page-terms'
+      };
+
+      const pageId = pageMap[route] || 'page-dashboard';
+      const pageEl = document.getElementById(pageId);
+      if (pageEl) pageEl.classList.add('active');
+
+      // If showing blog listing, reset to list view
+      if (route === 'blog') {
+        showBlogListing();
+      }
+
+      setActiveNav(route || 'dashboard');
+    }
+
+    // Scroll to top on page change
+    window.scrollTo(0, 0);
+  }
+
+  function setActiveNav(route) {
+    const navMap = {
+      'dashboard': '#/dashboard',
+      'about': '#/about',
+      'blog': '#/blog',
+      'privacy': '#/privacy',
+      'terms': '#/terms'
+    };
+    const targetHash = navMap[route] || '#/';
+    document.querySelectorAll('.nav-link').forEach(el => {
+      if (el.getAttribute('href') === targetHash || (route === 'dashboard' && el.getAttribute('href') === '#/')) {
+        el.classList.add('active');
+      }
+    });
+  }
+
+  function showBlogArticle(id) {
+    document.getElementById('blog-listing').style.display = 'none';
+    document.querySelectorAll('.blog-full-article').forEach(el => el.classList.remove('active'));
+    const article = document.getElementById('blog-article-' + id);
+    if (article) article.classList.add('active');
+  }
+
+  function showBlogListing() {
+    document.getElementById('blog-listing').style.display = '';
+    document.querySelectorAll('.blog-full-article').forEach(el => el.classList.remove('active'));
+  }
+
+  // Mobile hamburger menu toggle
+  function toggleNav() {
+    document.getElementById('nav-links').classList.toggle('open');
+  }
+
+  // Close mobile nav on link click
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('nav-link')) {
+      document.getElementById('nav-links').classList.remove('open');
+    }
+  });
+
+  // Listen for hash changes
+  window.addEventListener('hashchange', handleRoute);
+  window.addEventListener('DOMContentLoaded', handleRoute);
   </script>
 </body>
 <!-- VERSION NOTE: 1 -->
