@@ -7535,7 +7535,7 @@
         currentShareText = `$${tickerName} across all timeframes 👀
             \n Multi-timeframe crypto charts in one dashboard.
             \n Free. No signup.
-            \n #MultiPerps
+            \n #MultiPerps #Binance
             \n www.MultiPerps.com \n`;
         // Reset step states
         if (shareStep1Num) { shareStep1Num.textContent = '1'; shareStep1Num.classList.remove('done'); }
@@ -7585,15 +7585,18 @@
               throw new Error('html2canvas not loaded');
             }
 
+            // Calculate scale to ensure Full HD (1920px) minimum output width
+            const chartListWidth = chartList.offsetWidth;
+            const fhdScale = Math.max(2, Math.ceil(1920 / chartListWidth));
             const chartCanvas = await html2canvas(chartList, {
               backgroundColor: '#070814',
-              scale: 2,
+              scale: fhdScale,
               useCORS: true,
               logging: false
             });
 
             const tickerName = state.symbol.replace('USDT','');
-            const text = `@MultiPerps Charts — ${tickerName} multi-timeframe view\n\nwww.MultiPerps.com #MultiPerps #${tickerName}`;
+            const text = `MultiPerps Charts — ${tickerName} multi-timeframe view\n\nwww.MultiPerps.com #MultiPerps #${tickerName}`;
 
             // Create composite canvas: image on top, text below
             const textLines = text.split('\n');
