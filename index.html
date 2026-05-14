@@ -5175,6 +5175,9 @@
     const resizeCanvasToContainer = (canvas) => {
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
+      // Skip resizing if element is not visible (e.g., parent is display:none)
+      // or dimensions are unreasonably small — prevents 1x1 canvas artifacts
+      if (rect.width === 0 || rect.height === 0) return;
       const w = Math.max(1, Math.floor(rect.width * dpr));
       const h = Math.max(1, Math.floor(rect.height * dpr));
       if (canvas.width !== w || canvas.height !== h) {
@@ -5209,6 +5212,8 @@
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
+      // Guard against drawing on unreasonably small canvases (e.g., after being hidden)
+      if (canvas.width < 10 || canvas.height < 10) return;
 
       const width = canvas.width;
       const height = canvas.height;
@@ -5406,7 +5411,6 @@
             <input type="text" id="tickerInput" class="ticker-symbol-input" placeholder="🔍︎ Search Binance Tickers (e.g., BTC)" />
             <button class="nav-hamburger" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
             <div class="nav-links" id="nav-links">
-              <a href="#/" class="nav-link active">Dashboard</a>
               <a href="#/about" class="nav-link">About</a>
               <a href="#/blog" class="nav-link">Blog</a>
               <a href="#/privacy" class="nav-link">Privacy</a>
@@ -5760,6 +5764,8 @@
       const chart = state.charts[interval];
       if (!chart || !chart.canvas) return;
       resizeCanvasToContainer(chart.canvas);
+      // Skip drawing if canvas dimensions are still invalid after resize attempt
+      if (chart.canvas.width < 10 || chart.canvas.height < 10) return;
       if (chart.dirty || chart.hoverDirty) {
         const alertPrices = getAlertPrices();
         drawCandlestickChart(chart.canvas, chart.candles, chart.hoverPrice, chart.hoverIndex, chart.hoverLineColor, alertPrices);
@@ -5775,6 +5781,9 @@
       _chartRafId = requestAnimationFrame(() => {
         _chartRafId = null;
         if (document.hidden) return;
+        // Skip rendering if dashboard page is not active
+        const dashboardPage = document.getElementById('page-dashboard');
+        if (dashboardPage && !dashboardPage.classList.contains('active')) return;
         updateChartMetas();
         redrawCharts();
         // Schedule next frame if any chart is still dirty
@@ -5798,6 +5807,11 @@
 
     const redrawCharts = () => {
       for (const interval of CONFIG.INTERVALS) {
+        const chart = state.charts[interval];
+        if (chart && chart.canvas) {
+          // Skip charts with unreasonably small dimensions (not yet properly laid out)
+          if (chart.canvas.width < 10 || chart.canvas.height < 10) continue;
+        }
         redrawChart(interval);
       }
     };
@@ -6042,6 +6056,9 @@
 
       state.chartTimer = setInterval(() => {
         if (document.hidden) return;
+        // Also skip if dashboard page-section is not active (user on another page)
+        const dashboardPage = document.getElementById('page-dashboard');
+        if (dashboardPage && !dashboardPage.classList.contains('active')) return;
         markChartDirty();
       }, CONFIG.CHART_UPDATE_INTERVAL_MS);
 
@@ -6052,7 +6069,11 @@
         state.msgsPerSec = state.msgsInWindow;
         state.msgsInWindow = 0;
 
-        if (Number.isFinite(state.currentPrice)) {
+        // Only process price alerts and UI updates when dashboard is visible
+        const dashboardPage = document.getElementById('page-dashboard');
+        const dashboardVisible = dashboardPage && dashboardPage.classList.contains('active');
+
+        if (dashboardVisible && Number.isFinite(state.currentPrice)) {
           checkPriceAlerts(state.currentPrice);
           updatePriceUI();
         }
@@ -8622,6 +8643,27 @@
 
     // Scroll to top on page change
     window.scrollTo(0, 0);
+
+    // When returning to dashboard, force a chart redraw after layout stabilizes
+    // to fix the "single big candle" artifact from canvas resize while hidden
+    if (route === '' || route === 'dashboard') {
+      requestAnimationFrame(() => {
+        // Mark all charts dirty and trigger redraw after CSS display transition
+        for (const interval of CONFIG.INTERVALS) {
+          const chart = state.charts[interval];
+          if (chart) {
+            chart.dirty = true;
+            chart.hoverPrice = null;
+            chart.hoverIndex = null;
+          }
+        }
+        // Double RAF ensures layout is fully computed after display:block
+        requestAnimationFrame(() => {
+          markChartDirty();
+          redrawCharts();
+        });
+      });
+    }
   }
 
   function setActiveNav(route) {
