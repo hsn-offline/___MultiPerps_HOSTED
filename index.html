@@ -604,7 +604,7 @@
       align-items: center;
       flex-wrap: wrap;
       justify-content: center;
-      position: static;
+      position: relative;
       left: auto;
       transform: none;
       max-width: 100%;
@@ -864,8 +864,8 @@
        AD SECTION
        ============================================ */
     .ad-section {
-      margin: 16px auto;
-      padding: 8px;
+      margin: 8px auto;
+      padding: 4px;
       text-align: center;
       max-width: 728px;
       overflow: hidden;
@@ -882,8 +882,10 @@
 
     .ad-section ins.adsbygoogle {
       display: block;
-      min-height: 90px;
+      min-height: 50px;
+      max-height: 50px;
       background: transparent;
+      overflow: hidden;
     }
 
     /* ============================================
@@ -2892,8 +2894,8 @@
     /* Sticky Navigation Bar */
     .sticky-nav {
       position: sticky;
-      top: 48px;
-      z-index: 100;
+      top: 0;
+      z-index: 3000;
       display: flex;
       justify-content: center;
       gap: 8px;
@@ -3334,45 +3336,45 @@
     /* ============================================
        SITE NAVIGATION
        ============================================ */
-    .site-nav {
-      position: sticky;
-      top: 0;
-      z-index: 3000;
-      background: rgba(7, 8, 20, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0 16px;
-      display: flex;
+    .nav-hamburger {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      height: 48px;
-      gap: 12px;
-    }
-    .nav-brand {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--accent);
-      text-decoration: none;
-      white-space: nowrap;
-      letter-spacing: -0.5px;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 6px;
+      padding: 4px 8px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+      flex: 0 0 auto;
     }
     .nav-links {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: rgba(7, 8, 20, 0.96);
+      backdrop-filter: blur(12px);
+      flex-direction: column;
+      padding: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 0 0 8px 8px;
+      z-index: 3001;
+      min-width: 160px;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45);
     }
+    .nav-links.open { display: flex; }
     .nav-links::-webkit-scrollbar { display: none; }
     .nav-link {
       color: var(--muted);
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 600;
-      padding: 6px 12px;
+      padding: 10px 14px;
       border-radius: 6px;
       white-space: nowrap;
+      width: 100%;
       transition: color 140ms ease, background 140ms ease;
     }
     .nav-link:hover {
@@ -3383,33 +3385,26 @@
       color: var(--accent);
       background: rgba(38, 224, 210, 0.1);
     }
-    .nav-hamburger {
-      display: none;
-      background: none;
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 6px;
-      padding: 4px 8px;
+
+    .back-to-dashboard {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
       color: var(--muted);
+      padding: 6px 14px;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 1.2rem;
-      line-height: 1;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      text-decoration: none;
+      transition: all 140ms ease;
     }
-    @media (max-width: 640px) {
-      .nav-hamburger { display: inline-flex; align-items: center; }
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 48px;
-        left: 0;
-        right: 0;
-        background: rgba(7, 8, 20, 0.96);
-        backdrop-filter: blur(12px);
-        flex-direction: column;
-        padding: 8px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      }
-      .nav-links.open { display: flex; }
-      .nav-link { width: 100%; padding: 10px 14px; }
+    .back-to-dashboard:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+      border-color: rgba(255,255,255,0.2);
     }
 
 
@@ -3545,17 +3540,6 @@
 </head>
 
 <body>
-  <nav class="site-nav" aria-label="Site navigation">
-    <a href="#/" class="nav-brand">MultiPerps</a>
-    <button class="nav-hamburger" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
-    <div class="nav-links" id="nav-links">
-      <a href="#/" class="nav-link active">Dashboard</a>
-      <a href="#/about" class="nav-link">About</a>
-      <a href="#/blog" class="nav-link">Blog</a>
-      <a href="#/privacy" class="nav-link">Privacy</a>
-      <a href="#/terms" class="nav-link">Terms</a>
-    </div>
-  </nav>
 
   <!-- Skip to content link for accessibility -->
   <a href="#mainContent" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to main content</a>
@@ -3605,6 +3589,13 @@
 
   <div id="page-dashboard" class="page-section active">
 
+  <nav class="sticky-nav" id="stickyNav" aria-label="Dashboard navigation">
+    <button class="nav-btn" data-nav="charts" type="button">Multi Time</button>
+    <button class="nav-btn" data-nav="alerts" type="button">Multi Alert</button>
+    <button class="nav-btn" data-nav="trackers" type="button">Multi Ticker</button>
+    <button class="nav-btn" data-nav="rankings" type="button">Multi Rank</button>
+  </nav>
+
         <div class="ad-section">
           <div class="ad-label">Advertisement</div>
           <ins class="adsbygoogle"
@@ -3615,13 +3606,6 @@
                data-full-width-responsive="true"></ins>
           <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
-
-  <nav class="sticky-nav" id="stickyNav" aria-label="Dashboard navigation">
-    <button class="nav-btn" data-nav="charts" type="button">Multi Time</button>
-    <button class="nav-btn" data-nav="alerts" type="button">Multi Alert</button>
-    <button class="nav-btn" data-nav="trackers" type="button">Multi Ticker</button>
-    <button class="nav-btn" data-nav="rankings" type="button">Multi Rank</button>
-  </nav>
   <main id="mainContent" role="main">
     <div class="ticker-grid" id="tickerGrid"></div>
   </main>
@@ -5069,6 +5053,14 @@
           inp.setAttribute('autocomplete', 'off');
         }
       }
+      // Also connect tracker inputs to the same datalist
+      for (let i = 0; i < MAX_TRACKERS; i++) {
+        const inp = document.getElementById(`trackerInput${i}`);
+        if (inp) {
+          inp.setAttribute('list', 'alertTickerDatalist');
+          inp.setAttribute('autocomplete', 'off');
+        }
+      }
 
       // Attempt API fetch in background to enrich with live prices/volumes
       try {
@@ -5097,6 +5089,14 @@
           datalist.innerHTML = items.map(it => `<option value="${it.ticker}">`).join('');
           for (let i = 1; i <= 4; i++) {
             const inp = document.getElementById(`alertTicker${i}`);
+            if (inp) {
+              inp.setAttribute('list', 'alertTickerDatalist');
+              inp.setAttribute('autocomplete', 'off');
+            }
+          }
+          // Also update tracker inputs
+          for (let i = 0; i < MAX_TRACKERS; i++) {
+            const inp = document.getElementById(`trackerInput${i}`);
             if (inp) {
               inp.setAttribute('list', 'alertTickerDatalist');
               inp.setAttribute('autocomplete', 'off');
@@ -5404,6 +5404,14 @@
           <div class="card-header-brand"><span class="footer-brand" style="cursor: pointer; text-align: center;" onclick="location.reload()"><span class="brand-line">Multi</span><span class="brand-line">Perps</span></span></div>
           <div class="control-buttons">
             <input type="text" id="tickerInput" class="ticker-symbol-input" placeholder="🔍︎ Search Binance Tickers (e.g., BTC)" />
+            <button class="nav-hamburger" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
+            <div class="nav-links" id="nav-links">
+              <a href="#/" class="nav-link active">Dashboard</a>
+              <a href="#/about" class="nav-link">About</a>
+              <a href="#/blog" class="nav-link">Blog</a>
+              <a href="#/privacy" class="nav-link">Privacy</a>
+              <a href="#/terms" class="nav-link">Terms</a>
+            </div>
           </div>
           <div class="status-text" id="statusText"><span class="live-indicator connecting"></span> Connecting...</div>
         </div>
@@ -6737,7 +6745,7 @@
       return `
         <div class="tracker-card" id="trackerCard${index}" data-index="${index}">
           <div class="tracker-card-header-row">
-            <input type="text" id="trackerInput${index}" class="tracker-dropdown-input" placeholder="🔍 Search ticker (e.g. BTC)" value="${display}" autocomplete="off" data-tracker-index="${index}" />
+            <input type="text" id="trackerInput${index}" class="tracker-dropdown-input" placeholder="Ticker" value="${display}" autocomplete="off" data-tracker-index="${index}" list="alertTickerDatalist" />
             <span class="tracker-symbol" id="trackerSymbol${index}">${display || '--'}</span>
             <span class="tracker-price" id="trackerPrice${index}">--</span>
           </div>
@@ -6755,7 +6763,7 @@
       return `
         <div class="tracker-card empty" id="trackerCard${index}" data-index="${index}">
           <div class="tracker-card-header-row">
-            <input type="text" id="trackerInput${index}" class="tracker-dropdown-input" placeholder="🔍 Search ticker (e.g. BTC)" autocomplete="off" data-tracker-index="${index}" />
+            <input type="text" id="trackerInput${index}" class="tracker-dropdown-input" placeholder="Ticker" autocomplete="off" data-tracker-index="${index}" list="alertTickerDatalist" />
           </div>
           <div style="font-size:2rem;margin-bottom:8px;">📈</div>
           <div>Select a ticker above</div>
@@ -6771,59 +6779,50 @@
       }
       grid.innerHTML = html;
 
-      // Attach input handlers for each tracker card dropdown
+      // Attach input handlers for each tracker card dropdown (using native datalist)
+      // Key: do NOT call setTrackerSymbol() on 'input' — it triggers renderTrackerGrid()
+      // which rebuilds the DOM and destroys the focused input, killing the datalist popup.
+      // Only set the symbol on 'change' (datalist selection or blur with changed value)
+      // and 'Enter' key.
       for (let i = 0; i < MAX_TRACKERS; i++) {
         const inp = document.getElementById(`trackerInput${i}`);
         if (inp) {
           const slotIndex = i;
-          inp.addEventListener('focus', () => {
-            state.tickerSuggest.activeInput = inp;
-            state.tickerSuggest.onSelectCallback = (displayTicker, normalizedSymbol) => {
-              if (normalizedSymbol) {
-                setTrackerSymbol(slotIndex, normalizedSymbol);
+          // Ensure datalist is connected
+          inp.setAttribute('list', 'alertTickerDatalist');
+          inp.setAttribute('autocomplete', 'off');
+          inp.addEventListener('change', () => {
+            const val = inp.value.trim();
+            if (val) {
+              const sym = normalizeSymbol(val);
+              if (sym) {
+                setTrackerSymbol(slotIndex, sym);
               }
-            };
-            renderTickerSuggestMenu();
-          });
-          inp.addEventListener('input', () => {
-            renderTickerSuggestMenu();
+            }
           });
           inp.addEventListener('blur', () => {
-            if (Date.now() < state.tickerSuggest.ignoreBlurUntil) return;
+            // If the value looks like a valid ticker, set it;
+            // otherwise restore the previous symbol display value
+            const val = inp.value.trim();
+            if (val) {
+              const sym = normalizeSymbol(val);
+              if (sym) {
+                setTrackerSymbol(slotIndex, sym);
+                return;
+              }
+            }
+            // Restore the current symbol display value if user didn't select anything
             setTimeout(() => {
-              if (state.tickerSuggest.visible && state.tickerSuggest.activeInput === inp) return;
-              // Restore the current symbol display value if user didn't select anything
               const currentSym = stateTracker.symbols[slotIndex];
               if (currentSym) {
                 inp.value = toDisplayTicker(currentSym);
               } else {
                 inp.value = '';
               }
-            }, 250);
+            }, 100);
           });
           inp.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowDown') {
-              if (!state.tickerSuggest.visible) renderTickerSuggestMenu();
-              moveTickerSuggestActive(1);
-              e.preventDefault();
-              return;
-            }
-            if (e.key === 'ArrowUp') {
-              if (!state.tickerSuggest.visible) renderTickerSuggestMenu();
-              moveTickerSuggestActive(-1);
-              e.preventDefault();
-              return;
-            }
-            if (e.key === 'Escape') {
-              hideTickerSuggestMenu();
-              return;
-            }
             if (e.key === 'Enter') {
-              if (acceptTickerSuggestActive()) {
-                e.preventDefault();
-                return;
-              }
-              // Manual entry
               const val = inp.value.trim();
               if (val) {
                 const sym = normalizeSymbol(val);
@@ -7218,6 +7217,13 @@
       grid.innerHTML = '';
       const card = buildCard(state.symbol);
       grid.appendChild(card);
+
+      // Move ad-section below card-header (div[2]/div → main/div/div/div[1])
+      const adSection = document.querySelector('#page-dashboard > .ad-section');
+      const cardHeader = card.querySelector('.card-header');
+      if (adSection && cardHeader) {
+        cardHeader.after(adSection);
+      }
 
       state.elements = {
         card,
@@ -8101,6 +8107,7 @@
        ============================================ -->
   <div id="page-about" class="page-section">
     <div class="content-page">
+      <a href="#/" class="back-to-dashboard">&larr; Back to Dashboard</a>
       <h1>About MultiPerps</h1>
       <p>MultiPerps is a free, real-time Binance USDT-M Futures dashboard built for traders who want instant, multi-timeframe visibility into the perpetual contracts market. Designed with simplicity and speed in mind, MultiPerps streams live candlestick data across nine timeframes simultaneously — from 1-minute to monthly — so you never have to switch tabs to see the bigger picture.</p>
 
@@ -8130,6 +8137,7 @@
        ============================================ -->
   <div id="page-blog" class="page-section">
     <div class="content-page">
+      <a href="#/" class="back-to-dashboard">&larr; Back to Dashboard</a>
       <h1>Blog</h1>
       <p>Insights, guides, and analysis for Binance Futures traders.</p>
 
@@ -8357,6 +8365,7 @@
        ============================================ -->
   <div id="page-privacy" class="page-section">
     <div class="content-page">
+      <a href="#/" class="back-to-dashboard">&larr; Back to Dashboard</a>
       <h1>Privacy Policy</h1>
       <p><em>Last updated: May 14, 2026</em></p>
 
@@ -8418,6 +8427,7 @@
        ============================================ -->
   <div id="page-terms" class="page-section">
     <div class="content-page">
+      <a href="#/" class="back-to-dashboard">&larr; Back to Dashboard</a>
       <h1>Terms of Service</h1>
       <p><em>Last updated: May 14, 2026</em></p>
 
