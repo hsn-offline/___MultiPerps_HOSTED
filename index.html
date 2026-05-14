@@ -169,7 +169,6 @@
       --bg-0: #070814;
       --bg-1: #0e1024;
       --card: rgba(255, 255, 255, 0.06);
-      --card-2: rgba(0, 0, 0, 0.28);
       --border: rgba(255, 255, 255, 0.12);
       --border-2: rgba(255, 255, 255, 0.08);
       --text: rgba(255, 255, 255, 0.92);
@@ -183,7 +182,6 @@
       --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
       --ring: 0 0 0 3px rgba(38, 224, 210, 0.18);
       --section-bg: rgba(0, 0, 0, 0.14);
-      --section-header-bg: rgba(0, 0, 0, 0.22);
       --section-border: rgba(255, 255, 255, 0.06);
     }
 
@@ -244,14 +242,6 @@
       gap: 6px;
       flex-wrap: wrap;
       position: relative;
-    }
-
-    .card-header-left {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 0;
-      flex: 0 0 auto;
     }
 
     .ticker-title {
@@ -333,25 +323,7 @@
       box-shadow: var(--ring);
     }
 
-    .alert-state {
-      font-size: 1rem;
-      font-weight: 400;
-      white-space: nowrap;
-      text-align: left;
-      color: var(--muted-2);
-    }
 
-    .alert-state:empty {
-      display: none;
-    }
-
-    .alert-up {
-      color: var(--good);
-    }
-
-    .alert-down {
-      color: var(--bad);
-    }
 
     .copy-price-btn {
       border: 1px solid rgba(255, 255, 255, 0.14);
@@ -377,40 +349,6 @@
       color: var(--good);
     }
 
-    .price-alert-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      pointer-events: none;
-    }
-
-    .price-alert-popup {
-      background: rgba(0, 0, 0, 0.78);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-left-width: 4px;
-      border-radius: 10px;
-      padding: 10px 12px;
-      min-width: 240px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
-      color: #fff;
-    }
-
-    .price-alert-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .price-alert-body {
-      font-size: 0.85rem;
-      color: #d0d0d0;
-    }
-
     .chart-context-menu {
       position: fixed;
       z-index: 2000;
@@ -421,15 +359,6 @@
       min-width: 160px;
       box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45);
       display: none;
-    }
-
-    .chart-context-menu .menu-title {
-      font-size: 0.85rem;
-      color: #b0b0b0;
-      margin-bottom: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .chart-context-menu .menu-btn {
@@ -668,47 +597,9 @@
       box-sizing: border-box;
     }
 
-    .number-btn {
-      background: #2196f3;
-      color: white;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      padding: 0;
-      font-size: 1rem;
-      font-weight: bold;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
 
-    .number-btn:hover {
-      transform: translateY(-1px) scale(1.05);
-      box-shadow: 0 12px 24px rgba(33, 150, 243, 0.3);
-    }
 
-    .price-box {
-      background: rgba(0, 0, 0, 0.22);
-      padding: 10px 8px;
-      border-radius: 8px;
-      text-align: center;
-      border: 1px solid var(--border-2);
-      margin-bottom: 10px;
-    }
 
-    .price-label {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .price-value {
-      font-size: 2.0rem;
-      font-weight: bold;
-      color: rgba(255, 255, 255, 0.94);
-    }
 
     .status-row {
       display: flex;
@@ -735,23 +626,7 @@
       white-space: nowrap;
     }
 
-    .connection-quality {
-      font-size: 1rem;
-      color: var(--warn);
-      font-weight: 800;
-      white-space: nowrap;
-    }
 
-    .sample-count {
-      font-size: 0.8rem;
-      color: var(--accent);
-      white-space: nowrap;
-    }
-
-    .status-middle {
-      flex: 1;
-      text-align: center;
-    }
 
     .chart-list {
       display: grid;
@@ -870,14 +745,6 @@
       max-width: 930px;
       width: 100%;
       overflow: hidden;
-    }
-
-    .ad-label {
-      font-size: 0.65rem;
-      color: var(--muted-2);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 4px;
     }
 
     .ad-section ins.adsbygoogle {
@@ -1001,7 +868,18 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 0.82rem;
+      table-layout: fixed;
     }
+
+    /* Fixed column widths: # | Symbol | Price | Metric */
+    .ranking-table th:nth-child(1),
+    .ranking-table td:nth-child(1) { width: 10%; }
+    .ranking-table th:nth-child(2),
+    .ranking-table td:nth-child(2) { width: 30%; }
+    .ranking-table th:nth-child(3),
+    .ranking-table td:nth-child(3) { width: 32%; }
+    .ranking-table th:nth-child(4),
+    .ranking-table td:nth-child(4) { width: 28%; }
 
     .ranking-table th {
       text-align: left;
@@ -1013,6 +891,9 @@
       letter-spacing: 0.5px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       background: rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .ranking-table th:nth-child(3),
@@ -1026,6 +907,9 @@
       color: var(--muted);
       cursor: pointer;
       transition: background 100ms ease;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .ranking-table tr:hover td {
@@ -1041,7 +925,6 @@
     .ranking-table .rank-num {
       color: var(--muted-2);
       font-weight: 700;
-      width: 24px;
     }
 
     .ranking-table .sym-name {
@@ -1061,17 +944,6 @@
     .ranking-table .pct-down {
       color: var(--bad);
       font-weight: 700;
-    }
-
-    /* Flash animation for value changes */
-    @keyframes flashGreen {
-      0% { background-color: rgba(76, 175, 80, 0.3); }
-      100% { background-color: transparent; }
-    }
-
-    @keyframes flashRed {
-      0% { background-color: rgba(255, 82, 82, 0.3); }
-      100% { background-color: transparent; }
     }
 
     @keyframes flashPriceUp {
@@ -1105,29 +977,7 @@
     .chart-share-row .alert-field {
       flex: 0 0 auto;
     }
-    .chart-share-row .alert-tooltip {
-      flex: 0 0 auto;
-    }
-    /* Alert Row */
-    .alert-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 8px 12px;
-      background: rgba(0,0,0,0.22);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 8px;
-      margin-bottom: 6px;
-      flex-wrap: wrap;
-    }
-    .alert-row .alert-field {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex: 0 0 auto;
-      min-width: 0;
-    }
+
     .chart-share-row .alert-price-input {
       width: 100%;
     }
@@ -1151,13 +1001,7 @@
       box-shadow: 0 10px 20px rgba(29, 161, 242, 0.25);
     }
 
-    .ranking-table tr.flash-up td {
-      animation: flashGreen 1s ease-out;
-    }
 
-    .ranking-table tr.flash-down td {
-      animation: flashRed 1s ease-out;
-    }
 
     .ranking-loading {
       padding: 20px;
@@ -1173,14 +1017,7 @@
       font-size: 0.8rem;
     }
 
-    .ranking-footer {
-      padding: 6px 10px;
-      text-align: center;
-      font-size: 0.7rem;
-      color: var(--muted-2);
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
-      background: rgba(0, 0, 0, 0.15);
-    }
+
 
     .ticker-suggest-list::-webkit-scrollbar,
     body::-webkit-scrollbar {
@@ -1207,12 +1044,6 @@
     }
 
     @media (max-width: 1140px) {
-      .card-header-left {
-        width: 100%;
-        justify-content: space-between;
-        order: 1;
-      }
-
       .control-buttons {
         width: 100%;
         justify-content: flex-start;
@@ -1276,23 +1107,7 @@
         min-width: 0;
         width: 100%;
       }
-      .header-actions {
-        justify-content: flex-end;
-        gap: 8px;
-      }
-      .multi-alert-controls {
-        justify-content: flex-end;
-        gap: 8px;
-      }
-      .multi-ticker-controls {
-        justify-content: flex-end;
-        gap: 8px;
-      }
-      .header-btn {
-        font-size: 0.85rem;
-        padding: 5px 12px;
-        height: 30px;
-      }
+
 
       .alert-price-input {
         width: 100%;
@@ -1300,12 +1115,6 @@
 
       .card-header {
         align-items: stretch;
-      }
-
-      .card-header-left {
-        width: 100%;
-        justify-content: space-between;
-        order: 1;
       }
 
       .control-buttons {
@@ -1382,10 +1191,6 @@
         font-size: 1.1rem;
       }
 
-      .price-value {
-        font-size: 1.6rem;
-      }
-
       .ticker-symbol-input {
         width: 280px;
       }
@@ -1409,12 +1214,6 @@
 
       .rankings-header h2 {
         font-size: 1rem;
-      }
-      .multi-alert-controls {
-        justify-content: flex-end;
-      }
-      .multi-ticker-controls {
-        justify-content: flex-end;
       }
     }
 
@@ -1440,12 +1239,6 @@
       opacity: 1;
     }
 
-    .footer-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
     .footer-brand {
       font-size: 1rem;
       font-weight: 800;
@@ -1455,12 +1248,6 @@
       background-clip: text;
       letter-spacing: 0.5px;
       white-space: nowrap;
-    }
-
-    .footer-divider {
-      width: 1px;
-      height: 16px;
-      background: rgba(255, 255, 255, 0.14);
     }
 
     .footer-source {
@@ -1479,22 +1266,12 @@
       color: var(--accent);
     }
 
-    .footer-right {
-      font-size: 0.78rem;
-      color: rgba(255, 255, 255, 0.28);
-      white-space: nowrap;
-    }
-
     @media (max-width: 480px) {
       .site-footer {
         flex-direction: column;
         align-items: flex-start;
         padding: 14px 16px 12px;
         gap: 6px;
-      }
-
-      .footer-right {
-        font-size: 0.72rem;
       }
     }
 
@@ -1578,13 +1355,6 @@
       justify-self: end;
       margin-left: 0;
     }
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-left: auto;
-    }
     .status-text {
       font-size: 1.0rem;
       color: var(--muted);
@@ -1593,29 +1363,6 @@
       order: 1;
     }
 
-    .header-btn {
-      background: #2563eb;
-      color: #fff;
-      font-size: 0.9rem;
-      padding: 6px 14px;
-      border-radius: 6px;
-      white-space: nowrap;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      height: 32px; /* Ensure consistent height */
-      box-sizing: border-box;
-      display: inline-flex;
-      align-items: center;
-      transition: transform 140ms ease, box-shadow 140ms ease;
-    }
-    .header-btn:hover {
-      transform: translateY(-1px) scale(1.02);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.32);
-    }
-    .blog-btn {
-      background: #f59e0b;
-    }
     .status-row {
       display: flex;
       justify-content: flex-start;
@@ -1644,13 +1391,6 @@
       flex-wrap: wrap;
       justify-content: center;
       flex: 1 1 100%;
-    }
-    .network-sign {
-      font-size: 1rem;
-      color: var(--accent);
-      display: inline-flex;
-      align-items: center;
-      line-height: 1;
     }
     .timestamp { display: none; }
 
@@ -2186,26 +1926,6 @@
     }
 
   
-    /* Alert Row */
-    .alert-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 8px 12px;
-      background: rgba(0,0,0,0.22);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 8px;
-      margin-bottom: 6px;
-      flex-wrap: wrap;
-    }
-    .alert-row .alert-field {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex: 0 0 auto;
-      min-width: 0;
-    }
     .chart-share-row .alert-price-input {
       width: 220;
       min-width: 200px;
@@ -2224,15 +1944,6 @@
     }
 
     @media (max-width: 768px) {
-      .alert-row {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-      }
-      .alert-row .alert-field {
-        justify-content: space-between;
-        flex: 1 1 auto;
-      }
       .chart-share-row .alert-price-input {
         width: 100%;
         flex: 1 1 auto;
@@ -2243,10 +1954,6 @@
       .chart-share-row .alert-field {
         margin-right: 6px;
         margin-bottom: 4px;
-      }
-      .alert-tooltip {
-        margin-left: 0;
-        align-self: center;
       }
     }
 
@@ -2408,9 +2115,6 @@
     .ranking-table .pct-down {
       color: var(--bad-bright);
     }
-    .alert-down {
-      color: var(--bad-bright);
-    }
     .ranking-error {
       color: var(--bad-bright);
     }
@@ -2440,10 +2144,6 @@
     }
     .status-text {
       font-weight: 500;
-    }
-    .connection-quality {
-      font-weight: 700;
-      letter-spacing: 0.3px;
     }
     .alert-label {
       font-weight: 600;
@@ -2490,12 +2190,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Ad section label not bold */
-    .ad-label {
-      font-weight: 400;
-      letter-spacing: 2px;
-    }
-
     /* Skeleton loading for rankings */
     .skeleton-text {
       height: 14px;
@@ -2533,15 +2227,6 @@
     }
 
     @media (max-width: 768px) {
-      .alert-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .alert-row .alert-field {
-        max-width: none;
-        flex-direction: row;
-        justify-content: space-between;
-      }
       .ticker-suggest-menu {
         min-width: auto !important;
         width: calc(100vw - 32px) !important;
@@ -2563,10 +2248,6 @@
       }
       .ticker-suggest-menu .ticker-suggest-item {
         padding: 12px 14px;
-      }
-      .header-actions {
-        flex-wrap: wrap;
-        gap: 6px;
       }
       .status-row h3 {
         width: 100%;
@@ -2617,9 +2298,6 @@
       body {
         font-size: 112%;
       }
-      .alert-row .alert-field {
-        min-width: 0;
-      }
       /* Multi-alert compact mobile layout */
       .multi-alert-panel {
         padding: 8px 8px;
@@ -2658,21 +2336,6 @@
       }
       .alert-live-status {
         font-size: 0.62rem;
-      }
-      .header-actions {
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-      .header-actions .header-btn {
-        font-size: 0.8rem;
-        padding: 4px 10px;
-        height: 28px;
-      }
-      .header-btn {
-        font-size: 0.85rem;
-        padding: 5px 12px;
-        height: 30px;
       }
       .status-row {
         flex-wrap: wrap;
@@ -2744,9 +2407,6 @@
       margin: 0;
       flex: 0 0 auto;
     }
-    .multi-ticker-controls {
-      display: none;
-    }
     .tracker-timeframe-slider {
       display: flex;
       gap: 4px;
@@ -2787,17 +2447,6 @@
     }
     .tracker-tf-btn:active {
       transform: scale(0.96);
-    }
-    .multi-ticker-controls {
-      display: none;
-    }
-    .multi-ticker-input-row {
-      width: 100%;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-top: 4px;
-      flex-wrap: wrap;
     }
     .multi-ticker-grid {
       display: grid;
@@ -2863,26 +2512,6 @@
     }
     .tracker-price.up { color: var(--good); }
     .tracker-price.down { color: var(--bad-bright); }
-    .tracker-remove {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      background: rgba(255, 71, 87, 0.15);
-      border: 1px solid rgba(255, 71, 87, 0.3);
-      color: var(--bad-bright);
-      border-radius: 6px;
-      padding: 2px 8px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .tracker-card:hover .tracker-remove {
-      opacity: 1;
-    }
-    .tracker-remove:hover {
-      background: rgba(255, 71, 87, 0.3);
-    }
     .tracker-chart-container {
       height: 215px;
       background: #1a1a1a;
@@ -3028,12 +2657,6 @@
       to { opacity: 1; transform: translateX(0); }
     }
 
-
-    /* Hide alert-state elements (no more ▲/▼) */
-    .alert-state {
-      display: none !important;
-    }
-
     /* Alert Live Status Indicator */
     .alert-live-status {
       display: inline-flex;
@@ -3168,13 +2791,10 @@
 
     /* Unified button style */
     .control-btn,
-    .header-btn,
     .trade-btn,
     .share-btn,
-    .number-btn,
     .copy-price-btn,
     .ranking-card-refresh,
-    .tracker-remove,
     .blog-back-btn {
       padding: 6px 14px;
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -3188,10 +2808,8 @@
       user-select: none;
     }
     .control-btn:hover,
-    .header-btn:hover,
     .trade-btn:hover,
     .share-btn:hover,
-    .number-btn:hover,
     .copy-price-btn:hover,
     .ranking-card-refresh:hover,
     .blog-back-btn:hover {
@@ -3204,17 +2822,6 @@
     .copy-price-btn.copied {
       border-color: rgba(76, 175, 80, 0.6);
       color: var(--good);
-    }
-    /* Number buttons keep circular shape */
-    .number-btn {
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      padding: 0;
-      font-weight: bold;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
     }
     /* Trade button keeps blue color accent */
     .trade-btn {
@@ -3237,17 +2844,6 @@
       background: rgba(14, 165, 233, 0.25);
       border-color: rgba(14, 165, 233, 0.7);
       color: #81d4fa;
-    }
-    /* Header buttons */
-    .header-btn {
-      border-color: rgba(37, 99, 235, 0.5);
-      background: rgba(37, 99, 235, 0.15);
-      color: #6da3ff;
-    }
-    .header-btn:hover {
-      background: rgba(37, 99, 235, 0.25);
-      border-color: rgba(37, 99, 235, 0.7);
-      color: #93bfff;
     }
 
     /* ============================================
@@ -3304,9 +2900,6 @@
       width: 100%;
       min-width: 55px;
       max-width: 200px;
-    }
-    .multi-alert-inputs .alert-state {
-      display: none !important;
     }
     .alert-slot-log {
       font-size: 0.72rem;
@@ -3895,7 +3488,6 @@
       currentPrice: null,
       prevPrice: null,
       msgsInWindow: 0,
-      msgsPerSec: 0,
       chartTimer: null,
       healthTimer: null,
       audioContext: null,
@@ -3917,7 +3509,6 @@
         data: [],
         oiData: [],
         fundingData: [],
-        lastFetch: 0,
         timer: null,
         renderTimer: null,
         oiTimer: null,
@@ -4226,26 +3817,6 @@
       } catch { }
     };
 
-    const showPriceAlertPopup = (title, message, color) => {
-      const host = state.elements.card || document.body;
-      let container = host.querySelector('#priceAlertContainer');
-      if (!container) {
-        container = document.createElement('div');
-        container.id = 'priceAlertContainer';
-        container.className = 'price-alert-container';
-        host.appendChild(container);
-      }
-
-      if (container.children.length >= 3) return;
-
-      const popup = document.createElement('div');
-      popup.className = 'price-alert-popup';
-      popup.style.borderLeftColor = color;
-      popup.innerHTML = `<div class="price-alert-title">${title}</div><div class="price-alert-body">${message}</div>`;
-      container.appendChild(popup);
-      setTimeout(() => popup.remove(), 4000);
-    };
-
     // ===== Toast Notification System =====
     const showToast = (title, message, type) => {
       let container = document.getElementById('toastContainer');
@@ -4287,20 +3858,6 @@
         }
       } catch {}
     };
-
-    // Request notification permission only once per browser (stored in localStorage)
-    const requestNotificationOnce = (() => {
-      return () => {
-        if (hasAlertPermission()) return; // Already requested in this browser
-        if ('Notification' in window && Notification.permission === 'default') {
-          Notification.requestPermission().then((perm) => {
-            if (perm === 'granted') setAlertPermission();
-          }).catch(() => {});
-        } else if ('Notification' in window && Notification.permission === 'granted') {
-          setAlertPermission();
-        }
-      };
-    })();
 
     const checkPriceAlerts = (price) => {
       if (!Number.isFinite(price)) return;
@@ -4677,7 +4234,6 @@
           rtEl.className = 'alert-rt-price empty';
         } else {
           // Determine price direction vs. alert target price
-          const prevText = rtEl.textContent;
           const newText = '$' + formatPlainNumber(price);
           rtEl.textContent = newText;
           // Flash direction based on relation to alert price
@@ -5808,8 +5364,6 @@
       }
     };
 
-    const updateConnectionQuality = () => { /* removed */ };
-
     const initChartsState = () => {
       state.charts = {};
       for (const interval of CONFIG.INTERVALS) {
@@ -6192,7 +5746,6 @@
       state.lastMessageTime = null;
       state.lastTradeTime = null;
       state.msgsInWindow = 0;
-      state.msgsPerSec = 0;
       state.prevPrice = null;
 
       if (!state.urlSymbolMode) saveStored(STORAGE.symbol, state.symbol);
@@ -6246,7 +5799,6 @@
       // (already handled by markChartDirty via ws.onmessage -> chart.dirty = true)
 
       state.healthTimer = setInterval(() => {
-        state.msgsPerSec = state.msgsInWindow;
         state.msgsInWindow = 0;
 
         // Only process price alerts and UI updates when dashboard is visible
@@ -6309,7 +5861,6 @@
       state.lastTradeTime = null;
       state.lastMessageTime = null;
       state.msgsInWindow = 0;
-      state.msgsPerSec = 0;
       state.reconnectAttempts = 0;
 
       state.elements.tickerTitle.textContent = next.replace('USDT', '');
@@ -6408,7 +5959,6 @@
         }
         items.sort((a, b) => a.symbol.localeCompare(b.symbol));
         state.rankings.data = items;
-        state.rankings.lastFetch = Date.now();
         return items;
       } catch (err) {
         console.error('Rankings fetch error:', err);
@@ -7102,40 +6652,6 @@
       renderTrackerGrid();
       restartTrackerWS();
       fetchTrackerKlines();
-    };
-
-    const addTracker = (raw) => {
-      const sym = normalizeSymbol(raw);
-      if (!sym) return;
-      // Find first empty slot, or replace the slot that has the same symbol
-      if (stateTracker.symbols.includes(sym)) return; // no duplicates
-      let placed = false;
-      for (let i = 0; i < MAX_TRACKERS; i++) {
-        if (!stateTracker.symbols[i]) {
-          stateTracker.symbols[i] = sym;
-          placed = true;
-          break;
-        }
-      }
-      if (!placed) {
-        // All slots full, replace first
-        stateTracker.symbols[0] = sym;
-      }
-      saveTrackerSymbols();
-      renderTrackerGrid();
-      restartTrackerWS();
-      fetchTrackerKlines();
-    };
-
-    const removeTracker = (index) => {
-      stateTracker.symbols[index] = '';
-      // Compact: shift non-empty symbols down
-      const compacted = stateTracker.symbols.filter(Boolean);
-      while (compacted.length < MAX_TRACKERS) compacted.push('');
-      stateTracker.symbols = compacted;
-      saveTrackerSymbols();
-      renderTrackerGrid();
-      restartTrackerWS();
     };
 
     const fetchTrackerKlines = async () => {
@@ -7857,13 +7373,6 @@
         });
       }
 
-      function openBlogModal() {
-        if (!blogModal) return;
-        renderBlogList();
-        blogModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-
       function closeBlogModal() {
         if (!blogModal) return;
         blogModal.classList.remove('active');
@@ -7995,7 +7504,6 @@
 
             // Line 1: "MultiPerps Charts — BTC multi-timeframe view"
             // Draw in segments: before ticker, ticker (colored), after ticker
-            const line1 = textLines[0];
             const beforeTicker = 'MultiPerps Charts — ';
             const afterTicker = ' multi-timeframe view';
             const beforeWidth = ctx.measureText(beforeTicker).width;
@@ -8792,10 +8300,6 @@
   <!-- Hash-Based Routing & Blog Navigation -->
   <script>
   // Hash-based routing
-  function navigateTo(hash) {
-    window.location.hash = hash;
-  }
-
   function handleRoute() {
     const hash = window.location.hash || '#/';
     const route = hash.replace('#/', '').replace('#', '') || 'dashboard';
