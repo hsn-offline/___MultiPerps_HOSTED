@@ -865,37 +865,12 @@
        ============================================ */
     .ad-section {
       margin: 8px auto;
-      padding: 4px;
+      padding: 0;
       text-align: center;
       max-width: 930px;
       width: 100%;
       overflow: hidden;
-      background: transparent;
     }
-
-    .ad-section .ad-banner {
-      display: inline-block;
-      width: 100%;
-      max-width: 930px;
-      height: 180px;
-      min-height: 180px;
-      background: transparent;
-    }
-
-    @media (max-width: 950px) {
-      .ad-section .ad-banner {
-        max-width: 100%;
-        height: auto;
-        min-height: 90px;
-      }
-    }
-
-    @media (max-width: 500px) {
-      .ad-section .ad-banner {
-        min-height: 50px;
-      }
-    }
-
 
     .ad-label {
       font-size: 0.65rem;
@@ -907,6 +882,9 @@
 
     .ad-section ins.adsbygoogle {
       display: block;
+      width: 100%;
+      max-width: 930px;
+      height: 180px;
       background: transparent;
       overflow: hidden;
     }
@@ -930,6 +908,8 @@
       flex-wrap: wrap;
       gap: 10px;
     }
+
+
 
     .rankings-header h2 {
       font-size: 1.15rem;
@@ -2516,10 +2496,39 @@
       letter-spacing: 2px;
     }
 
+    /* Skeleton loading for rankings */
+    .skeleton-text {
+      height: 14px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+      background-size: 200% 100%;
+      animation: skeletonShimmer 1.5s ease-in-out infinite;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .ranking-loading .ranking-table {
+      opacity: 0.6;
+    }
+
+    .ranking-loading .rank-num {
+      color: var(--muted-2);
+    }
+
     /* Google AdSense responsive adjustments */
-    @media (max-width: 950px) {
+    @media (max-width: 960px) {
       .ad-section {
         max-width: 100%;
+      }
+      .ad-section ins.adsbygoogle {
+        max-width: 100%;
+        height: 180px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .ad-section ins.adsbygoogle {
+        height: 100px;
       }
     }
 
@@ -2534,8 +2543,26 @@
         justify-content: space-between;
       }
       .ticker-suggest-menu {
-        min-width: 300px !important;
-        max-width: 95vw;
+        min-width: auto !important;
+        width: calc(100vw - 32px) !important;
+        max-width: calc(100vw - 32px) !important;
+        left: 16px !important;
+        right: 16px !important;
+        border-radius: 12px;
+      }
+      .ticker-suggest-menu .ticker-suggest-filters {
+        padding: 8px;
+        gap: 6px;
+      }
+      .ticker-suggest-menu .ticker-suggest-filter-btn {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+      }
+      .ticker-suggest-menu .ticker-suggest-list {
+        max-height: 50vh;
+      }
+      .ticker-suggest-menu .ticker-suggest-item {
+        padding: 12px 14px;
       }
       .header-actions {
         flex-wrap: wrap;
@@ -2912,7 +2939,7 @@
       box-shadow: 0 0 0 3px rgba(38, 224, 210, 0.18);
     }
     .tracker-dropdown-input::placeholder {
-      color: rgba(255, 255, 255, 0.42);
+      color: rgba(255, 255, 255, 0.55);
     }
     /* Sticky Navigation Bar */
     .sticky-nav {
@@ -3620,9 +3647,8 @@
   </nav>
 
         <div class="ad-section">
-          <div class="ad-label">Advertisement</div>
-          <ins class="adsbygoogle ad-banner"
-               style="display:block;background:transparent;"
+          <ins class="adsbygoogle"
+               style="display:block;width:100%;max-width:930px;height:180px"
                data-ad-client="ca-pub-5711107782432526"
                data-ad-slot="auto"
                data-ad-format="horizontal"
@@ -3662,6 +3688,7 @@
       alert4Prefix: 'alert_price_4_',
       futuresSymbolsCache: 'alert_futures_symbols_cache',
       futuresFavorites: 'alert_futures_favorites',
+      recentTickers: 'pv_recent_tickers_v1',
       multiAlerts: 'pv_multi_alerts_v2',
       alertPermission: 'pv_alert_permission_v1',
       alertLogHistory: 'pv_alert_log_history_v2',
@@ -3783,6 +3810,30 @@
       try {
         localStorage.setItem(STORAGE.futuresFavorites, JSON.stringify(Array.from(state.futuresFavorites)));
       } catch { }
+    };
+
+    const loadRecentTickers = () => {
+      try {
+        const raw = localStorage.getItem(STORAGE.recentTickers);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.map(t => String(t || '').toUpperCase()).filter(Boolean).slice(0, 10);
+      } catch { return []; }
+    };
+
+    const saveRecentTickers = (tickers) => {
+      try { localStorage.setItem(STORAGE.recentTickers, JSON.stringify(tickers.slice(0, 10))); } catch {}
+    };
+
+    const addRecentTicker = (ticker) => {
+      const t = String(ticker || '').toUpperCase();
+      if (!t) return;
+      const recent = loadRecentTickers();
+      const idx = recent.indexOf(t);
+      if (idx >= 0) recent.splice(idx, 1);
+      recent.unshift(t);
+      saveRecentTickers(recent);
     };
 
     const isFavoriteTicker = (ticker) => {
@@ -4840,6 +4891,7 @@
         menu.innerHTML = `
           <div class="ticker-suggest-filters">
             <button type="button" class="ticker-suggest-filter-btn" data-filter="all">All</button>
+            <button type="button" class="ticker-suggest-filter-btn" data-filter="recent">Recent</button>
             <button type="button" class="ticker-suggest-filter-btn" data-filter="favorites">Fav</button>
             <button type="button" class="ticker-suggest-filter-btn" data-filter="gainers">Gainers</button>
             <button type="button" class="ticker-suggest-filter-btn" data-filter="losers">Losers</button>
@@ -4859,6 +4911,23 @@
         menu.addEventListener('mouseleave', () => {
           state.tickerSuggest.ignoreBlurUntil = Date.now() + 300;
         });
+
+        // Swipe-to-dismiss for mobile
+        let touchStartY = 0;
+        let touchStartX = 0;
+        menu.addEventListener('touchstart', (e) => {
+          state.tickerSuggest.ignoreBlurUntil = Date.now() + 2000;
+          touchStartY = e.touches[0].clientY;
+          touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        menu.addEventListener('touchmove', (e) => {
+          const dy = e.touches[0].clientY - touchStartY;
+          const dx = e.touches[0].clientX - touchStartX;
+          // Swipe down or swipe left/right with significant distance
+          if (dy > 80 || Math.abs(dx) > 120) {
+            hideTickerSuggestMenu();
+          }
+        }, { passive: true });
 
         const filterRow = menu.querySelector('.ticker-suggest-filters');
         if (filterRow) {
@@ -4916,7 +4985,14 @@
       }
 
       let base = items;
-      if (state.tickerSuggest.filter === 'favorites') {
+      if (state.tickerSuggest.filter === 'recent') {
+        const recent = loadRecentTickers();
+        base = recent.map(t => items.find(x => x.ticker === t || x.ticker === t.replace('USDT', ''))).filter(Boolean);
+        if (base.length === 0) {
+          // Fallback: show placeholder
+          base = [];
+        }
+      } else if (state.tickerSuggest.filter === 'favorites') {
         base = items.filter((x) => isFavoriteTicker(x.ticker));
       } else if (state.tickerSuggest.filter === 'gainers') {
         base = items.filter((x) => Number.isFinite(x.pct)).slice().sort((a, b) => (b.pct - a.pct));
@@ -4949,9 +5025,13 @@
       if (!top.length) {
         const empty = document.createElement('div');
         empty.className = 'ticker-suggest-item placeholder';
-        empty.textContent = state.tickerSuggest.filter === 'favorites'
-          ? 'No favorites yet. Click ★ to save.'
-          : 'No matches.';
+        if (state.tickerSuggest.filter === 'favorites') {
+          empty.textContent = 'No favorites yet. Click ★ to save.';
+        } else if (state.tickerSuggest.filter === 'recent') {
+          empty.textContent = 'No recent tickers. Search and select a ticker to build history.';
+        } else {
+          empty.textContent = 'No matches.';
+        }
         listEl.appendChild(empty);
       }
 
@@ -4994,6 +5074,7 @@
         });
         row.addEventListener('click', async () => {
           const next = normalizeSymbol(it.ticker);
+          addRecentTicker(next || it.ticker);
           if (state.tickerSuggest.onSelectCallback) {
             targetInput.value = it.ticker;
             hideTickerSuggestMenu();
@@ -5432,7 +5513,7 @@
           <div class="card-header-brand"><span class="footer-brand" style="cursor: pointer; text-align: center;" onclick="location.reload()"><span class="brand-line">Multi</span><span class="brand-line">Perps</span></span></div>
           <div class="control-buttons">
             <input type="text" id="tickerInput" class="ticker-symbol-input" placeholder="🔍︎ Search Binance Tickers (e.g., BTC)" />
-            <button class="nav-hamburger" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
+            <button class="nav-hamburger" onclick="toggleNav()" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
             <div class="nav-links" id="nav-links">
               <a href="#/about" class="nav-link">About</a>
               <a href="#/blog" class="nav-link">Blog</a>
@@ -5563,7 +5644,18 @@
                 <div class="ranking-card-title"><span class="dot gainers"></span> Top Gainers</div>
                 <div class="ranking-card-refresh" data-refresh="gainers">↳↰</div>
               </div>
-              <div class="ranking-loading" id="gainersLoading">Loading...</div>
+              <div class="ranking-loading" id="gainersLoading">
+              <table class="ranking-table">
+                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>24h %</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:40px"></div></td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
               <div id="gainersContent"></div>
             </div>
             <div class="ranking-card" data-rank-type="losers">
@@ -5571,7 +5663,18 @@
                 <div class="ranking-card-title"><span class="dot losers"></span> Top Losers</div>
                 <div class="ranking-card-refresh" data-refresh="losers">↳↰</div>
               </div>
-              <div class="ranking-loading" id="losersLoading">Loading...</div>
+              <div class="ranking-loading" id="losersLoading">
+              <table class="ranking-table">
+                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>24h %</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:40px"></div></td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
               <div id="losersContent"></div>
             </div>
             <div class="ranking-card" data-rank-type="volume">
@@ -5579,7 +5682,18 @@
                 <div class="ranking-card-title"><span class="dot volume"></span> Top Volume</div>
                 <div class="ranking-card-refresh" data-refresh="volume">↳↰</div>
               </div>
-              <div class="ranking-loading" id="volumeLoading">Loading...</div>
+              <div class="ranking-loading" id="volumeLoading">
+              <table class="ranking-table">
+                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>Volume (24h)</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:65px"></div></td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
               <div id="volumeContent"></div>
             </div>
             <div class="ranking-card" data-rank-type="oi">
@@ -5587,7 +5701,18 @@
                 <div class="ranking-card-title"><span class="dot oi"></span> Top Open Interest</div>
                 <div class="ranking-card-refresh" data-refresh="oi">↳↰</div>
               </div>
-              <div class="ranking-loading" id="oiLoading">Loading...</div>
+              <div class="ranking-loading" id="oiLoading">
+              <table class="ranking-table">
+                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>OI</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:65px"></div></td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
               <div id="oiContent"></div>
             </div>
             <div class="ranking-card" data-rank-type="funding">
@@ -5595,7 +5720,18 @@
                 <div class="ranking-card-title"><span class="dot funding-pos"></span> Top Positive Funding</div>
                 <div class="ranking-card-refresh" data-refresh="funding">↳↰</div>
               </div>
-              <div class="ranking-loading" id="fundingPosLoading">Loading...</div>
+              <div class="ranking-loading" id="fundingPosLoading">
+              <table class="ranking-table">
+                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>Funding</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
               <div id="fundingPosContent"></div>
             </div>
             <div class="ranking-card" data-rank-type="funding">
@@ -5603,7 +5739,18 @@
                 <div class="ranking-card-title"><span class="dot funding-neg"></span> Top Negative Funding</div>
                 <div class="ranking-card-refresh" data-refresh="funding">↳↰</div>
               </div>
-              <div class="ranking-loading" id="fundingNegLoading">Loading...</div>
+              <div class="ranking-loading" id="fundingNegLoading">
+              <table class="ranking-table">
+                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>Funding</th></tr></thead>
+                <tbody>
+                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
               <div id="fundingNegContent"></div>
             </div>
           </div>
@@ -5682,11 +5829,21 @@
             chart.hoverPrice = next;
             chart.hoverIndex = idx;
             chart.hoverDirty = true;
-            redrawChart(interval);
+            // Use requestAnimationFrame for smooth hover updates during WS data floods
+            if (!chart._hoverRaf) {
+              chart._hoverRaf = requestAnimationFrame(() => {
+                chart._hoverRaf = null;
+                redrawChart(interval);
+              });
+            }
           });
           canvas.addEventListener('mouseleave', () => {
             const chart = state.charts[interval];
             if (!chart) return;
+            if (chart._hoverRaf) {
+              cancelAnimationFrame(chart._hoverRaf);
+              chart._hoverRaf = null;
+            }
             if (chart.hoverPrice === null && chart.hoverIndex === null) return;
             chart.hoverPrice = null;
             chart.hoverIndex = null;
@@ -7301,11 +7458,11 @@
         });
       state.elements.tickerInput.addEventListener('input', () => {
         saveStored(STORAGE.tickerInput, state.elements.tickerInput.value);
-        // Debounce search input to avoid rebuilding 200+ DOM items on every keystroke
+        // Debounce search input aggressively to avoid rebuilding 200+ DOM items on every keystroke
         clearTimeout(state.tickerInputDebounce);
         state.tickerInputDebounce = setTimeout(() => {
           renderTickerSuggestMenu();
-        }, 150);
+        }, 300);
       });
         state.elements.tickerInput.addEventListener('blur', async () => {
           if (Date.now() < state.tickerSuggest.ignoreBlurUntil) return;
@@ -7781,8 +7938,21 @@
             shareCopyChartBtn.textContent = '⏳';
             shareCopyChartBtn.disabled = true;
 
+            // Lazy-load html2canvas on first use
             if (typeof html2canvas !== 'function') {
-              throw new Error('html2canvas not loaded');
+              await new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                script.crossOrigin = 'anonymous';
+                script.referrerPolicy = 'no-referrer';
+                script.onload = resolve;
+                script.onerror = () => reject(new Error('Failed to load html2canvas'));
+                document.head.appendChild(script);
+              });
+            }
+
+            if (typeof html2canvas !== 'function') {
+              throw new Error('html2canvas failed to load');
             }
 
             // Calculate scale to ensure Full HD (1920px) minimum output width
@@ -8135,6 +8305,35 @@
   </script>
 
   <!-- Blog Modal -->
+  
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-top">
+      <div class="footer-col">
+        <div class="footer-brand">MultiPerps</div>
+        <div class="footer-desc">With the slogan "All Timeframes. All Free.", MultiPerps provides free real-time Binance Futures dashboard for USDT perpetual markets. Track prices, analyze candlestick charts across multiple timeframes, monitor open interest and funding rates, and set price alerts — all with no sign-up required.</div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">About</div>
+        <a href="#/about">About MultiPerps</a>
+        <a href="#/blog">Blog</a>
+        <a href="#/privacy">Privacy Policy</a>
+        <a href="#/terms">Terms of Service</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <a href="#" data-page="alerts">Dashboard Alerts Guide</a>
+        <a href="#" data-page="usdt">Donation</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Follow Us</div>
+        <a href="https://x.com/MultiPerps" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 MultiPerps. Free Binance Futures dashboard for crypto traders. All rights reserved.</span>
+      <span class="footer-source">Data source: <a href="https://www.binance.com/en/futures/home" target="_blank" rel="noopener">Binance Futures API</a></span>
+    </div>
+  </footer>
   </div><!-- end page-dashboard -->
 
   <div id="blogModal" class="page-modal blog-modal" role="dialog" aria-label="Trading Blog" aria-modal="true">
@@ -8520,34 +8719,7 @@
     </div>
   </div>
 
-  <footer class="site-footer" role="contentinfo">
-    <div class="footer-top">
-      <div class="footer-col">
-        <div class="footer-brand">MultiPerps</div>
-        <div class="footer-desc">With the slogan "All Timeframes. All Free.", MultiPerps provides free real-time Binance Futures dashboard for USDT perpetual markets. Track prices, analyze candlestick charts across multiple timeframes, monitor open interest and funding rates, and set price alerts — all with no sign-up required.</div>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">About</div>
-        <a href="#/about">About MultiPerps</a>
-        <a href="#/blog">Blog</a>
-        <a href="#/privacy">Privacy Policy</a>
-        <a href="#/terms">Terms of Service</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Resources</div>
-        <a href="#" data-page="alerts">Dashboard Alerts Guide</a>
-        <a href="#" data-page="usdt">Donation</a>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Follow Us</div>
-        <a href="https://x.com/MultiPerps" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>&copy; 2026 MultiPerps. Free Binance Futures dashboard for crypto traders. All rights reserved.</span>
-      <span class="footer-source">Data source: <a href="https://www.binance.com/en/futures/home" target="_blank" rel="noopener">Binance Futures API</a></span>
-    </div>
-  </footer>
+  
 
 
 
@@ -8588,8 +8760,7 @@
 
   
 
-  <!-- html2canvas for screenshot capture (deferred for performance) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+
 
   <!-- Ad Blocker Detection -->
   <script>
@@ -8719,7 +8890,10 @@
 
   // Mobile hamburger menu toggle
   function toggleNav() {
-    document.getElementById('nav-links').classList.toggle('open');
+    const nav = document.getElementById('nav-links');
+    const btn = document.querySelector('.nav-hamburger');
+    const isOpen = nav.classList.toggle('open');
+    if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   }
 
   // Close mobile nav on link click
