@@ -144,10 +144,11 @@
   }
   </script>
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://partner.googleadservices.com https://www.google.com https://www.gstatic.com https://www.googletagmanager.com; img-src * data: blob:; connect-src https://fapi.binance.com wss://fstream.binance.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://www.googletagmanager.com https://analytics.google.com https://region1.analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.gstatic.com; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fapi.binance.com wss://fstream.binance.com https://cdn.coinglasscdn.com https://cdnjs.cloudflare.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://partner.googleadservices.com https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://bin.bnbstatic.com; img-src * data: blob:; connect-src https://fapi.binance.com wss://fstream.binance.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://www.googletagmanager.com https://analytics.google.com https://region1.analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.gstatic.com https://bin.bnbstatic.com; frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://pagead2.googlesyndication.com;" />
 
   <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fapi.binance.com" crossorigin />
+  <link rel="preconnect" href="https://bin.bnbstatic.com" />
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
   <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
@@ -256,6 +257,9 @@
       white-space: nowrap;
       line-height: 1.05;
       text-align: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .header-price {
@@ -876,15 +880,19 @@
       table-layout: fixed;
     }
 
-    /* Fixed column widths: # | Symbol | Price | Metric */
+    /* Fixed column widths: # | ★ | Symbol | Price | Metric | 🔗 */
     .ranking-table th:nth-child(1),
-    .ranking-table td:nth-child(1) { width: 10%; }
+    .ranking-table td:nth-child(1) { width: 8%; }
     .ranking-table th:nth-child(2),
-    .ranking-table td:nth-child(2) { width: 30%; }
+    .ranking-table td:nth-child(2) { width: 10%; }
     .ranking-table th:nth-child(3),
-    .ranking-table td:nth-child(3) { width: 32%; }
+    .ranking-table td:nth-child(3) { width: 24%; }
     .ranking-table th:nth-child(4),
-    .ranking-table td:nth-child(4) { width: 28%; }
+    .ranking-table td:nth-child(4) { width: 26%; }
+    .ranking-table th:nth-child(5),
+    .ranking-table td:nth-child(5) { width: 22%; }
+    .ranking-table th:nth-child(6),
+    .ranking-table td:nth-child(6) { width: 10%; }
 
     .ranking-table th {
       text-align: left;
@@ -901,8 +909,8 @@
       white-space: nowrap;
     }
 
-    .ranking-table th:nth-child(3),
-    .ranking-table th:nth-child(4) {
+    .ranking-table th:nth-child(4),
+    .ranking-table th:nth-child(5) {
       text-align: right;
     }
 
@@ -921,8 +929,8 @@
       background: rgba(255, 255, 255, 0.04);
     }
 
-    .ranking-table td:nth-child(3),
-    .ranking-table td:nth-child(4) {
+    .ranking-table td:nth-child(4),
+    .ranking-table td:nth-child(5) {
       text-align: right;
       font-family: 'Segoe UI', monospace;
     }
@@ -949,6 +957,78 @@
     .ranking-table .pct-down {
       color: var(--bad);
       font-weight: 700;
+    }
+
+    /* Binance favicon in header & trade button */
+    .binance-favicon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      border-radius: 2px;
+      object-fit: contain;
+      display: inline-block;
+    }
+    .binance-favicon-btn {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      border-radius: 2px;
+      object-fit: contain;
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    /* Favorite star in ranking table */
+    .ranking-fav-star {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.18);
+      color: rgba(255,255,255,0.45);
+      cursor: pointer;
+      font-size: 0.8rem;
+      line-height: 1;
+      transition: all 0.2s ease;
+      padding: 0;
+    }
+    .ranking-fav-star:hover {
+      border-color: rgba(255,255,255,0.24);
+      color: rgba(255,255,255,0.8);
+      transform: scale(1.15);
+    }
+    .ranking-fav-star.fav {
+      border-color: rgba(255,204,128,0.4);
+      background: rgba(255,204,128,0.1);
+      color: rgba(255,204,128,0.9);
+    }
+
+    /* Trade link in ranking table */
+    .ranking-trade-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      border: 1px solid rgba(37,99,235,0.3);
+      background: rgba(37,99,235,0.1);
+      color: #6da3ff;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .ranking-trade-link:hover {
+      border-color: rgba(37,99,235,0.6);
+      background: rgba(37,99,235,0.2);
+      color: #93bfff;
+      transform: scale(1.15);
     }
 
     @keyframes flashPriceUp {
@@ -1166,6 +1246,40 @@
         flex-wrap: wrap;
         gap: 10px;
       }
+
+      /* Rankings mobile: compact table */
+      .ranking-section {
+        padding: 8px 4px;
+      }
+      .ranking-card {
+        border-radius: 6px;
+      }
+      .ranking-card-header {
+        padding: 6px 8px;
+      }
+      .ranking-card-title {
+        font-size: 0.85rem;
+      }
+      .ranking-table {
+        font-size: 0.75rem;
+      }
+      .ranking-table th {
+        padding: 4px 5px;
+        font-size: 0.65rem;
+      }
+      .ranking-table td {
+        padding: 4px 5px;
+      }
+      .ranking-fav-star {
+        width: 20px;
+        height: 20px;
+        font-size: 0.7rem;
+      }
+      .ranking-trade-link {
+        width: 20px;
+        height: 20px;
+        font-size: 0.75rem;
+      }
     }
 
     @media (max-width: 480px) {
@@ -1219,6 +1333,43 @@
 
       .rankings-header h2 {
         font-size: 1rem;
+      }
+
+      /* Extra compact ranking tables on small mobile */
+      .ranking-section {
+        padding: 6px 2px;
+        border-radius: 8px;
+      }
+      .ranking-card-header {
+        padding: 5px 6px;
+      }
+      .ranking-table {
+        font-size: 0.7rem;
+        table-layout: auto;
+      }
+      .ranking-table th {
+        padding: 3px 4px;
+        font-size: 0.6rem;
+        letter-spacing: 0.2px;
+      }
+      .ranking-table td {
+        padding: 3px 4px;
+      }
+      .ranking-fav-star {
+        width: 18px;
+        height: 18px;
+        font-size: 0.65rem;
+        border-radius: 3px;
+      }
+      .ranking-trade-link {
+        width: 18px;
+        height: 18px;
+        font-size: 0.7rem;
+        border-radius: 3px;
+      }
+      .binance-favicon {
+        width: 14px;
+        height: 14px;
       }
     }
 
@@ -5088,7 +5239,7 @@
         <div class="status-row">
           <h3>Multi Timeframes</h3>
           <div class="status-header-info">
-            <div class="ticker-title" id="tickerTitle">${display}</div>
+            <div class="ticker-title" id="tickerTitle"><img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" class="binance-favicon" alt="Binance" onerror="this.style.display='none'" />${display}</div>
             <div class="header-price" id="headerPrice">Loading...</div>
             <button class="copy-price-btn" id="copyPriceBtn" title="Copy current price">⧉</button>
           </div>
@@ -5097,7 +5248,7 @@
         <div class="chart-list">${intervalSections}</div>
         <div class="chart-share-row">
           <div class="chart-action-buttons">
-            <button id="tradeBtn" class="control-btn trade-btn" title="Open Binance Futures">Trade Now</button>
+            <button id="tradeBtn" class="control-btn trade-btn" title="Open Binance Futures"><img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" class="binance-favicon-btn" alt="" onerror="this.style.display='none'" />Trade</button>
             <button class="control-btn share-btn" id="chartShareBtn" type="button">
               <span style="margin-right:6px">𝕏</span>Share
             </button>
@@ -5207,13 +5358,13 @@
               </div>
               <div class="ranking-loading" id="gainersLoading">
               <table class="ranking-table">
-                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>24h %</th></tr></thead>
+                <thead><tr><th>#</th><th>★</th><th>Symbol</th><th>Price</th><th>24h %</th><th>🔗</th></tr></thead>
                 <tbody>
-                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
-                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td></tr>
-                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
-                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:40px"></div></td></tr>
-                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
+                  <tr><td><span class="rank-num">1</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td>☆</td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td>☆</td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td>☆</td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:40px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td><td>🔗</td></tr>
                 </tbody>
               </table>
             </div>
@@ -5226,13 +5377,13 @@
               </div>
               <div class="ranking-loading" id="losersLoading">
               <table class="ranking-table">
-                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>24h %</th></tr></thead>
+                <thead><tr><th>#</th><th>★</th><th>Symbol</th><th>Price</th><th>24h %</th><th>🔗</th></tr></thead>
                 <tbody>
-                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
-                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td></tr>
-                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
-                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:40px"></div></td></tr>
-                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
+                  <tr><td><span class="rank-num">1</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td>☆</td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td>☆</td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td>☆</td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:40px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td><td>🔗</td></tr>
                 </tbody>
               </table>
             </div>
@@ -5245,13 +5396,13 @@
               </div>
               <div class="ranking-loading" id="volumeLoading">
               <table class="ranking-table">
-                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>Volume (24h)</th></tr></thead>
+                <thead><tr><th>#</th><th>★</th><th>Symbol</th><th>Price</th><th>Volume (24h)</th><th>🔗</th></tr></thead>
                 <tbody>
-                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td></tr>
-                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:65px"></div></td></tr>
-                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td></tr>
-                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td></tr>
-                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td></tr>
+                  <tr><td><span class="rank-num">1</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td>☆</td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:65px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td>☆</td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td>☆</td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td>🔗</td></tr>
                 </tbody>
               </table>
             </div>
@@ -5264,13 +5415,13 @@
               </div>
               <div class="ranking-loading" id="oiLoading">
               <table class="ranking-table">
-                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>OI</th></tr></thead>
+                <thead><tr><th>#</th><th>★</th><th>Symbol</th><th>Price</th><th>OI</th><th>🔗</th></tr></thead>
                 <tbody>
-                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td></tr>
-                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
-                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:65px"></div></td></tr>
-                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
-                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td></tr>
+                  <tr><td><span class="rank-num">1</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td>☆</td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td>☆</td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:65px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td>☆</td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td><td>🔗</td></tr>
                 </tbody>
               </table>
             </div>
@@ -5283,13 +5434,13 @@
               </div>
               <div class="ranking-loading" id="fundingPosLoading">
               <table class="ranking-table">
-                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>Funding</th></tr></thead>
+                <thead><tr><th>#</th><th>★</th><th>Symbol</th><th>Price</th><th>Funding</th><th>🔗</th></tr></thead>
                 <tbody>
-                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
-                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
-                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td></tr>
-                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td></tr>
-                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
+                  <tr><td><span class="rank-num">1</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td>☆</td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td>☆</td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td>☆</td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td><td>🔗</td></tr>
                 </tbody>
               </table>
             </div>
@@ -5302,13 +5453,13 @@
               </div>
               <div class="ranking-loading" id="fundingNegLoading">
               <table class="ranking-table">
-                <thead><tr><th>#</th><th>Symbol</th><th>Price</th><th>Funding</th></tr></thead>
+                <thead><tr><th>#</th><th>★</th><th>Symbol</th><th>Price</th><th>Funding</th><th>🔗</th></tr></thead>
                 <tbody>
-                  <tr><td><span class="rank-num">1</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
-                  <tr><td><span class="rank-num">2</span></td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td></tr>
-                  <tr><td><span class="rank-num">3</span></td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td></tr>
-                  <tr><td><span class="rank-num">4</span></td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td></tr>
-                  <tr><td><span class="rank-num">5</span></td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td></tr>
+                  <tr><td><span class="rank-num">1</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">2</span></td><td>☆</td><td><div class="skeleton-text" style="width:55px"></div></td><td><div class="skeleton-text" style="width:75px"></div></td><td><div class="skeleton-text" style="width:50px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">3</span></td><td>☆</td><td><div class="skeleton-text" style="width:65px"></div></td><td><div class="skeleton-text" style="width:70px"></div></td><td><div class="skeleton-text" style="width:60px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">4</span></td><td>☆</td><td><div class="skeleton-text" style="width:50px"></div></td><td><div class="skeleton-text" style="width:85px"></div></td><td><div class="skeleton-text" style="width:45px"></div></td><td>🔗</td></tr>
+                  <tr><td><span class="rank-num">5</span></td><td>☆</td><td><div class="skeleton-text" style="width:60px"></div></td><td><div class="skeleton-text" style="width:80px"></div></td><td><div class="skeleton-text" style="width:55px"></div></td><td>🔗</td></tr>
                 </tbody>
               </table>
             </div>
@@ -5868,7 +6019,17 @@
       state.msgsInWindow = 0;
       state.reconnectAttempts = 0;
 
-      state.elements.tickerTitle.textContent = next.replace('USDT', '');
+      // Update ticker title text while preserving the favicon <img>
+      const titleEl = state.elements.tickerTitle;
+      if (titleEl) {
+        const textNodes = Array.from(titleEl.childNodes).filter(n => n.nodeType === Node.TEXT_NODE);
+        const displayText = next.replace('USDT', '');
+        if (textNodes.length > 0) {
+          textNodes[textNodes.length - 1].textContent = displayText;
+        } else {
+          titleEl.appendChild(document.createTextNode(displayText));
+        }
+      }
       document.title = next.replace('USDT', '');
 
       if (state.elements.alert1Input) {
@@ -6023,6 +6184,16 @@
       return html;
     };
 
+    const buildRankingFavStar = (ticker) => {
+      const isFav = isFavoriteTicker(ticker);
+      return `<button type="button" class="ranking-fav-star${isFav ? ' fav' : ''}" data-rank-fav="${ticker}" title="${isFav ? 'Remove from' : 'Add to'} favourites">${isFav ? '★' : '☆'}</button>`;
+    };
+
+    const buildRankingTradeLink = (symbol) => {
+      const url = getBinanceFuturesUrl(symbol);
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="ranking-trade-link" data-rank-trade="${symbol}" title="Trade on Binance">🔗</a>`;
+    };
+
     const renderVolumeRanking = () => {
       const container = document.getElementById('volumeContent');
       const loading = document.getElementById('volumeLoading');
@@ -6035,9 +6206,11 @@
 
       const columns = [
         { header: '#', getValue: (item, idx) => `<span class="rank-num">${idx + 1}</span>` },
+        { header: '★', getValue: (item) => buildRankingFavStar(item.ticker) },
         { header: 'Symbol', getValue: (item) => `<span class="sym-name" data-sym="${item.symbol}">${item.ticker}</span>`, getClass: () => 'sym-name' },
         { header: 'Price', getValue: (item) => formatPrice(item.lastPrice) },
         { header: 'Volume (24h)', getValue: (item) => formatCompact(item.volUsdt) },
+        { header: '🔗', getValue: (item) => buildRankingTradeLink(item.symbol) },
       ];
 
       container.innerHTML = buildRankingTable(items, columns);
@@ -6057,9 +6230,11 @@
 
       const columns = [
         { header: '#', getValue: (item, idx) => `<span class="rank-num">${idx + 1}</span>` },
+        { header: '★', getValue: (item) => buildRankingFavStar(item.ticker) },
         { header: 'Symbol', getValue: (item) => `<span class="sym-name" data-sym="${item.symbol}">${item.ticker}</span>` },
         { header: 'Price', getValue: (item) => formatPrice(item.lastPrice) },
         { header: '24h %', getValue: (item) => formatPct(item.pct), getClass: (item) => item.pct >= 0 ? 'pct-up' : 'pct-down' },
+        { header: '🔗', getValue: (item) => buildRankingTradeLink(item.symbol) },
       ];
 
       container.innerHTML = buildRankingTable(items, columns);
@@ -6079,9 +6254,11 @@
 
       const columns = [
         { header: '#', getValue: (item, idx) => `<span class="rank-num">${idx + 1}</span>` },
+        { header: '★', getValue: (item) => buildRankingFavStar(item.ticker) },
         { header: 'Symbol', getValue: (item) => `<span class="sym-name" data-sym="${item.symbol}">${item.ticker}</span>` },
         { header: 'Price', getValue: (item) => formatPrice(item.lastPrice) },
         { header: '24h %', getValue: (item) => formatPct(item.pct), getClass: (item) => item.pct >= 0 ? 'pct-up' : 'pct-down' },
+        { header: '🔗', getValue: (item) => buildRankingTradeLink(item.symbol) },
       ];
 
       container.innerHTML = buildRankingTable(items, columns);
@@ -6115,9 +6292,11 @@
 
       const columns = [
         { header: '#', getValue: (item, idx) => `<span class="rank-num">${idx + 1}</span>` },
+        { header: '★', getValue: (item) => buildRankingFavStar(item.ticker) },
         { header: 'Symbol', getValue: (item) => `<span class="sym-name" data-sym="${item.symbol}">${item.ticker}</span>` },
         { header: 'Price', getValue: (item) => formatPrice(item.lastPrice) },
         { header: 'OI', getValue: (item) => formatCompact(item.oi) },
+        { header: '🔗', getValue: (item) => buildRankingTradeLink(item.symbol) },
       ];
 
       container.innerHTML = buildRankingTable(itemsWithOI, columns);
@@ -6170,9 +6349,11 @@
 
       const columns = [
         { header: '#', getValue: (item, idx) => `<span class="rank-num">${idx + 1}</span>` },
+        { header: '★', getValue: (item) => buildRankingFavStar(item.ticker) },
         { header: 'Symbol', getValue: (item) => `<span class="sym-name" data-sym="${item.symbol}">${item.ticker}</span>` },
         { header: 'Price', getValue: (item) => item.markPrice !== null ? formatPrice(item.markPrice) : '—' },
         { header: 'Funding', getValue: (item) => formatFundingPct(item.fundingPct), getClass: () => 'pct-up' },
+        { header: '🔗', getValue: (item) => buildRankingTradeLink(item.symbol) },
       ];
 
       container.innerHTML = buildRankingTable(items, columns);
@@ -6192,9 +6373,11 @@
 
       const columns = [
         { header: '#', getValue: (item, idx) => `<span class="rank-num">${idx + 1}</span>` },
+        { header: '★', getValue: (item) => buildRankingFavStar(item.ticker) },
         { header: 'Symbol', getValue: (item) => `<span class="sym-name" data-sym="${item.symbol}">${item.ticker}</span>` },
         { header: 'Price', getValue: (item) => item.markPrice !== null ? formatPrice(item.markPrice) : '—' },
         { header: 'Funding', getValue: (item) => formatFundingPct(item.fundingPct), getClass: () => 'pct-down' },
+        { header: '🔗', getValue: (item) => buildRankingTradeLink(item.symbol) },
       ];
 
       container.innerHTML = buildRankingTable(items, columns);
@@ -6361,6 +6544,22 @@
         renderFundingPositiveRanking();
         renderFundingNegativeRanking();
       }
+      // Update OI table fav stars in-place (without expensive re-fetch)
+      updateRankingFavStars('oiContent');
+    };
+
+    // Update fav star icons in a ranking table without full re-render
+    const updateRankingFavStars = (containerId) => {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.querySelectorAll('.ranking-fav-star').forEach(btn => {
+        const ticker = btn.getAttribute('data-rank-fav');
+        if (!ticker) return;
+        const isFav = isFavoriteTicker(ticker);
+        btn.classList.toggle('fav', isFav);
+        btn.textContent = isFav ? '★' : '☆';
+        btn.title = isFav ? 'Remove from favourites' : 'Add to favourites';
+      });
     };
 
     const initRankings = async () => {
@@ -6371,6 +6570,24 @@
 
       // Event delegation for ticker clicks in ranking tables (fixes double-click issue)
       document.getElementById('rankingsGrid')?.addEventListener('click', (e) => {
+        // Favorite star click
+        const favBtn = e.target.closest('.ranking-fav-star');
+        if (favBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const ticker = favBtn.getAttribute('data-rank-fav');
+          if (ticker) {
+            toggleFavoriteTicker(ticker);
+            renderRankingsRealtime();
+          }
+          return;
+        }
+        // Trade link click — let default <a> behavior handle it
+        const tradeLink = e.target.closest('.ranking-trade-link');
+        if (tradeLink) {
+          // Default anchor behavior will open the link
+          return;
+        }
         const symEl = e.target.closest('.sym-name');
         if (symEl) {
           const sym = symEl.getAttribute('data-sym');
