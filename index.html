@@ -19,9 +19,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Primary SEO Meta Tags -->
-  <title>MultiPerps — Real-Time Binance Futures Dashboard | Multi-Timeframe Charts, Liquidation Heatmap &amp; Market Rankings</title>
-  <meta name="description" content="MultiPerps is a free real-time Binance Futures dashboard with live multi-timeframe candlestick charts (1m to 1M), liquidation heatmap, price alerts, open interest rankings, funding rates, and multi-ticker tracking for USDT perpetual contracts. No sign-up required." />
-  <meta name="keywords" content="Binance Futures, crypto dashboard, real-time charts, candlestick charts, multi-timeframe analysis, liquidation heatmap, liquidity heatmap, price alerts, USDT perpetual, open interest, funding rates, crypto trading, BTC futures, ETH futures, crypto market rankings, free crypto tool, MultiPerps, Binance USDT-M, live crypto charts, futures trading dashboard" />
+  <title>MultiPerps — Real-Time Binance Futures Dashboard | Multi-Timeframe Charts &amp; Market Rankings</title>
+  <meta name="description" content="MultiPerps is a free real-time Binance Futures dashboard with live multi-timeframe candlestick charts (1m to 1M), price alerts, open interest rankings, funding rates, and multi-ticker tracking for USDT perpetual contracts. No sign-up required." />
+  <meta name="keywords" content="Binance Futures, crypto dashboard, real-time charts, candlestick charts, multi-timeframe analysis, price alerts, USDT perpetual, open interest, funding rates, crypto trading, BTC futures, ETH futures, crypto market rankings, free crypto tool, MultiPerps, Binance USDT-M, live crypto charts, futures trading dashboard" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="author" content="MultiPerps" />
   <link rel="canonical" href="https://www.multiperps.com/" />
@@ -30,19 +30,19 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.multiperps.com/" />
   <meta property="og:title" content="MultiPerps — Free Real-Time Binance Futures Dashboard" />
-  <meta property="og:description" content="Live multi-timeframe candlestick charts, liquidation heatmap, price alerts, open interest rankings, funding rates, and multi-ticker tracking for Binance USDT perpetual futures. Free, no sign-up." />
+  <meta property="og:description" content="Live multi-timeframe candlestick charts, price alerts, open interest rankings, funding rates, and multi-ticker tracking for Binance USDT perpetual futures. Free, no sign-up." />
   <meta property="og:site_name" content="MultiPerps" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:image" content="https://www.multiperps.com/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="MultiPerps Binance Futures Dashboard with live multi-timeframe charts and liquidation heatmap" />
+  <meta property="og:image:alt" content="MultiPerps Binance Futures Dashboard with live multi-timeframe charts" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@MultiPerps" />
   <meta name="twitter:title" content="MultiPerps — Free Real-Time Binance Futures Dashboard" />
-  <meta name="twitter:description" content="MultiPerps — All Timeframes. All Free. Watch live multi-timeframe candlestick charts, liquidation heatmap, price alerts, open interest rankings, funding rates &amp; multi-ticker tracking for Binance USDT perpetual futures." />
+  <meta name="twitter:description" content="MultiPerps — All Timeframes. All Free. Watch live multi-timeframe candlestick charts, price alerts, open interest rankings, funding rates &amp; multi-ticker tracking for Binance USDT perpetual futures." />
   <meta name="twitter:image" content="https://www.multiperps.com/og-image.png" />
 
   <!-- JSON-LD Structured Data: WebApplication -->
@@ -52,7 +52,7 @@
     "@type": "WebApplication",
     "name": "MultiPerps",
     "url": "https://www.multiperps.com",
-    "description": "Free real-time Binance Futures dashboard with live multi-timeframe candlestick charts, liquidation heatmap, price alerts, open interest rankings, funding rates, and multi-ticker tracking for USDT perpetual contracts.",
+    "description": "Free real-time Binance Futures dashboard with live multi-timeframe candlestick charts, price alerts, open interest rankings, funding rates, and multi-ticker tracking for USDT perpetual contracts.",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
     "offers": {
@@ -67,7 +67,7 @@
     },
     "featureList": [
       "Real-time multi-timeframe candlestick charts",
-      "Liquidation heatmap with depth-weighted density",
+      "OI-Price Matrix panel with OI-Price scenario analysis",
       "Price alerts with audio notifications",
       "Open interest rankings",
       "Funding rate tracker",
@@ -90,7 +90,7 @@
         "name": "What is MultiPerps?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "MultiPerps is a free, real-time Binance Futures dashboard that displays live multi-timeframe candlestick charts, liquidation heatmap, price alerts, open interest rankings, funding rates, and market rankings for USDT perpetual contracts — all without requiring an account."
+          "text": "MultiPerps is a free, real-time Binance Futures dashboard that displays live multi-timeframe candlestick charts, price alerts, open interest rankings, funding rates, and market rankings for USDT perpetual contracts — all without requiring an account."
         }
       },
       {
@@ -175,21 +175,31 @@
       color-scheme: dark;
       --bg-0: #070814;
       --bg-1: #0e1024;
-      --card: rgba(255, 255, 255, 0.06);
-      --border: rgba(255, 255, 255, 0.12);
-      --border-2: rgba(255, 255, 255, 0.08);
-      --text: rgba(255, 255, 255, 0.92);
-      --muted: rgba(255, 255, 255, 0.68);
-      --muted-2: rgba(255, 255, 255, 0.52);
+      --card: rgba(255, 255, 255, 0.055);
+      --card-hover: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.10);
+      --border-2: rgba(255, 255, 255, 0.07);
+      --border-3: rgba(255, 255, 255, 0.05);
+      --text: rgba(255, 255, 255, 0.93);
+      --muted: rgba(255, 255, 255, 0.70);
+      --muted-2: rgba(255, 255, 255, 0.55);
+      --muted-3: rgba(255, 255, 255, 0.38);
       --accent: #26e0d2;
       --accent-2: #4aa3ff;
       --warn: #ffcc80;
       --good: #4caf50;
+      --good-bright: #5eff8a;
       --bad: #ff5252;
+      --bad-bright: #ff4757;
       --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
       --ring: 0 0 0 3px rgba(38, 224, 210, 0.18);
-      --section-bg: rgba(0, 0, 0, 0.14);
-      --section-border: rgba(255, 255, 255, 0.06);
+      --section-bg: rgba(255, 255, 255, 0.03);
+      --section-border: rgba(255, 255, 255, 0.07);
+      --subtle-bg: rgba(255, 255, 255, 0.04);
+      --subtle-hover: rgba(255, 255, 255, 0.07);
+      --input-bg: rgba(0, 0, 0, 0.20);
+      --input-border: rgba(255, 255, 255, 0.12);
+      --input-focus: rgba(38, 224, 210, 0.6);
     }
 
     body {
@@ -319,9 +329,9 @@
       max-width: 100%;
       min-width: 55px;
       padding: 5px 7px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      border: 1px solid var(--input-border);
       border-radius: 4px;
-      background: rgba(0, 0, 0, 0.18);
+      background: var(--input-bg);
       color: var(--text);
       font-size: 1rem;
       outline: none;
@@ -329,41 +339,20 @@
     }
 
     .alert-price-input:focus {
-      border-color: rgba(38, 224, 210, 0.7);
+      border-color: var(--input-focus);
       box-shadow: var(--ring);
     }
 
 
-
     .copy-price-btn {
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(0, 0, 0, 0.22);
-      color: var(--muted);
-      border-radius: 8px;
-      padding: 5px 9px;
-      cursor: pointer;
-      font-size: 0.95rem;
       line-height: 1;
-      user-select: none;
-      transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease, color 140ms ease;
-    }
-
-    .copy-price-btn:hover {
-      border-color: rgba(255, 255, 255, 0.26);
-      color: var(--text);
-      transform: translateY(-1px);
-    }
-
-    .copy-price-btn.copied {
-      border-color: rgba(76, 175, 80, 0.6);
-      color: var(--good);
     }
 
     .chart-context-menu {
       position: fixed;
       z-index: 2000;
       background: rgba(0, 0, 0, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      border: 1px solid var(--border);
       border-radius: 10px;
       padding: 8px;
       min-width: 160px;
@@ -373,8 +362,8 @@
 
     .chart-context-menu .menu-btn {
       width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      background: var(--subtle-bg);
       color: #ffffff;
       border-radius: 8px;
       padding: 8px 10px;
@@ -384,8 +373,8 @@
     }
 
     .chart-context-menu .menu-btn:hover {
-      border-color: rgba(255, 255, 255, 0.24);
-      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--border);
+      background: var(--subtle-hover);
     }
 
     .ticker-suggest-menu {
@@ -404,7 +393,7 @@
       display: flex;
       gap: 6px;
       padding: 6px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid var(--border-2);
       overflow-x: auto;
       overflow-y: hidden;
       flex-wrap: nowrap;
@@ -427,8 +416,8 @@
     }
 
     .ticker-suggest-filter-btn {
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      background: var(--subtle-bg);
       color: var(--text);
       border-radius: 999px;
       padding: 6px 10px;
@@ -442,14 +431,14 @@
 
     .ticker-suggest-filter-btn.clear {
       margin-left: auto;
-      border-color: rgba(255, 255, 255, 0.18);
-      background: rgba(255, 255, 255, 0.03);
+      border-color: var(--border);
+      background: var(--border-3);
       color: var(--muted);
     }
 
     .ticker-suggest-filter-btn.active {
-      border-color: rgba(255, 255, 255, 0.28);
-      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--border);
+      background: var(--subtle-hover);
     }
 
     .ticker-suggest-list {
@@ -477,8 +466,8 @@
 
     .ticker-suggest-item:hover,
     .ticker-suggest-item.active {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.12);
+      background: var(--subtle-hover);
+      border-color: var(--border-2);
     }
 
     .ticker-suggest-left {
@@ -499,8 +488,8 @@
       align-items: center;
       justify-content: center;
       border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(0, 0, 0, 0.18);
+      border: 1px solid var(--border);
+      background: var(--subtle-bg);
       color: rgba(255, 255, 255, 0.6);
       flex: 0 0 auto;
       cursor: pointer;
@@ -511,7 +500,7 @@
 
     .ticker-suggest-star:hover {
       transform: translateY(-1px);
-      border-color: rgba(255, 255, 255, 0.24);
+      border-color: var(--border);
       color: rgba(255, 255, 255, 0.86);
     }
 
@@ -524,7 +513,7 @@
       font-weight: 800;
       font-size: 0.9rem;
       white-space: nowrap;
-      color: #b0b0b0;
+      color: var(--muted);
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -557,7 +546,7 @@
       padding: 5px 8px;
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 4px;
-      background: rgba(0, 0, 0, 0.22);
+      background: var(--input-bg);
       color: var(--text);
       font-size: 0.9rem;
       outline: none;
@@ -565,42 +554,15 @@
     }
 
     .ticker-symbol-input:focus {
-      border-color: rgba(38, 224, 210, 0.7);
+      border-color: var(--input-focus);
       box-shadow: var(--ring);
     }
 
     .ticker-symbol-input::placeholder {
-      color: rgba(255, 255, 255, 0.42);
-    }
-
-    .control-btn {
-      padding: 6px 14px;
-      border: none;
-      border-radius: 4px;
-      font-weight: normal;
-      cursor: pointer;
-      transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
-      font-size: 1rem;
-      user-select: none;
-    }
-
-    .control-btn:hover {
-      transform: translateY(-1px) scale(1.02);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.32);
-    }
-
-    .load-btn {
-      background: rgba(37, 99, 235, 0.15);
-      color: #6da3ff;
-      border-color: rgba(37, 99, 235, 0.5);
+      color: var(--muted-3);
     }
 
     .trade-btn {
-      background: #2563eb;
-      color: white;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-weight: 600;
       display: inline-flex;
       align-items: center;
       height: 32px; /* Match header button height */
@@ -632,7 +594,6 @@
     .timestamp {
       font-size: 1rem;
       color: var(--muted);
-      font-weight: 0;
       white-space: nowrap;
     }
 
@@ -645,8 +606,8 @@
     }
 
     .chart-section {
-      background: rgba(0, 0, 0, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: var(--subtle-bg);
+      border: 1px solid var(--border-3);
       border-radius: 6px;
       overflow: hidden;
     }
@@ -656,8 +617,8 @@
       justify-content: flex-start;
       align-items: center;
       padding: 6px 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.22);
+      border-bottom: 1px solid var(--border-2);
+      background: var(--subtle-bg);
       gap: 8px;
     }
 
@@ -687,10 +648,10 @@
     }
 
     .kline-change:not(:empty) {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--subtle-hover);
       padding: 2px 6px;
       border-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid var(--border);
     }
 
     .kline-change.up {
@@ -698,12 +659,12 @@
     }
 
     .kline-change.down {
-      color: #ff5252;
+      color: var(--bad-bright);
     }
 
     .chart-container {
       height: 166px;
-      background: #1a1a1a;
+      background: rgba(0, 0, 0, 0.25);
       position: relative;
       overflow: hidden;
     }
@@ -762,7 +723,8 @@
       width: 100%;
       max-width: 930px;
       height: 180px;
-      background: transparent;
+      background: var(--subtle-bg);
+      border-radius: 8px;
       overflow: hidden;
     }
 
@@ -772,8 +734,8 @@
     .rankings-section {
       margin-top: 12px;
       padding: 12px 8px;
-      background: var(--section-bg);
-      border: 1px solid var(--section-border);
+      background: var(--subtle-bg);
+      border: 1px solid var(--border-3);
       border-radius: 10px;
     }
 
@@ -802,8 +764,8 @@
     }
 
     .ranking-card {
-      background: rgba(0, 0, 0, 0.22);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: var(--subtle-bg);
+      border: 1px solid var(--border-3);
       border-radius: 8px;
       overflow: hidden;
       display: flex;
@@ -819,8 +781,8 @@
       justify-content: space-between;
       align-items: center;
       padding: 8px 10px;
-      background: rgba(0, 0, 0, 0.28);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      background: var(--input-bg);
+      border-bottom: 1px solid var(--border-3);
     }
 
     .ranking-card-title {
@@ -898,13 +860,13 @@
     .ranking-table th {
       text-align: left;
       padding: 6px 10px;
-      color: var(--muted-2);
+      color: var(--muted);
       font-weight: 600;
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      background: rgba(0, 0, 0, 0.15);
+      border-bottom: 1px solid var(--border-3);
+      background: var(--subtle-bg);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -917,7 +879,7 @@
 
     .ranking-table td {
       padding: 5px 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border-3);
       color: var(--muted);
       cursor: pointer;
       transition: background 100ms ease;
@@ -927,7 +889,7 @@
     }
 
     .ranking-table tr:hover td {
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--subtle-hover);
     }
 
     .ranking-table td:nth-child(4),
@@ -987,7 +949,7 @@
       width: 22px;
       height: 22px;
       border-radius: 4px;
-      border: 1px solid rgba(255,255,255,0.10);
+      border: 1px solid var(--border-2);
       background: rgba(0,0,0,0.18);
       color: rgba(255,255,255,0.45);
       cursor: pointer;
@@ -997,7 +959,7 @@
       padding: 0;
     }
     .ranking-fav-star:hover {
-      border-color: rgba(255,255,255,0.24);
+      border-color: var(--border);
       color: rgba(255,255,255,0.8);
       transform: scale(1.15);
     }
@@ -1057,182 +1019,11 @@
       gap: 10px;
       align-items: center;
     }
-    .chart-share-row .alert-field:first-child {
-      margin-left: 0;
-    }
-    .chart-share-row .alert-field {
-      flex: 0 0 auto;
-    }
-
-    .chart-share-row .alert-price-input {
-      width: 100%;
-    }
     .share-btn {
-      background: #0ea5e9;
-      color: #fff;
-      font-size: 1rem;
-      padding: 6px 18px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
       display: inline-flex;
       align-items: center;
       height: 32px;
       box-sizing: border-box;
-      transition: transform 140ms ease, box-shadow 140ms ease;
-    }
-    .share-btn:hover {
-      transform: translateY(-1px) scale(1.02);
-      box-shadow: 0 10px 20px rgba(29, 161, 242, 0.25);
-    }
-
-    /* ============================================
-       LIQUIDATION HEATMAP SECTION
-       ============================================ */
-    .liq-heatmap-section {
-      margin-top: 12px;
-      padding: 0;
-      background: var(--section-bg);
-      border: 1px solid var(--section-border);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .liq-heatmap-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 12px;
-      background: rgba(0, 0, 0, 0.28);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .liq-heatmap-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .liq-heatmap-title .dot.heatmap {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      display: inline-block;
-      background: linear-gradient(135deg, #4a90d9, #e53935);
-    }
-
-    .liq-heatmap-legend {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.72rem;
-      color: var(--muted-2);
-    }
-
-    .liq-heatmap-legend-bar {
-      width: 60px;
-      height: 8px;
-      border-radius: 3px;
-      background: linear-gradient(90deg, #1a3a6e, #4a90d9, #e8a838, #e53935);
-    }
-
-    .liq-heatmap-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .heatmap-range-label {
-      color: var(--muted-2);
-      font-size: 0.75rem;
-      font-weight: 600;
-      line-height: 1;
-      user-select: none;
-      padding: 3px 8px;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .liq-heatmap-refresh {
-      font-size: 0.75rem;
-      color: var(--muted-2);
-      cursor: pointer;
-      transition: color 140ms ease;
-    }
-
-    .liq-heatmap-refresh:hover {
-      color: var(--accent);
-    }
-
-    .liq-heatmap-body {
-      position: relative;
-      height: 320px;
-      background: #0d0e1a;
-      overflow: hidden;
-    }
-
-    .liq-heatmap-canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .liq-heatmap-loading {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted-2);
-      font-size: 0.85rem;
-      background: rgba(13, 14, 26, 0.85);
-      z-index: 2;
-      transition: opacity 0.3s ease;
-    }
-
-    .liq-heatmap-loading.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .liq-heatmap-tooltip {
-      position: absolute;
-      z-index: 10;
-      background: rgba(0, 0, 0, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 6px;
-      padding: 6px 10px;
-      font-size: 0.78rem;
-      color: var(--text);
-      pointer-events: none;
-      white-space: nowrap;
-      display: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    }
-
-    @media (max-width: 768px) {
-      .liq-heatmap-body {
-        height: 260px;
-      }
-      .liq-heatmap-header {
-        padding: 6px 8px;
-      }
-      .liq-heatmap-title {
-        font-size: 0.85rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .liq-heatmap-body {
-        height: 220px;
-      }
     }
 
     .ranking-loading {
@@ -1369,8 +1160,8 @@
       }
 
       .ticker-symbol-input {
-        flex: 1;
-        min-width: 160px;
+        flex: 1 1 0;
+        min-width: 0;
       }
 
       .status-row {
@@ -1395,7 +1186,7 @@
       }
 
       /* Rankings mobile: compact table */
-      .ranking-section {
+      .rankings-section {
         padding: 8px 4px;
       }
       .ranking-card {
@@ -1458,7 +1249,9 @@
       }
 
       .ticker-symbol-input {
-        width: 280px;
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 100%;
       }
 
        .copy-price-btn {
@@ -1483,7 +1276,7 @@
       }
 
       /* Extra compact ranking tables on small mobile */
-      .ranking-section {
+      .rankings-section {
         padding: 6px 2px;
         border-radius: 8px;
       }
@@ -1529,8 +1322,8 @@
       padding: 18px 24px 14px;
       opacity: 0;
       transition: opacity 0.5s ease;
-      background: rgba(0, 0, 0, 0.38);
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      background: var(--section-bg);
+      border-top: 1px solid var(--section-border);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
@@ -1985,8 +1778,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--subtle-bg);
+      border: 1px solid var(--border);
       color: var(--muted);
       padding: 6px 14px;
       border-radius: 6px;
@@ -1996,9 +1789,9 @@
       transition: all 140ms ease;
     }
     .blog-back-btn:hover {
-      background: rgba(255,255,255,0.1);
+      background: var(--subtle-hover);
       color: var(--text);
-      border-color: rgba(255,255,255,0.2);
+      border-color: var(--border);
     }
     @media (max-width: 768px) {
       .blog-list {
@@ -2064,7 +1857,7 @@
     }
     .page-modal-close:hover {
       color: var(--text);
-      background: rgba(255,255,255,0.08);
+      background: var(--subtle-hover);
     }
     .page-modal-content h2 {
       color: var(--accent);
@@ -2137,7 +1930,7 @@
     }
     .share-modal-close:hover {
       color: var(--text);
-      background: rgba(255,255,255,0.08);
+      background: var(--subtle-hover);
     }
     .share-modal-title {
       color: var(--accent);
@@ -2151,7 +1944,7 @@
       align-items: center;
       gap: 12px;
       padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid var(--border-3);
     }
     .share-step:last-child {
       border-bottom: none;
@@ -2190,8 +1983,8 @@
       font-size: 0.95rem;
     }
     .share-copy-btn {
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(0, 0, 0, 0.22);
+      border: 1px solid var(--border);
+      background: var(--input-bg);
       color: var(--muted);
       border-radius: 8px;
       padding: 5px 9px;
@@ -2203,7 +1996,7 @@
       transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease, color 140ms ease;
     }
     .share-copy-btn:hover {
-      border-color: rgba(255, 255, 255, 0.26);
+      border-color: var(--border);
       color: var(--text);
       transform: translateY(-1px);
     }
@@ -2218,8 +2011,8 @@
     }
 
     .donation-box {
-      background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--input-bg);
+      border: 1px solid var(--border-2);
       border-radius: 8px;
       padding: 12px;
       font-family: monospace;
@@ -2227,39 +2020,6 @@
       color: var(--warn);
       word-break: break-all;
     }
-
-  
-    .chart-share-row .alert-price-input {
-      width: 220;
-      min-width: 200px;
-      flex: 0 0 auto;
-    }
-    .chart-share-row .alert-field {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-right: 8px;
-    }
-    .chart-share-row .alert-label {
-      font-size: 0.85rem;
-      color: var(--muted-2);
-      white-space: nowrap;
-    }
-
-    @media (max-width: 768px) {
-      .chart-share-row .alert-price-input {
-        width: 100%;
-        flex: 1 1 auto;
-      }
-      .chart-share-row {
-        justify-content: flex-start;
-      }
-      .chart-share-row .alert-field {
-        margin-right: 6px;
-        margin-bottom: 4px;
-      }
-    }
-
 
     /* Search Dropdown */
     .ticker-suggest-menu {
@@ -2284,7 +2044,7 @@
     .ticker-suggest-filters {
       padding: 8px 10px 10px;
       gap: 8px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid var(--border-3);
       margin-bottom: 4px;
     }
     .ticker-suggest-filter-btn {
@@ -2293,13 +2053,13 @@
       font-weight: 700;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.04);
+      background: var(--subtle-bg);
       color: var(--muted);
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       letter-spacing: 0.3px;
     }
     .ticker-suggest-filter-btn:hover {
-      background: rgba(255,255,255,0.08);
+      background: var(--subtle-hover);
       border-color: rgba(255,255,255,0.18);
       color: var(--text);
       transform: translateY(-1px);
@@ -2342,7 +2102,7 @@
       height: 30px;
       border-radius: 10px;
       font-size: 1.05rem;
-      background: rgba(255,255,255,0.06);
+      background: var(--subtle-bg);
       border: 1px solid rgba(255,255,255,0.1);
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -2379,9 +2139,9 @@
     .ticker-symbol-input {
       width: clamp(286px, 41.8vw, 440px);
       padding: 7px 12px;
-      border: 2.6px solid rgba(255,255,255,0.12);
+      border: 2.6px solid var(--input-border);
       border-radius: 10px;
-      background: rgba(0,0,0,0.28);
+      background: var(--input-bg);
       color: var(--text);
       font-size: 0.95rem;
       font-weight: 500;
@@ -2390,21 +2150,17 @@
       letter-spacing: 0.2px;
     }
     .ticker-symbol-input:focus {
-      border-color: rgba(38, 224, 210, 0.6);
+      border-color: var(--input-focus);
       box-shadow: 0 0 0 3px rgba(38, 224, 210, 0.12), 0 4px 20px rgba(38, 224, 210, 0.08);
-      background: rgba(0,0,0,0.35);
+      background: rgba(0,0,0,0.30);
     }
     .ticker-symbol-input::placeholder {
-      color: rgba(255, 255, 255, 0.35);
+      color: var(--muted-3);
       font-weight: 400;
     }
 
 
-    /* Brighter red colors */
-    :root {
-      --bad: #ff6b6b;
-      --bad-bright: #ff4757;
-    }
+    /* Brighter red colors - now unified with root vars */
     .header-price.price-down {
       color: var(--bad-bright);
       text-shadow: 0 0 12px rgba(255, 71, 87, 0.5);
@@ -2723,8 +2479,8 @@
       font-weight: 700;
       padding: 2px 6px;
       border-radius: 4px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      background: var(--subtle-bg);
       white-space: nowrap;
     }
     .kline-rsi:not(:empty) {
@@ -2752,8 +2508,8 @@
     .multi-ticker-section {
       margin: 10px 0;
       padding: 12px;
-      background: var(--section-bg);
-      border: 1px solid var(--section-border);
+      background: var(--subtle-bg);
+      border: 1px solid var(--border-3);
       border-radius: 10px;
     }
     .multi-ticker-header {
@@ -2775,8 +2531,8 @@
       display: flex;
       gap: 4px;
       align-items: center;
-      background: rgba(0, 0, 0, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: var(--subtle-bg);
+      border: 1px solid var(--border-3);
       border-radius: 8px;
       padding: 4px 6px;
       flex: 0 1 auto;
@@ -2818,8 +2574,8 @@
       gap: 10px;
     }
     .tracker-card {
-      background: rgba(0, 0, 0, 0.22);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: var(--subtle-bg);
+      border: 1px solid var(--border-3);
       border-radius: 8px;
       padding: 10px;
       position: relative;
@@ -2878,7 +2634,7 @@
     .tracker-price.down { color: var(--bad-bright); }
     .tracker-chart-container {
       height: 215px;
-      background: #1a1a1a;
+      background: rgba(0, 0, 0, 0.25);
       border-radius: 6px;
       overflow: hidden;
       margin-bottom: 6px;
@@ -2916,9 +2672,9 @@
       flex: 0 1 130px;
       min-width: 80px;
       padding: 5px 8px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      border: 1px solid var(--input-border);
       border-radius: 4px;
-      background: rgba(0, 0, 0, 0.22);
+      background: var(--input-bg);
       color: var(--text);
       font-size: 0.85rem;
       outline: none;
@@ -2928,11 +2684,11 @@
       margin-left: auto;
     }
     .tracker-dropdown-input:focus {
-      border-color: rgba(38, 224, 210, 0.7);
+      border-color: var(--input-focus);
       box-shadow: 0 0 0 3px rgba(38, 224, 210, 0.18);
     }
     .tracker-dropdown-input::placeholder {
-      color: rgba(255, 255, 255, 0.55);
+      color: var(--muted-2);
     }
     /* Sticky Navigation Bar */
     .sticky-nav {
@@ -2946,7 +2702,7 @@
       background: rgba(7, 8, 20, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid var(--border-2);
       border-radius: 0;
     }
     .sticky-nav .nav-btn {
@@ -3161,8 +2917,8 @@
     .ranking-card-refresh,
     .blog-back-btn {
       padding: 6px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      background: var(--subtle-bg);
       color: var(--muted);
       border-radius: 6px;
       cursor: pointer;
@@ -3177,7 +2933,7 @@
     .copy-price-btn:hover,
     .ranking-card-refresh:hover,
     .blog-back-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--subtle-hover);
       color: var(--text);
       transform: none;
       box-shadow: none;
@@ -3216,8 +2972,8 @@
     .multi-alert-panel {
       margin: 12px 0;
       padding: 14px 16px;
-      background: var(--section-bg);
-      border: 1px solid var(--section-border);
+      background: var(--subtle-bg);
+      border: 1px solid var(--border-3);
       border-radius: 10px;
     }
     .multi-alert-header {
@@ -3234,7 +2990,6 @@
       font-weight: 700;
       margin: 0;
     }
-    /* .multi-alert-active removed */
     .multi-alert-inputs {
       display: grid;
       grid-template-columns: 1fr;
@@ -3249,7 +3004,7 @@
       gap: 6px;
       min-width: 0;
       padding: 6px 8px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-3);
       border-radius: 8px;
       flex-wrap: wrap;
     }
@@ -3286,8 +3041,8 @@
       align-items: center;
       gap: 8px;
       padding: 8px 12px;
-      background: rgba(0,0,0,0.18);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: var(--subtle-bg);
+      border: 1px solid var(--border-3);
       border-radius: 8px;
       flex-wrap: wrap;
     }
@@ -3347,7 +3102,7 @@
       display: inline-flex;
       align-items: center;
       background: none;
-      border: 1px solid rgba(255,255,255,0.14);
+      border: 1px solid var(--border);
       border-radius: 6px;
       padding: 4px 8px;
       color: var(--muted);
@@ -3365,7 +3120,7 @@
       backdrop-filter: blur(12px);
       flex-direction: column;
       padding: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid var(--border-2);
       border-radius: 0 0 8px 8px;
       z-index: 3001;
       min-width: 160px;
@@ -3386,7 +3141,7 @@
     }
     .nav-link:hover {
       color: var(--text);
-      background: rgba(255, 255, 255, 0.06);
+      background: var(--subtle-bg);
     }
     .nav-link.active {
       color: var(--accent);
@@ -3397,8 +3152,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--subtle-bg);
+      border: 1px solid var(--border);
       color: var(--muted);
       padding: 6px 14px;
       border-radius: 6px;
@@ -3409,9 +3164,9 @@
       transition: all 140ms ease;
     }
     .back-to-dashboard:hover {
-      background: rgba(255,255,255,0.1);
+      background: var(--subtle-hover);
       color: var(--text);
-      border-color: rgba(255,255,255,0.2);
+      border-color: var(--border);
     }
 
 
@@ -3476,7 +3231,7 @@
     }
     .blog-card {
       background: var(--card);
-      border: 1px solid var(--section-border);
+      border: 1px solid var(--border-3);
       border-radius: 12px;
       overflow: hidden;
       transition: border-color 140ms ease, transform 140ms ease;
@@ -3544,388 +3299,307 @@
     }
 
     /* ============================================
-       HEATMAP MODAL
+       BIAS DETECTION PANEL
        ============================================ */
-    .heatmap-modal-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 3000;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-    .heatmap-modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .heatmap-modal {
-      background: var(--bg-1);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      width: 94vw;
-      max-width: 900px;
-      max-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.6);
-      transform: translateY(20px) scale(0.97);
-      transition: transform 0.25s ease;
-    }
-    .heatmap-modal-overlay.active .heatmap-modal {
-      transform: translateY(0) scale(1);
-    }
-    .heatmap-modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 14px;
-      background: rgba(0,0,0,0.28);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .heatmap-modal-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .heatmap-modal-title .dot.heatmap {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      display: inline-block;
-      background: linear-gradient(135deg, #4a90d9, #e53935);
-    }
-    .heatmap-modal-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .heatmap-modal-legend {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.95rem;
-      color: var(--muted-2);
+    .bias-panel {
+      margin-top: 10px;
+      background: transparent;
+      border: 1px solid var(--section-border);
+      border-radius: 10px;
+      overflow: hidden;
       position: relative;
     }
-    .heatmap-info-btn {
+    .bias-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px 12px;
+      background: transparent;
+      border-bottom: 1px solid var(--border-3);
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .bias-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      flex: 1;
+    }
+    .bias-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .bias-ticker-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffcc80;
+      margin-right: 10px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+
+
+
+    /* Tooltip */
+    .bias-tooltip-wrap {
+      position: relative;
+      display: inline-flex;
+    }
+    .bias-info-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--input-border);
+      background: var(--subtle-bg);
       color: var(--muted-2);
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      cursor: help;
-      margin-left: 4px;
-      position: relative;
+      cursor: pointer;
       transition: all 0.15s ease;
       line-height: 1;
     }
-    .heatmap-info-btn:hover {
-      border-color: rgba(38,224,210,0.5);
+    .bias-info-btn:hover {
+      border-color: rgba(38, 224, 210, 0.5);
       color: var(--accent);
-      background: rgba(38,224,210,0.08);
+      background: rgba(38, 224, 210, 0.08);
     }
-    .heatmap-info-btn:hover + .heatmap-info-popup,
-    .heatmap-info-popup:hover {
-      display: block;
-    }
-    .heatmap-info-popup {
+    .bias-tooltip-popup {
       display: none;
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      margin-top: 10px;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 400px;
-      max-height: min(70vh, 480px);
-      overflow-y: auto;
-      background: rgba(15,16,30,0.97);
-      border: 1px solid rgba(255,255,255,0.14);
+      max-height: min(85vh, 600px);
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.15) transparent;
+      background: rgba(12, 13, 26, 0.97);
+      border: 1px solid var(--border);
       border-radius: 10px;
       padding: 14px 16px;
       z-index: 200;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-      font-size: 0.85rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+      font-size: 0.88rem;
       line-height: 1.55;
       color: var(--muted-2);
       text-align: left;
-      pointer-events: auto;
     }
-    .heatmap-info-popup p {
-      margin: 0 0 10px 0;
+    .bias-tooltip-popup::-webkit-scrollbar {
+      width: 5px;
     }
-    .heatmap-info-popup p:last-child {
-      margin-bottom: 0;
+    .bias-tooltip-popup::-webkit-scrollbar-track {
+      background: transparent;
     }
-    .heatmap-info-popup strong {
-      color: var(--text);
-    }
-    .heatmap-modal-legend-bar {
-      width: 60px;
-      height: 8px;
+    .bias-tooltip-popup::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.15);
       border-radius: 3px;
-      background: linear-gradient(90deg, #1a3a6e, #4a90d9, #e8a838, #e53935);
     }
-    .heatmap-stats-bar {
-      display: flex;
-      gap: 12px;
-      padding: 6px 14px;
-      background: rgba(0,0,0,0.22);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      flex-wrap: wrap;
-      align-items: center;
-      font-size: 0.9rem;
-      min-height: 32px;
-    }
-    .heatmap-stat-ticker {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--text);
-      margin-right: 6px;
-      letter-spacing: 0.5px;
-    }
-    .heatmap-stat {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--muted-2);
-    }
-    .heatmap-stat .stat-label {
-      font-size: 0.85rem;
-      opacity: 0.7;
-    }
-    .heatmap-stat .stat-value {
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: var(--text);
-    }
-    .heatmap-stat .stat-value.positive { color: #4caf50; }
-    .heatmap-stat .stat-value.negative { color: #ff5252; }
-    .heatmap-stat .stat-value.neutral { color: #e8a838; }
-    .heatmap-bias-stat .stat-value { font-size: 0.95rem !important; }
-    .heatmap-bias-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-    .heatmap-bias-reason {
-      font-size: 0.8rem !important;
-      color: #4aa3ff;
-      max-width: 260px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .heatmap-screenshot-btn {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: var(--muted-2);
-      border-radius: 6px;
-      width: 30px;
-      height: 28px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1rem;
-      line-height: 1;
-      transition: all 0.15s ease;
-      margin-left: auto;
-      flex-shrink: 0;
-    }
-    .heatmap-screenshot-btn:hover {
-      border-color: rgba(38,224,210,0.4);
-      color: var(--accent);
-      background: rgba(38,224,210,0.08);
-    }
-    .heatmap-screenshot-btn.copied {
-      border-color: rgba(76,175,80,0.5);
-      color: #4caf50;
-      background: rgba(76,175,80,0.1);
-    }
-    .heatmap-modal-close {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: var(--muted);
-      border-radius: 8px;
-      width: 38px;
-      height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1.4rem;
-      line-height: 1;
-      transition: all 0.15s ease;
-      flex-shrink: 0;
-    }
-    .heatmap-modal-close:hover {
-      background: rgba(255,82,82,0.15);
-      border-color: rgba(255,82,82,0.3);
-      color: #ff5252;
-    }
-    .heatmap-modal-body {
-      position: relative;
-      height: 420px;
-      background: #0d0e1a;
-      overflow: hidden;
-    }
-    .heatmap-modal-canvas {
-      width: 100%;
-      height: 100%;
+    .bias-tooltip-popup.active {
       display: block;
     }
-    .heatmap-modal-loading {
-      position: absolute;
-      inset: 0;
+    .bias-tooltip-popup strong {
+      color: var(--text);
+    }
+
+    /* Content grid */
+    .bias-content {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: transparent;
+      border-top: 1px solid var(--border-3);
+    }
+
+    /* Sections */
+    .bias-section {
+      padding: 10px 14px;
+    }
+    .bias-section-label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      text-align: center;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+
+
+    /* Scenario section — 2×2 matrix */
+    .bias-scenario-section {
+      border-bottom: none;
+      width: 100%;
+      text-align: center;
+    }
+    .bias-sc-matrix {
+      display: grid;
+      grid-template-columns: auto 1fr 1fr;
+      grid-template-rows: auto 1fr 1fr;
+      gap: 6px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .bias-sc-col-hdr {
+      font-size: 1.05rem;
+      font-weight: normal;
+      color: #ffffff;
+      text-align: center;
+      padding: 8px 10px;
+      white-space: nowrap;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .bias-sc-row-hdr {
+      font-size: 1.05rem;
+      font-weight: normal;
+      color: #ffffff;
+      writing-mode: horizontal-tb;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--muted-2);
-      font-size: 1.1rem;
-      background: rgba(13, 14, 26, 0.85);
-      z-index: 2;
-      transition: opacity 0.3s ease;
-    }
-    .heatmap-modal-loading.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .heatmap-modal-tooltip {
-      position: absolute;
-      z-index: 10;
-      background: rgba(0, 0, 0, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 6px;
-      padding: 8px 14px;
-      font-size: 1rem;
-      color: var(--text);
-      pointer-events: none;
+      padding: 0 10px;
       white-space: nowrap;
-      display: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
-    .heatmap-open-btn {
-      background: linear-gradient(135deg, rgba(229,57,53,0.2), rgba(232,168,56,0.2));
-      color: #e8a838;
-      border: 1px solid rgba(232,168,56,0.3);
-      padding: 6px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      display: inline-flex;
+    .bias-sc-cell {
+      background: var(--subtle-bg);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 14px;
+      text-align: center;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      cursor: default;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      height: 34px;
-      box-sizing: border-box;
-      cursor: pointer;
-      transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+      justify-content: center;
+      gap: 8px;
+    }
+    .bias-sc-cell-name {
+      display: block;
+      font-size: 1.25rem;
+      font-weight: normal;
+      color: #ffffff;
+      line-height: 1.25;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    .bias-sc-cell-bias {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: normal;
+      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.4;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    /* Active scenario cell — clean highlight, no glow */
+    .bias-sc-cell.active {
+      border-color: rgba(38, 224, 210, 0.7);
+      background: rgba(38, 224, 210, 0.12);
+      box-shadow: none;
+      transform: none;
+    }
+    .bias-sc-cell.active .bias-sc-cell-name {
+      color: #ffffff;
       font-size: 1.1rem;
-      user-select: none;
+      text-shadow: 0 0 8px rgba(255,255,255,0.3);
     }
-    .heatmap-open-btn:hover {
-      transform: translateY(-1px) scale(1.02);
-      box-shadow: 0 10px 20px rgba(232,168,56,0.15);
-      border-color: rgba(232,168,56,0.5);
-    }
-
-    .heatmap-modal-controls .heatmap-range-label {
-      padding: 5px 12px;
-      font-size: 0.95rem;
-      border-radius: 6px;
-    }
-    .heatmap-modal-controls .liq-heatmap-refresh {
-      font-size: 0.95rem;
-    }
-    .heatmap-modal-legend-bar {
-      width: 80px;
-      height: 10px;
-    }
-    .heatmap-stats-bar {
-      font-size: 0.95rem;
-      gap: 16px;
-      padding: 7px 14px;
-    }
-    .heatmap-stat .stat-label { font-size: 0.9rem; }
-    .heatmap-stat .stat-value { font-size: 0.95rem; }
-    .heatmap-modal-title .dot.heatmap {
-      width: 10px;
-      height: 10px;
+    .bias-sc-cell.active .bias-sc-cell-bias {
+      color: #ffffff;
+      opacity: 3;
+      text-shadow: 0 0 6px rgba(255,255,255,0.2);
     }
 
-    /* Heatmap modal mobile optimization */
+    /* Scenario-specific tinting when active — no glow, solid borders */
+    .bias-sc-cell.active[data-sc="1"] {
+      border-color: rgba(76, 175, 80, 0.8);
+      background: rgba(76, 175, 80, 0.15);
+      box-shadow: none;
+    }
+    .bias-sc-cell.active[data-sc="1"] .bias-sc-cell-name { color: #ffffff; text-shadow: 0 0 10px rgba(94,255,138,0.5); }
+    .bias-sc-cell.active[data-sc="1"] .bias-sc-cell-bias { color: #ffffff; text-shadow: 0 0 8px rgba(94,255,138,0.4); }
+
+    .bias-sc-cell.active[data-sc="2"] {
+      border-color: rgba(255, 204, 128, 0.8);
+      background: rgba(255, 204, 128, 0.15);
+      box-shadow: none;
+    }
+    .bias-sc-cell.active[data-sc="2"] .bias-sc-cell-name { color: #ffffff; text-shadow: 0 0 10px rgba(255,204,128,0.5); }
+    .bias-sc-cell.active[data-sc="2"] .bias-sc-cell-bias { color: #ffffff; text-shadow: 0 0 8px rgba(255,204,128,0.4); }
+
+    .bias-sc-cell.active[data-sc="3"] {
+      border-color: rgba(255, 82, 82, 0.8);
+      background: rgba(255, 82, 82, 0.15);
+      box-shadow: none;
+    }
+    .bias-sc-cell.active[data-sc="3"] .bias-sc-cell-name { color: #ffffff; text-shadow: 0 0 10px rgba(255,107,107,0.5); }
+    .bias-sc-cell.active[data-sc="3"] .bias-sc-cell-bias { color: #ffffff; text-shadow: 0 0 8px rgba(255,107,107,0.4); }
+
+    .bias-sc-cell.active[data-sc="4"] {
+      border-color: rgba(100, 181, 246, 0.8);
+      background: rgba(100, 181, 246, 0.15);
+      box-shadow: none;
+    }
+    .bias-sc-cell.active[data-sc="4"] .bias-sc-cell-name { color: #ffffff; text-shadow: 0 0 10px rgba(100,181,246,0.5); }
+    .bias-sc-cell.active[data-sc="4"] .bias-sc-cell-bias { color: #ffffff; text-shadow: 0 0 8px rgba(100,181,246,0.4); }
+
+
+
+
+    /* Mobile responsive */
     @media (max-width: 768px) {
-      .heatmap-modal {
-        width: 98vw;
-        max-width: none;
-        max-height: 85vh;
-        border-radius: 10px;
+      .bias-header {
+        padding: 6px 10px;
+        gap: 6px;
+        flex-wrap: wrap;
       }
-      .heatmap-modal-body {
-        height: 320px;
+      .bias-header-left {
+        flex-wrap: wrap;
+        gap: 6px;
       }
-      .heatmap-modal-header {
-        padding: 8px 10px;
+      .bias-title {
+        font-size: 0.95rem;
       }
-      .heatmap-modal-title {
-        font-size: 1.15rem;
+      .bias-sc-matrix {
+        max-width: 100%;
       }
-      .heatmap-modal-controls {
-        gap: 4px;
-      }
-      .heatmap-modal-controls .heatmap-range-label {
-        padding: 3px 8px;
-        font-size: 0.85rem;
-      }
-      .heatmap-stats-bar {
-        font-size: 0.8rem;
-        gap: 8px;
-        padding: 5px 10px;
-      }
-      .heatmap-stat .stat-label { font-size: 0.75rem; }
-      .heatmap-stat .stat-value { font-size: 0.8rem; }
-      .heatmap-stat-ticker { font-size: 0.9rem; }
-      .heatmap-bias-reason { font-size: 0.7rem !important; max-width: 140px; }
-      .heatmap-bias-group { gap: 3px; }
-      .heatmap-screenshot-btn { width: 26px; height: 24px; font-size: 0.85rem; }
-      .heatmap-info-popup {
-        width: 300px;
-        max-height: min(60vh, 400px);
-        font-size: 0.8rem;
-        left: auto;
-        right: 0;
-        transform: none;
+      .bias-tooltip-popup {
+        width: 290px;
+        max-height: min(80vh, 520px);
+        font-size: 0.82rem;
       }
     }
     @media (max-width: 480px) {
-      .heatmap-modal-body {
-        height: 260px;
+      .bias-header-left {
+        gap: 4px;
       }
-      .heatmap-modal-overlay {
-        align-items: flex-end;
+      .bias-title {
+        font-size: 0.9rem;
       }
-      .heatmap-modal {
-        width: 100vw;
-        max-height: 80vh;
-        border-radius: 14px 14px 0 0;
+      .bias-sc-cell-name {
+        font-size: 1.1rem;
+      }
+      .bias-sc-cell-bias {
+        font-size: 0.85rem;
+      }
+      .bias-sc-col-hdr,
+      .bias-sc-row-hdr {
+        font-size: 0.88rem;
+      }
+      .bias-sc-cell {
+        padding: 10px 6px;
       }
     }
-
   </style>
 </head>
 
@@ -3964,11 +3638,11 @@
     </article>
     <article>
       <h3>Why MultiPerps is the Best Free Crypto Trading Dashboard for Binance Futures (2026)</h3>
-      <p>Discover why thousands of traders use MultiPerps for real-time multi-timeframe charts, liquidation heatmap, price alerts, open interest rankings, funding rate tracking, and multi-ticker monitoring — all free and privacy-first.</p>
+      <p>Discover why thousands of traders use MultiPerps for real-time multi-timeframe charts, price alerts, open interest rankings, funding rate tracking, and multi-ticker monitoring — all free and privacy-first.</p>
     </article>
     <h2>Frequently Asked Questions</h2>
     <h3>What is MultiPerps?</h3>
-    <p>MultiPerps is a free, real-time Binance Futures dashboard that displays live multi-timeframe candlestick charts, liquidation heatmap, price alerts, open interest rankings, funding rates, and market rankings for USDT perpetual contracts — all without requiring an account.</p>
+    <p>MultiPerps is a free, real-time Binance Futures dashboard that displays live multi-timeframe candlestick charts, price alerts, open interest rankings, funding rates, and market rankings for USDT perpetual contracts — all without requiring an account.</p>
     <h3>Is MultiPerps free?</h3>
     <p>Yes, MultiPerps is 100% free with no accounts, subscriptions, or hidden fees.</p>
     <h3>Does MultiPerps track my data?</h3>
@@ -3999,35 +3673,7 @@
     <div class="ticker-grid" id="tickerGrid"></div>
   </main>
 
-  <div class="heatmap-modal-overlay" id="heatmapModalOverlay">
-    <div class="heatmap-modal">
-      <div class="heatmap-modal-header">
-        <div class="heatmap-modal-title"><span class="dot heatmap">
-        </span> Liquidation HeatMap<span class="heatmap-range-label">Range: 2x - 10x</span></div>          
-        <div class="heatmap-modal-legend"><span>Low</span><div class="heatmap-modal-legend-bar"></div><span>High</span><span class="heatmap-info-btn" id="heatmapInfoBtn">?</span><div class="heatmap-info-popup" id="heatmapInfoPopup"><p><strong>How to Use:</strong> The heatmap visualizes where liquidations are concentrated around the current price for the 2x–10x leverage range. <span style="color:#4caf50">Green ▲ arrows</span> on the right mark long liquidation levels below price — if price drops to these zones, long positions get forcibly closed, accelerating the sell-off. <span style="color:#ff5252">Red ▼ arrows</span> mark short liquidation levels above price — if price rises there, short positions get liquidated, fueling a squeeze. The teal dashed line is the current mark price. Hot zones (orange/red bands) are "magnetic" — price tends to gravitate toward dense liquidation clusters during volatile moves because each triggered position adds fuel. Use the heatmap to: (1) identify where cascades may accelerate, (2) place stop-losses outside the thickest liq clusters, and (3) spot when a move may exhaust itself as it runs out of dense zones ahead.</p><p><strong>Stats Bar:</strong> <b style="color:#4aa3ff">OI</b> = Open Interest in base asset (higher OI = more capital at risk). <b style="color:#4aa3ff">Funding</b> = Last funding rate from Binance (positive = longs pay shorts, negative = shorts pay longs; extremes signal crowding). <b style="color:#4aa3ff">Vol</b> = 24h quote volume from Binance's ticker endpoint. <b style="color:#4aa3ff">Bias</b> = Directional pressure based on liq density: Bullish means more short liq above (squeeze potential), Bearish means more long liq below (cascade risk). The <span style="color:#4aa3ff">blue reason text</span> explains the bias call.</p><p><strong>Calculation:</strong> Liquidation prices: Long Liq = Mark Price × (1 − 1/Leverage + MMR), Short Liq = Mark Price × (1 + 1/Leverage − MMR), where MMR is Binance's maintenance margin ratio (0.5% at 2x, 1% at 3–5x, 1.5% at 10x). For each leverage tier (2x, 3x, 5x, 10x), liq prices are mapped onto a 300-bin price grid. Density at each bin combines a Gaussian kernel centered on each liq price, weighted by 1/√leverage (lower leverage = more capital at risk), and multiplied by a depth factor from the real Binance order book — thicker walls near a liq price amplify density, indicating greater cascade potential. The result is smoothed and normalized to 0–1, then rendered as a color gradient (blue → yellow → orange → red). Bias is computed by summing proximity-weighted liq density above vs below the mark price — closer liq levels contribute more weight. The ratio of short-to-long density determines the bias label and direction.</p></div></div>
-        <div class="heatmap-modal-controls">
-          <div class="liq-heatmap-refresh" id="liqHeatmapRefresh" title="Refresh heatmap data">&#x21bb;</div>
-        </div>
-        <button class="heatmap-modal-close" id="heatmapModalClose" type="button">&#x2715;</button>
-      </div>
-      <div class="heatmap-stats-bar" id="heatmapStatsBar">
-        <span class="heatmap-stat-ticker" id="statTicker">--</span>
-        <span class="heatmap-stat"><span class="stat-label">OI:</span> <span class="stat-value" id="statOI">--</span></span>
-        <span class="heatmap-stat"><span class="stat-label">Funding:</span> <span class="stat-value" id="statFunding">--</span></span>
-        <span class="heatmap-stat"><span class="stat-label">Vol:</span> <span class="stat-value" id="statVol">--</span></span>
-        <span class="heatmap-bias-group">
-          <span class="heatmap-stat heatmap-bias-stat"><span class="stat-label">Bias:</span> <span class="stat-value" id="statBias">--</span></span>
-          <span class="heatmap-stat heatmap-bias-reason" id="statBiasReason"></span>
-        </span>
-        <button type="button" class="heatmap-screenshot-btn" id="heatmapScreenshotBtn" title="Copy heatmap screenshot">&#x2398;</button>
-      </div>
-      <div class="heatmap-modal-body" id="liqHeatmapBody">
-        <canvas class="heatmap-modal-canvas" id="liqHeatmapCanvas"></canvas>
-        <div class="heatmap-modal-loading" id="liqHeatmapLoading">Loading heatmap...</div>
-        <div class="heatmap-modal-tooltip" id="liqHeatmapTooltip"></div>
-      </div>
-    </div>
-  </div>
+
 
   <script>
 
@@ -4524,10 +4170,6 @@
       return [p1, p2, p3, p4, ...multiPrices];
     };
 
-    const setAlertState = () => {
-      // Removed - using toast notifications instead
-    };
-
     const playAlertSound = () => {
       try {
         const ctx = state.audioContext || new (window.AudioContext || window.webkitAudioContext)();
@@ -4671,12 +4313,10 @@
         playAlertSound();
         const ticker = state.symbol.replace('USDT', '');
         if (crossedUp) {
-          setAlertState(index, 'up', alertPrice);
           showToast(`${ticker} Alert ${index} ↑`, `Crossed UP ${formatPrice(alertPrice)} (now ${formatPrice(price)})`, 'up');
           sendBrowserNotification(`${ticker} Alert ${index}`, `Crossed UP ${formatPrice(alertPrice)} (now ${formatPrice(price)})`);
           updateAlertLog(`${ticker} Alert ${index}: Crossed UP ${formatPrice(alertPrice)}`);
         } else {
-          setAlertState(index, 'down', alertPrice);
           showToast(`${ticker} Alert ${index} ↓`, `Crossed DOWN ${formatPrice(alertPrice)} (now ${formatPrice(price)})`, 'down');
           sendBrowserNotification(`${ticker} Alert ${index}`, `Crossed DOWN ${formatPrice(alertPrice)} (now ${formatPrice(price)})`);
           updateAlertLog(`${ticker} Alert ${index}: Crossed DOWN ${formatPrice(alertPrice)}`);
@@ -5876,13 +5516,78 @@
         <div class="chart-list">${intervalSections}</div>
         <div class="chart-share-row">
           <div class="chart-action-buttons">
-            <button id="heatmapOpenBtn" class="control-btn heatmap-open-btn" type="button">🔥 Liq HeatMap</button>
+
             <button id="tradeBtn" class="control-btn trade-btn" title="Open Binance Futures"><img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" class="binance-favicon-btn" alt="" onerror="this.style.display='none'" />Trade</button>
             <button class="control-btn share-btn" id="chartShareBtn" type="button">
               <span style="margin-right:6px">𝕏</span>Share
             </button>
           </div>
         </div>
+
+        <!-- ==========================================
+             OI-PRICE MATRIX PANEL
+             2×2 scenario grid based on OI direction
+             and price direction using 168 hourly OI
+             data points (7 days) from Binance API.
+             ========================================== -->
+        <div class="bias-panel" id="oiPricePanel">
+          <div class="bias-header">
+            <div class="bias-header-left">
+              <span class="bias-ticker-name" id="biasTickerName"></span><span class="bias-title">Open Interest-Price Analysis</span>
+              <span class="bias-tooltip-wrap">
+                <span class="bias-info-btn" title="How OI-Price Matrix works">?</span>
+                <span class="bias-tooltip-popup">
+                  <strong>OI-Price Matrix:</strong><br>
+                  Open Interest-Price Matrix analysis is a 2×2 scenario grid based on the relationship between <em>price direction</em> and <em>open interest direction</em> in futures markets. Both Price and OI use <b style="color:#4aa3ff">168 hourly data points</b> (7 days) from Binance to compute multi-timeframe trends (4h, 24h, 7d).<br><br>
+                  <strong style="color:var(--text)">Noise Filter:</strong> Changes within <b>±0.2%</b> are treated as FLAT (noise). Only changes exceeding this threshold count as UP or DOWN votes. Direction requires <b>majority vote</b> — at least 2 of 3 timeframes must agree. If either Price or OI is FLAT, the result shows <b>"No Clear Signal"</b> instead of forcing a scenario.<br><br>
+                  <b style="color:#4caf50">🟢 Price ↑ + OI ↑ = Strong Uptrend</b> — New longs entering, confirming the move. <b>Bias: Long</b><br><br>
+                  <b style="color:var(--warn)">🟡 Price ↑ + OI ↓ = Short Covering</b> — Rally driven by shorts closing. Weaker. <b>Bias: Careful Long / Avoid late entries</b><br><br>
+                  <b style="color:#ff5252">🔴 Price ↓ + OI ↑ = Strong Downtrend</b> — New shorts opening, confirming the decline. <b>Bias: Short</b><br><br>
+                  <b style="color:#64b5f6">🔵 Price ↓ + OI ↓ = Exhaustion</b> — Longs capitulating. Often precedes reversal. <b>Bias: Avoid late shorts, watch for Long reversal</b><br><br>
+                  <strong style="color:var(--text)">Data Sources:</strong><br>
+                  <span style="color:#aaa;font-size:0.84rem;line-height:1.6">
+                  • Price Trends: Binance klines API, 168 hourly candles (7 days)<br>
+                  • OI Trends: Binance openInterestHist API, 168 hourly snapshots (7 days)<br>
+                  • Current OI: Binance openInterest API<br>
+                  • 3 API calls only, auto-refreshed every 10 seconds
+                  </span><br><br>
+                  <em style="color:var(--warn)">Not financial advice. Always do your own research.</em>
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <div class="bias-content">
+            <!-- OI SCENARIOS 2x2 MATRIX (full width) -->
+            <div class="bias-section bias-scenario-section">
+              <div class="bias-sc-matrix">
+                <div class="bias-sc-corner"></div>
+                <div class="bias-sc-col-hdr">OI ↑</div>
+                <div class="bias-sc-col-hdr">OI ↓</div>
+                <div class="bias-sc-row-hdr">Price ↑</div>
+                <div class="bias-sc-cell" id="biasScenario1" data-sc="1">
+                  <span class="bias-sc-cell-name">Strong Uptrend</span>
+                  <span class="bias-sc-cell-bias" id="biasScBias1">&#x1F7E2; Long</span>
+                </div>
+                <div class="bias-sc-cell" id="biasScenario2" data-sc="2">
+                  <span class="bias-sc-cell-name">Short Covering</span>
+                  <span class="bias-sc-cell-bias" id="biasScBias2">&#x1F7E1; Careful Long / Avoid late entries</span>
+                </div>
+                <div class="bias-sc-row-hdr">Price ↓</div>
+                <div class="bias-sc-cell" id="biasScenario3" data-sc="3">
+                  <span class="bias-sc-cell-name">Strong Downtrend</span>
+                  <span class="bias-sc-cell-bias" id="biasScBias3">&#x1F534; Short</span>
+                </div>
+                <div class="bias-sc-cell" id="biasScenario4" data-sc="4">
+                  <span class="bias-sc-cell-name">Exhaustion</span>
+                  <span class="bias-sc-cell-bias" id="biasScBias4">&#x1F535; Avoid late shorts, watch for Long reversal</span>
+                </div>
+              </div>
+              <div id="oiPriceResult" style="text-align:center;margin-top:8px;font-size:0.84rem;color:var(--muted-2);line-height:1.55;"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="multi-alert-panel" id="multiAlertPanel">
           <div class="multi-alert-header">
             <h3>Multi Alerts</h3>
@@ -6611,7 +6316,7 @@
 
       closeWs();
       stopMultiAlertMonitor();
-      liqHeatmap.stopAutoRefresh();
+      oiPricePanel.stopAutoRefresh();
 
       state.wsStatus = { text: 'Stopped', level: 'error' };
       updateStatus();
@@ -6619,682 +6324,298 @@
     };
 
     // ============================================
-    // LIQUIDATION HEATMAP - Price-Level Visualization
-    // candlestick chart showing liquidation density.
-    // Uses Binance order book depth + estimated
-    // liquidation levels at common leverage points.
+    // OI-PRICE MATRIX PANEL
+    // 2×2 scenario grid: OI direction vs Price direction
+    // Uses 168 hourly data points (7 days) from Binance for both Price and OI.
+    // 3 API calls: klines (1h×168), openInterestHist (1h×168), openInterest
+    // Direction: majority vote across 4h/24h/7d timeframes with ±0.2% noise threshold
+    // FLAT = neither UP nor DOWN (too close to call) → "No Clear Signal"
     // ============================================
-    const liqHeatmap = {
-      data: null,
+    const oiPricePanel = {
       symbol: null,
       timer: null,
-      hoverPrice: null,
-      loading: false,
-      stats: { oi: null, funding: null, vol24h: null, bidDepth: null, askDepth: null },
-      leverages: [2, 3, 5, 10],
-      getMmr(leverage) {
-        if (leverage <= 2) return 0.005;
-        if (leverage <= 5) return 0.01;
-        if (leverage <= 10) return 0.015;
-        if (leverage <= 20) return 0.025;
-        if (leverage <= 50) return 0.05;
-        if (leverage <= 75) return 0.08;
-        if (leverage <= 100) return 0.10;
-        return 0.125;
+      stats: {
+        priceChange4h: null,   // 4-hour price change %
+        priceChange24h: null,  // 24-hour price change %
+        priceChange7d: null,   // 7-day price change %
+        oiCurrent: null,
+        oiChange4h: null,      // 4-hour OI change %
+        oiChange24h: null,     // 24-hour OI change %
+        oiChange7d: null       // 7-day OI change %
       },
-      liqPriceLong(markPrice, leverage) {
-        const mmr = this.getMmr(leverage);
-        return markPrice * (1 - (1 / leverage) + mmr);
-      },
-      liqPriceShort(markPrice, leverage) {
-        const mmr = this.getMmr(leverage);
-        return markPrice * (1 + (1 / leverage) - mmr);
-      },
-      async fetchDepth(symbol, limit = 500) {
+
+      async fetchData(symbol) {
+        // Reset stats
+        this.stats.priceChange4h = null;
+        this.stats.priceChange24h = null;
+        this.stats.priceChange7d = null;
+        this.stats.oiCurrent = null;
+        this.stats.oiChange4h = null;
+        this.stats.oiChange24h = null;
+        this.stats.oiChange7d = null;
+
         try {
-          const url = `https://fapi.binance.com/fapi/v1/depth?symbol=${encodeURIComponent(symbol)}&limit=${limit}`;
-          return await fetchJsonWithTimeout(url);
-        } catch (e) {
-          console.warn('LiqHeatmap: depth fetch failed', e);
-          return null;
-        }
-      },
-      async fetchKlinesForRange(symbol) {
-        try {
-          return await fetchBinanceFuturesKlines(symbol, '4h', 60);
-        } catch { return []; }
-      },
-      async fetchMarketStats(symbol) {
-        try {
-          const [oiRes, premiumRes, tickerRes] = await Promise.allSettled([
-            fetchJsonWithTimeout(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${encodeURIComponent(symbol)}`),
-            fetchJsonWithTimeout(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${encodeURIComponent(symbol)}`),
-            fetchJsonWithTimeout(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${encodeURIComponent(symbol)}`)
+          const [klinesRes, oiHistRes, oiRes] = await Promise.allSettled([
+            fetchJsonWithTimeout(`https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=1h&limit=168`),
+            fetchJsonWithTimeout(`https://fapi.binance.com/futures/data/openInterestHist?symbol=${encodeURIComponent(symbol)}&period=1h&limit=168`),
+            fetchJsonWithTimeout(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${encodeURIComponent(symbol)}`)
           ]);
-          if (oiRes.status === 'fulfilled' && oiRes.value?.openInterest) {
-            this.stats.oi = parseFloat(oiRes.value.openInterest);
+
+          // Klines — 168 hourly candles for multi-timeframe price changes
+          if (klinesRes.status === 'fulfilled' && Array.isArray(klinesRes.value) && klinesRes.value.length >= 2) {
+            const candles = klinesRes.value;
+            const latestClose = parseFloat(candles[candles.length - 1][4]); // close price
+
+            // 4-hour price change (5th from end = 4 candles ago)
+            if (candles.length >= 8 && Number.isFinite(latestClose)) {
+              const close4hAgo = parseFloat(candles[candles.length - 5][4]);
+              if (Number.isFinite(close4hAgo) && close4hAgo > 0) {
+                this.stats.priceChange4h = ((latestClose - close4hAgo) / close4hAgo) * 100;
+              }
+            }
+
+            // 24-hour price change (25th from end = 24 candles ago)
+            if (candles.length >= 48 && Number.isFinite(latestClose)) {
+              const close24hAgo = parseFloat(candles[candles.length - 25][4]);
+              if (Number.isFinite(close24hAgo) && close24hAgo > 0) {
+                this.stats.priceChange24h = ((latestClose - close24hAgo) / close24hAgo) * 100;
+              }
+            }
+
+            // 7-day price change (first candle vs last)
+            if (Number.isFinite(latestClose)) {
+              const firstClose = parseFloat(candles[0][4]);
+              if (Number.isFinite(firstClose) && firstClose > 0) {
+                this.stats.priceChange7d = ((latestClose - firstClose) / firstClose) * 100;
+              }
+            }
           }
-          if (premiumRes.status === 'fulfilled' && premiumRes.value) {
-            this.stats.funding = parseFloat(premiumRes.value.lastFundingRate);
+
+          // OI history — 168 hourly data points
+          if (oiHistRes.status === 'fulfilled' && Array.isArray(oiHistRes.value) && oiHistRes.value.length >= 2) {
+            const data = oiHistRes.value;
+            const latestOi = parseFloat(data[data.length - 1].sumOpenInterest);
+
+            // 4-hour OI change
+            if (data.length >= 8) {
+              const oi4hAgo = parseFloat(data[data.length - 5].sumOpenInterest);
+              if (Number.isFinite(latestOi) && Number.isFinite(oi4hAgo) && oi4hAgo > 0) {
+                this.stats.oiChange4h = ((latestOi - oi4hAgo) / oi4hAgo) * 100;
+              }
+            }
+
+            // 24-hour OI change
+            if (data.length >= 48) {
+              const oi24hAgo = parseFloat(data[data.length - 25].sumOpenInterest);
+              if (Number.isFinite(latestOi) && Number.isFinite(oi24hAgo) && oi24hAgo > 0) {
+                this.stats.oiChange24h = ((latestOi - oi24hAgo) / oi24hAgo) * 100;
+              }
+            }
+
+            // 7-day OI change
+            const firstOi = parseFloat(data[0].sumOpenInterest);
+            if (Number.isFinite(latestOi) && Number.isFinite(firstOi) && firstOi > 0) {
+              this.stats.oiChange7d = ((latestOi - firstOi) / firstOi) * 100;
+            }
           }
-          // 24h quote volume — same source as rankings section
-          if (tickerRes.status === 'fulfilled' && tickerRes.value) {
-            this.stats.vol24h = parseFloat(tickerRes.value.quoteVolume);
+
+          // Current OI absolute value
+          if (oiRes.status === 'fulfilled' && oiRes.value && oiRes.value.openInterest) {
+            this.stats.oiCurrent = parseFloat(oiRes.value.openInterest);
           }
-          this.updateStatsUI();
         } catch (e) {
-          console.warn('LiqHeatmap: stats fetch failed', e);
+          console.warn('OI-Price Panel: fetch error', e);
         }
       },
-      calcBias() {
-        if (!this.data || !this.data.liqDensity || !Number.isFinite(this.data.markPrice)) return;
-        const { liqDensity, priceMin, priceMax, markPrice, BINS, binSize } = this.data;
-        let shortLiqDensity = 0; // density above price (short liquidations)
-        let longLiqDensity = 0;  // density below price (long liquidations)
-        const markBin = Math.floor((markPrice - priceMin) / binSize);
-        for (let i = 0; i < BINS; i++) {
-          if (i < markBin) {
-            longLiqDensity += liqDensity[i] * (markBin - i) / markBin; // weight: closer = stronger
-          } else if (i > markBin) {
-            shortLiqDensity += liqDensity[i] * (i - markBin) / (BINS - markBin);
-          }
+
+      computeScenario() {
+        // Noise threshold — changes within ±0.2% are considered FLAT (noise)
+        const THRESHOLD = 0.2;
+
+        // Price direction — majority vote across 3 timeframes with threshold
+        let priceUpVotes = 0;
+        let priceDownVotes = 0;
+        let priceFlatVotes = 0;
+        if (Number.isFinite(this.stats.priceChange4h)) {
+          if (this.stats.priceChange4h > THRESHOLD) priceUpVotes++;
+          else if (this.stats.priceChange4h < -THRESHOLD) priceDownVotes++;
+          else priceFlatVotes++;
         }
-        // Normalize
-        const total = shortLiqDensity + longLiqDensity;
-        if (total < 0.01) {
-          const el = document.getElementById('statBias');
-          if (el) { el.textContent = 'Neutral'; el.className = 'stat-value neutral'; }
-          const reasonEl = document.getElementById('statBiasReason');
-          if (reasonEl) reasonEl.textContent = 'Low liq density on both sides';
-          return;
+        if (Number.isFinite(this.stats.priceChange24h)) {
+          if (this.stats.priceChange24h > THRESHOLD) priceUpVotes++;
+          else if (this.stats.priceChange24h < -THRESHOLD) priceDownVotes++;
+          else priceFlatVotes++;
         }
-        const shortPct = shortLiqDensity / total;
-        const longPct = longLiqDensity / total;
-        const ratio = shortPct / (longPct || 0.01);
-        const el = document.getElementById('statBias');
-        const reasonEl = document.getElementById('statBiasReason');
-        if (ratio > 2.0) {
-          if (el) { el.textContent = 'Strong Bullish'; el.className = 'stat-value positive'; }
-          if (reasonEl) reasonEl.textContent = 'Heavy short liq above — squeeze magnet';
-        } else if (ratio > 1.3) {
-          if (el) { el.textContent = 'Bullish'; el.className = 'stat-value positive'; }
-          if (reasonEl) reasonEl.textContent = 'More short liq above price';
-        } else if (ratio < 0.5) {
-          if (el) { el.textContent = 'Strong Bearish'; el.className = 'stat-value negative'; }
-          if (reasonEl) reasonEl.textContent = 'Heavy long liq below — cascade risk';
-        } else if (ratio < 0.77) {
-          if (el) { el.textContent = 'Bearish'; el.className = 'stat-value negative'; }
-          if (reasonEl) reasonEl.textContent = 'More long liq below price';
-        } else {
-          if (el) { el.textContent = 'Neutral'; el.className = 'stat-value neutral'; }
-          if (reasonEl) reasonEl.textContent = 'Balanced liq density both sides';
+        if (Number.isFinite(this.stats.priceChange7d)) {
+          if (this.stats.priceChange7d > THRESHOLD) priceUpVotes++;
+          else if (this.stats.priceChange7d < -THRESHOLD) priceDownVotes++;
+          else priceFlatVotes++;
         }
-      },
-      updateStatsUI() {
-        const setVal = (id, val, cls) => {
-          const el = document.getElementById(id);
-          if (el) { el.textContent = val; el.className = 'stat-value' + (cls ? ' ' + cls : ''); }
+        const priceTotal = priceUpVotes + priceDownVotes;
+        const priceUp = priceTotal > 0 && priceUpVotes > priceDownVotes;
+        const priceDown = priceTotal > 0 && priceDownVotes > priceUpVotes;
+        const priceFlat = priceTotal === 0 || (priceUpVotes === priceDownVotes);
+
+        // OI direction — majority vote across 3 timeframes with threshold
+        let oiUpVotes = 0;
+        let oiDownVotes = 0;
+        let oiFlatVotes = 0;
+        if (Number.isFinite(this.stats.oiChange4h)) {
+          if (this.stats.oiChange4h > THRESHOLD) oiUpVotes++;
+          else if (this.stats.oiChange4h < -THRESHOLD) oiDownVotes++;
+          else oiFlatVotes++;
+        }
+        if (Number.isFinite(this.stats.oiChange24h)) {
+          if (this.stats.oiChange24h > THRESHOLD) oiUpVotes++;
+          else if (this.stats.oiChange24h < -THRESHOLD) oiDownVotes++;
+          else oiFlatVotes++;
+        }
+        if (Number.isFinite(this.stats.oiChange7d)) {
+          if (this.stats.oiChange7d > THRESHOLD) oiUpVotes++;
+          else if (this.stats.oiChange7d < -THRESHOLD) oiDownVotes++;
+          else oiFlatVotes++;
+        }
+        const oiTotal = oiUpVotes + oiDownVotes;
+        const oiUp = oiTotal > 0 && oiUpVotes > oiDownVotes;
+        const oiDown = oiTotal > 0 && oiDownVotes > oiUpVotes;
+        const oiFlat = oiTotal === 0 || (oiUpVotes === oiDownVotes);
+
+        // Scenario classification
+        // 0 = no data, 5 = no clear signal (FLAT)
+        let scenarioIdx = 0;
+        if (priceFlat && oiFlat && (priceFlatVotes > 0 || oiFlatVotes > 0)) scenarioIdx = 5;
+        else if (priceFlat || oiFlat) scenarioIdx = 5;
+        else if (priceUp && oiUp) scenarioIdx = 1;
+        else if (priceUp && oiDown) scenarioIdx = 2;
+        else if (priceDown && oiUp) scenarioIdx = 3;
+        else if (priceDown && oiDown) scenarioIdx = 4;
+
+        // Format multi-timeframe strings
+        const fmtPct = (v) => Number.isFinite(v) ? ((v > 0 ? '+' : '') + v.toFixed(2) + '%') : '--';
+        const priceParts = [];
+        if (Number.isFinite(this.stats.priceChange4h))  priceParts.push('4h ' + fmtPct(this.stats.priceChange4h));
+        if (Number.isFinite(this.stats.priceChange24h)) priceParts.push('24h ' + fmtPct(this.stats.priceChange24h));
+        if (Number.isFinite(this.stats.priceChange7d))  priceParts.push('7d ' + fmtPct(this.stats.priceChange7d));
+        const priceLine = priceParts.length > 0 ? priceParts.join(' | ') : '--';
+
+        const oiParts = [];
+        if (Number.isFinite(this.stats.oiChange4h))  oiParts.push('4h ' + fmtPct(this.stats.oiChange4h));
+        if (Number.isFinite(this.stats.oiChange24h)) oiParts.push('24h ' + fmtPct(this.stats.oiChange24h));
+        if (Number.isFinite(this.stats.oiChange7d))  oiParts.push('7d ' + fmtPct(this.stats.oiChange7d));
+        const oiLine = oiParts.length > 0 ? oiParts.join(' | ') : '--';
+
+        return {
+          scenarioIdx,
+          priceLine,
+          oiLine,
+          priceUp,
+          priceDown,
+          priceFlat,
+          oiUp,
+          oiDown,
+          oiFlat,
+          priceChange4h: this.stats.priceChange4h,
+          priceChange24h: this.stats.priceChange24h,
+          priceChange7d: this.stats.priceChange7d,
+          oiChange4h: this.stats.oiChange4h,
+          oiChange24h: this.stats.oiChange24h,
+          oiChange7d: this.stats.oiChange7d
         };
-        // Set ticker name
-        const tickerEl = document.getElementById('statTicker');
-        if (tickerEl) {
-          const display = (this.symbol || '').replace('USDT', '') || '--';
-          tickerEl.textContent = display;
-        }
-        setVal('statOI', this.stats.oi != null && Number.isFinite(this.stats.oi) ? formatCompact(this.stats.oi) : '--');
-        if (this.stats.funding != null && Number.isFinite(this.stats.funding)) {
-          const fVal = this.stats.funding * 100;
-          const sign = fVal > 0 ? '+' : '';
-          setVal('statFunding', sign + fVal.toFixed(4) + '%', this.stats.funding > 0 ? 'positive' : this.stats.funding < 0 ? 'negative' : 'neutral');
-        } else { setVal('statFunding', '--'); }
-        setVal('statVol', this.stats.vol24h != null && Number.isFinite(this.stats.vol24h) ? formatCompact(this.stats.vol24h) : '--');
-        this.calcBias();
       },
-      buildDensityProfile(markPrice, depthData, klines) {
-        if (!markPrice || !depthData) return null;
-        const bids = depthData.bids || [];
-        const asks = depthData.asks || [];
-        const leverages = this.leverages;
-        let bidDepthTotal = 0, askDepthTotal = 0;
-        for (const [, q] of bids) bidDepthTotal += parseFloat(q) || 0;
-        for (const [, q] of asks) askDepthTotal += parseFloat(q) || 0;
-        this.stats.bidDepth = bidDepthTotal * markPrice;
-        this.stats.askDepth = askDepthTotal * markPrice;
-        let priceMin = markPrice * 0.85;
-        let priceMax = markPrice * 1.15;
-        if (klines && klines.length > 0) {
-          let lo = Infinity, hi = -Infinity;
-          for (const k of klines) {
-            if (k.low < lo) lo = k.low;
-            if (k.high > hi) hi = k.high;
-          }
-          if (Number.isFinite(lo) && Number.isFinite(hi)) {
-            const rangePad = (hi - lo) * 0.35;
-            priceMin = Math.min(lo - rangePad, markPrice * 0.92);
-            priceMax = Math.max(hi + rangePad, markPrice * 1.08);
+
+      render(scenario) {
+        // Highlight active cell (only 1-4, never 5)
+        for (let i = 1; i <= 4; i++) {
+          const cell = document.getElementById('biasScenario' + i);
+          if (cell) {
+            cell.classList.toggle('active', scenario.scenarioIdx === i);
           }
         }
-        for (const lev of leverages) {
-          const lLong = this.liqPriceLong(markPrice, lev);
-          const lShort = this.liqPriceShort(markPrice, lev);
-          if (lLong > 0 && Number.isFinite(lLong)) priceMin = Math.min(priceMin, lLong * 0.998);
-          if (lShort > 0 && Number.isFinite(lShort)) priceMax = Math.max(priceMax, lShort * 1.002);
-        }
-        const BINS = 300;
-        const binSize = (priceMax - priceMin) / BINS;
-        const bidVol = new Float64Array(BINS);
-        const askVol = new Float64Array(BINS);
-        for (const [priceStr, qtyStr] of bids) {
-          const price = parseFloat(priceStr);
-          const qty = parseFloat(qtyStr);
-          if (!Number.isFinite(price) || !Number.isFinite(qty) || qty <= 0) continue;
-          const bin = Math.floor((price - priceMin) / binSize);
-          if (bin >= 0 && bin < BINS) bidVol[bin] += qty;
-        }
-        for (const [priceStr, qtyStr] of asks) {
-          const price = parseFloat(priceStr);
-          const qty = parseFloat(qtyStr);
-          if (!Number.isFinite(price) || !Number.isFinite(qty) || qty <= 0) continue;
-          const bin = Math.floor((price - priceMin) / binSize);
-          if (bin >= 0 && bin < BINS) askVol[bin] += qty;
-        }
-        const smooth = (arr, sigma) => {
-          const out = new Float64Array(arr.length);
-          const r = Math.ceil(sigma * 2.5);
-          for (let i = 0; i < arr.length; i++) {
-            let sum = 0, w = 0;
-            for (let j = i - r; j <= i + r; j++) {
-              if (j < 0 || j >= arr.length) continue;
-              const g = Math.exp(-0.5 * ((j - i) / sigma) ** 2);
-              sum += arr[j] * g;
-              w += g;
-            }
-            out[i] = w > 0 ? sum / w : 0;
-          }
-          return out;
-        };
-        const bidSmooth = smooth(bidVol, 2.5);
-        const askSmooth = smooth(askVol, 2.5);
-        const bidCum = new Float64Array(BINS);
-        const askCum = new Float64Array(BINS);
-        let cumB = 0;
-        for (let i = 0; i < BINS; i++) { cumB += bidSmooth[i]; bidCum[i] = cumB; }
-        let cumA = 0;
-        for (let i = BINS - 1; i >= 0; i--) { cumA += askSmooth[i]; askCum[i] = cumA; }
-        let maxCum = 0;
-        for (let i = 0; i < BINS; i++) {
-          if (bidCum[i] > maxCum) maxCum = bidCum[i];
-          if (askCum[i] > maxCum) maxCum = askCum[i];
-        }
-        const liqDensity = new Float64Array(BINS);
-        for (const lev of leverages) {
-          const lLong = this.liqPriceLong(markPrice, lev);
-          const lShort = this.liqPriceShort(markPrice, lev);
-          const weight = 1 / Math.sqrt(lev);
-          const spread = 4;
-          if (Number.isFinite(lLong) && lLong > 0) {
-            const centerBin = Math.floor((lLong - priceMin) / binSize);
-            for (let b = centerBin - spread; b <= centerBin + spread; b++) {
-              if (b < 0 || b >= BINS) continue;
-              const gauss = Math.exp(-0.5 * ((b - centerBin) / (spread * 0.4)) ** 2);
-              const depthFactor = 1 + (bidSmooth[b] / (maxCum || 1)) * 10;
-              liqDensity[b] += weight * gauss * depthFactor * 2;
-            }
-          }
-          if (Number.isFinite(lShort) && lShort > 0) {
-            const centerBin = Math.floor((lShort - priceMin) / binSize);
-            for (let b = centerBin - spread; b <= centerBin + spread; b++) {
-              if (b < 0 || b >= BINS) continue;
-              const gauss = Math.exp(-0.5 * ((b - centerBin) / (spread * 0.4)) ** 2);
-              const depthFactor = 1 + (askSmooth[b] / (maxCum || 1)) * 10;
-              liqDensity[b] += weight * gauss * depthFactor * 2;
-            }
-          }
-        }
-        let maxLD = 0;
-        for (let i = 0; i < BINS; i++) { if (liqDensity[i] > maxLD) maxLD = liqDensity[i]; }
-        if (maxLD > 0) { for (let i = 0; i < BINS; i++) liqDensity[i] /= maxLD; }
-        const allVols = [...bidSmooth, ...askSmooth].filter(v => v > 0).sort((a, b) => a - b);
-        const wallThreshold = allVols.length > 0 ? allVols[Math.floor(allVols.length * 0.92)] : 0;
-        const walls = [];
-        for (let i = 0; i < BINS; i++) {
-          const price = priceMin + (i + 0.5) * binSize;
-          if (bidSmooth[i] >= wallThreshold) walls.push({ price, volume: bidSmooth[i], side: 'bid' });
-          if (askSmooth[i] >= wallThreshold) walls.push({ price, volume: askSmooth[i], side: 'ask' });
-        }
-        const liqLevels = [];
-        for (const lev of leverages) {
-          const lLong = this.liqPriceLong(markPrice, lev);
-          const lShort = this.liqPriceShort(markPrice, lev);
-          if (Number.isFinite(lLong) && lLong >= priceMin && lLong <= priceMax) {
-            liqLevels.push({ price: lLong, leverage: lev, side: 'long' });
-          }
-          if (Number.isFinite(lShort) && lShort >= priceMin && lShort <= priceMax) {
-            liqLevels.push({ price: lShort, leverage: lev, side: 'short' });
-          }
-        }
-        return { bidCum, askCum, bidSmooth, askSmooth, liqDensity, maxCum, priceMin, priceMax, binSize, liqLevels, walls, markPrice, BINS };
-      },
-      heatmapColor(d) {
-        const v = Math.max(0, Math.min(1, d));
-        let r, g, b, a;
-        if (v < 0.25) {
-          const t = v / 0.25;
-          r = 26; g = 58 + t * 86; b = 110 + t * 107;
-          a = 0.15 + t * 0.35;
-        } else if (v < 0.5) {
-          const t = (v - 0.25) / 0.25;
-          r = 26 + t * 206; g = 144 + t * 24; b = 217 - t * 177;
-          a = 0.5 + t * 0.2;
-        } else if (v < 0.75) {
-          const t = (v - 0.5) / 0.25;
-          r = 232 - t * 5; g = 168 - t * 86; b = 40 - t * 16;
-          a = 0.7 + t * 0.15;
-        } else {
-          const t = (v - 0.75) / 0.25;
-          r = 227 + t * 2; g = 82 - t * 40; b = 24 + t * 29;
-          a = 0.85 + t * 0.15;
-        }
-        return `rgba(${Math.round(r)},${Math.round(g)},${Math.round(b)},${a.toFixed(2)})`;
-      },
-      fmtPrice(p) {
-        if (p >= 10000) return p.toFixed(0);
-        if (p >= 1000) return p.toFixed(1);
-        if (p >= 1) return p.toFixed(2);
-        if (p >= 0.01) return p.toFixed(4);
-        return p.toFixed(6);
-      },
-      render() {
-        const canvas = document.getElementById('liqHeatmapCanvas');
-        if (!canvas) return;
-        const container = document.getElementById('liqHeatmapBody');
-        if (!container) return;
-        const dpr = window.devicePixelRatio || 1;
-        const rect = container.getBoundingClientRect();
-        if (rect.width === 0 || rect.height === 0) return;
-        const w = Math.floor(rect.width * dpr);
-        const h = Math.floor(rect.height * dpr);
-        if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = '#0d0e1a';
-        ctx.fillRect(0, 0, w, h);
-        const data = this.data;
-        if (!data || !data.liqDensity) {
-          ctx.fillStyle = '#666';
-          ctx.font = `${16 * dpr}px Arial`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('No data', w / 2, h / 2);
-          return;
-        }
-        const pad = { top: 16 * dpr, bottom: 28 * dpr, left: 72 * dpr, right: 72 * dpr };
-        const chartW = w - pad.left - pad.right;
-        const chartH = h - pad.top - pad.bottom;
-        if (chartW < 20 || chartH < 20) return;
-        const { liqDensity, priceMin, priceMax, liqLevels, markPrice, BINS } = data;
-        const priceRange = priceMax - priceMin;
-        if (priceRange <= 0) return;
-        const priceToY = (price) => pad.top + chartH * (1 - (price - priceMin) / priceRange);
 
-        // Grid
-        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-        ctx.lineWidth = 1;
-        const numGridLines = Math.min(12, Math.floor(chartH / (28 * dpr)));
-        for (let i = 0; i <= numGridLines; i++) {
-          const y = pad.top + (i / numGridLines) * chartH;
-          ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + chartW, y); ctx.stroke();
-        }
-
-        // Heatmap density bands across full chart width
-        for (let i = 0; i < BINS; i++) {
-          const d = liqDensity[i];
-          if (d < 0.02) continue;
-          const price = priceMin + (i + 0.5) * data.binSize;
-          const y1 = priceToY(price + data.binSize * 0.5);
-          const y2 = priceToY(price - data.binSize * 0.5);
-          const bandH = Math.max(1, y2 - y1);
-          // Gradient: fade at edges, strong in center
-          const gradient = ctx.createLinearGradient(pad.left, 0, pad.left + chartW, 0);
-          gradient.addColorStop(0, this.heatmapColor(d * 0.4));
-          gradient.addColorStop(0.15, this.heatmapColor(d * 0.7));
-          gradient.addColorStop(0.5, this.heatmapColor(d));
-          gradient.addColorStop(0.85, this.heatmapColor(d * 0.7));
-          gradient.addColorStop(1, this.heatmapColor(d * 0.4));
-          ctx.fillStyle = gradient;
-          ctx.fillRect(pad.left, y1, chartW, bandH);
-        }
-
-        // Price axis labels (left)
-        ctx.fillStyle = 'rgba(255,255,255,0.55)';
-        ctx.font = `${12 * dpr}px 'Segoe UI', monospace`;
-        ctx.textAlign = 'right';
-        ctx.textBaseline = 'middle';
-        const numLabels = Math.min(10, Math.floor(chartH / (30 * dpr)));
-        for (let i = 0; i <= numLabels; i++) {
-          const price = priceMin + (i / numLabels) * priceRange;
-          const y = priceToY(price);
-          ctx.fillText(this.fmtPrice(price), pad.left - 6 * dpr, y);
-        }
-
-        // Current price line
-        if (Number.isFinite(markPrice)) {
-          const my = priceToY(markPrice);
-          ctx.strokeStyle = 'rgba(38, 224, 210, 0.7)';
-          ctx.lineWidth = 1.5 * dpr;
-          ctx.setLineDash([4 * dpr, 3 * dpr]);
-          ctx.beginPath(); ctx.moveTo(pad.left, my); ctx.lineTo(pad.left + chartW, my); ctx.stroke();
-          ctx.setLineDash([]);
-          // Price label on right
-          ctx.font = `bold ${12 * dpr}px 'Segoe UI', monospace`;
-          const mpLabel = this.fmtPrice(markPrice);
-          const labelW = ctx.measureText(mpLabel).width + 8 * dpr;
-          const labelH = 16 * dpr;
-          ctx.fillStyle = 'rgba(38, 224, 210, 0.15)';
-          ctx.fillRect(pad.left + chartW + 2 * dpr, my - labelH / 2, labelW, labelH);
-          ctx.fillStyle = 'rgba(38, 224, 210, 0.9)';
-          ctx.textAlign = 'left';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(mpLabel, pad.left + chartW + 6 * dpr, my);
-
-          // Directional labels near current price
-          ctx.font = `${10 * dpr}px 'Segoe UI', sans-serif`;
-          ctx.textAlign = 'left';
-          ctx.textBaseline = 'top';
-          ctx.fillStyle = 'rgba(76,210,80,0.8)';
-          ctx.fillText('Long Liqs ▼', pad.left + 6 * dpr, my + 4 * dpr);
-          ctx.textBaseline = 'bottom';
-          ctx.fillStyle = 'rgba(255,90,90,0.8)';
-          ctx.fillText('Short Liqs ▲', pad.left + 6 * dpr, my - 4 * dpr);
-        }
-
-        // Liquidation level markers on RIGHT axis
-        for (const lvl of liqLevels) {
-          const y = priceToY(lvl.price);
-          if (y < pad.top || y > pad.top + chartH) continue;
-          const isLong = lvl.side === 'long';
-          const color = isLong ? 'rgba(76,175,80,0.7)' : 'rgba(255,82,82,0.7)';
-          const arrow = isLong ? '▲' : '▼';
-          ctx.fillStyle = color;
-          ctx.font = `${11 * dpr}px Arial`;
-          ctx.textAlign = 'left';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(arrow, pad.left + chartW + 4 * dpr, y);
-          ctx.fillStyle = 'rgba(255,255,255,0.45)';
-          ctx.font = `${10 * dpr}px 'Segoe UI', monospace`;
-          ctx.fillText(`${lvl.leverage}x`, pad.left + chartW + 16 * dpr, y + 1);
-          ctx.strokeStyle = color.replace('0.7', '0.12');
-          ctx.lineWidth = 1;
-          ctx.setLineDash([2 * dpr, 3 * dpr]);
-          ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + chartW, y); ctx.stroke();
-          ctx.setLineDash([]);
-        }
-
-        // Title
-        const display = (this.symbol || '').replace('USDT', '');
-        if (display && Number.isFinite(markPrice)) {
-          ctx.fillStyle = 'rgba(255,255,255,0.55)';
-          ctx.font = `bold ${13 * dpr}px 'Segoe UI', sans-serif`;
-          ctx.textAlign = 'left';
-          ctx.textBaseline = 'top';
-          ctx.fillText(`${display}  Liquidation Heatmap - MultiPerps.com`, pad.left + 6 * dpr, pad.top + 4 * dpr);
-        }
-
-        // Hover crosshair
-        if (this.hoverPrice !== null && Number.isFinite(this.hoverPrice)) {
-          const hy = priceToY(this.hoverPrice);
-          if (hy >= pad.top && hy <= pad.top + chartH) {
-            ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-            ctx.lineWidth = 1;
-            ctx.setLineDash([2 * dpr, 2 * dpr]);
-            ctx.beginPath(); ctx.moveTo(pad.left, hy); ctx.lineTo(pad.left + chartW, hy); ctx.stroke();
-            ctx.setLineDash([]);
+        // Build result line below matrix
+        const resultEl = document.getElementById('oiPriceResult');
+        if (resultEl) {
+          if (scenario.scenarioIdx === 0) {
+            resultEl.innerHTML = '<span style="color:var(--muted-2)">Awaiting data...</span>';
+          } else if (scenario.scenarioIdx === 5) {
+            resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:var(--muted-2)">No Clear Signal</b>'
+              + '<br><span style="font-size:0.82rem">Price: ' + scenario.priceLine + '<br>OI: ' + scenario.oiLine + '</span>'
+              + '<br><i style="font-size:0.7rem;color:var(--muted-2);opacity:0.7">Disclaimer: Not financial advice.</i>';
+          } else {
+            const names = { 1: 'Strong Uptrend', 2: 'Short Covering', 3: 'Strong Downtrend', 4: 'Exhaustion' };
+            const colors = { 1: '#4caf50', 2: 'var(--warn)', 3: '#ff5252', 4: '#64b5f6' };
+            const name = names[scenario.scenarioIdx] || '--';
+            const color = colors[scenario.scenarioIdx] || 'var(--text)';
+            resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:' + color + '">' + name + '</b>'
+              + '<br><span style="font-size:0.82rem">Price: ' + scenario.priceLine + '<br>OI: ' + scenario.oiLine + '</span>'
+              + '<br><i style="font-size:0.7rem;color:var(--muted-2);opacity:0.7">Disclaimer: Not financial advice.</i>';
           }
         }
       },
+
       async refresh(symbol) {
         if (!symbol) return;
         this.symbol = symbol;
-        const loadingEl = document.getElementById('liqHeatmapLoading');
-        if (loadingEl) loadingEl.classList.remove('hidden');
-        this.loading = true;
         try {
-          let markPrice = state.currentPrice;
-          if (!Number.isFinite(markPrice)) await fetchCurrentPrice(symbol);
-          const price = state.currentPrice;
-          if (!Number.isFinite(price)) return;
-          const [depthData, klines] = await Promise.all([
-            this.fetchDepth(symbol, 500),
-            this.fetchKlinesForRange(symbol),
-          ]);
-          this.data = this.buildDensityProfile(price, depthData, klines);
-          this.render();
-          this.fetchMarketStats(symbol);
-          this.updateStatsUI();
+          await this.fetchData(symbol);
+          const scenario = this.computeScenario();
+          this.render(scenario);
         } catch (e) {
-          console.warn('LiqHeatmap refresh error:', e);
-        } finally {
-          this.loading = false;
-          if (loadingEl) loadingEl.classList.add('hidden');
+          console.warn('OI-Price Panel: refresh error', e);
         }
       },
+
       startAutoRefresh(symbol) {
         this.stopAutoRefresh();
         this.symbol = symbol;
         this.refresh(symbol);
         this.timer = setInterval(() => {
-          if (this.symbol && state.isRunning) this.refresh(this.symbol);
-        }, 30000);
+          if (this.symbol && state.isRunning) {
+            this.refresh(this.symbol);
+          }
+        }, 10000);
       },
+
       stopAutoRefresh() {
         if (this.timer) { clearInterval(this.timer); this.timer = null; }
       },
-      onMouseMove(e) {
-        const tooltip = document.getElementById('liqHeatmapTooltip');
-        const body = document.getElementById('liqHeatmapBody');
-        if (!tooltip || !body || !this.data) return;
-        const rect = body.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const pad = { top: 16, bottom: 28, left: 72, right: 72 };
-        const chartH = rect.height - pad.top - pad.bottom;
-        if (y < pad.top || y > pad.top + chartH || x < pad.left) {
-          tooltip.style.display = 'none';
-          this.hoverPrice = null;
-          this.render();
-          return;
-        }
-        const priceRange = this.data.priceMax - this.data.priceMin;
-        const price = this.data.priceMin + (1 - (y - pad.top) / chartH) * priceRange;
-        this.hoverPrice = price;
-        const binIdx = Math.floor((price - this.data.priceMin) / this.data.binSize);
-        const liqD = (binIdx >= 0 && binIdx < this.data.BINS) ? this.data.liqDensity[binIdx] : 0;
-        let nearestLiq = null, minDist = Infinity;
-        for (const lvl of this.data.liqLevels) {
-          const dist = Math.abs(lvl.price - price);
-          if (dist < minDist) { minDist = dist; nearestLiq = lvl; }
-        }
-        let nearestWall = null, minWallDist = Infinity;
-        for (const wall of this.data.walls) {
-          const dist = Math.abs(wall.price - price);
-          if (dist < minWallDist) { minWallDist = dist; nearestWall = wall; }
-        }
-        let html = `<div style="color:#ccc;font-size:1rem">Price: <b>$${this.fmtPrice(price)}</b></div>`;
-        html += `<div style="color:#e8a838;font-size:0.9rem">Liq Density: ${(liqD * 100).toFixed(0)}%</div>`;
-        if (nearestLiq && minDist / price < 0.008) {
-          const side = nearestLiq.side === 'long' ? 'Long' : 'Short';
-          const sideColor = nearestLiq.side === 'long' ? '#4caf50' : '#ff5252';
-          html += `<div style="color:${sideColor};font-size:0.9rem">${side} ${nearestLiq.leverage}x Liq: $${this.fmtPrice(nearestLiq.price)}</div>`;
-        }
-        if (nearestWall && minWallDist / price < 0.005) {
-          const wallSide = nearestWall.side === 'bid' ? 'Bid' : 'Ask';
-          const wallColor = nearestWall.side === 'bid' ? '#4caf50' : '#ff5252';
-          html += `<div style="color:${wallColor};font-size:0.9rem">${wallSide} Wall: ${nearestWall.volume.toFixed(1)}</div>`;
-        }
-        tooltip.innerHTML = html;
-        tooltip.style.display = 'block';
-        const tx = Math.min(x + 14, rect.width - 200);
-        const ty = Math.min(y - 12, rect.height - 100);
-        tooltip.style.left = tx + 'px';
-        tooltip.style.top = ty + 'px';
-        this.render();
-      },
-      onMouseLeave() {
-        const tooltip = document.getElementById('liqHeatmapTooltip');
-        if (tooltip) tooltip.style.display = 'none';
-        this.hoverPrice = null;
-        this.render();
-      },
-      updateMarkPrice(newPrice) {
-        if (!this.data || !Number.isFinite(newPrice)) return;
-        this.data.markPrice = newPrice;
-        const newLiqLevels = [];
-        for (const lev of this.leverages) {
-          const lLong = this.liqPriceLong(newPrice, lev);
-          const lShort = this.liqPriceShort(newPrice, lev);
-          if (Number.isFinite(lLong) && lLong >= this.data.priceMin && lLong <= this.data.priceMax) {
-            newLiqLevels.push({ price: lLong, leverage: lev, side: 'long' });
-          }
-          if (Number.isFinite(lShort) && lShort >= this.data.priceMin && lShort <= this.data.priceMax) {
-            newLiqLevels.push({ price: lShort, leverage: lev, side: 'short' });
-          }
-        }
-        this.data.liqLevels = newLiqLevels;
-        if (!this._renderThrottle) {
-          this._renderThrottle = true;
-          requestAnimationFrame(() => { this.render(); this._renderThrottle = false; });
-        }
-      },
-      init() {
-        const body = document.getElementById('liqHeatmapBody');
-        if (body) {
-          body.addEventListener('mousemove', (e) => this.onMouseMove(e));
-          body.addEventListener('mouseleave', () => this.onMouseLeave());
-        }
-        const refreshBtn = document.getElementById('liqHeatmapRefresh');
-        if (refreshBtn) {
-          refreshBtn.addEventListener('click', () => {
-            if (this.symbol) this.refresh(this.symbol);
-          });
-        }
-        window.addEventListener('resize', () => {
-          if (this.data) this.render();
-        });
-        // Screenshot button
-        const screenshotBtn = document.getElementById('heatmapScreenshotBtn');
-        if (screenshotBtn) {
-          screenshotBtn.addEventListener('click', () => {
-            const canvas = document.getElementById('liqHeatmapCanvas');
-            const statsBar = document.getElementById('heatmapStatsBar');
-            if (!canvas) return;
-            // Build composite canvas: stats bar + heatmap
-            const statsH = statsBar ? 36 : 0;
-            const compCanvas = document.createElement('canvas');
-            compCanvas.width = canvas.width;
-            compCanvas.height = canvas.height + statsH * (window.devicePixelRatio || 1);
-            const compCtx = compCanvas.getContext('2d');
-            // Draw stats bar background
-            const dpr = window.devicePixelRatio || 1;
-            compCtx.fillStyle = '#0d0e1a';
-            compCtx.fillRect(0, 0, compCanvas.width, statsH * dpr);
-            // Draw stats bar text
-            if (statsBar) {
-              const ticker = document.getElementById('statTicker')?.textContent || '';
-              const oi = document.getElementById('statOI')?.textContent || '';
-              const funding = document.getElementById('statFunding')?.textContent || '';
-              const vol = document.getElementById('statVol')?.textContent || '';
-              const bias = document.getElementById('statBias')?.textContent || '';
-              const biasReason = document.getElementById('statBiasReason')?.textContent || '';
-              compCtx.font = `bold ${11 * dpr}px 'Segoe UI', sans-serif`;
-              compCtx.textBaseline = 'middle';
-              const y = statsH * dpr / 2;
-              let x = 12 * dpr;
-              const drawStat = (label, value, color) => {
-                compCtx.fillStyle = 'rgba(255,255,255,0.5)';
-                compCtx.fillText(label + ' ', x, y);
-                x += compCtx.measureText(label + ' ').width;
-                compCtx.fillStyle = color || 'rgba(255,255,255,0.9)';
-                compCtx.fillText(value + '  ', x, y);
-                x += compCtx.measureText(value + '  ').width;
-              };
-              compCtx.fillStyle = 'rgba(255,255,255,0.95)';
-              compCtx.font = `bold ${12 * dpr}px 'Segoe UI', sans-serif`;
-              compCtx.fillText(ticker, x, y);
-              x += compCtx.measureText(ticker).width + 14 * dpr;
-              compCtx.font = `bold ${11 * dpr}px 'Segoe UI', sans-serif`;
-              drawStat('OI:', oi);
-              drawStat('Funding:', funding);
-              drawStat('Vol:', vol);
-              drawStat('Bias:', bias, bias === 'Bullish' || bias === 'Strong Bullish' ? '#4caf50' : bias === 'Bearish' || bias === 'Strong Bearish' ? '#ff5252' : '#e8a838');
-              if (biasReason) {
-                compCtx.fillStyle = '#4aa3ff';
-                compCtx.fillText(biasReason, x, y);
-              }
-            }
-            // Draw heatmap canvas below
-            compCtx.drawImage(canvas, 0, statsH * dpr);
-            compCanvas.toBlob((blob) => {
-              if (!blob) return;
-              try {
-                navigator.clipboard.write([
-                  new ClipboardItem({ 'image/png': blob })
-                ]).then(() => {
-                  screenshotBtn.classList.add('copied');
-                  screenshotBtn.innerHTML = '&#x2713;';
-                  setTimeout(() => {
-                    screenshotBtn.classList.remove('copied');
-                    screenshotBtn.innerHTML = '&#x2398;';
-                  }, 1500);
-                });
-              } catch (e) {
-                // Fallback: download as file
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `heatmap-${this.symbol || 'chart'}-${Date.now()}.png`;
-                a.click();
-                URL.revokeObjectURL(url);
-                screenshotBtn.classList.add('copied');
-                screenshotBtn.innerHTML = '&#x2713;';
-                setTimeout(() => {
-                  screenshotBtn.classList.remove('copied');
-                  screenshotBtn.innerHTML = '&#x2398;';
-                }, 1500);
-              }
-            }, 'image/png');
-          });
-        }
-      }
-    };
 
-    // ===== Heatmap Modal =====
-    const heatmapModal = {
-      isOpen: false,
-      open() {
-        const overlay = document.getElementById('heatmapModalOverlay');
-        if (overlay) {
-          overlay.classList.add('active');
-          document.body.style.overflow = 'hidden';
+      init() {
+        // Tooltip: move popup to body so position:fixed works correctly
+        // (parent containers with position:relative or transforms break fixed positioning)
+        const infoBtn = document.querySelector('.bias-info-btn');
+        const tooltipPopup = document.querySelector('.bias-tooltip-popup');
+        if (infoBtn && tooltipPopup) {
+          // Move popup to body to avoid any parent positioning issues
+          document.body.appendChild(tooltipPopup);
+
+          infoBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = tooltipPopup.classList.toggle('active');
+            if (isActive) {
+              const btnRect = infoBtn.getBoundingClientRect();
+              const popupWidth = Math.min(400, window.innerWidth - 20);
+              tooltipPopup.style.width = popupWidth + 'px';
+              let top = btnRect.bottom + 8;
+              let left = btnRect.left;
+              if (left + popupWidth > window.innerWidth - 10) {
+                left = window.innerWidth - popupWidth - 10;
+              }
+              const maxH = Math.min(window.innerHeight * 0.85, 600);
+              if (top + maxH > window.innerHeight) {
+                top = Math.max(10, btnRect.top - maxH - 8);
+              }
+              tooltipPopup.style.top = top + 'px';
+              tooltipPopup.style.left = left + 'px';
+            }
+          });
+          tooltipPopup.addEventListener('click', (e) => {
+            e.stopPropagation();
+          });
+          document.addEventListener('click', () => {
+            tooltipPopup.classList.remove('active');
+          });
         }
-        this.isOpen = true;
-        // Start fetching data only when modal opens
-        if (state.symbol && state.isRunning) {
-          liqHeatmap.startAutoRefresh(state.symbol);
-        }
-      },
-      close() {
-        const overlay = document.getElementById('heatmapModalOverlay');
-        if (overlay) {
-          overlay.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-        this.isOpen = false;
-        // Stop fetching data when modal closes to save resources
-        liqHeatmap.stopAutoRefresh();
-      },
-      toggle() {
-        if (this.isOpen) this.close();
-        else this.open();
       }
     };
 
@@ -7333,26 +6654,20 @@
 
       if (state.elements.alert1Input) {
         state.elements.alert1Input.value = loadStored(alertStorageKey(1, next), '');
-        setAlertState(1, null);
         state.alertLastTimes[1] = 0;
       }
       if (state.elements.alert2Input) {
         state.elements.alert2Input.value = loadStored(alertStorageKey(2, next), '');
-        setAlertState(2, null);
         state.alertLastTimes[2] = 0;
       }
       if (state.elements.alert3Input) {
         state.elements.alert3Input.value = loadStored(alertStorageKey(3, next), '');
-        setAlertState(3, null);
         state.alertLastTimes[3] = 0;
       }
       if (state.elements.alert4Input) {
         state.elements.alert4Input.value = loadStored(alertStorageKey(4, next), '');
-        setAlertState(4, null);
         state.alertLastTimes[4] = 0;
       }
-
-      // Update alert ticker names display after symbol change - removed (element no longer exists)
 
       // Update header price to loading state
       if (state.elements.headerPrice) {
@@ -7394,9 +6709,12 @@
       updateCountdowns();
       updateStatus();
 
-      // Start liquidation heatmap only if modal is open
-      if (heatmapModal.isOpen) {
-        liqHeatmap.startAutoRefresh(next);
+      // Start bias detection panel
+      if (state.isRunning) {
+        oiPricePanel.startAutoRefresh(next);
+      // Update ticker name in bias panel header
+      const biasTickerEl = document.getElementById('biasTickerName');
+      if (biasTickerEl) biasTickerEl.textContent = next.replace('USDT', '');
       }
 
       if (wasRunning) start();
@@ -8478,10 +7796,6 @@
         alert2Input: card.querySelector('#alert2Input'),
         alert3Input: card.querySelector('#alert3Input'),
         alert4Input: card.querySelector('#alert4Input'),
-        alert1State: card.querySelector('#alert1State'),
-        alert2State: card.querySelector('#alert2State'),
-        alert3State: card.querySelector('#alert3State'),
-        alert4State: card.querySelector('#alert4State'),
         tradeBtn: card.querySelector('#tradeBtn'),
         statusText: card.querySelector('#statusText'),
         timestampText: card.querySelector('#timestampText'),
@@ -8497,6 +7811,10 @@
           state.tickerSuggest.activeInput = state.elements.tickerInput;
           state.tickerSuggest.onSelectCallback = null;
           renderTickerSuggestMenu();
+          // Scroll input into view on mobile to prevent virtual keyboard hiding it
+          setTimeout(() => {
+            state.elements.tickerInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
         });
       state.elements.tickerInput.addEventListener('input', () => {
         saveStored(STORAGE.tickerInput, state.elements.tickerInput.value);
@@ -8537,21 +7855,8 @@
       renderFavTickers();
       if (state.multiAlerts.length > 0) startMultiAlertMonitor();
 
-      // Initialize Liquidation Heatmap
-      liqHeatmap.init();
-
-      // Real-time price update for heatmap: update mark price + liq levels on every WS tick
-      // (full depth refresh happens every 30s via startAutoRefresh)
-      // Only update when heatmap modal is open to save resources
-      const liqHeatmapPriceObserver = new MutationObserver(() => {
-        if (heatmapModal.isOpen && liqHeatmap.data && Number.isFinite(state.currentPrice)) {
-          liqHeatmap.updateMarkPrice(state.currentPrice);
-        }
-      });
-      const headerPriceEl = card.querySelector('#headerPrice');
-      if (headerPriceEl) {
-        liqHeatmapPriceObserver.observe(headerPriceEl, { childList: true, characterData: true, subtree: true });
-      }
+      // Initialize OI-Price Matrix Panel
+      oiPricePanel.init();
 
       // Wire up alert slot inputs
       for (let i = 0; i < 4; i++) {
@@ -8645,30 +7950,6 @@
           });
         }
       }
-
-      // Wire up Add Alert button
-      const alertTickerInput = document.getElementById('alertTickerInput');
-      const addAlertBtn = document.getElementById('addAlertTickerBtn');
-      if (addAlertBtn && alertTickerInput) {
-        addAlertBtn.addEventListener('click', () => {
-          ensureAlertPermission();
-          const ticker = alertTickerInput.value.trim();
-          if (!ticker) return;
-          // Find first empty slot or use last slot
-          const sym = normalizeSymbol(ticker);
-          if (!sym) return;
-          // Prompt for price
-          const priceStr = prompt(`Enter alert price for ${sym.replace('USDT', '')}:`);
-          if (!priceStr) return;
-          const price = parseAlertPrice(priceStr);
-          if (!Number.isFinite(price)) return;
-          if (addMultiAlert(sym, price)) {
-            alertTickerInput.value = '';
-          }
-        });
-      }
-
-      // Initialize alert ticker names display - removed (element no longer exists)
 
       // Alert Panel first interaction - ensure audio context and notification permission
       const alertPanel = document.getElementById('multiAlertPanel');
@@ -8783,44 +8064,16 @@
         });
       }
 
-      // ===== Heatmap Modal Handlers =====
-      const heatmapOpenBtn = document.getElementById('heatmapOpenBtn');
-      if (heatmapOpenBtn) {
-        heatmapOpenBtn.addEventListener('click', () => {
-          heatmapModal.toggle();
-        });
-      }
-
-      const heatmapModalClose = document.getElementById('heatmapModalClose');
-      if (heatmapModalClose) {
-        heatmapModalClose.addEventListener('click', () => {
-          heatmapModal.close();
-        });
-      }
-
-      const heatmapModalOverlay = document.getElementById('heatmapModalOverlay');
-      if (heatmapModalOverlay) {
-        heatmapModalOverlay.addEventListener('click', (e) => {
-          if (e.target === heatmapModalOverlay) {
-            heatmapModal.close();
-          }
-        });
-      }
-
-      // Close modal on Escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && heatmapModal.isOpen) {
-          heatmapModal.close();
-        }
-      });
-
       // ===== Page Visibility Handler =====
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
-          liqHeatmap.stopAutoRefresh();
+          oiPricePanel.stopAutoRefresh();
         } else {
-          if (heatmapModal.isOpen && state.symbol && state.isRunning) {
-            liqHeatmap.startAutoRefresh(state.symbol);
+          if (state.symbol && state.isRunning) {
+            oiPricePanel.startAutoRefresh(state.symbol);
+      // Update ticker name in bias panel header
+      const biasTickerEl2 = document.getElementById('biasTickerName');
+      if (biasTickerEl2) biasTickerEl2.textContent = state.symbol.replace('USDT', '');
           }
         }
       });
@@ -8983,7 +8236,7 @@
         if (!shareModal) return;
         const tickerName = state.symbol.replace('USDT','');
         currentShareText = `$${tickerName} across all timeframes 👀
-            \nTrack Future contracts with 9 timeframes at once —  1m • 5m • 15m • 30m • 1h • 4h • 1D • 1W • 1M
+            \nTrack 9 timeframes at once —  1m • 5m • 15m • 30m • 1h • 4h • 1D • 1W • 1M
             \nFree | No signup.
             \nTry: www.MultiPerps.com
             \n#MultiPerps #Binance #CryptoCharts \n`;
@@ -9402,7 +8655,7 @@
     <div class="footer-top">
       <div class="footer-col">
         <div class="footer-brand">MultiPerps</div>
-        <div class="footer-desc">With the slogan "All Timeframes. All Free.", MultiPerps provides a free real-time Binance Futures dashboard for USDT perpetual markets. Track prices across multiple timeframes, visualize liquidation heatmaps, monitor open interest and funding rates, and set price alerts — all with no sign-up required.</div>
+        <div class="footer-desc">With the slogan "All Timeframes. All Free.", MultiPerps provides a free real-time Binance Futures dashboard for USDT perpetual markets. Track prices across multiple timeframes, monitor open interest and funding rates, and set price alerts — all with no sign-up required.</div>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">About</div>
@@ -9453,7 +8706,7 @@
       <h2>Key Features</h2>
       <ul>
         <li><strong>Multi-Timeframe Charts:</strong> View 1m, 5m, 15m, 30m, 1h, 4h, daily, weekly, and monthly candlestick charts simultaneously, all updating in real time.</li>
-        <li><strong>Liquidation Heatmap:</strong> Visualize liquidation density across the price spectrum with a depth-weighted heatmap for the 2x–10x leverage range. Identify where liquidation cascades may accelerate, spot magnetic price zones, and read directional bias based on short vs long liquidation density — all powered by real Binance order book data.</li>
+        <li><strong>OI-Price Matrix:</strong> Real-time 2\u00d72 scenario grid showing the relationship between price direction and open interest direction. Uses 168 hourly data points (7 days) for both Price and OI to compute multi-timeframe trends (4h, 24h, 7d). Direction determined by majority vote across timeframes. Identify Strong Uptrend, Short Covering, Strong Downtrend, or Exhaustion scenarios \u2014 all powered by real Binance data with 10-second auto-refresh.</li>
         <li><strong>Price Alerts:</strong> Set up price alerts with audio notifications and visual popups. Alerts persist across browser sessions using local storage.</li>
         <li><strong>Market Rankings:</strong> Track top volume, top gainers, top losers, open interest leaders, and funding rate extremes across all Binance USDT-M perpetual contracts.</li>
         <li><strong>Multi-Ticker Dashboard:</strong> Monitor up to four tickers side by side on the same screen for instant comparison.</li>
@@ -9531,7 +8784,7 @@
           <div class="blog-card-body">
             <div class="blog-card-date">Jul 22, 2025</div>
             <div class="blog-card-title">Liquidation Cascades: Understanding the Mechanics of Crypto Futures Wipeouts</div>
-            <div class="blog-card-excerpt">Liquidation cascades are among the most dramatic events in crypto futures. Understand the mechanics behind these self-reinforcing sell-offs, how to read a liquidity heatmap, and how to protect your positions.</div>
+            <div class="blog-card-excerpt">Liquidation cascades are among the most dramatic events in crypto futures. Understand the mechanics behind these self-reinforcing sell-offs and how to protect your positions.</div>
             <span class="blog-card-link">Read more &rarr;</span>
           </div>
         </div>
@@ -9670,11 +8923,11 @@
           <ul>
             <li><strong>Use reasonable leverage:</strong> The higher your leverage, the closer your liquidation price is to your entry. With 20x leverage, a 5% adverse move liquidates you. With 5x leverage, you can withstand a 20% move.</li>
             <li><strong>Always use stop-losses:</strong> A stop-loss exits your position before the exchange force-liquidates it. You control the exit price rather than being liquidated at the worst possible time.</li>
-            <li><strong>Monitor open interest and funding:</strong> Extremely high OI combined with high positive funding is a warning sign that the market is vulnerable to a long liquidation cascade. MultiPerps displays both metrics in real time.</li>
+            <li><strong>Monitor open interest and funding:</strong> Extremely high OI combined with high positive funding is a warning sign that the market is vulnerable to a long liquidation cascade.</li>
             <li><strong>Reduce position size before major events:</strong> Options expirations, economic data releases, and exchange maintenance periods are common cascade triggers.</li>
           </ul>
           <h2>Visualizing Liquidation Risk with the Liquidity Heatmap</h2>
-          <p>One of the most powerful ways to anticipate where a cascade might accelerate — or stall — is by using a liquidity heatmap. MultiPerps provides a built-in liquidation heatmap that visualizes the density of estimated liquidation levels across the price spectrum for any Binance USDT-M perpetual contract. The heatmap uses real order book depth data from Binance, weighted against calculated liquidation prices at common leverage tiers (2x through 10x), to produce a color-coded density map. Warmer colors (orange and red) indicate price zones where a large concentration of liquidations would cluster, meaning those areas act as magnetic targets during a cascade — price tends to gravitate toward dense liquidation zones because each triggered position adds fuel to the move. A built-in bias indicator also evaluates whether short-side or long-side liquidation density dominates near the current price, giving traders a quick read on directional pressure. By examining the heatmap before entering a trade, you can identify where forced selling or buying is likely to intensify, set more informed stop-loss levels that avoid the thickest liq clusters, and recognize when a cascade may be nearing exhaustion as it runs out of dense liquidation zones ahead. The liquidity heatmap transforms what is normally an abstract concept — hidden leverage concentrations — into an intuitive visual tool that directly informs risk management decisions.</p>
+          <p>One of the most powerful ways to anticipate where a cascade might accelerate — or stall — is by using a liquidity heatmap. Liquidation heatmap visualizes the density of estimated liquidation levels across the price spectrum for any Binance USDT-M perpetual contract. The heatmap uses real order book depth data from Binance, weighted against calculated liquidation prices, to produce a color-coded density map. Warmer colors (orange and red) indicate price zones where a large concentration of liquidations would cluster, meaning those areas act as magnetic targets during a cascade — price tends to gravitate toward dense liquidation zones because each triggered position adds fuel to the move. A built-in bias indicator also evaluates whether short-side or long-side liquidation density dominates near the current price, giving traders a quick read on directional pressure. By examining the heatmap before entering a trade, you can identify where forced selling or buying is likely to intensify, set more informed stop-loss levels that avoid the thickest liq clusters, and recognize when a cascade may be nearing exhaustion as it runs out of dense liquidation zones ahead. The liquidity heatmap transforms what is normally an abstract concept — hidden leverage concentrations — into an intuitive visual tool that directly informs risk management decisions.</p>
           <h2>Opportunities After a Cascade</h2>
           <p>After a liquidation cascade, the market often presents excellent trading opportunities. With leveraged positions wiped out and funding rates reset, the market is cleaner and less crowded. Watch for a V-shaped recovery or a retest of the cascade low. These post-cascade setups can offer some of the best risk-reward ratios in crypto trading — but only enter with confirmation, not anticipation.</p>
         </div>
