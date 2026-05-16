@@ -6987,8 +6987,37 @@
         // Build result line below matrix with probabilistic wording
         const resultEl = document.getElementById('oiPriceResult');
         if (resultEl) {
+          // ── Build OI & Funding Rate inline string ──
+          let oiFundingLine = '';
+          const hasOi = Number.isFinite(this.stats.oiCurrent);
+          const hasFr = Number.isFinite(this.stats.fundingRate);
+          if (hasOi || hasFr) {
+            const oiFundingParts = [];
+            if (hasOi) {
+              const oi = this.stats.oiCurrent;
+              let oiStr;
+              if (oi >= 1e9) oiStr = (oi / 1e9).toFixed(2) + 'B';
+              else if (oi >= 1e6) oiStr = (oi / 1e6).toFixed(2) + 'M';
+              else if (oi >= 1e3) oiStr = (oi / 1e3).toFixed(1) + 'K';
+              else oiStr = oi.toFixed(2);
+              oiFundingParts.push('<span style="color:var(--warn);font-weight:700">OI: ' + oiStr + '</span>');
+            }
+            if (hasFr) {
+              const fr = this.stats.fundingRate;
+              const frPct = (fr * 100).toFixed(4);
+              const sign = fr > 0 ? '+' : '';
+              let frColor = 'var(--text)';
+              if (fr > 0.001) frColor = 'var(--good)';
+              else if (fr > 0.0003) frColor = 'var(--warn)';
+              else if (fr < -0.001) frColor = 'var(--bad)';
+              else if (fr < -0.0003) frColor = '#64b5f6';
+              oiFundingParts.push('<span style="color:' + frColor + ';font-weight:700">Funding Rate: ' + sign + frPct + '%</span>');
+            }
+            oiFundingLine = '<br><span style="font-size:0.92rem;">' + oiFundingParts.join(' <span style="color:var(--muted-3);font-weight:300">|</span> ') + '</span>';
+          }
+
           if (scenario.scenarioIdx === 0) {
-            resultEl.innerHTML = '<span style="color:var(--muted-2)">Awaiting data...</span>';
+            resultEl.innerHTML = '<span style="color:var(--muted-2)">Awaiting data...</span>' + oiFundingLine;
           } else if (scenario.scenarioIdx === 5) {
             // Provide context for why no clear signal
             let reason = 'Mixed or flat signals across timeframes';
@@ -7001,7 +7030,8 @@
             else if (!scenario.priceFlat && scenario.oiFlat) reason = 'OI change within adaptive threshold';
             else if (scenario.priceFlat && scenario.oiFlat) reason = 'Both price and OI within adaptive thresholds';
             resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:var(--muted-2)">No Clear Signal</b>'
-              + '<br><span style="font-size:1rem;color:var(--muted-3)">' + reason + '</span>';
+              + '<br><span style="font-size:1rem;color:var(--muted-3)">' + reason + '</span>'
+              + oiFundingLine;
           } else {
             // Probabilistic scenario descriptions — avoid absolute wording
             const names = { 1: 'Strong Uptrend', 2: 'Short Covering', 3: 'Strong Downtrend', 4: 'Exhaustion' };
@@ -7017,7 +7047,8 @@
             const color = colors[scenario.scenarioIdx] || 'var(--text)';
 
             resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:' + color + '">' + name + '</b>'
-              + '<br><span style="font-size:1rem;color:var(--muted-2);line-height:1.5">' + desc + '</span>';
+              + '<br><span style="font-size:1rem;color:var(--muted-2);line-height:1.5">' + desc + '</span>'
+              + oiFundingLine;
           }
         }
 
