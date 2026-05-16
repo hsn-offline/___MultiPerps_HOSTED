@@ -5639,7 +5639,7 @@
         <div class="bias-panel" id="oiPricePanel">
           <div class="bias-header">
             <div class="bias-header-left">
-              <span class="bias-ticker-name" id="biasTickerName"></span><span class="bias-title">Open Interest-Price Matrix Analysis</span>
+              <span class="bias-ticker-name" id="biasTickerName"></span><span class="bias-title">Open Interest-Price Analysis</span>
               <span class="bias-tooltip-wrap">
                 <span class="bias-info-btn" title="How OI-Price Matrix works">?</span>
                 <span class="bias-tooltip-popup">
@@ -5733,7 +5733,7 @@
                   <span class="bias-sc-cell-bias" id="biasScBias4">&#x1F535; Unwinds likely; watch reversal</span>
                 </div>
               </div>
-              <div id="oiPriceResult" style="text-align:center;margin-top:8px;font-size:0.95rem;color:var(--muted-2);line-height:1.6;"></div>
+              <div id="oiPriceResult" style="text-align:center;margin-top:8px;font-size:1.1rem;color:var(--muted-2);line-height:1.6;"></div>
               <div id="oiPriceConfidence" class="bias-confidence-bar" style="display:none;">
                 <span style="font-weight:600;">Signal Strength:</span>
                 <div class="bias-confidence-track"><div id="oiPriceConfFill" class="bias-confidence-fill"></div></div>
@@ -7001,7 +7001,7 @@
             else if (!scenario.priceFlat && scenario.oiFlat) reason = 'OI change within adaptive threshold';
             else if (scenario.priceFlat && scenario.oiFlat) reason = 'Both price and OI within adaptive thresholds';
             resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:var(--muted-2)">No Clear Signal</b>'
-              + '<br><span style="font-size:0.84rem;color:var(--muted-3)">' + reason + '</span>';
+              + '<br><span style="font-size:1rem;color:var(--muted-3)">' + reason + '</span>';
           } else {
             // Probabilistic scenario descriptions — avoid absolute wording
             const names = { 1: 'Strong Uptrend', 2: 'Short Covering', 3: 'Strong Downtrend', 4: 'Exhaustion' };
@@ -7017,7 +7017,7 @@
             const color = colors[scenario.scenarioIdx] || 'var(--text)';
 
             resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:' + color + '">' + name + '</b>'
-              + '<br><span style="font-size:0.84rem;color:var(--muted-2);line-height:1.5">' + desc + '</span>';
+              + '<br><span style="font-size:1rem;color:var(--muted-2);line-height:1.5">' + desc + '</span>';
           }
         }
 
@@ -7368,7 +7368,7 @@
               s('.bias-sc-cell-bias', { fontSize: '0.68rem', lineHeight: '1.3' });
               s('.bias-sc-cell.active .bias-sc-cell-name', { fontSize: '0.82rem' });
               // Result text below matrix
-              s('#oiPriceResult', { fontSize: '0.72rem', marginTop: '4px', lineHeight: '1.4' });
+              s('#oiPriceResult', { fontSize: '1rem', marginTop: '4px', lineHeight: '1.4' });
               // Signal Strength bar (formerly "Confidence bar")
               s('.bias-confidence-bar', { fontSize: '0.72rem', maxWidth: '100%', gap: '5px' });
               s('.bias-confidence-track', { height: '4px' });
