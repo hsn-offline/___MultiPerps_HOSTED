@@ -67,10 +67,12 @@
     },
     "featureList": [
       "Real-time multi-timeframe candlestick charts",
-      "OI-Price Matrix panel with OI-Price scenario analysis",
-      "Open interest vs price divergence detection",
-      "Crypto market bias and sentiment signals (long buildup, short covering, strong uptrend, exhaustion)",
-      "Funding rate and OI-volume ratio context analysis",
+      "OI-Price Matrix panel with adaptive thresholds and EMA(5) smoothing",
+      "Open interest vs price divergence detection with weighted timeframe voting",
+      "Crypto market bias and sentiment signals (long buildup, short covering, strong downtrend, exhaustion)",
+      "Signal Strength scoring with agreement, magnitude, and participation components",
+      "OI Expansion Quality and Liquidation Pressure indicators",
+      "Funding rate context analysis",
       "Price alerts with audio notifications",
       "Open interest rankings",
       "Funding rate tracker",
@@ -133,7 +135,7 @@
         "name": "What is the OI-Price Matrix on MultiPerps?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The OI-Price Matrix is a 2x2 scenario analysis grid that combines open interest direction with price direction to identify market bias. It shows four scenarios: Strong Uptrend (OI up + Price up = Long), Short Covering (OI down + Price up = Careful Long), Strong Downtrend (OI up + Price down = Short), and Exhaustion (OI down + Price down = Avoid late shorts, watch for Long reversal). It uses 3-candle averaging for noise reduction, scaled thresholds per timeframe (4h, 24h, 7d), and includes confidence scoring, funding rate context, and OI-volume ratio analysis."
+          "text": "The OI-Price Matrix is a 2x2 scenario analysis grid that combines open interest direction with price direction to identify market bias. It shows four scenarios: Strong Uptrend (OI up + Price up), Short Covering (OI down + Price up), Strong Downtrend (OI up + Price down), and Exhaustion (OI down + Price down). It uses EMA(5) smoothing for noise reduction, adaptive thresholds that adjust to each asset's volatility (with static fallback), weighted timeframe voting (4h=1, 24h=2, 7d=3), and includes Signal Strength scoring, funding rate context, OI Expansion Quality, and Liquidation Pressure indicators."
         }
       },
       {
@@ -141,7 +143,7 @@
         "name": "How does the OI-Price analysis detect market bias?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The OI-Price analysis detects market bias by comparing the direction of open interest changes against price changes across three timeframes (4h, 24h, 7d). When OI rises and price rises, it signals long buildup (Strong Uptrend). When OI falls and price rises, it signals short covering. When OI rises and price falls, it signals strong downtrend with new shorts. When OI falls and price falls, it signals exhaustion with shorts unwinding. A majority vote of at least 2 of 3 timeframes is required for a directional signal, otherwise it shows No Clear Signal."
+          "text": "The OI-Price analysis detects market bias by comparing the direction of open interest changes against price changes across three timeframes (4h, 24h, 7d) using weighted voting where longer timeframes carry more weight (4h=1, 24h=2, 7d=3). When OI rises and price rises, it signals likely long-side participation increasing (Strong Uptrend). When OI falls and price rises, it signals likely short covering. When OI rises and price falls, it signals likely short-side expansion. When OI falls and price falls, it signals likely liquidations or unwinds (Exhaustion). Thresholds adapt to each asset's rolling volatility, and a weighted majority is required for a directional signal, otherwise it shows No Clear Signal with an explanation of why."
         }
       }
     ]
@@ -3450,7 +3452,7 @@
       font-size: 1.08rem;
     }
 
-    /* Confidence bar */
+    /* Signal Strength bar (formerly "Confidence bar") */
     .bias-confidence-bar {
       width: 100%;
       max-width: 520px;
@@ -3482,14 +3484,12 @@
 
     /* Context rows (funding, OI/Vol) */
     .bias-context-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
+      display: block;
+      text-align: center;
       font-size: 0.92rem;
       color: var(--muted-2);
       margin-top: 4px;
+      line-height: 1.6;
     }
     .bias-context-item {
       display: inline-flex;
@@ -3703,7 +3703,7 @@
       }
       .bias-context-row {
         font-size: 0.82rem;
-        gap: 10px;
+        line-height: 1.5;
       }
     }
   </style>
@@ -5639,52 +5639,66 @@
         <div class="bias-panel" id="oiPricePanel">
           <div class="bias-header">
             <div class="bias-header-left">
-              <span class="bias-ticker-name" id="biasTickerName"></span><span class="bias-title">Open Interest-Price Analysis</span>
+              <span class="bias-ticker-name" id="biasTickerName"></span><span class="bias-title">Open Interest-Price Matrix Analysis</span>
               <span class="bias-tooltip-wrap">
                 <span class="bias-info-btn" title="How OI-Price Matrix works">?</span>
                 <span class="bias-tooltip-popup">
-                  <strong>OI-Price Matrix:</strong><br>
+                  <strong>OI-Price Matrix (v2):</strong><br>
                   Open Interest-Price Matrix analysis is a 2&times;2 scenario grid based on the relationship between <em>price direction</em> and <em>open interest direction</em> in futures markets. Price uses <b style="color:#4aa3ff">5m klines</b> (48 candles for 4h) and <b style="color:#4aa3ff">1h klines</b> (168 candles for 24h &amp; 7d). OI uses <b style="color:#4aa3ff">168 hourly snapshots</b> (7 days).<br><br>
 
-                  <strong style="color:var(--text)">3-Candle Averaging (Noise Reduction):</strong><br>
-                  Instead of a single close price, each endpoint uses the <b>average of 3 consecutive completed closes</b> to smooth candle-close noise:<br>
-                  <code style="color:var(--accent);font-size:0.88rem">change% = (avg(close[-2], close[-3], close[-4]) &minus; avg(close[-2-N], close[-3-N], close[-4-N])) / avg(past 3 closes) &times; 100</code><br>
-                  <span style="font-size:0.84rem;color:var(--muted-3)">Where N = 48 for 4h, 24 for 24h, 168 for 7d. Same method applied to OI snapshots. This reduces false signals from single-candle spikes.</span><br><br>
+                  <strong style="color:var(--text)">EMA(5) Smoothing (Noise Reduction):</strong><br>
+                  Instead of a single close or simple 3-candle average, each endpoint uses <b>EMA(5)</b> (Exponential Moving Average, period 5) of completed closes/snapshots. EMA gives more weight to recent data while filtering wicks and noise proportionally across all timeframes:<br>
+                  <code style="color:var(--accent);font-size:0.88rem">change% = (EMA5(recent closes) &minus; EMA5(past closes)) / EMA5(past closes) &times; 100</code><br>
+                  <span style="font-size:0.84rem;color:var(--muted-3)">EMA period is configurable (default 5, try 3 or 8). Sufficient warmup data is used for convergence. Same method applied to OI snapshots.</span><br><br>
 
-                  <strong style="color:var(--text)">Scaled Noise Threshold:</strong><br>
-                  Each timeframe has its own threshold to avoid false signals on longer windows:<br>
-                  <code style="color:var(--accent);font-size:0.9rem">T(4h) = 0.2% &nbsp;|&nbsp; T(24h) = 0.5% &nbsp;|&nbsp; T(7d) = 1.0%</code><br>
-                  Changes within &plusmn;threshold are treated as FLAT. Direction requires <b>majority vote</b> &mdash; at least 2 of 3 timeframes must agree. If either Price or OI is FLAT, the result shows <b>"No Clear Signal"</b>.<br><br>
+                  <strong style="color:var(--text)">Adaptive Noise Threshold:</strong><br>
+                  Thresholds adapt to each asset's volatility using rolling standard deviation of close-to-close % returns:<br>
+                  <code style="color:var(--accent);font-size:0.9rem">threshold = k &times; rollingVol &nbsp;(k = 1.5, default)</code><br>
+                  <span style="font-size:0.84rem;color:var(--muted-3)">Rolling vol is computed from existing kline data (no extra API calls). If insufficient data, falls back to static thresholds: T(4h)=0.2%, T(24h)=0.5%, T(7d)=1.0%. Changes within &plusmn;threshold are treated as FLAT. Asterisk (*) in UI = adaptive threshold active.</span><br><br>
 
-                  <strong style="color:var(--text)">Confidence Score Formula <span style="color:var(--warn);font-size:0.82rem">(Experimental)</span>:</strong><br>
-                  <code style="color:var(--accent);font-size:0.88rem">confidence = (agreeVotes / totalVotes) &times; avgMagnitude / (threshold + avgMagnitude)</code><br>
-                  <span style="font-size:0.84rem;color:var(--muted-3)">Where agreeVotes = timeframes agreeing with the direction, totalVotes = timeframes with data, avgMagnitude = average |change| of agreeing timeframes. Result mapped: &lt;40% = Weak, 40-70% = Moderate, &gt;70% = Strong. <b style="color:var(--warn)">This formula is experimental and has not been statistically backtested.</b></span><br><br>
+                  <strong style="color:var(--text)">Weighted Timeframe Voting:</strong><br>
+                  Each timeframe has a weight reflecting its structural significance:<br>
+                  <code style="color:var(--accent);font-size:0.9rem">4h = 1 &nbsp;|&nbsp; 24h = 2 &nbsp;|&nbsp; 7d = 3</code><br>
+                  <span style="font-size:0.84rem;color:var(--muted-3)">Direction requires the <b>weighted sum</b> of agreeing timeframes to exceed the disagreeing side. If either Price or OI is FLAT, the result shows <b>"No Clear Signal"</b>. Longer timeframes carry more conviction.</span><br><br>
 
-                  <b style="color:#4caf50">&#x1F7E2; Price &uarr; + OI &uarr; = Strong Uptrend</b> &mdash; New longs entering, confirming the move. <b>Bias: Long</b><br><br>
-                  <b style="color:var(--warn)">&#x1F7E1; Price &uarr; + OI &darr; = Short Covering</b> &mdash; Rally driven by shorts closing. Weaker. <b>Bias: Careful Long / Avoid late entries</b><br><br>
-                  <b style="color:#ff5252">&#x1F534; Price &darr; + OI &uarr; = Strong Downtrend</b> &mdash; New shorts opening, confirming the decline. <b>Bias: Short</b><br><br>
-                  <b style="color:#64b5f6">&#x1F535; Price &darr; + OI &darr; = Exhaustion</b> &mdash; Longs capitulating. Often precedes reversal. <b>Bias: Avoid late shorts, watch for Long reversal</b><br><br>
+                  <strong style="color:var(--text)">Signal Strength Formula:</strong><br>
+                  <code style="color:var(--accent);font-size:0.88rem">signalStrength = agreement&times;0.4 + magnitude&times;0.35 + participation&times;0.25</code><br>
+                  <span style="font-size:0.84rem;color:var(--muted-3)">Three interpretable components: <b>Agreement</b> (0.4): weighted fraction of votes agreeing with direction. <b>Magnitude</b> (0.35): average move size relative to adaptive threshold. <b>Participation</b> (0.25): fraction of timeframes providing data. Mapped: &lt;35% = Low, 35-65% = Moderate, &gt;65% = High.</span><br><br>
+
+                  <b style="color:#4caf50">&#x1F7E2; Price &uarr; + OI &uarr; = Strong Uptrend</b> &mdash; Long-side participation likely increasing; positioning expansion supports move. <b>Bias: Long</b><br><br>
+                  <b style="color:var(--warn)">&#x1F7E1; Price &uarr; + OI &darr; = Short Covering</b> &mdash; Short covering likely contributing to rally; move may lack new long capital. <b>Bias: Careful Long</b><br><br>
+                  <b style="color:#ff5252">&#x1F534; Price &darr; + OI &uarr; = Strong Downtrend</b> &mdash; Short-side positioning likely expanding; downward pressure reinforced by new positions. <b>Bias: Short</b><br><br>
+                  <b style="color:#64b5f6">&#x1F535; Price &darr; + OI &darr; = Exhaustion</b> &mdash; Long liquidations or unwinds likely; forced selling may be near exhaustion. <b>Bias: Watch for reversal</b><br><br>
 
                   <strong style="color:var(--text)">Funding Rate Context:</strong><br>
                   <span style="font-size:0.84rem;color:var(--muted-3)">Fetched from Binance premiumIndex API. Positive rate = longs pay shorts (longs crowded). Negative rate = shorts pay longs (shorts crowded). Extreme values (&gt;0.1% or &lt;-0.1%) signal overleveraged positioning.</span><br><br>
 
-                  <strong style="color:var(--text)">OI/Volume Ratio:</strong><br>
-                  <code style="color:var(--accent);font-size:0.88rem">OI/Vol = Current OI (contracts) / 24h Volume (contracts)</code><br>
-                  <span style="font-size:0.84rem;color:var(--muted-3)">High ratio (&gt;0.5) = leveraged speculation dominates. Low ratio (&lt;0.1) = spot-driven or low leverage. Volume from 24hr ticker API.</span><br><br>
+                  <strong style="color:var(--text)">OI Expansion Quality:</strong><br>
+                  <code style="color:var(--accent);font-size:0.88rem">OI Exp Q = |OI change%| / (volume_turnover &times; 10)</code><br>
+                  <span style="font-size:0.84rem;color:var(--muted-3)">Where volume_turnover = 24h volume / current OI. Measures whether leverage expansion is supported by trading activity. <b>High</b> (&gt;0.5) = aggressive leverage expansion with low volume support (squeeze risk). <b>Low</b> (&lt;0.2) = volume supports the OI change (organic).</span><br><br>
+
+                  <strong style="color:var(--text)">Liquidation Pressure:</strong><br>
+                  <code style="color:var(--accent);font-size:0.88rem">LiqPress = min(1, |fundingRate|/0.001) &times; min(1, |OI change%|/10)</code><br>
+                  <span style="font-size:0.84rem;color:var(--muted-3)">Both funding and OI expansion must be elevated for a high score. Direction: positive funding + OI up = <b>Long-side</b> risk (longs crowded). Negative funding + OI up = <b>Short-side</b> risk (shorts crowded). |LiqPress| &gt; 0.6 = Elevated, 0.3-0.6 = Moderate, &lt; 0.3 = Low.</span><br><br>
+
+                  <strong style="color:var(--text)">Live Context Values:</strong><br>
+                  <span id="oiTooltipLiveValues" style="font-size:0.84rem;color:var(--muted-3)">Awaiting data...</span><br><br>
 
                   <strong style="color:var(--text)">Data Sources:</strong><br>
                   <span style="color:#aaa;font-size:0.84rem;line-height:1.6">
-                  &bull; Price &amp; OI: avg of 3 consecutive closes/snapshots per endpoint<br>
-                  &bull; Price 4h: Binance klines, 48 5m-candles<br>
-                  &bull; Price 24h/7d: Binance klines, 168 1h-candles<br>
+                  &bull; Price &amp; OI: EMA(5) of completed closes/snapshots per endpoint<br>
+                  &bull; Price 4h: Binance klines, 48 5m-candles (60 fetched for EMA warmup)<br>
+                  &bull; Price 24h/7d: Binance klines, 168 1h-candles (180 fetched for EMA warmup)<br>
                   &bull; OI Trends: Binance openInterestHist API, 168 hourly snapshots<br>
                   &bull; Current OI: Binance openInterest API<br>
                   &bull; Funding Rate: Binance premiumIndex API<br>
                   &bull; 24h Volume: Binance 24hr ticker API<br>
+                  &bull; Adaptive thresholds: rolling volatility from existing kline data<br>
+                  &bull; Liquidation Pressure: derived from funding + OI (no extra API)<br>
                   &bull; 6 API calls on initial load, then smart refresh:<br>
                   &nbsp;&nbsp;&bull; Klines + OI: every 30 seconds<br>
                   &nbsp;&nbsp;&bull; Funding + Volume: every 60 seconds<br>
-                  &bull; Partial-candle guard: latest 5m/1h candle excluded, avg of 3 prior closes used
+                  &bull; Partial-candle guard: latest candle excluded, EMA(5) of prior closes used
                   </span><br><br>
                   <em style="color:var(--warn)">Not financial advice. Always do your own research.</em>
                 </span>
@@ -5703,30 +5717,31 @@
                 <div class="bias-sc-row-hdr">Price ↑</div>
                 <div class="bias-sc-cell" id="biasScenario1" data-sc="1">
                   <span class="bias-sc-cell-name">Strong Uptrend</span>
-                  <span class="bias-sc-cell-bias" id="biasScBias1">&#x1F7E2; Long</span>
+                  <span class="bias-sc-cell-bias" id="biasScBias1">&#x1F7E2; Long-side likely building</span>
                 </div>
                 <div class="bias-sc-cell" id="biasScenario2" data-sc="2">
                   <span class="bias-sc-cell-name">Short Covering</span>
-                  <span class="bias-sc-cell-bias" id="biasScBias2">&#x1F7E1; Careful Long / Avoid late entries</span>
+                  <span class="bias-sc-cell-bias" id="biasScBias2">&#x1F7E1; Rally likely short-driven</span>
                 </div>
                 <div class="bias-sc-row-hdr">Price ↓</div>
                 <div class="bias-sc-cell" id="biasScenario3" data-sc="3">
                   <span class="bias-sc-cell-name">Strong Downtrend</span>
-                  <span class="bias-sc-cell-bias" id="biasScBias3">&#x1F534; Short</span>
+                  <span class="bias-sc-cell-bias" id="biasScBias3">&#x1F534; Short-side likely expanding</span>
                 </div>
                 <div class="bias-sc-cell" id="biasScenario4" data-sc="4">
                   <span class="bias-sc-cell-name">Exhaustion</span>
-                  <span class="bias-sc-cell-bias" id="biasScBias4">&#x1F535; Avoid late shorts, watch for Long reversal</span>
+                  <span class="bias-sc-cell-bias" id="biasScBias4">&#x1F535; Unwinds likely; watch reversal</span>
                 </div>
               </div>
               <div id="oiPriceResult" style="text-align:center;margin-top:8px;font-size:0.95rem;color:var(--muted-2);line-height:1.6;"></div>
               <div id="oiPriceConfidence" class="bias-confidence-bar" style="display:none;">
-                <span style="font-weight:600;">Confidence:</span>
+                <span style="font-weight:600;">Signal Strength:</span>
                 <div class="bias-confidence-track"><div id="oiPriceConfFill" class="bias-confidence-fill"></div></div>
                 <span id="oiPriceConfLabel" class="bias-confidence-label"></span>
               </div>
               <div id="oiPriceContext" class="bias-context-row" style="display:none;"></div>
               <div id="oiPriceWarning" class="bias-data-warning" style="display:none;"></div>
+              <div id="oiPriceDisclaimer" style="display:none;text-align:center;margin-top:4px;"><i style="font-size:0.72rem;color:var(--muted-2);opacity:0.7">Disclaimer: Not financial advice.</i></div>
             </div>
           </div>
         </div>
@@ -6461,17 +6476,61 @@
     };
 
     // ============================================
-    // OI-PRICE MATRIX PANEL
+    // OI-PRICE MATRIX PANEL  (v2 — Improved)
     // 2×2 scenario grid: OI direction vs Price direction
-    // Uses avg of 3 closes/OI snapshots at each endpoint (smooths candle noise)
-    // 6 API calls: klines (5m×52 + 1h×172), openInterestHist (1h×168), openInterest, premiumIndex, ticker/24hr
-    // Direction: majority vote across 4h/24h/7d timeframes with SCALED thresholds (0.2%/0.5%/1.0%)
-    // Confidence: (agreeVotes/totalVotes) × (avgMagnitude / (avgThreshold + avgMagnitude)) — EXPERIMENTAL
-    // FLAT = within scaled threshold → "No Clear Signal"
-    // Partial-candle guard: latest candle excluded, previous 3 closes averaged
+    // Uses EMA(5) smoothing at each endpoint (proportional across timeframes)
+    // 6 API calls: klines (5m×60 + 1h×180), openInterestHist (1h×168), openInterest, premiumIndex, ticker/24hr
+    // Direction: WEIGHTED vote across 4h/24h/7d timeframes (weights: 4h=1, 24h=2, 7d=3)
+    // Thresholds: ADAPTIVE — threshold = k × rollingVol, fallback to static (0.2%/0.5%/1.0%)
+    // Signal Strength: agreement(0.4) + magnitude(0.35) + participation(0.25)
+    // FLAT = within adaptive threshold → "No Clear Signal"
+    // Partial-candle guard: latest candle excluded, EMA(5) of prior closes
+    // Liquidation Pressure: derived from funding rate × OI expansion (no extra API)
+    // OI Expansion Quality: |OI change%| / volume_normalization — replaces OI/Volume ratio
     // Request dedup: isRefreshing flag + _refreshId generation counter
     // Smart refresh: klines+OI every 30s, funding+ticker every 60s
     // ============================================
+
+    // ── Configurable constants ──
+    const OI_EMA_PERIOD    = 5;     // EMA smoothing period (try 3, 5, or 8)
+    const OI_VOL_MULTIPLIER = 1.5;  // Adaptive threshold = k × rollingVol
+    const OI_VOL_MIN_TF    = 8;     // Minimum data points needed for rolling vol calc
+    // Timeframe weights for weighted voting
+    const OI_TF_WEIGHTS    = { '4h': 1, '24h': 2, '7d': 3 };
+    // Static fallback thresholds (used when rolling vol cannot be computed)
+    const OI_STATIC_THRESHOLDS = { '4h': 0.2, '24h': 0.5, '7d': 1.0 };
+
+    // ── Lightweight inline EMA helper ──
+    // No external library. O(n) with small n (≤10 values).
+    function _ema(values, period) {
+      if (!values || values.length === 0) return NaN;
+      const valid = values.filter(v => Number.isFinite(v));
+      if (valid.length === 0) return NaN;
+      const k = 2 / (period + 1);
+      let e = valid[0];
+      for (let i = 1; i < valid.length; i++) {
+        e = valid[i] * k + e * (1 - k);
+      }
+      return e;
+    }
+
+    // ── Rolling volatility from close-to-close % returns ──
+    // Returns stddev of % changes, or NaN if insufficient data
+    function _rollingVol(closes, lookback) {
+      if (!closes || closes.length < lookback + 1) return NaN;
+      const slice = closes.slice(-lookback - 1);
+      const returns = [];
+      for (let i = 1; i < slice.length; i++) {
+        if (slice[i - 1] > 0) {
+          returns.push((slice[i] - slice[i - 1]) / slice[i - 1]);
+        }
+      }
+      if (returns.length < OI_VOL_MIN_TF) return NaN;
+      const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
+      const variance = returns.reduce((s, r) => s + (r - mean) ** 2, 0) / returns.length;
+      return Math.sqrt(variance) * 100; // return as percentage
+    }
+
     const oiPricePanel = {
       symbol: null,
       timer: null,
@@ -6488,7 +6547,13 @@
         oiChange7d: null,      // 7-day OI change %
         fundingRate: null,     // latest funding rate
         volume24h: null,       // 24h quote volume (USDT)
-        oiVolRatio: null,      // OI/Volume ratio
+        oiVolRatio: null,      // OI/Volume ratio (kept for backward compat, deprecated)
+        oiExpansionQuality: null, // OI Expansion Quality metric (new)
+        liqPressure: null,     // Liquidation Pressure indicator (new)
+        volThresholds: null,   // Computed adaptive thresholds per TF
+        vol4h: null,           // 4h rolling volatility %
+        vol24h: null,          // 24h rolling volatility %
+        vol7d: null,           // 7d rolling volatility %
         oiDataStale: false,    // true when OI data is missing/stale
         klinesStale: false     // true when price kline data is missing/stale
       },
@@ -6512,6 +6577,12 @@
         this.stats.fundingRate = null;
         this.stats.volume24h = null;
         this.stats.oiVolRatio = null;
+        this.stats.oiExpansionQuality = null;
+        this.stats.liqPressure = null;
+        this.stats.volThresholds = null;
+        this.stats.vol4h = null;
+        this.stats.vol24h = null;
+        this.stats.vol7d = null;
         this.stats.oiDataStale = false;
         this.stats.klinesStale = false;
 
@@ -6520,8 +6591,10 @@
 
         try {
           const [klines5mRes, klines1hRes, oiHistRes, oiRes, fundingRes, ticker24hRes] = await Promise.allSettled([
-            fetchOI(`https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=5m&limit=52`),
-            fetchOI(`https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=1h&limit=172`),
+            // 5m klines: 60 candles (48 for 4h + 2 partial guard + 10 for EMA warmup)
+            fetchOI(`https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=5m&limit=60`),
+            // 1h klines: 180 candles (168 for 7d + 2 partial guard + 10 for EMA warmup)
+            fetchOI(`https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=1h&limit=180`),
             fetchOI(`https://fapi.binance.com/futures/data/openInterestHist?symbol=${encodeURIComponent(symbol)}&period=1h&limit=168`),
             fetchOI(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${encodeURIComponent(symbol)}`),
             fetchOI(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${encodeURIComponent(symbol)}`),
@@ -6531,127 +6604,202 @@
           // If a newer refresh started while we were fetching, discard these results
           if (this._refreshId !== myId) return;
 
-          // 5m klines — 52 candles for 4-hour price change (48 = 4h, +2 partial guard, +2 extra for 3-candle avg)
+          // ── 5m klines — 60 candles for 4-hour price change ──
+          // 48 candles = 4h lookback, skip candle[-1] (partial guard), EMA(OI_EMA_PERIOD) for smoothing
           if (klines5mRes.status === 'fulfilled' && Array.isArray(klines5mRes.value) && klines5mRes.value.length >= 52) {
             const candles = klines5mRes.value;
-            // Avg of last 3 completed 5m closes (partial-candle guard: skip candle[-1])
-            const c1 = parseFloat(candles[candles.length - 2][4]);
-            const c2 = parseFloat(candles[candles.length - 3][4]);
-            const c3 = parseFloat(candles[candles.length - 4][4]);
-            const latestAvg = (Number.isFinite(c1) && Number.isFinite(c2) && Number.isFinite(c3)) ? (c1 + c2 + c3) / 3 : c1;
-            // 4h ago = 48 candles back from latest complete, avg of 3 closes there
-            const p1 = parseFloat(candles[candles.length - 2 - 48][4]);
-            const p2 = parseFloat(candles[candles.length - 3 - 48][4]);
-            const p3 = parseFloat(candles[candles.length - 4 - 48][4]);
-            const pastAvg = (Number.isFinite(p1) && Number.isFinite(p2) && Number.isFinite(p3)) ? (p1 + p2 + p3) / 3 : p1;
-            if (Number.isFinite(latestAvg) && Number.isFinite(pastAvg) && pastAvg > 0) {
-              this.stats.priceChange4h = ((latestAvg - pastAvg) / pastAvg) * 100;
+            // Extract completed close prices (skip candle[-1] = partial)
+            const completedCloses = [];
+            for (let i = 0; i < candles.length - 1; i++) {
+              const c = parseFloat(candles[i][4]);
+              if (Number.isFinite(c)) completedCloses.push(c);
             }
+
+            // EMA(5) at the recent endpoint: last OI_EMA_PERIOD*2 completed closes (enough for EMA convergence)
+            const recentSlice = completedCloses.slice(-(OI_EMA_PERIOD * 2));
+            const latestEma = _ema(recentSlice, OI_EMA_PERIOD);
+
+            // EMA(5) at the 4h-ago endpoint: OI_EMA_PERIOD*2 completed closes ending 48 candles back
+            const offset4h = completedCloses.length - 48; // index where 4h-ago window starts
+            if (offset4h >= OI_EMA_PERIOD * 2 && Number.isFinite(latestEma)) {
+              const pastSlice = completedCloses.slice(offset4h - OI_EMA_PERIOD * 2, offset4h);
+              const pastEma = _ema(pastSlice, OI_EMA_PERIOD);
+              if (Number.isFinite(pastEma) && pastEma > 0) {
+                this.stats.priceChange4h = ((latestEma - pastEma) / pastEma) * 100;
+              }
+            }
+
+            // Rolling volatility for 4h: use last 48+1 close prices
+            this.stats.vol4h = _rollingVol(completedCloses, 48);
           } else {
             this.stats.klinesStale = true;
           }
 
-          // 1h klines — 172 candles for 24h and 7d price changes (168 + 2 partial guard + 2 for 3-candle avg)
+          // ── 1h klines — 180 candles for 24h and 7d price changes ──
           if (klines1hRes.status === 'fulfilled' && Array.isArray(klines1hRes.value) && klines1hRes.value.length >= 28) {
             const candles = klines1hRes.value;
-            // Avg of last 3 completed hourly closes (partial-candle guard: skip candle[-1])
-            const lc1 = parseFloat(candles[candles.length - 2][4]);
-            const lc2 = parseFloat(candles[candles.length - 3][4]);
-            const lc3 = parseFloat(candles[candles.length - 4][4]);
-            const latestAvg = (Number.isFinite(lc1) && Number.isFinite(lc2) && Number.isFinite(lc3)) ? (lc1 + lc2 + lc3) / 3 : lc1;
+            // Extract completed close prices (skip candle[-1] = partial)
+            const completedCloses1h = [];
+            for (let i = 0; i < candles.length - 1; i++) {
+              const c = parseFloat(candles[i][4]);
+              if (Number.isFinite(c)) completedCloses1h.push(c);
+            }
 
-            // 24-hour price change (24 candles back, avg of 3 closes there)
-            if (candles.length >= 29 && Number.isFinite(latestAvg)) {
-              const h1 = parseFloat(candles[candles.length - 2 - 24][4]);
-              const h2 = parseFloat(candles[candles.length - 3 - 24][4]);
-              const h3 = parseFloat(candles[candles.length - 4 - 24][4]);
-              const past24hAvg = (Number.isFinite(h1) && Number.isFinite(h2) && Number.isFinite(h3)) ? (h1 + h2 + h3) / 3 : h1;
-              if (Number.isFinite(past24hAvg) && past24hAvg > 0) {
-                this.stats.priceChange24h = ((latestAvg - past24hAvg) / past24hAvg) * 100;
+            // EMA(5) at the recent endpoint
+            const recentSlice1h = completedCloses1h.slice(-(OI_EMA_PERIOD * 2));
+            const latestEma1h = _ema(recentSlice1h, OI_EMA_PERIOD);
+
+            // 24-hour price change: EMA(5) at 24 candles back
+            if (completedCloses1h.length >= 24 + OI_EMA_PERIOD * 2 && Number.isFinite(latestEma1h)) {
+              const offset24h = completedCloses1h.length - 24;
+              const past24hSlice = completedCloses1h.slice(offset24h - OI_EMA_PERIOD * 2, offset24h);
+              const past24hEma = _ema(past24hSlice, OI_EMA_PERIOD);
+              if (Number.isFinite(past24hEma) && past24hEma > 0) {
+                this.stats.priceChange24h = ((latestEma1h - past24hEma) / past24hEma) * 100;
               }
             }
 
-            // 7-day price change (168 candles back, avg of 3 closes there)
-            if (candles.length >= 172 && Number.isFinite(latestAvg)) {
-              const d1 = parseFloat(candles[candles.length - 2 - 168][4]);
-              const d2 = parseFloat(candles[candles.length - 3 - 168][4]);
-              const d3 = parseFloat(candles[candles.length - 4 - 168][4]);
-              const past7dAvg = (Number.isFinite(d1) && Number.isFinite(d2) && Number.isFinite(d3)) ? (d1 + d2 + d3) / 3 : d1;
-              if (Number.isFinite(past7dAvg) && past7dAvg > 0) {
-                this.stats.priceChange7d = ((latestAvg - past7dAvg) / past7dAvg) * 100;
+            // 7-day price change: EMA(5) at 168 candles back
+            if (completedCloses1h.length >= 168 + OI_EMA_PERIOD * 2 && Number.isFinite(latestEma1h)) {
+              const offset7d = completedCloses1h.length - 168;
+              const past7dSlice = completedCloses1h.slice(offset7d - OI_EMA_PERIOD * 2, offset7d);
+              const past7dEma = _ema(past7dSlice, OI_EMA_PERIOD);
+              if (Number.isFinite(past7dEma) && past7dEma > 0) {
+                this.stats.priceChange7d = ((latestEma1h - past7dEma) / past7dEma) * 100;
               }
             }
+
+            // Rolling volatility for 24h and 7d
+            this.stats.vol24h = _rollingVol(completedCloses1h, 24);
+            this.stats.vol7d = _rollingVol(completedCloses1h, 168);
           } else {
             this.stats.klinesStale = true;
           }
 
-          // OI history — 168 hourly data points (avg of 3 snapshots at each endpoint)
+          // ── OI history — 168 hourly data points, EMA(5) at each endpoint ──
           if (oiHistRes.status === 'fulfilled' && Array.isArray(oiHistRes.value) && oiHistRes.value.length >= 7) {
             const data = oiHistRes.value;
-            // Avg of last 3 completed OI snapshots (skip latest to align with partial-candle guard)
-            const oi1 = parseFloat(data[data.length - 2].sumOpenInterest);
-            const oi2 = parseFloat(data[data.length - 3].sumOpenInterest);
-            const oi3 = parseFloat(data[data.length - 4].sumOpenInterest);
-            const latestOiAvg = (Number.isFinite(oi1) && Number.isFinite(oi2) && Number.isFinite(oi3)) ? (oi1 + oi2 + oi3) / 3 : oi1;
+            // Extract completed OI snapshots (skip latest = partial guard)
+            const completedOI = [];
+            for (let i = 0; i < data.length - 1; i++) {
+              const oi = parseFloat(data[i].sumOpenInterest);
+              if (Number.isFinite(oi)) completedOI.push(oi);
+            }
 
-            // 4-hour OI change (avg of 3 snapshots 4h ago)
-            if (data.length >= 9 && Number.isFinite(latestOiAvg)) {
-              const o4h1 = parseFloat(data[data.length - 2 - 4].sumOpenInterest);
-              const o4h2 = parseFloat(data[data.length - 3 - 4].sumOpenInterest);
-              const o4h3 = parseFloat(data[data.length - 4 - 4].sumOpenInterest);
-              const oi4hAvg = (Number.isFinite(o4h1) && Number.isFinite(o4h2) && Number.isFinite(o4h3)) ? (o4h1 + o4h2 + o4h3) / 3 : o4h1;
-              if (Number.isFinite(oi4hAvg) && oi4hAvg > 0) {
-                this.stats.oiChange4h = ((latestOiAvg - oi4hAvg) / oi4hAvg) * 100;
+            // EMA(5) at the recent endpoint
+            const recentOiSlice = completedOI.slice(-(OI_EMA_PERIOD * 2));
+            const latestOiEma = _ema(recentOiSlice, OI_EMA_PERIOD);
+
+            // 4-hour OI change: EMA(5) at 4 snapshots back
+            if (completedOI.length >= 4 + OI_EMA_PERIOD * 2 && Number.isFinite(latestOiEma)) {
+              const offset4h = completedOI.length - 4;
+              const past4hSlice = completedOI.slice(offset4h - OI_EMA_PERIOD * 2, offset4h);
+              const oi4hEma = _ema(past4hSlice, OI_EMA_PERIOD);
+              if (Number.isFinite(oi4hEma) && oi4hEma > 0) {
+                this.stats.oiChange4h = ((latestOiEma - oi4hEma) / oi4hEma) * 100;
               }
             }
 
-            // 24-hour OI change (avg of 3 snapshots 24h ago)
-            if (data.length >= 29 && Number.isFinite(latestOiAvg)) {
-              const o24h1 = parseFloat(data[data.length - 2 - 24].sumOpenInterest);
-              const o24h2 = parseFloat(data[data.length - 3 - 24].sumOpenInterest);
-              const o24h3 = parseFloat(data[data.length - 4 - 24].sumOpenInterest);
-              const oi24hAvg = (Number.isFinite(o24h1) && Number.isFinite(o24h2) && Number.isFinite(o24h3)) ? (o24h1 + o24h2 + o24h3) / 3 : o24h1;
-              if (Number.isFinite(oi24hAvg) && oi24hAvg > 0) {
-                this.stats.oiChange24h = ((latestOiAvg - oi24hAvg) / oi24hAvg) * 100;
+            // 24-hour OI change: EMA(5) at 24 snapshots back
+            if (completedOI.length >= 24 + OI_EMA_PERIOD * 2 && Number.isFinite(latestOiEma)) {
+              const offset24h = completedOI.length - 24;
+              const past24hSlice = completedOI.slice(offset24h - OI_EMA_PERIOD * 2, offset24h);
+              const oi24hEma = _ema(past24hSlice, OI_EMA_PERIOD);
+              if (Number.isFinite(oi24hEma) && oi24hEma > 0) {
+                this.stats.oiChange24h = ((latestOiEma - oi24hEma) / oi24hEma) * 100;
               }
             }
 
-            // 7-day OI change (avg of 3 snapshots 7d ago)
-            if (data.length >= 172 && Number.isFinite(latestOiAvg)) {
-              const o7d1 = parseFloat(data[data.length - 2 - 168].sumOpenInterest);
-              const o7d2 = parseFloat(data[data.length - 3 - 168].sumOpenInterest);
-              const o7d3 = parseFloat(data[data.length - 4 - 168].sumOpenInterest);
-              const oi7dAvg = (Number.isFinite(o7d1) && Number.isFinite(o7d2) && Number.isFinite(o7d3)) ? (o7d1 + o7d2 + o7d3) / 3 : o7d1;
-              if (Number.isFinite(oi7dAvg) && oi7dAvg > 0) {
-                this.stats.oiChange7d = ((latestOiAvg - oi7dAvg) / oi7dAvg) * 100;
+            // 7-day OI change: EMA(5) at 168 snapshots back
+            if (completedOI.length >= 168 + OI_EMA_PERIOD * 2 && Number.isFinite(latestOiEma)) {
+              const offset7d = completedOI.length - 168;
+              const past7dSlice = completedOI.slice(offset7d - OI_EMA_PERIOD * 2, offset7d);
+              const oi7dEma = _ema(past7dSlice, OI_EMA_PERIOD);
+              if (Number.isFinite(oi7dEma) && oi7dEma > 0) {
+                this.stats.oiChange7d = ((latestOiEma - oi7dEma) / oi7dEma) * 100;
               }
             }
           } else {
             this.stats.oiDataStale = true;
           }
 
-          // Current OI absolute value
+          // ── Current OI absolute value ──
           if (oiRes.status === 'fulfilled' && oiRes.value && oiRes.value.openInterest) {
             this.stats.oiCurrent = parseFloat(oiRes.value.openInterest);
           } else {
             this.stats.oiDataStale = true;
           }
 
-          // Funding rate
+          // ── Funding rate ──
           if (fundingRes.status === 'fulfilled' && fundingRes.value && fundingRes.value.lastFundingRate !== undefined) {
             this.stats.fundingRate = parseFloat(fundingRes.value.lastFundingRate);
             if (!Number.isFinite(this.stats.fundingRate)) this.stats.fundingRate = null;
           }
 
-          // 24h volume & OI/Volume ratio
+          // ── 24h volume, OI/Volume ratio (legacy), and OI Expansion Quality (new) ──
           if (ticker24hRes.status === 'fulfilled' && ticker24hRes.value) {
             const vol = parseFloat(ticker24hRes.value.volume);        // 24h volume in contracts
             const quoteVol = parseFloat(ticker24hRes.value.quoteVolume); // 24h volume in USDT
             this.stats.volume24h = Number.isFinite(quoteVol) ? quoteVol : null;
 
-            // OI/Vol ratio: both in same unit (contracts)
+            // Legacy OI/Vol ratio (kept for backward compat)
             if (Number.isFinite(this.stats.oiCurrent) && Number.isFinite(vol) && vol > 0) {
               this.stats.oiVolRatio = this.stats.oiCurrent / vol;
+            }
+
+            // ── NEW: OI Expansion Quality ──
+            // Measures whether leverage expansion is supported by trading activity.
+            // |OI change%| / normalized_volume_ratio
+            // High = leverage expanding without volume support (suspicious/squeeze risk)
+            // Low = modest OI change with strong volume (organic/supported)
+            const oiChange24h = this.stats.oiChange24h;
+            if (Number.isFinite(oiChange24h) && Number.isFinite(vol) && Number.isFinite(this.stats.oiCurrent) && vol > 0 && this.stats.oiCurrent > 0) {
+              // Normalize: how much OI changed relative to total OI, vs how much volume traded relative to OI
+              const oiAbsChange = Math.abs(oiChange24h);
+              const volTurnover = vol / this.stats.oiCurrent; // how many times OI turned over in 24h
+              if (volTurnover > 0) {
+                // Expansion quality: higher = more leverage per unit of volume
+                // Scale: 0-1 range typical. >0.5 = aggressive leverage expansion
+                this.stats.oiExpansionQuality = oiAbsChange / (volTurnover * 10);
+                // Clamp to reasonable range
+                this.stats.oiExpansionQuality = Math.min(2, Math.max(0, this.stats.oiExpansionQuality));
+              }
+            }
+          }
+
+          // ── NEW: Compute Adaptive Thresholds ──
+          // threshold = OI_VOL_MULTIPLIER × rollingVol, fallback to static
+          const thresholds = {};
+          thresholds['4h'] = Number.isFinite(this.stats.vol4h) && this.stats.vol4h > 0.01
+            ? Math.max(0.1, OI_VOL_MULTIPLIER * this.stats.vol4h)
+            : OI_STATIC_THRESHOLDS['4h'];
+          thresholds['24h'] = Number.isFinite(this.stats.vol24h) && this.stats.vol24h > 0.01
+            ? Math.max(0.1, OI_VOL_MULTIPLIER * this.stats.vol24h)
+            : OI_STATIC_THRESHOLDS['24h'];
+          thresholds['7d'] = Number.isFinite(this.stats.vol7d) && this.stats.vol7d > 0.01
+            ? Math.max(0.1, OI_VOL_MULTIPLIER * this.stats.vol7d)
+            : OI_STATIC_THRESHOLDS['7d'];
+          this.stats.volThresholds = thresholds;
+
+          // ── NEW: Liquidation Pressure Indicator ──
+          // Derived from funding rate direction × OI expansion magnitude (no extra API)
+          // High funding + expanding OI = elevated liquidation risk on the crowded side
+          if (Number.isFinite(this.stats.fundingRate) && Number.isFinite(this.stats.oiChange24h)) {
+            const frAbs = Math.abs(this.stats.fundingRate);
+            const oiAbs = Math.abs(this.stats.oiChange24h);
+            // Scale: 0-1 range. Both funding and OI expansion must be elevated for high score
+            // frAbs typically 0-0.003, oiAbs typically 0-20%
+            const frScaled = Math.min(1, frAbs / 0.001); // 0.1% = 1.0
+            const oiScaled = Math.min(1, oiAbs / 10);     // 10% OI change = 1.0
+            this.stats.liqPressure = frScaled * oiScaled;
+            // Direction: positive funding + OI up → longs at risk; negative funding + OI up → shorts at risk
+            // Stored as signed value: positive = long liquidation risk, negative = short liquidation risk
+            if (this.stats.fundingRate > 0 && this.stats.oiChange24h > 0) {
+              this.stats.liqPressure = Math.abs(this.stats.liqPressure);  // longs at risk
+            } else if (this.stats.fundingRate < 0 && this.stats.oiChange24h > 0) {
+              this.stats.liqPressure = -Math.abs(this.stats.liqPressure); // shorts at risk
+            } else {
+              this.stats.liqPressure = this.stats.liqPressure * (this.stats.fundingRate > 0 ? 1 : -1);
             }
           }
 
@@ -6668,98 +6816,114 @@
       },
 
       computeScenario() {
-        // Scaled noise thresholds per timeframe
-        const THRESHOLDS = { '4h': 0.2, '24h': 0.5, '7d': 1.0 };
+        // ── Adaptive thresholds: use rolling-vol based if available, else static fallback ──
+        const THRESHOLDS = this.stats.volThresholds || OI_STATIC_THRESHOLDS;
 
-        // Price direction — majority vote across 3 timeframes with scaled thresholds
-        let priceUpVotes = 0, priceDownVotes = 0, priceFlatVotes = 0;
-        const priceMagnitudes = []; // magnitude of agreeing votes (for confidence)
+        // ── Price direction — WEIGHTED vote across 3 timeframes ──
+        // Weights: 4h=1, 24h=2, 7d=3. Direction wins when weighted sum exceeds the other.
+        let priceUpWeight = 0, priceDownWeight = 0, priceFlatCount = 0;
+        const priceMagnitudes = []; // magnitude of agreeing votes (for signal strength)
+        const priceAvailable = [];  // which TFs had data
 
         if (Number.isFinite(this.stats.priceChange4h)) {
           const t = THRESHOLDS['4h'];
-          if (this.stats.priceChange4h > t) { priceUpVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange4h)); }
-          else if (this.stats.priceChange4h < -t) { priceDownVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange4h)); }
-          else priceFlatVotes++;
+          priceAvailable.push('4h');
+          if (this.stats.priceChange4h > t) { priceUpWeight += OI_TF_WEIGHTS['4h']; priceMagnitudes.push(Math.abs(this.stats.priceChange4h)); }
+          else if (this.stats.priceChange4h < -t) { priceDownWeight += OI_TF_WEIGHTS['4h']; priceMagnitudes.push(Math.abs(this.stats.priceChange4h)); }
+          else priceFlatCount++;
         }
         if (Number.isFinite(this.stats.priceChange24h)) {
           const t = THRESHOLDS['24h'];
-          if (this.stats.priceChange24h > t) { priceUpVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange24h)); }
-          else if (this.stats.priceChange24h < -t) { priceDownVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange24h)); }
-          else priceFlatVotes++;
+          priceAvailable.push('24h');
+          if (this.stats.priceChange24h > t) { priceUpWeight += OI_TF_WEIGHTS['24h']; priceMagnitudes.push(Math.abs(this.stats.priceChange24h)); }
+          else if (this.stats.priceChange24h < -t) { priceDownWeight += OI_TF_WEIGHTS['24h']; priceMagnitudes.push(Math.abs(this.stats.priceChange24h)); }
+          else priceFlatCount++;
         }
         if (Number.isFinite(this.stats.priceChange7d)) {
           const t = THRESHOLDS['7d'];
-          if (this.stats.priceChange7d > t) { priceUpVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange7d)); }
-          else if (this.stats.priceChange7d < -t) { priceDownVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange7d)); }
-          else priceFlatVotes++;
+          priceAvailable.push('7d');
+          if (this.stats.priceChange7d > t) { priceUpWeight += OI_TF_WEIGHTS['7d']; priceMagnitudes.push(Math.abs(this.stats.priceChange7d)); }
+          else if (this.stats.priceChange7d < -t) { priceDownWeight += OI_TF_WEIGHTS['7d']; priceMagnitudes.push(Math.abs(this.stats.priceChange7d)); }
+          else priceFlatCount++;
         }
-        const priceTotal = priceUpVotes + priceDownVotes;
-        const priceUp = priceTotal > 0 && priceUpVotes > priceDownVotes;
-        const priceDown = priceTotal > 0 && priceDownVotes > priceUpVotes;
-        const priceFlat = priceTotal === 0 || (priceUpVotes === priceDownVotes);
+        const priceTotalWeight = priceUpWeight + priceDownWeight;
+        const priceUp = priceTotalWeight > 0 && priceUpWeight > priceDownWeight;
+        const priceDown = priceTotalWeight > 0 && priceDownWeight > priceUpWeight;
+        const priceFlat = priceTotalWeight === 0 || (priceUpWeight === priceDownWeight);
 
-        // OI direction — majority vote across 3 timeframes with scaled thresholds
-        let oiUpVotes = 0, oiDownVotes = 0, oiFlatVotes = 0;
+        // ── OI direction — WEIGHTED vote across 3 timeframes ──
+        let oiUpWeight = 0, oiDownWeight = 0, oiFlatCount = 0;
         const oiMagnitudes = [];
+        const oiAvailable = [];
 
         if (Number.isFinite(this.stats.oiChange4h)) {
           const t = THRESHOLDS['4h'];
-          if (this.stats.oiChange4h > t) { oiUpVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange4h)); }
-          else if (this.stats.oiChange4h < -t) { oiDownVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange4h)); }
-          else oiFlatVotes++;
+          oiAvailable.push('4h');
+          if (this.stats.oiChange4h > t) { oiUpWeight += OI_TF_WEIGHTS['4h']; oiMagnitudes.push(Math.abs(this.stats.oiChange4h)); }
+          else if (this.stats.oiChange4h < -t) { oiDownWeight += OI_TF_WEIGHTS['4h']; oiMagnitudes.push(Math.abs(this.stats.oiChange4h)); }
+          else oiFlatCount++;
         }
         if (Number.isFinite(this.stats.oiChange24h)) {
           const t = THRESHOLDS['24h'];
-          if (this.stats.oiChange24h > t) { oiUpVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange24h)); }
-          else if (this.stats.oiChange24h < -t) { oiDownVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange24h)); }
-          else oiFlatVotes++;
+          oiAvailable.push('24h');
+          if (this.stats.oiChange24h > t) { oiUpWeight += OI_TF_WEIGHTS['24h']; oiMagnitudes.push(Math.abs(this.stats.oiChange24h)); }
+          else if (this.stats.oiChange24h < -t) { oiDownWeight += OI_TF_WEIGHTS['24h']; oiMagnitudes.push(Math.abs(this.stats.oiChange24h)); }
+          else oiFlatCount++;
         }
         if (Number.isFinite(this.stats.oiChange7d)) {
           const t = THRESHOLDS['7d'];
-          if (this.stats.oiChange7d > t) { oiUpVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange7d)); }
-          else if (this.stats.oiChange7d < -t) { oiDownVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange7d)); }
-          else oiFlatVotes++;
+          oiAvailable.push('7d');
+          if (this.stats.oiChange7d > t) { oiUpWeight += OI_TF_WEIGHTS['7d']; oiMagnitudes.push(Math.abs(this.stats.oiChange7d)); }
+          else if (this.stats.oiChange7d < -t) { oiDownWeight += OI_TF_WEIGHTS['7d']; oiMagnitudes.push(Math.abs(this.stats.oiChange7d)); }
+          else oiFlatCount++;
         }
-        const oiTotal = oiUpVotes + oiDownVotes;
-        const oiUp = oiTotal > 0 && oiUpVotes > oiDownVotes;
-        const oiDown = oiTotal > 0 && oiDownVotes > oiUpVotes;
-        const oiFlat = oiTotal === 0 || (oiUpVotes === oiDownVotes);
+        const oiTotalWeight = oiUpWeight + oiDownWeight;
+        const oiUp = oiTotalWeight > 0 && oiUpWeight > oiDownWeight;
+        const oiDown = oiTotalWeight > 0 && oiDownWeight > oiUpWeight;
+        const oiFlat = oiTotalWeight === 0 || (oiUpWeight === oiDownWeight);
 
-        // Scenario classification
+        // ── Scenario classification ──
         let scenarioIdx = 0;
-        if (priceFlat && oiFlat && (priceFlatVotes > 0 || oiFlatVotes > 0)) scenarioIdx = 5;
+        if (priceFlat && oiFlat && (priceFlatCount > 0 || oiFlatCount > 0)) scenarioIdx = 5;
         else if (priceFlat || oiFlat) scenarioIdx = 5;
         else if (priceUp && oiUp) scenarioIdx = 1;
         else if (priceUp && oiDown) scenarioIdx = 2;
         else if (priceDown && oiUp) scenarioIdx = 3;
         else if (priceDown && oiDown) scenarioIdx = 4;
 
-        // Confidence score: (agreeVotes / totalVotes) * avgMagnitude / (avgThreshold + avgMagnitude)
-        let confidence = 0;
+        // ── Signal Strength (replaces "Confidence") ──
+        // Three interpretable components, weighted:
+        //   Agreement (0.4): how much weight agrees with the direction vs total weight
+        //   Magnitude (0.35): average move size relative to adaptive threshold
+        //   Participation (0.25): fraction of timeframes providing data
+        let signalStrength = 0;
         if (scenarioIdx >= 1 && scenarioIdx <= 4) {
-          const priceAgree = priceUp ? priceUpVotes : priceDownVotes;
-          const oiAgree = oiUp ? oiUpVotes : oiDownVotes;
-          const priceTotalVotes = priceUpVotes + priceDownVotes + priceFlatVotes;
-          const oiTotalVotes = oiUpVotes + oiDownVotes + oiFlatVotes;
-          const totalVotes = Math.max(1, priceTotalVotes + oiTotalVotes);
-          const agreeVotes = priceAgree + oiAgree;
+          const totalPossibleWeight = OI_TF_WEIGHTS['4h'] + OI_TF_WEIGHTS['24h'] + OI_TF_WEIGHTS['7d']; // 6
 
-          // Average magnitude of agreeing timeframes
+          // Agreement: weighted fraction of votes agreeing with the direction
+          const priceAgreeWeight = priceUp ? priceUpWeight : priceDownWeight;
+          const oiAgreeWeight = oiUp ? oiUpWeight : oiDownWeight;
+          const priceDisagreeWeight = priceUp ? priceDownWeight : priceUpWeight;
+          const oiDisagreeWeight = oiUp ? oiDownWeight : oiUpWeight;
+          const agreeTotal = priceAgreeWeight + oiAgreeWeight;
+          const disagreeTotal = priceDisagreeWeight + oiDisagreeWeight;
+          const agreement = totalPossibleWeight > 0 ? agreeTotal / (agreeTotal + disagreeTotal) : 0;
+
+          // Magnitude: average move size relative to threshold
           const allMagnitudes = [...priceMagnitudes, ...oiMagnitudes];
           const avgMag = allMagnitudes.length > 0 ? allMagnitudes.reduce((a, b) => a + b, 0) / allMagnitudes.length : 0;
+          const avgThresh = Object.values(THRESHOLDS).reduce((a, b) => a + b, 0) / Object.keys(THRESHOLDS).length;
+          const magnitude = avgThresh > 0 ? Math.min(1, avgMag / (avgThresh * 3)) : 0;
 
-          // Average threshold of available timeframes
-          const threshValues = [];
-          if (Number.isFinite(this.stats.priceChange4h) || Number.isFinite(this.stats.oiChange4h)) threshValues.push(THRESHOLDS['4h']);
-          if (Number.isFinite(this.stats.priceChange24h) || Number.isFinite(this.stats.oiChange24h)) threshValues.push(THRESHOLDS['24h']);
-          if (Number.isFinite(this.stats.priceChange7d) || Number.isFinite(this.stats.oiChange7d)) threshValues.push(THRESHOLDS['7d']);
-          const avgThresh = threshValues.length > 0 ? threshValues.reduce((a, b) => a + b, 0) / threshValues.length : 1;
+          // Participation: how many of 6 possible data points are available
+          const dataPoints = priceAvailable.length + oiAvailable.length;
+          const participation = dataPoints / 6;
 
-          confidence = (agreeVotes / totalVotes) * (avgMag / (avgThresh + avgMag));
-          confidence = Math.min(1, Math.max(0, confidence)); // clamp 0-1
+          signalStrength = (agreement * 0.4) + (magnitude * 0.35) + (participation * 0.25);
+          signalStrength = Math.min(1, Math.max(0, signalStrength)); // clamp 0-1
         }
 
-        // Format multi-timeframe strings
+        // ── Format multi-timeframe strings ──
         const fmtPct = (v) => Number.isFinite(v) ? ((v > 0 ? '+' : '') + v.toFixed(2) + '%') : '--';
         const priceParts = [];
         if (Number.isFinite(this.stats.priceChange4h))  priceParts.push('4h ' + fmtPct(this.stats.priceChange4h));
@@ -6773,11 +6937,22 @@
         if (Number.isFinite(this.stats.oiChange7d))  oiParts.push('7d ' + fmtPct(this.stats.oiChange7d));
         const oiLine = oiParts.length > 0 ? oiParts.join(' | ') : '--';
 
+        // ── Adaptive threshold info string ──
+        const threshParts = [];
+        for (const tf of ['4h', '24h', '7d']) {
+          if (THRESHOLDS[tf] !== undefined) {
+            const isAdaptive = Number.isFinite(this.stats['vol' + tf.charAt(0).toUpperCase() + tf.slice(1)]) && this.stats['vol' + tf.charAt(0).toUpperCase() + tf.slice(1)] > 0.01;
+            threshParts.push(tf + ' ' + THRESHOLDS[tf].toFixed(2) + '%' + (isAdaptive ? '*' : ''));
+          }
+        }
+        const thresholdLine = threshParts.length > 0 ? threshParts.join(' | ') : '';
+
         return {
           scenarioIdx,
-          confidence,
+          signalStrength,
           priceLine,
           oiLine,
+          thresholdLine,
           priceUp,
           priceDown,
           priceFlat,
@@ -6792,6 +6967,8 @@
           oiChange7d: this.stats.oiChange7d,
           fundingRate: this.stats.fundingRate,
           oiVolRatio: this.stats.oiVolRatio,
+          oiExpansionQuality: this.stats.oiExpansionQuality,
+          liqPressure: this.stats.liqPressure,
           volume24h: this.stats.volume24h,
           oiDataStale: this.stats.oiDataStale,
           klinesStale: this.stats.klinesStale
@@ -6807,48 +6984,54 @@
           }
         }
 
-        // Build result line below matrix
+        // Build result line below matrix with probabilistic wording
         const resultEl = document.getElementById('oiPriceResult');
         if (resultEl) {
           if (scenario.scenarioIdx === 0) {
             resultEl.innerHTML = '<span style="color:var(--muted-2)">Awaiting data...</span>';
           } else if (scenario.scenarioIdx === 5) {
+            // Provide context for why no clear signal
+            let reason = 'Mixed or flat signals across timeframes';
+            const priceParts = [scenario.priceChange4h, scenario.priceChange24h, scenario.priceChange7d].filter(v => Number.isFinite(v));
+            const oiParts = [scenario.oiChange4h, scenario.oiChange24h, scenario.oiChange7d].filter(v => Number.isFinite(v));
+            if (priceParts.length === 0 && oiParts.length === 0) reason = 'Insufficient data';
+            else if (priceParts.length === 0) reason = 'Price data unavailable';
+            else if (oiParts.length === 0) reason = 'OI data unavailable';
+            else if (scenario.priceFlat && !scenario.oiFlat) reason = 'Price movement within adaptive threshold';
+            else if (!scenario.priceFlat && scenario.oiFlat) reason = 'OI change within adaptive threshold';
+            else if (scenario.priceFlat && scenario.oiFlat) reason = 'Both price and OI within adaptive thresholds';
             resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:var(--muted-2)">No Clear Signal</b>'
-              + '<br><span style="font-size:0.88rem">Price: ' + scenario.priceLine + '<br>OI: ' + scenario.oiLine + '</span>'
-              + '<br><i style="font-size:0.72rem;color:var(--muted-2);opacity:0.7">Disclaimer: Not financial advice.</i>';
+              + '<br><span style="font-size:0.84rem;color:var(--muted-3)">' + reason + '</span>';
           } else {
+            // Probabilistic scenario descriptions — avoid absolute wording
             const names = { 1: 'Strong Uptrend', 2: 'Short Covering', 3: 'Strong Downtrend', 4: 'Exhaustion' };
+            const descriptions = {
+              1: 'Long-side participation likely increasing; positioning expansion supports move',
+              2: 'Short covering likely contributing to rally; move may lack new long capital',
+              3: 'Short-side positioning likely expanding; downward pressure reinforced by new positions',
+              4: 'Long liquidations or unwinds likely; forced selling may be near exhaustion'
+            };
             const colors = { 1: '#4caf50', 2: 'var(--warn)', 3: '#ff5252', 4: '#64b5f6' };
             const name = names[scenario.scenarioIdx] || '--';
+            const desc = descriptions[scenario.scenarioIdx] || '';
             const color = colors[scenario.scenarioIdx] || 'var(--text)';
 
-            // Dominant price and OI magnitude for prominent display
-            const fmtPct = (v) => Number.isFinite(v) ? ((v > 0 ? '+' : '') + v.toFixed(2) + '%') : '';
-            const priceMags = [scenario.priceChange4h, scenario.priceChange24h, scenario.priceChange7d].filter(v => Number.isFinite(v));
-            const oiMags = [scenario.oiChange4h, scenario.oiChange24h, scenario.oiChange7d].filter(v => Number.isFinite(v));
-            const priceAvg = priceMags.length > 0 ? priceMags.reduce((a, b) => a + Math.abs(b), 0) / priceMags.length : 0;
-            const oiAvg = oiMags.length > 0 ? oiMags.reduce((a, b) => a + Math.abs(b), 0) / oiMags.length : 0;
-            const priceSign = scenario.priceUp ? '+' : '-';
-            const oiSign = scenario.oiUp ? '+' : '-';
-
             resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:' + color + '">' + name + '</b>'
-              + ' <span style="font-size:0.88rem;color:var(--muted)">(Price ' + priceSign + priceAvg.toFixed(1) + '% avg, OI ' + oiSign + oiAvg.toFixed(1) + '% avg)</span>'
-              + '<br><span style="font-size:0.88rem">Price: ' + scenario.priceLine + '<br>OI: ' + scenario.oiLine + '</span>'
-              + '<br><i style="font-size:0.72rem;color:var(--muted-2);opacity:0.7">Disclaimer: Not financial advice.</i>';
+              + '<br><span style="font-size:0.84rem;color:var(--muted-2);line-height:1.5">' + desc + '</span>';
           }
         }
 
-        // Confidence bar
+        // Signal Strength bar (renamed from "Confidence")
         const confEl = document.getElementById('oiPriceConfidence');
         const confFillEl = document.getElementById('oiPriceConfFill');
         const confLabelEl = document.getElementById('oiPriceConfLabel');
         if (confEl && confFillEl && confLabelEl) {
           if (scenario.scenarioIdx >= 1 && scenario.scenarioIdx <= 4) {
-            const pct = Math.round(scenario.confidence * 100);
-            let label = 'Weak';
+            const pct = Math.round(scenario.signalStrength * 100);
+            let label = 'Low';
             let barColor = '#ff5252';
-            if (pct >= 70) { label = 'Strong'; barColor = '#4caf50'; }
-            else if (pct >= 40) { label = 'Moderate'; barColor = '#ffcc80'; }
+            if (pct >= 65) { label = 'High'; barColor = '#4caf50'; }
+            else if (pct >= 35) { label = 'Moderate'; barColor = '#ffcc80'; }
             confFillEl.style.width = pct + '%';
             confFillEl.style.background = barColor;
             confLabelEl.textContent = label + ' (' + pct + '%)';
@@ -6859,10 +7042,11 @@
           }
         }
 
-        // Context row (funding rate + OI/Vol ratio)
+        // Context row (funding rate, OI Expansion Quality, Liquidation Pressure) — hidden from UI, live values shown in tooltip
         const ctxEl = document.getElementById('oiPriceContext');
         if (ctxEl) {
           const items = [];
+
           // Funding rate
           if (Number.isFinite(scenario.fundingRate)) {
             const ratePct = (scenario.fundingRate * 100).toFixed(4);
@@ -6872,10 +7056,20 @@
             else if (scenario.fundingRate > 0.0003) { rateColor = '#ffcc80'; rateNote = ' (Slight long bias)'; }
             else if (scenario.fundingRate < -0.001) { rateColor = '#ff5252'; rateNote = ' (Shorts pay — short crowded)'; }
             else if (scenario.fundingRate < -0.0003) { rateColor = '#64b5f6'; rateNote = ' (Slight short bias)'; }
-            items.push('<span class="bias-context-item"><span class="label">Funding:</span> <span class="value" style="color:' + rateColor + '">' + ratePct + '%' + rateNote + '</span></span>');
+            items.push('<span class="bias-context-item" title="Binance funding rate: positive = longs pay shorts, negative = shorts pay longs"><span class="label">Funding:</span> <span class="value" style="color:' + rateColor + '">' + ratePct + '%' + rateNote + '</span></span>');
           }
-          // OI/Volume ratio
-          if (Number.isFinite(scenario.oiVolRatio)) {
+
+          // OI Expansion Quality (replaces OI/Volume ratio in primary display)
+          if (Number.isFinite(scenario.oiExpansionQuality)) {
+            const eqVal = scenario.oiExpansionQuality.toFixed(2);
+            let eqColor = 'var(--muted)';
+            let eqNote = '';
+            if (scenario.oiExpansionQuality > 0.5) { eqColor = '#ffcc80'; eqNote = ' (Aggressive leverage expansion)'; }
+            else if (scenario.oiExpansionQuality > 0.2) { eqColor = 'var(--accent-2)'; eqNote = ' (Moderate expansion)'; }
+            else { eqColor = '#64b5f6'; eqNote = ' (Volume-supported)'; }
+            items.push('<span class="bias-context-item" title="OI Expansion Quality: measures leverage expansion vs trading activity. High = expanding OI with low volume (squeeze risk). Low = volume supports OI change."><span class="label">OI Exp Q:</span> <span class="value" style="color:' + eqColor + '">' + eqVal + eqNote + '</span></span>');
+          } else if (Number.isFinite(scenario.oiVolRatio)) {
+            // Fallback to legacy OI/Volume if Expansion Quality not available
             const ratio = scenario.oiVolRatio.toFixed(3);
             let ratioColor = 'var(--muted)';
             let ratioNote = '';
@@ -6884,12 +7078,81 @@
             else { ratioNote = ' (Balanced)'; }
             items.push('<span class="bias-context-item"><span class="label">OI/Vol:</span> <span class="value" style="color:' + ratioColor + '">' + ratio + ratioNote + '</span></span>');
           }
-          if (items.length > 0) {
-            ctxEl.innerHTML = items.join('');
-            ctxEl.style.display = 'flex';
-          } else {
-            ctxEl.style.display = 'none';
+
+          // Liquidation Pressure indicator (new)
+          if (Number.isFinite(scenario.liqPressure)) {
+            const lpAbs = Math.abs(scenario.liqPressure);
+            let lpColor = 'var(--muted)';
+            let lpLabel = 'Low';
+            let lpDirection = scenario.liqPressure >= 0 ? 'Long' : 'Short';
+            if (lpAbs > 0.6) { lpColor = '#ff5252'; lpLabel = 'Elevated'; }
+            else if (lpAbs > 0.3) { lpColor = '#ffcc80'; lpLabel = 'Moderate'; }
+            else { lpColor = '#64b5f6'; lpLabel = 'Low'; }
+            items.push('<span class="bias-context-item" title="Liquidation Pressure: derived from funding rate + OI expansion. Elevated = crowded side at risk of forced liquidation. Direction indicates which side is at risk."><span class="label">Liq Press:</span> <span class="value" style="color:' + lpColor + '">' + lpLabel + ' (' + lpDirection + '-side)</span></span>');
           }
+
+          // Always hidden from UI — values injected into tooltip instead
+          ctxEl.innerHTML = items.join('<br>');
+          ctxEl.style.display = 'none';
+        }
+
+        // Inject live context values into the tooltip popup
+        const tipLive = document.getElementById('oiTooltipLiveValues');
+        if (tipLive) {
+          const liveParts = [];
+
+          // Funding rate with worked example
+          if (Number.isFinite(scenario.fundingRate)) {
+            const fr = scenario.fundingRate;
+            const frAbs = Math.abs(fr);
+            const frScaled = Math.min(1, frAbs / 0.001).toFixed(2);
+            const ratePct = (fr * 100).toFixed(4);
+            let frDir = fr > 0 ? 'Longs pay' : 'Shorts pay';
+            liveParts.push(
+              '<b>Funding:</b> ' + ratePct + '% (' + frDir + ')' +
+              '<br>&nbsp;&nbsp;|rate| = ' + frAbs.toFixed(6) + ', scaled = min(1, ' + frAbs.toFixed(6) + '/0.001) = ' + frScaled
+            );
+          }
+
+          // OI Exp Q with worked example
+          if (Number.isFinite(scenario.oiExpansionQuality)) {
+            const eq = scenario.oiExpansionQuality;
+            const oiAbs = Math.abs(scenario.oiChange24h || 0);
+            const volTurnover = this.stats.oiCurrent && this.stats.volume24h && Number.isFinite(this.stats.oiCurrent) && Number.isFinite(this.stats.volume24h)
+              ? 'vol/OI = ' + (this.stats.volume24h / this.stats.oiCurrent).toFixed(1) + ' &times; 10 = ' + ((this.stats.volume24h / this.stats.oiCurrent) * 10).toFixed(1)
+              : 'N/A';
+            let eqLabel = eq > 0.5 ? 'Aggressive' : eq > 0.2 ? 'Moderate' : 'Volume-supported';
+            liveParts.push(
+              '<b>OI Exp Q:</b> ' + eq.toFixed(2) + ' (' + eqLabel + ')' +
+              '<br>&nbsp;&nbsp;|OI change 24h| = ' + oiAbs.toFixed(2) + '%, ' + volTurnover
+            );
+          } else if (Number.isFinite(scenario.oiVolRatio)) {
+            liveParts.push(
+              '<b>OI/Vol:</b> ' + scenario.oiVolRatio.toFixed(3) + ' (legacy fallback)'
+            );
+          }
+
+          // Liq Press with worked example
+          if (Number.isFinite(scenario.liqPressure)) {
+            const lp = scenario.liqPressure;
+            const lpAbs = Math.abs(lp);
+            const frAbs = Math.abs(scenario.fundingRate || 0);
+            const oiAbs = Math.abs(scenario.oiChange24h || 0);
+            const frScaled = Math.min(1, frAbs / 0.001).toFixed(2);
+            const oiScaled = Math.min(1, oiAbs / 10).toFixed(2);
+            let lpLabel = lpAbs > 0.6 ? 'Elevated' : lpAbs > 0.3 ? 'Moderate' : 'Low';
+            let lpDir = lp >= 0 ? 'Long' : 'Short';
+            liveParts.push(
+              '<b>Liq Press:</b> ' + lpLabel + ' (' + lpDir + '-side, value=' + lpAbs.toFixed(2) + ')' +
+              '<br>&nbsp;&nbsp;min(1, |' + frAbs.toFixed(6) + '|/0.001) = ' + frScaled +
+              ', min(1, |' + oiAbs.toFixed(2) + '%|/10) = ' + oiScaled +
+              ', ' + frScaled + ' &times; ' + oiScaled + ' = ' + (parseFloat(frScaled) * parseFloat(oiScaled)).toFixed(2)
+            );
+          }
+
+          tipLive.innerHTML = liveParts.length > 0
+            ? liveParts.join('<br><br>')
+            : 'Awaiting data...';
         }
 
         // Data warning badge
@@ -6904,6 +7167,12 @@
           } else {
             warnEl.style.display = 'none';
           }
+        }
+
+        // Disclaimer — show at the bottom when scenario is active
+        const discEl = document.getElementById('oiPriceDisclaimer');
+        if (discEl) {
+          discEl.style.display = (scenario.scenarioIdx >= 1) ? 'block' : 'none';
         }
       },
 
@@ -6958,13 +7227,38 @@
             if (!Number.isFinite(this.stats.fundingRate)) this.stats.fundingRate = null;
           }
 
-          // 24h volume & OI/Volume ratio
+          // 24h volume, OI/Volume ratio (legacy), and OI Expansion Quality
           if (ticker24hRes.status === 'fulfilled' && ticker24hRes.value) {
             const vol = parseFloat(ticker24hRes.value.volume);
             const quoteVol = parseFloat(ticker24hRes.value.quoteVolume);
             this.stats.volume24h = Number.isFinite(quoteVol) ? quoteVol : null;
             if (Number.isFinite(this.stats.oiCurrent) && Number.isFinite(vol) && vol > 0) {
               this.stats.oiVolRatio = this.stats.oiCurrent / vol;
+            }
+            // Recompute OI Expansion Quality with updated volume
+            const oiChange24h = this.stats.oiChange24h;
+            if (Number.isFinite(oiChange24h) && Number.isFinite(vol) && Number.isFinite(this.stats.oiCurrent) && vol > 0 && this.stats.oiCurrent > 0) {
+              const oiAbsChange = Math.abs(oiChange24h);
+              const volTurnover = vol / this.stats.oiCurrent;
+              if (volTurnover > 0) {
+                this.stats.oiExpansionQuality = Math.min(2, Math.max(0, oiAbsChange / (volTurnover * 10)));
+              }
+            }
+          }
+
+          // Recompute Liquidation Pressure with updated funding rate
+          if (Number.isFinite(this.stats.fundingRate) && Number.isFinite(this.stats.oiChange24h)) {
+            const frAbs = Math.abs(this.stats.fundingRate);
+            const oiAbs = Math.abs(this.stats.oiChange24h);
+            const frScaled = Math.min(1, frAbs / 0.001);
+            const oiScaled = Math.min(1, oiAbs / 10);
+            this.stats.liqPressure = frScaled * oiScaled;
+            if (this.stats.fundingRate > 0 && this.stats.oiChange24h > 0) {
+              this.stats.liqPressure = Math.abs(this.stats.liqPressure);
+            } else if (this.stats.fundingRate < 0 && this.stats.oiChange24h > 0) {
+              this.stats.liqPressure = -Math.abs(this.stats.liqPressure);
+            } else {
+              this.stats.liqPressure = this.stats.liqPressure * (this.stats.fundingRate > 0 ? 1 : -1);
             }
           }
 
@@ -7075,11 +7369,11 @@
               s('.bias-sc-cell.active .bias-sc-cell-name', { fontSize: '0.82rem' });
               // Result text below matrix
               s('#oiPriceResult', { fontSize: '0.72rem', marginTop: '4px', lineHeight: '1.4' });
-              // Confidence bar
+              // Signal Strength bar (formerly "Confidence bar")
               s('.bias-confidence-bar', { fontSize: '0.72rem', maxWidth: '100%', gap: '5px' });
               s('.bias-confidence-track', { height: '4px' });
               // Context row (funding, OI/Vol)
-              s('.bias-context-row', { fontSize: '0.68rem', gap: '6px' });
+              s('.bias-context-row', { fontSize: '0.68rem', lineHeight: '1.4' });
               // Data warning
               s('.bias-data-warning', { fontSize: '0.62rem' });
               // Content section
@@ -9271,7 +9565,7 @@
       <h2>Key Features</h2>
       <ul>
         <li><strong>Multi-Timeframe Charts:</strong> View 1m, 5m, 15m, 30m, 1h, 4h, daily, weekly, and monthly candlestick charts simultaneously, all updating in real time.</li>
-        <li><strong>OI-Price Matrix:</strong> Real-time 2\u00d72 scenario grid showing the relationship between price direction and open interest direction. Uses 168 hourly data points (7 days) for both Price and OI to compute multi-timeframe trends (4h, 24h, 7d). Direction determined by majority vote across timeframes. Identify Strong Uptrend, Short Covering, Strong Downtrend, or Exhaustion scenarios \u2014 all powered by real Binance data with smart auto-refresh (30s/60s).</li>
+        <li><strong>OI-Price Matrix:</strong> Real-time 2\u00d72 scenario grid showing the relationship between price direction and open interest direction. Uses 168 hourly data points (7 days) for both Price and OI to compute multi-timeframe trends (4h, 24h, 7d). Direction determined by weighted vote across timeframes (4h=1, 24h=2, 7d=3) with adaptive thresholds that adjust to each asset's volatility. EMA(5) smoothing reduces noise. Includes Signal Strength scoring, OI Expansion Quality, and Liquidation Pressure indicators. Identify Strong Uptrend, Short Covering, Strong Downtrend, or Exhaustion scenarios \u2014 all powered by real Binance data with smart auto-refresh (30s/60s).</li>
         <li><strong>Price Alerts:</strong> Set up price alerts with audio notifications and visual popups. Alerts persist across browser sessions using local storage.</li>
         <li><strong>Market Rankings:</strong> Track top volume, top gainers, top losers, open interest leaders, and funding rate extremes across all Binance USDT-M perpetual contracts.</li>
         <li><strong>Multi-Ticker Dashboard:</strong> Monitor up to four tickers side by side on the same screen for instant comparison.</li>
