@@ -3374,7 +3374,32 @@
       color: var(--accent);
       background: rgba(38, 224, 210, 0.08);
     }
-
+    .bias-copy-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid var(--input-border);
+      background: var(--subtle-bg);
+      color: var(--muted-2);
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      line-height: 1;
+    }
+    .bias-copy-btn:hover {
+      border-color: rgba(38, 224, 210, 0.5);
+      color: var(--accent);
+      background: rgba(38, 224, 210, 0.08);
+    }
+    .bias-copy-btn.copied {
+      border-color: rgba(76, 175, 80, 0.5);
+      color: #4caf50;
+      background: rgba(76, 175, 80, 0.1);
+    }
     .bias-tooltip-popup {
       display: none;
       position: fixed;
@@ -5664,7 +5689,7 @@
                   <em style="color:var(--warn)">Not financial advice. Always do your own research.</em>
                 </span>
               </span>
-
+              <span class="bias-copy-btn" id="oiCopyBtn" title="Copy OI-Price panel as image">⧉</span>
             </div>
           </div>
 
@@ -6986,7 +7011,201 @@
           });
         }
 
+        // Copy OI-Price panel as portrait PNG (narrow div → naturally portrait)
+        const copyBtn = document.getElementById('oiCopyBtn');
+        if (copyBtn) {
+          copyBtn.addEventListener('click', async () => {
+            const panel = document.getElementById('oiPricePanel');
+            if (!panel) return;
+            try {
+              copyBtn.textContent = '⏳';
+              copyBtn.disabled = true;
 
+              // Lazy-load html2canvas on first use
+              if (typeof html2canvas !== 'function') {
+                await new Promise((resolve, reject) => {
+                  const script = document.createElement('script');
+                  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                  script.crossOrigin = 'anonymous';
+                  script.referrerPolicy = 'no-referrer';
+                  script.onload = resolve;
+                  script.onerror = () => reject(new Error('Failed to load html2canvas'));
+                  document.head.appendChild(script);
+                });
+              }
+              if (typeof html2canvas !== 'function') {
+                throw new Error('html2canvas failed to load');
+              }
+
+              // Clone the panel into a narrow off-screen div so content reflows portrait
+              const CAPTURE_W = 420;
+              const wrapper = document.createElement('div');
+              wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;width:' + CAPTURE_W + 'px;overflow:hidden;z-index:-1;background:#070814;';
+              const clone = panel.cloneNode(true);
+              // Remove tooltip popup from clone (it's moved to body in init)
+              const popupInClone = clone.querySelector('.bias-tooltip-popup');
+              if (popupInClone) popupInClone.remove();
+              // Remove tooltip wrapper (just the ? button container)
+              const tooltipWrapInClone = clone.querySelector('.bias-tooltip-wrap');
+              if (tooltipWrapInClone) tooltipWrapInClone.remove();
+              // Remove copy button from clone (don't show it in screenshot)
+              const copyInClone = clone.querySelector('#oiCopyBtn');
+              if (copyInClone) copyInClone.remove();
+              // Force the cloned panel to fill the wrapper width
+              clone.style.width = '100%';
+              clone.style.margin = '0';
+              clone.style.borderRadius = '0';
+
+              // Scale down font sizes and paddings for the narrow container
+              const s = (sel, styles) => {
+                const els = clone.querySelectorAll(sel);
+                els.forEach(el => Object.assign(el.style, styles));
+              };
+              // Header: ticker name + title
+              s('.bias-ticker-name', { fontSize: '0.85rem', marginRight: '6px' });
+              s('.bias-title', { fontSize: '0.85rem' });
+              s('.bias-header', { padding: '6px 10px' });
+              // 2×2 grid
+              s('.bias-sc-matrix', { gap: '4px', maxWidth: '100%' });
+              s('.bias-sc-col-hdr', { fontSize: '0.75rem', padding: '4px 6px' });
+              s('.bias-sc-row-hdr', { fontSize: '0.75rem', padding: '0 6px' });
+              s('.bias-sc-cell', { padding: '8px 6px', borderRadius: '6px', borderWidth: '1.5px', gap: '4px' });
+              s('.bias-sc-cell-name', { fontSize: '0.82rem', letterSpacing: '0.2px' });
+              s('.bias-sc-cell-bias', { fontSize: '0.68rem', lineHeight: '1.3' });
+              s('.bias-sc-cell.active .bias-sc-cell-name', { fontSize: '0.82rem' });
+              // Result text below matrix
+              s('#oiPriceResult', { fontSize: '0.72rem', marginTop: '4px', lineHeight: '1.4' });
+              // Confidence bar
+              s('.bias-confidence-bar', { fontSize: '0.72rem', maxWidth: '100%', gap: '5px' });
+              s('.bias-confidence-track', { height: '4px' });
+              // Context row (funding, OI/Vol)
+              s('.bias-context-row', { fontSize: '0.68rem', gap: '6px' });
+              // Data warning
+              s('.bias-data-warning', { fontSize: '0.62rem' });
+              // Content section
+              s('.bias-content', { fontSize: '0.78rem' });
+              s('.bias-section', { padding: '6px 8px' });
+
+              wrapper.appendChild(clone);
+              document.body.appendChild(wrapper);
+
+              // Wait a tick for reflow
+              await new Promise(r => setTimeout(r, 50));
+
+              // Capture at 3x scale for crisp 1080px-wide output (420 × ~2.57 ≈ 1080)
+              const panelCanvas = await html2canvas(clone, {
+                backgroundColor: '#070814',
+                scale: Math.ceil(1080 / CAPTURE_W),
+                useCORS: true,
+                logging: false
+              });
+
+              // Remove the temporary wrapper
+              document.body.removeChild(wrapper);
+
+              // --- Compose final portrait PNG ---
+              const tickerName = (this.symbol || '').replace('USDT', '');
+              const PAD = 36;
+              const FOOTER_H = 72;
+
+              const OUT_W = panelCanvas.width;
+              const OUT_H = panelCanvas.height + FOOTER_H + PAD;
+
+              const outCanvas = document.createElement('canvas');
+              outCanvas.width = OUT_W;
+              outCanvas.height = OUT_H;
+              const ctx = outCanvas.getContext('2d');
+
+              // Background with subtle gradient
+              const grad = ctx.createLinearGradient(0, 0, OUT_W, OUT_H);
+              grad.addColorStop(0, '#070814');
+              grad.addColorStop(1, '#0e1024');
+              ctx.fillStyle = grad;
+              ctx.fillRect(0, 0, OUT_W, OUT_H);
+
+              // Thin accent line at top
+              const accentGrad = ctx.createLinearGradient(0, 0, OUT_W, 0);
+              accentGrad.addColorStop(0, '#26e0d2');
+              accentGrad.addColorStop(1, '#4aa3ff');
+              ctx.fillStyle = accentGrad;
+              ctx.fillRect(0, 0, OUT_W, 3);
+
+              // Draw the panel capture
+              ctx.drawImage(panelCanvas, 0, 0);
+
+              // Footer: branded text at the bottom
+              const textFontSize = 22;
+              const textLineH = textFontSize * 1.5;
+              const footerY = panelCanvas.height + 20 + textLineH;
+              const textFont = '600 ' + textFontSize + 'px "Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
+              ctx.font = textFont;
+
+              // Line 1: "MultiPerps OI-Price — BTC"
+              const beforeTick = 'MultiPerps OI-Price — ';
+              ctx.textAlign = 'left';
+              const bfw = ctx.measureText(beforeTick).width;
+              const tfw = ctx.measureText(tickerName).width;
+              const total1w = bfw + tfw;
+              const sx1 = (OUT_W - total1w) / 2;
+              ctx.fillStyle = '#888';
+              ctx.fillText(beforeTick, sx1, footerY);
+              ctx.fillStyle = '#ffcc80';
+              ctx.fillText(tickerName, sx1 + bfw, footerY);
+
+              // Line 2: "www.MultiPerps.com #MultiPerps #BTC"
+              const prefix2 = 'www.MultiPerps.com #MultiPerps #';
+              const p2w = ctx.measureText(prefix2).width;
+              const t2w = ctx.measureText(tickerName).width;
+              const total2w = p2w + t2w;
+              const sx2 = (OUT_W - total2w) / 2;
+              ctx.fillStyle = '#555';
+              ctx.fillText(prefix2, sx2, footerY + textLineH);
+              ctx.fillStyle = '#ffcc80';
+              ctx.fillText(tickerName, sx2 + p2w, footerY + textLineH);
+
+              outCanvas.toBlob(async (blob) => {
+                if (!blob) {
+                  throw new Error('Canvas toBlob failed');
+                }
+                try {
+                  // Copy image to clipboard
+                  await navigator.clipboard.write([
+                    new ClipboardItem({ 'image/png': blob })
+                  ]);
+                  copyBtn.classList.add('copied');
+                  copyBtn.textContent = '✓';
+                } catch {
+                  // Fallback: download the image
+                  try {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'MultiPerps-OI-Price-' + tickerName + '.png';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    copyBtn.classList.add('copied');
+                    copyBtn.textContent = '✓';
+                  } catch {
+                    copyBtn.textContent = '✗';
+                  }
+                }
+                copyBtn.disabled = false;
+                setTimeout(() => {
+                  copyBtn.textContent = '⧉';
+                  copyBtn.classList.remove('copied');
+                }, 4000);
+              }, 'image/png');
+            } catch (err) {
+              console.error('OI-Price capture failed:', err);
+              copyBtn.textContent = '✗';
+              copyBtn.disabled = false;
+              setTimeout(() => {
+                copyBtn.textContent = '⧉';
+                copyBtn.classList.remove('copied');
+              }, 2000);
+            }
+          });
+        }
       }
     };
 
