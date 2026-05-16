@@ -20,8 +20,8 @@
 
   <!-- Primary SEO Meta Tags -->
   <title>MultiPerps — Real-Time Binance Futures Dashboard | Multi-Timeframe Charts &amp; Market Rankings</title>
-  <meta name="description" content="MultiPerps is a free real-time Binance Futures dashboard with live multi-timeframe candlestick charts (1m to 1M), price alerts, open interest rankings, funding rates, and multi-ticker tracking for USDT perpetual contracts. No sign-up required." />
-  <meta name="keywords" content="Binance Futures, crypto dashboard, real-time charts, candlestick charts, multi-timeframe analysis, price alerts, USDT perpetual, open interest, funding rates, crypto trading, BTC futures, ETH futures, crypto market rankings, free crypto tool, MultiPerps, Binance USDT-M, live crypto charts, futures trading dashboard" />
+  <meta name="description" content="MultiPerps is a free real-time Binance Futures dashboard with live multi-timeframe candlestick charts (1m to 1M), OI-Price Matrix analysis (open interest vs price scenario signals), price alerts, open interest rankings, funding rates, and multi-ticker tracking for USDT perpetual contracts. No sign-up required." />
+  <meta name="keywords" content="Binance Futures, crypto dashboard, real-time charts, candlestick charts, multi-timeframe analysis, price alerts, USDT perpetual, open interest, funding rates, crypto trading, BTC futures, ETH futures, crypto market rankings, free crypto tool, MultiPerps, Binance USDT-M, live crypto charts, futures trading dashboard, OI-Price Matrix, open interest price analysis, OI price scenario, crypto sentiment analysis, long short bias, futures market bias, OI price divergence, open interest analysis, crypto trading signals, funding rate analysis, OI trend analysis, short covering signal, long buildup, short unwind, market sentiment indicator" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="author" content="MultiPerps" />
   <link rel="canonical" href="https://www.multiperps.com/" />
@@ -30,19 +30,19 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.multiperps.com/" />
   <meta property="og:title" content="MultiPerps — Free Real-Time Binance Futures Dashboard" />
-  <meta property="og:description" content="Live multi-timeframe candlestick charts, price alerts, open interest rankings, funding rates, and multi-ticker tracking for Binance USDT perpetual futures. Free, no sign-up." />
+  <meta property="og:description" content="Live multi-timeframe candlestick charts, OI-Price Matrix analysis, price alerts, open interest rankings, funding rates, and multi-ticker tracking for Binance USDT perpetual futures. Free, no sign-up." />
   <meta property="og:site_name" content="MultiPerps" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:image" content="https://www.multiperps.com/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="MultiPerps Binance Futures Dashboard with live multi-timeframe charts" />
+  <meta property="og:image:alt" content="MultiPerps Binance Futures Dashboard with live multi-timeframe charts and OI-Price Matrix analysis" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@MultiPerps" />
   <meta name="twitter:title" content="MultiPerps — Free Real-Time Binance Futures Dashboard" />
-  <meta name="twitter:description" content="MultiPerps — All Timeframes. All Free. Watch live multi-timeframe candlestick charts, price alerts, open interest rankings, funding rates &amp; multi-ticker tracking for Binance USDT perpetual futures." />
+  <meta name="twitter:description" content="MultiPerps — All Timeframes. All Free. Watch live multi-timeframe candlestick charts, OI-Price Matrix analysis, price alerts, open interest rankings, funding rates &amp; multi-ticker tracking for Binance USDT perpetual futures." />
   <meta name="twitter:image" content="https://www.multiperps.com/og-image.png" />
 
   <!-- JSON-LD Structured Data: WebApplication -->
@@ -68,6 +68,9 @@
     "featureList": [
       "Real-time multi-timeframe candlestick charts",
       "OI-Price Matrix panel with OI-Price scenario analysis",
+      "Open interest vs price divergence detection",
+      "Crypto market bias and sentiment signals (long buildup, short covering, strong uptrend, exhaustion)",
+      "Funding rate and OI-volume ratio context analysis",
       "Price alerts with audio notifications",
       "Open interest rankings",
       "Funding rate tracker",
@@ -123,6 +126,22 @@
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "You can set price alerts per ticker. When the live market price crosses your specified level, MultiPerps triggers an audio notification and a visual popup. Alerts persist across browser sessions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the OI-Price Matrix on MultiPerps?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The OI-Price Matrix is a 2x2 scenario analysis grid that combines open interest direction with price direction to identify market bias. It shows four scenarios: Strong Uptrend (OI up + Price up = Long), Short Covering (OI down + Price up = Careful Long), Strong Downtrend (OI up + Price down = Short), and Exhaustion (OI down + Price down = Avoid late shorts, watch for Long reversal). It uses 3-candle averaging for noise reduction, scaled thresholds per timeframe (4h, 24h, 7d), and includes confidence scoring, funding rate context, and OI-volume ratio analysis."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the OI-Price analysis detect market bias?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The OI-Price analysis detects market bias by comparing the direction of open interest changes against price changes across three timeframes (4h, 24h, 7d). When OI rises and price rises, it signals long buildup (Strong Uptrend). When OI falls and price rises, it signals short covering. When OI rises and price falls, it signals strong downtrend with new shorts. When OI falls and price falls, it signals exhaustion with shorts unwinding. A majority vote of at least 2 of 3 timeframes is required for a directional signal, otherwise it shows No Clear Signal."
         }
       }
     ]
@@ -823,17 +842,6 @@
 
     .ranking-card-title .dot.funding-neg {
       background: #ff1744;
-    }
-
-    .ranking-card-refresh {
-      font-size: 0.75rem;
-      color: var(--muted-2);
-      cursor: pointer;
-      transition: color 140ms ease;
-    }
-
-    .ranking-card-refresh:hover {
-      color: var(--accent);
     }
 
     .ranking-table {
@@ -2914,7 +2922,6 @@
     .trade-btn,
     .share-btn,
     .copy-price-btn,
-    .ranking-card-refresh,
     .blog-back-btn {
       padding: 6px 14px;
       border: 1px solid var(--border);
@@ -2931,7 +2938,6 @@
     .trade-btn:hover,
     .share-btn:hover,
     .copy-price-btn:hover,
-    .ranking-card-refresh:hover,
     .blog-back-btn:hover {
       background: var(--subtle-hover);
       color: var(--text);
@@ -3368,6 +3374,7 @@
       color: var(--accent);
       background: rgba(38, 224, 210, 0.08);
     }
+
     .bias-tooltip-popup {
       display: none;
       position: fixed;
@@ -3415,6 +3422,71 @@
       gap: 0;
       background: transparent;
       border-top: 1px solid var(--border-3);
+      font-size: 1.08rem;
+    }
+
+    /* Confidence bar */
+    .bias-confidence-bar {
+      width: 100%;
+      max-width: 520px;
+      margin: 4px auto 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.92rem;
+      color: var(--muted-2);
+    }
+    .bias-confidence-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .bias-confidence-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.4s ease, background 0.4s ease;
+    }
+    .bias-confidence-label {
+      font-weight: 700;
+      white-space: nowrap;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    /* Context rows (funding, OI/Vol) */
+    .bias-context-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.92rem;
+      color: var(--muted-2);
+      margin-top: 4px;
+    }
+    .bias-context-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .bias-context-item .label { color: var(--muted-3); font-weight: 600; }
+    .bias-context-item .value { font-weight: 700; }
+
+    /* Data warning badge */
+    .bias-data-warning {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 82, 82, 0.12);
+      border: 1px solid rgba(255, 82, 82, 0.3);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.85rem;
+      color: var(--bad);
+      font-weight: 600;
+      margin: 4px auto 0;
     }
 
     /* Sections */
@@ -3450,7 +3522,7 @@
       margin: 0 auto;
     }
     .bias-sc-col-hdr {
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       font-weight: normal;
       color: #ffffff;
       text-align: center;
@@ -3459,7 +3531,7 @@
       text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
     .bias-sc-row-hdr {
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       font-weight: normal;
       color: #ffffff;
       writing-mode: horizontal-tb;
@@ -3487,7 +3559,7 @@
     }
     .bias-sc-cell-name {
       display: block;
-      font-size: 1.25rem;
+      font-size: 1.22rem;
       font-weight: normal;
       color: #ffffff;
       line-height: 1.25;
@@ -3496,7 +3568,7 @@
     }
     .bias-sc-cell-bias {
       display: block;
-      font-size: 0.95rem;
+      font-size: 1.08rem;
       font-weight: normal;
       color: rgba(255, 255, 255, 0.92);
       line-height: 1.4;
@@ -3516,7 +3588,6 @@
     }
     .bias-sc-cell.active .bias-sc-cell-bias {
       color: #ffffff;
-      opacity: 3;
       text-shadow: 0 0 6px rgba(255,255,255,0.2);
     }
 
@@ -3586,18 +3657,28 @@
       .bias-title {
         font-size: 0.9rem;
       }
+      .bias-content {
+        font-size: 0.98rem;
+      }
       .bias-sc-cell-name {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
       }
       .bias-sc-cell-bias {
-        font-size: 0.85rem;
+        font-size: 0.92rem;
       }
       .bias-sc-col-hdr,
       .bias-sc-row-hdr {
-        font-size: 0.88rem;
+        font-size: 0.95rem;
       }
       .bias-sc-cell {
         padding: 10px 6px;
+      }
+      .bias-confidence-bar {
+        font-size: 0.82rem;
+      }
+      .bias-context-row {
+        font-size: 0.82rem;
+        gap: 10px;
       }
     }
   </style>
@@ -5538,22 +5619,52 @@
                 <span class="bias-info-btn" title="How OI-Price Matrix works">?</span>
                 <span class="bias-tooltip-popup">
                   <strong>OI-Price Matrix:</strong><br>
-                  Open Interest-Price Matrix analysis is a 2×2 scenario grid based on the relationship between <em>price direction</em> and <em>open interest direction</em> in futures markets. Both Price and OI use <b style="color:#4aa3ff">168 hourly data points</b> (7 days) from Binance to compute multi-timeframe trends (4h, 24h, 7d).<br><br>
-                  <strong style="color:var(--text)">Noise Filter:</strong> Changes within <b>±0.2%</b> are treated as FLAT (noise). Only changes exceeding this threshold count as UP or DOWN votes. Direction requires <b>majority vote</b> — at least 2 of 3 timeframes must agree. If either Price or OI is FLAT, the result shows <b>"No Clear Signal"</b> instead of forcing a scenario.<br><br>
-                  <b style="color:#4caf50">🟢 Price ↑ + OI ↑ = Strong Uptrend</b> — New longs entering, confirming the move. <b>Bias: Long</b><br><br>
-                  <b style="color:var(--warn)">🟡 Price ↑ + OI ↓ = Short Covering</b> — Rally driven by shorts closing. Weaker. <b>Bias: Careful Long / Avoid late entries</b><br><br>
-                  <b style="color:#ff5252">🔴 Price ↓ + OI ↑ = Strong Downtrend</b> — New shorts opening, confirming the decline. <b>Bias: Short</b><br><br>
-                  <b style="color:#64b5f6">🔵 Price ↓ + OI ↓ = Exhaustion</b> — Longs capitulating. Often precedes reversal. <b>Bias: Avoid late shorts, watch for Long reversal</b><br><br>
+                  Open Interest-Price Matrix analysis is a 2&times;2 scenario grid based on the relationship between <em>price direction</em> and <em>open interest direction</em> in futures markets. Price uses <b style="color:#4aa3ff">5m klines</b> (48 candles for 4h) and <b style="color:#4aa3ff">1h klines</b> (168 candles for 24h &amp; 7d). OI uses <b style="color:#4aa3ff">168 hourly snapshots</b> (7 days).<br><br>
+
+                  <strong style="color:var(--text)">3-Candle Averaging (Noise Reduction):</strong><br>
+                  Instead of a single close price, each endpoint uses the <b>average of 3 consecutive completed closes</b> to smooth candle-close noise:<br>
+                  <code style="color:var(--accent);font-size:0.88rem">change% = (avg(close[-2], close[-3], close[-4]) &minus; avg(close[-2-N], close[-3-N], close[-4-N])) / avg(past 3 closes) &times; 100</code><br>
+                  <span style="font-size:0.84rem;color:var(--muted-3)">Where N = 48 for 4h, 24 for 24h, 168 for 7d. Same method applied to OI snapshots. This reduces false signals from single-candle spikes.</span><br><br>
+
+                  <strong style="color:var(--text)">Scaled Noise Threshold:</strong><br>
+                  Each timeframe has its own threshold to avoid false signals on longer windows:<br>
+                  <code style="color:var(--accent);font-size:0.9rem">T(4h) = 0.2% &nbsp;|&nbsp; T(24h) = 0.5% &nbsp;|&nbsp; T(7d) = 1.0%</code><br>
+                  Changes within &plusmn;threshold are treated as FLAT. Direction requires <b>majority vote</b> &mdash; at least 2 of 3 timeframes must agree. If either Price or OI is FLAT, the result shows <b>"No Clear Signal"</b>.<br><br>
+
+                  <strong style="color:var(--text)">Confidence Score Formula <span style="color:var(--warn);font-size:0.82rem">(Experimental)</span>:</strong><br>
+                  <code style="color:var(--accent);font-size:0.88rem">confidence = (agreeVotes / totalVotes) &times; avgMagnitude / (threshold + avgMagnitude)</code><br>
+                  <span style="font-size:0.84rem;color:var(--muted-3)">Where agreeVotes = timeframes agreeing with the direction, totalVotes = timeframes with data, avgMagnitude = average |change| of agreeing timeframes. Result mapped: &lt;40% = Weak, 40-70% = Moderate, &gt;70% = Strong. <b style="color:var(--warn)">This formula is experimental and has not been statistically backtested.</b></span><br><br>
+
+                  <b style="color:#4caf50">&#x1F7E2; Price &uarr; + OI &uarr; = Strong Uptrend</b> &mdash; New longs entering, confirming the move. <b>Bias: Long</b><br><br>
+                  <b style="color:var(--warn)">&#x1F7E1; Price &uarr; + OI &darr; = Short Covering</b> &mdash; Rally driven by shorts closing. Weaker. <b>Bias: Careful Long / Avoid late entries</b><br><br>
+                  <b style="color:#ff5252">&#x1F534; Price &darr; + OI &uarr; = Strong Downtrend</b> &mdash; New shorts opening, confirming the decline. <b>Bias: Short</b><br><br>
+                  <b style="color:#64b5f6">&#x1F535; Price &darr; + OI &darr; = Exhaustion</b> &mdash; Longs capitulating. Often precedes reversal. <b>Bias: Avoid late shorts, watch for Long reversal</b><br><br>
+
+                  <strong style="color:var(--text)">Funding Rate Context:</strong><br>
+                  <span style="font-size:0.84rem;color:var(--muted-3)">Fetched from Binance premiumIndex API. Positive rate = longs pay shorts (longs crowded). Negative rate = shorts pay longs (shorts crowded). Extreme values (&gt;0.1% or &lt;-0.1%) signal overleveraged positioning.</span><br><br>
+
+                  <strong style="color:var(--text)">OI/Volume Ratio:</strong><br>
+                  <code style="color:var(--accent);font-size:0.88rem">OI/Vol = Current OI (contracts) / 24h Volume (contracts)</code><br>
+                  <span style="font-size:0.84rem;color:var(--muted-3)">High ratio (&gt;0.5) = leveraged speculation dominates. Low ratio (&lt;0.1) = spot-driven or low leverage. Volume from 24hr ticker API.</span><br><br>
+
                   <strong style="color:var(--text)">Data Sources:</strong><br>
                   <span style="color:#aaa;font-size:0.84rem;line-height:1.6">
-                  • Price Trends: Binance klines API, 168 hourly candles (7 days)<br>
-                  • OI Trends: Binance openInterestHist API, 168 hourly snapshots (7 days)<br>
-                  • Current OI: Binance openInterest API<br>
-                  • 3 API calls only, auto-refreshed every 10 seconds
+                  &bull; Price &amp; OI: avg of 3 consecutive closes/snapshots per endpoint<br>
+                  &bull; Price 4h: Binance klines, 48 5m-candles<br>
+                  &bull; Price 24h/7d: Binance klines, 168 1h-candles<br>
+                  &bull; OI Trends: Binance openInterestHist API, 168 hourly snapshots<br>
+                  &bull; Current OI: Binance openInterest API<br>
+                  &bull; Funding Rate: Binance premiumIndex API<br>
+                  &bull; 24h Volume: Binance 24hr ticker API<br>
+                  &bull; 6 API calls on initial load, then smart refresh:<br>
+                  &nbsp;&nbsp;&bull; Klines + OI: every 30 seconds<br>
+                  &nbsp;&nbsp;&bull; Funding + Volume: every 60 seconds<br>
+                  &bull; Partial-candle guard: latest 5m/1h candle excluded, avg of 3 prior closes used
                   </span><br><br>
                   <em style="color:var(--warn)">Not financial advice. Always do your own research.</em>
                 </span>
               </span>
+
             </div>
           </div>
 
@@ -5583,7 +5694,14 @@
                   <span class="bias-sc-cell-bias" id="biasScBias4">&#x1F535; Avoid late shorts, watch for Long reversal</span>
                 </div>
               </div>
-              <div id="oiPriceResult" style="text-align:center;margin-top:8px;font-size:0.84rem;color:var(--muted-2);line-height:1.55;"></div>
+              <div id="oiPriceResult" style="text-align:center;margin-top:8px;font-size:0.95rem;color:var(--muted-2);line-height:1.6;"></div>
+              <div id="oiPriceConfidence" class="bias-confidence-bar" style="display:none;">
+                <span style="font-weight:600;">Confidence:</span>
+                <div class="bias-confidence-track"><div id="oiPriceConfFill" class="bias-confidence-fill"></div></div>
+                <span id="oiPriceConfLabel" class="bias-confidence-label"></span>
+              </div>
+              <div id="oiPriceContext" class="bias-context-row" style="display:none;"></div>
+              <div id="oiPriceWarning" class="bias-data-warning" style="display:none;"></div>
             </div>
           </div>
         </div>
@@ -5677,7 +5795,6 @@
             <div class="ranking-card" data-rank-type="gainers">
               <div class="ranking-card-header">
                 <div class="ranking-card-title"><span class="dot gainers"></span> Top Gainers</div>
-                <div class="ranking-card-refresh" data-refresh="gainers">↳↰</div>
               </div>
               <div class="ranking-loading" id="gainersLoading">
               <table class="ranking-table">
@@ -5696,7 +5813,6 @@
             <div class="ranking-card" data-rank-type="losers">
               <div class="ranking-card-header">
                 <div class="ranking-card-title"><span class="dot losers"></span> Top Losers</div>
-                <div class="ranking-card-refresh" data-refresh="losers">↳↰</div>
               </div>
               <div class="ranking-loading" id="losersLoading">
               <table class="ranking-table">
@@ -5715,7 +5831,6 @@
             <div class="ranking-card" data-rank-type="volume">
               <div class="ranking-card-header">
                 <div class="ranking-card-title"><span class="dot volume"></span> Top Volume</div>
-                <div class="ranking-card-refresh" data-refresh="volume">↳↰</div>
               </div>
               <div class="ranking-loading" id="volumeLoading">
               <table class="ranking-table">
@@ -5734,7 +5849,6 @@
             <div class="ranking-card" data-rank-type="oi">
               <div class="ranking-card-header">
                 <div class="ranking-card-title"><span class="dot oi"></span> Top Open Interest</div>
-                <div class="ranking-card-refresh" data-refresh="oi">↳↰</div>
               </div>
               <div class="ranking-loading" id="oiLoading">
               <table class="ranking-table">
@@ -5753,7 +5867,6 @@
             <div class="ranking-card" data-rank-type="funding">
               <div class="ranking-card-header">
                 <div class="ranking-card-title"><span class="dot funding-pos"></span> Top Positive Funding</div>
-                <div class="ranking-card-refresh" data-refresh="funding">↳↰</div>
               </div>
               <div class="ranking-loading" id="fundingPosLoading">
               <table class="ranking-table">
@@ -5772,7 +5885,6 @@
             <div class="ranking-card" data-rank-type="funding">
               <div class="ranking-card-header">
                 <div class="ranking-card-title"><span class="dot funding-neg"></span> Top Negative Funding</div>
-                <div class="ranking-card-refresh" data-refresh="funding">↳↰</div>
               </div>
               <div class="ranking-loading" id="fundingNegLoading">
               <table class="ranking-table">
@@ -6326,14 +6438,21 @@
     // ============================================
     // OI-PRICE MATRIX PANEL
     // 2×2 scenario grid: OI direction vs Price direction
-    // Uses 168 hourly data points (7 days) from Binance for both Price and OI.
-    // 3 API calls: klines (1h×168), openInterestHist (1h×168), openInterest
-    // Direction: majority vote across 4h/24h/7d timeframes with ±0.2% noise threshold
-    // FLAT = neither UP nor DOWN (too close to call) → "No Clear Signal"
+    // Uses avg of 3 closes/OI snapshots at each endpoint (smooths candle noise)
+    // 6 API calls: klines (5m×52 + 1h×172), openInterestHist (1h×168), openInterest, premiumIndex, ticker/24hr
+    // Direction: majority vote across 4h/24h/7d timeframes with SCALED thresholds (0.2%/0.5%/1.0%)
+    // Confidence: (agreeVotes/totalVotes) × (avgMagnitude / (avgThreshold + avgMagnitude)) — EXPERIMENTAL
+    // FLAT = within scaled threshold → "No Clear Signal"
+    // Partial-candle guard: latest candle excluded, previous 3 closes averaged
+    // Request dedup: isRefreshing flag + _refreshId generation counter
+    // Smart refresh: klines+OI every 30s, funding+ticker every 60s
     // ============================================
     const oiPricePanel = {
       symbol: null,
       timer: null,
+      _slowTimer: null,      // slow refresh for funding+ticker
+      _refreshId: 0,        // generation counter to discard stale results
+      _isRefreshing: false,  // dedup flag
       stats: {
         priceChange4h: null,   // 4-hour price change %
         priceChange24h: null,  // 24-hour price change %
@@ -6341,10 +6460,22 @@
         oiCurrent: null,
         oiChange4h: null,      // 4-hour OI change %
         oiChange24h: null,     // 24-hour OI change %
-        oiChange7d: null       // 7-day OI change %
+        oiChange7d: null,      // 7-day OI change %
+        fundingRate: null,     // latest funding rate
+        volume24h: null,       // 24h quote volume (USDT)
+        oiVolRatio: null,      // OI/Volume ratio
+        oiDataStale: false,    // true when OI data is missing/stale
+        klinesStale: false     // true when price kline data is missing/stale
       },
 
       async fetchData(symbol) {
+        // Deduplication: skip if already refreshing (next 10s cycle will retry)
+        if (this._isRefreshing) return;
+
+        // Generation counter: discard results if a newer refresh started
+        const myId = ++this._refreshId;
+        this._isRefreshing = true;
+
         // Reset stats
         this.stats.priceChange4h = null;
         this.stats.priceChange24h = null;
@@ -6353,102 +6484,188 @@
         this.stats.oiChange4h = null;
         this.stats.oiChange24h = null;
         this.stats.oiChange7d = null;
+        this.stats.fundingRate = null;
+        this.stats.volume24h = null;
+        this.stats.oiVolRatio = null;
+        this.stats.oiDataStale = false;
+        this.stats.klinesStale = false;
+
+        // Use the existing fetchJsonWithTimeout (8s timeout) for reliability
+        const fetchOI = (url) => fetchJsonWithTimeout(url);
 
         try {
-          const [klinesRes, oiHistRes, oiRes] = await Promise.allSettled([
-            fetchJsonWithTimeout(`https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=1h&limit=168`),
-            fetchJsonWithTimeout(`https://fapi.binance.com/futures/data/openInterestHist?symbol=${encodeURIComponent(symbol)}&period=1h&limit=168`),
-            fetchJsonWithTimeout(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${encodeURIComponent(symbol)}`)
+          const [klines5mRes, klines1hRes, oiHistRes, oiRes, fundingRes, ticker24hRes] = await Promise.allSettled([
+            fetchOI(`https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=5m&limit=52`),
+            fetchOI(`https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=1h&limit=172`),
+            fetchOI(`https://fapi.binance.com/futures/data/openInterestHist?symbol=${encodeURIComponent(symbol)}&period=1h&limit=168`),
+            fetchOI(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${encodeURIComponent(symbol)}`),
+            fetchOI(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${encodeURIComponent(symbol)}`),
+            fetchOI(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${encodeURIComponent(symbol)}`)
           ]);
 
-          // Klines — 168 hourly candles for multi-timeframe price changes
-          if (klinesRes.status === 'fulfilled' && Array.isArray(klinesRes.value) && klinesRes.value.length >= 2) {
-            const candles = klinesRes.value;
-            const latestClose = parseFloat(candles[candles.length - 1][4]); // close price
+          // If a newer refresh started while we were fetching, discard these results
+          if (this._refreshId !== myId) return;
 
-            // 4-hour price change (5th from end = 4 candles ago)
-            if (candles.length >= 8 && Number.isFinite(latestClose)) {
-              const close4hAgo = parseFloat(candles[candles.length - 5][4]);
-              if (Number.isFinite(close4hAgo) && close4hAgo > 0) {
-                this.stats.priceChange4h = ((latestClose - close4hAgo) / close4hAgo) * 100;
-              }
+          // 5m klines — 52 candles for 4-hour price change (48 = 4h, +2 partial guard, +2 extra for 3-candle avg)
+          if (klines5mRes.status === 'fulfilled' && Array.isArray(klines5mRes.value) && klines5mRes.value.length >= 52) {
+            const candles = klines5mRes.value;
+            // Avg of last 3 completed 5m closes (partial-candle guard: skip candle[-1])
+            const c1 = parseFloat(candles[candles.length - 2][4]);
+            const c2 = parseFloat(candles[candles.length - 3][4]);
+            const c3 = parseFloat(candles[candles.length - 4][4]);
+            const latestAvg = (Number.isFinite(c1) && Number.isFinite(c2) && Number.isFinite(c3)) ? (c1 + c2 + c3) / 3 : c1;
+            // 4h ago = 48 candles back from latest complete, avg of 3 closes there
+            const p1 = parseFloat(candles[candles.length - 2 - 48][4]);
+            const p2 = parseFloat(candles[candles.length - 3 - 48][4]);
+            const p3 = parseFloat(candles[candles.length - 4 - 48][4]);
+            const pastAvg = (Number.isFinite(p1) && Number.isFinite(p2) && Number.isFinite(p3)) ? (p1 + p2 + p3) / 3 : p1;
+            if (Number.isFinite(latestAvg) && Number.isFinite(pastAvg) && pastAvg > 0) {
+              this.stats.priceChange4h = ((latestAvg - pastAvg) / pastAvg) * 100;
             }
-
-            // 24-hour price change (25th from end = 24 candles ago)
-            if (candles.length >= 48 && Number.isFinite(latestClose)) {
-              const close24hAgo = parseFloat(candles[candles.length - 25][4]);
-              if (Number.isFinite(close24hAgo) && close24hAgo > 0) {
-                this.stats.priceChange24h = ((latestClose - close24hAgo) / close24hAgo) * 100;
-              }
-            }
-
-            // 7-day price change (first candle vs last)
-            if (Number.isFinite(latestClose)) {
-              const firstClose = parseFloat(candles[0][4]);
-              if (Number.isFinite(firstClose) && firstClose > 0) {
-                this.stats.priceChange7d = ((latestClose - firstClose) / firstClose) * 100;
-              }
-            }
+          } else {
+            this.stats.klinesStale = true;
           }
 
-          // OI history — 168 hourly data points
-          if (oiHistRes.status === 'fulfilled' && Array.isArray(oiHistRes.value) && oiHistRes.value.length >= 2) {
+          // 1h klines — 172 candles for 24h and 7d price changes (168 + 2 partial guard + 2 for 3-candle avg)
+          if (klines1hRes.status === 'fulfilled' && Array.isArray(klines1hRes.value) && klines1hRes.value.length >= 28) {
+            const candles = klines1hRes.value;
+            // Avg of last 3 completed hourly closes (partial-candle guard: skip candle[-1])
+            const lc1 = parseFloat(candles[candles.length - 2][4]);
+            const lc2 = parseFloat(candles[candles.length - 3][4]);
+            const lc3 = parseFloat(candles[candles.length - 4][4]);
+            const latestAvg = (Number.isFinite(lc1) && Number.isFinite(lc2) && Number.isFinite(lc3)) ? (lc1 + lc2 + lc3) / 3 : lc1;
+
+            // 24-hour price change (24 candles back, avg of 3 closes there)
+            if (candles.length >= 29 && Number.isFinite(latestAvg)) {
+              const h1 = parseFloat(candles[candles.length - 2 - 24][4]);
+              const h2 = parseFloat(candles[candles.length - 3 - 24][4]);
+              const h3 = parseFloat(candles[candles.length - 4 - 24][4]);
+              const past24hAvg = (Number.isFinite(h1) && Number.isFinite(h2) && Number.isFinite(h3)) ? (h1 + h2 + h3) / 3 : h1;
+              if (Number.isFinite(past24hAvg) && past24hAvg > 0) {
+                this.stats.priceChange24h = ((latestAvg - past24hAvg) / past24hAvg) * 100;
+              }
+            }
+
+            // 7-day price change (168 candles back, avg of 3 closes there)
+            if (candles.length >= 172 && Number.isFinite(latestAvg)) {
+              const d1 = parseFloat(candles[candles.length - 2 - 168][4]);
+              const d2 = parseFloat(candles[candles.length - 3 - 168][4]);
+              const d3 = parseFloat(candles[candles.length - 4 - 168][4]);
+              const past7dAvg = (Number.isFinite(d1) && Number.isFinite(d2) && Number.isFinite(d3)) ? (d1 + d2 + d3) / 3 : d1;
+              if (Number.isFinite(past7dAvg) && past7dAvg > 0) {
+                this.stats.priceChange7d = ((latestAvg - past7dAvg) / past7dAvg) * 100;
+              }
+            }
+          } else {
+            this.stats.klinesStale = true;
+          }
+
+          // OI history — 168 hourly data points (avg of 3 snapshots at each endpoint)
+          if (oiHistRes.status === 'fulfilled' && Array.isArray(oiHistRes.value) && oiHistRes.value.length >= 7) {
             const data = oiHistRes.value;
-            const latestOi = parseFloat(data[data.length - 1].sumOpenInterest);
+            // Avg of last 3 completed OI snapshots (skip latest to align with partial-candle guard)
+            const oi1 = parseFloat(data[data.length - 2].sumOpenInterest);
+            const oi2 = parseFloat(data[data.length - 3].sumOpenInterest);
+            const oi3 = parseFloat(data[data.length - 4].sumOpenInterest);
+            const latestOiAvg = (Number.isFinite(oi1) && Number.isFinite(oi2) && Number.isFinite(oi3)) ? (oi1 + oi2 + oi3) / 3 : oi1;
 
-            // 4-hour OI change
-            if (data.length >= 8) {
-              const oi4hAgo = parseFloat(data[data.length - 5].sumOpenInterest);
-              if (Number.isFinite(latestOi) && Number.isFinite(oi4hAgo) && oi4hAgo > 0) {
-                this.stats.oiChange4h = ((latestOi - oi4hAgo) / oi4hAgo) * 100;
+            // 4-hour OI change (avg of 3 snapshots 4h ago)
+            if (data.length >= 9 && Number.isFinite(latestOiAvg)) {
+              const o4h1 = parseFloat(data[data.length - 2 - 4].sumOpenInterest);
+              const o4h2 = parseFloat(data[data.length - 3 - 4].sumOpenInterest);
+              const o4h3 = parseFloat(data[data.length - 4 - 4].sumOpenInterest);
+              const oi4hAvg = (Number.isFinite(o4h1) && Number.isFinite(o4h2) && Number.isFinite(o4h3)) ? (o4h1 + o4h2 + o4h3) / 3 : o4h1;
+              if (Number.isFinite(oi4hAvg) && oi4hAvg > 0) {
+                this.stats.oiChange4h = ((latestOiAvg - oi4hAvg) / oi4hAvg) * 100;
               }
             }
 
-            // 24-hour OI change
-            if (data.length >= 48) {
-              const oi24hAgo = parseFloat(data[data.length - 25].sumOpenInterest);
-              if (Number.isFinite(latestOi) && Number.isFinite(oi24hAgo) && oi24hAgo > 0) {
-                this.stats.oiChange24h = ((latestOi - oi24hAgo) / oi24hAgo) * 100;
+            // 24-hour OI change (avg of 3 snapshots 24h ago)
+            if (data.length >= 29 && Number.isFinite(latestOiAvg)) {
+              const o24h1 = parseFloat(data[data.length - 2 - 24].sumOpenInterest);
+              const o24h2 = parseFloat(data[data.length - 3 - 24].sumOpenInterest);
+              const o24h3 = parseFloat(data[data.length - 4 - 24].sumOpenInterest);
+              const oi24hAvg = (Number.isFinite(o24h1) && Number.isFinite(o24h2) && Number.isFinite(o24h3)) ? (o24h1 + o24h2 + o24h3) / 3 : o24h1;
+              if (Number.isFinite(oi24hAvg) && oi24hAvg > 0) {
+                this.stats.oiChange24h = ((latestOiAvg - oi24hAvg) / oi24hAvg) * 100;
               }
             }
 
-            // 7-day OI change
-            const firstOi = parseFloat(data[0].sumOpenInterest);
-            if (Number.isFinite(latestOi) && Number.isFinite(firstOi) && firstOi > 0) {
-              this.stats.oiChange7d = ((latestOi - firstOi) / firstOi) * 100;
+            // 7-day OI change (avg of 3 snapshots 7d ago)
+            if (data.length >= 172 && Number.isFinite(latestOiAvg)) {
+              const o7d1 = parseFloat(data[data.length - 2 - 168].sumOpenInterest);
+              const o7d2 = parseFloat(data[data.length - 3 - 168].sumOpenInterest);
+              const o7d3 = parseFloat(data[data.length - 4 - 168].sumOpenInterest);
+              const oi7dAvg = (Number.isFinite(o7d1) && Number.isFinite(o7d2) && Number.isFinite(o7d3)) ? (o7d1 + o7d2 + o7d3) / 3 : o7d1;
+              if (Number.isFinite(oi7dAvg) && oi7dAvg > 0) {
+                this.stats.oiChange7d = ((latestOiAvg - oi7dAvg) / oi7dAvg) * 100;
+              }
             }
+          } else {
+            this.stats.oiDataStale = true;
           }
 
           // Current OI absolute value
           if (oiRes.status === 'fulfilled' && oiRes.value && oiRes.value.openInterest) {
             this.stats.oiCurrent = parseFloat(oiRes.value.openInterest);
+          } else {
+            this.stats.oiDataStale = true;
           }
+
+          // Funding rate
+          if (fundingRes.status === 'fulfilled' && fundingRes.value && fundingRes.value.lastFundingRate !== undefined) {
+            this.stats.fundingRate = parseFloat(fundingRes.value.lastFundingRate);
+            if (!Number.isFinite(this.stats.fundingRate)) this.stats.fundingRate = null;
+          }
+
+          // 24h volume & OI/Volume ratio
+          if (ticker24hRes.status === 'fulfilled' && ticker24hRes.value) {
+            const vol = parseFloat(ticker24hRes.value.volume);        // 24h volume in contracts
+            const quoteVol = parseFloat(ticker24hRes.value.quoteVolume); // 24h volume in USDT
+            this.stats.volume24h = Number.isFinite(quoteVol) ? quoteVol : null;
+
+            // OI/Vol ratio: both in same unit (contracts)
+            if (Number.isFinite(this.stats.oiCurrent) && Number.isFinite(vol) && vol > 0) {
+              this.stats.oiVolRatio = this.stats.oiCurrent / vol;
+            }
+          }
+
         } catch (e) {
+          // If a newer refresh started, silently discard
+          if (this._refreshId !== myId) return;
           console.warn('OI-Price Panel: fetch error', e);
+        } finally {
+          // Only clear the flag if we're still the current refresh
+          if (this._refreshId === myId) {
+            this._isRefreshing = false;
+          }
         }
       },
 
       computeScenario() {
-        // Noise threshold — changes within ±0.2% are considered FLAT (noise)
-        const THRESHOLD = 0.2;
+        // Scaled noise thresholds per timeframe
+        const THRESHOLDS = { '4h': 0.2, '24h': 0.5, '7d': 1.0 };
 
-        // Price direction — majority vote across 3 timeframes with threshold
-        let priceUpVotes = 0;
-        let priceDownVotes = 0;
-        let priceFlatVotes = 0;
+        // Price direction — majority vote across 3 timeframes with scaled thresholds
+        let priceUpVotes = 0, priceDownVotes = 0, priceFlatVotes = 0;
+        const priceMagnitudes = []; // magnitude of agreeing votes (for confidence)
+
         if (Number.isFinite(this.stats.priceChange4h)) {
-          if (this.stats.priceChange4h > THRESHOLD) priceUpVotes++;
-          else if (this.stats.priceChange4h < -THRESHOLD) priceDownVotes++;
+          const t = THRESHOLDS['4h'];
+          if (this.stats.priceChange4h > t) { priceUpVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange4h)); }
+          else if (this.stats.priceChange4h < -t) { priceDownVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange4h)); }
           else priceFlatVotes++;
         }
         if (Number.isFinite(this.stats.priceChange24h)) {
-          if (this.stats.priceChange24h > THRESHOLD) priceUpVotes++;
-          else if (this.stats.priceChange24h < -THRESHOLD) priceDownVotes++;
+          const t = THRESHOLDS['24h'];
+          if (this.stats.priceChange24h > t) { priceUpVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange24h)); }
+          else if (this.stats.priceChange24h < -t) { priceDownVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange24h)); }
           else priceFlatVotes++;
         }
         if (Number.isFinite(this.stats.priceChange7d)) {
-          if (this.stats.priceChange7d > THRESHOLD) priceUpVotes++;
-          else if (this.stats.priceChange7d < -THRESHOLD) priceDownVotes++;
+          const t = THRESHOLDS['7d'];
+          if (this.stats.priceChange7d > t) { priceUpVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange7d)); }
+          else if (this.stats.priceChange7d < -t) { priceDownVotes++; priceMagnitudes.push(Math.abs(this.stats.priceChange7d)); }
           else priceFlatVotes++;
         }
         const priceTotal = priceUpVotes + priceDownVotes;
@@ -6456,23 +6673,26 @@
         const priceDown = priceTotal > 0 && priceDownVotes > priceUpVotes;
         const priceFlat = priceTotal === 0 || (priceUpVotes === priceDownVotes);
 
-        // OI direction — majority vote across 3 timeframes with threshold
-        let oiUpVotes = 0;
-        let oiDownVotes = 0;
-        let oiFlatVotes = 0;
+        // OI direction — majority vote across 3 timeframes with scaled thresholds
+        let oiUpVotes = 0, oiDownVotes = 0, oiFlatVotes = 0;
+        const oiMagnitudes = [];
+
         if (Number.isFinite(this.stats.oiChange4h)) {
-          if (this.stats.oiChange4h > THRESHOLD) oiUpVotes++;
-          else if (this.stats.oiChange4h < -THRESHOLD) oiDownVotes++;
+          const t = THRESHOLDS['4h'];
+          if (this.stats.oiChange4h > t) { oiUpVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange4h)); }
+          else if (this.stats.oiChange4h < -t) { oiDownVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange4h)); }
           else oiFlatVotes++;
         }
         if (Number.isFinite(this.stats.oiChange24h)) {
-          if (this.stats.oiChange24h > THRESHOLD) oiUpVotes++;
-          else if (this.stats.oiChange24h < -THRESHOLD) oiDownVotes++;
+          const t = THRESHOLDS['24h'];
+          if (this.stats.oiChange24h > t) { oiUpVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange24h)); }
+          else if (this.stats.oiChange24h < -t) { oiDownVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange24h)); }
           else oiFlatVotes++;
         }
         if (Number.isFinite(this.stats.oiChange7d)) {
-          if (this.stats.oiChange7d > THRESHOLD) oiUpVotes++;
-          else if (this.stats.oiChange7d < -THRESHOLD) oiDownVotes++;
+          const t = THRESHOLDS['7d'];
+          if (this.stats.oiChange7d > t) { oiUpVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange7d)); }
+          else if (this.stats.oiChange7d < -t) { oiDownVotes++; oiMagnitudes.push(Math.abs(this.stats.oiChange7d)); }
           else oiFlatVotes++;
         }
         const oiTotal = oiUpVotes + oiDownVotes;
@@ -6481,7 +6701,6 @@
         const oiFlat = oiTotal === 0 || (oiUpVotes === oiDownVotes);
 
         // Scenario classification
-        // 0 = no data, 5 = no clear signal (FLAT)
         let scenarioIdx = 0;
         if (priceFlat && oiFlat && (priceFlatVotes > 0 || oiFlatVotes > 0)) scenarioIdx = 5;
         else if (priceFlat || oiFlat) scenarioIdx = 5;
@@ -6489,6 +6708,31 @@
         else if (priceUp && oiDown) scenarioIdx = 2;
         else if (priceDown && oiUp) scenarioIdx = 3;
         else if (priceDown && oiDown) scenarioIdx = 4;
+
+        // Confidence score: (agreeVotes / totalVotes) * avgMagnitude / (avgThreshold + avgMagnitude)
+        let confidence = 0;
+        if (scenarioIdx >= 1 && scenarioIdx <= 4) {
+          const priceAgree = priceUp ? priceUpVotes : priceDownVotes;
+          const oiAgree = oiUp ? oiUpVotes : oiDownVotes;
+          const priceTotalVotes = priceUpVotes + priceDownVotes + priceFlatVotes;
+          const oiTotalVotes = oiUpVotes + oiDownVotes + oiFlatVotes;
+          const totalVotes = Math.max(1, priceTotalVotes + oiTotalVotes);
+          const agreeVotes = priceAgree + oiAgree;
+
+          // Average magnitude of agreeing timeframes
+          const allMagnitudes = [...priceMagnitudes, ...oiMagnitudes];
+          const avgMag = allMagnitudes.length > 0 ? allMagnitudes.reduce((a, b) => a + b, 0) / allMagnitudes.length : 0;
+
+          // Average threshold of available timeframes
+          const threshValues = [];
+          if (Number.isFinite(this.stats.priceChange4h) || Number.isFinite(this.stats.oiChange4h)) threshValues.push(THRESHOLDS['4h']);
+          if (Number.isFinite(this.stats.priceChange24h) || Number.isFinite(this.stats.oiChange24h)) threshValues.push(THRESHOLDS['24h']);
+          if (Number.isFinite(this.stats.priceChange7d) || Number.isFinite(this.stats.oiChange7d)) threshValues.push(THRESHOLDS['7d']);
+          const avgThresh = threshValues.length > 0 ? threshValues.reduce((a, b) => a + b, 0) / threshValues.length : 1;
+
+          confidence = (agreeVotes / totalVotes) * (avgMag / (avgThresh + avgMag));
+          confidence = Math.min(1, Math.max(0, confidence)); // clamp 0-1
+        }
 
         // Format multi-timeframe strings
         const fmtPct = (v) => Number.isFinite(v) ? ((v > 0 ? '+' : '') + v.toFixed(2) + '%') : '--';
@@ -6506,6 +6750,7 @@
 
         return {
           scenarioIdx,
+          confidence,
           priceLine,
           oiLine,
           priceUp,
@@ -6519,7 +6764,12 @@
           priceChange7d: this.stats.priceChange7d,
           oiChange4h: this.stats.oiChange4h,
           oiChange24h: this.stats.oiChange24h,
-          oiChange7d: this.stats.oiChange7d
+          oiChange7d: this.stats.oiChange7d,
+          fundingRate: this.stats.fundingRate,
+          oiVolRatio: this.stats.oiVolRatio,
+          volume24h: this.stats.volume24h,
+          oiDataStale: this.stats.oiDataStale,
+          klinesStale: this.stats.klinesStale
         };
       },
 
@@ -6539,16 +6789,95 @@
             resultEl.innerHTML = '<span style="color:var(--muted-2)">Awaiting data...</span>';
           } else if (scenario.scenarioIdx === 5) {
             resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:var(--muted-2)">No Clear Signal</b>'
-              + '<br><span style="font-size:0.82rem">Price: ' + scenario.priceLine + '<br>OI: ' + scenario.oiLine + '</span>'
-              + '<br><i style="font-size:0.7rem;color:var(--muted-2);opacity:0.7">Disclaimer: Not financial advice.</i>';
+              + '<br><span style="font-size:0.88rem">Price: ' + scenario.priceLine + '<br>OI: ' + scenario.oiLine + '</span>'
+              + '<br><i style="font-size:0.72rem;color:var(--muted-2);opacity:0.7">Disclaimer: Not financial advice.</i>';
           } else {
             const names = { 1: 'Strong Uptrend', 2: 'Short Covering', 3: 'Strong Downtrend', 4: 'Exhaustion' };
             const colors = { 1: '#4caf50', 2: 'var(--warn)', 3: '#ff5252', 4: '#64b5f6' };
             const name = names[scenario.scenarioIdx] || '--';
             const color = colors[scenario.scenarioIdx] || 'var(--text)';
+
+            // Dominant price and OI magnitude for prominent display
+            const fmtPct = (v) => Number.isFinite(v) ? ((v > 0 ? '+' : '') + v.toFixed(2) + '%') : '';
+            const priceMags = [scenario.priceChange4h, scenario.priceChange24h, scenario.priceChange7d].filter(v => Number.isFinite(v));
+            const oiMags = [scenario.oiChange4h, scenario.oiChange24h, scenario.oiChange7d].filter(v => Number.isFinite(v));
+            const priceAvg = priceMags.length > 0 ? priceMags.reduce((a, b) => a + Math.abs(b), 0) / priceMags.length : 0;
+            const oiAvg = oiMags.length > 0 ? oiMags.reduce((a, b) => a + Math.abs(b), 0) / oiMags.length : 0;
+            const priceSign = scenario.priceUp ? '+' : '-';
+            const oiSign = scenario.oiUp ? '+' : '-';
+
             resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:' + color + '">' + name + '</b>'
-              + '<br><span style="font-size:0.82rem">Price: ' + scenario.priceLine + '<br>OI: ' + scenario.oiLine + '</span>'
-              + '<br><i style="font-size:0.7rem;color:var(--muted-2);opacity:0.7">Disclaimer: Not financial advice.</i>';
+              + ' <span style="font-size:0.88rem;color:var(--muted)">(Price ' + priceSign + priceAvg.toFixed(1) + '% avg, OI ' + oiSign + oiAvg.toFixed(1) + '% avg)</span>'
+              + '<br><span style="font-size:0.88rem">Price: ' + scenario.priceLine + '<br>OI: ' + scenario.oiLine + '</span>'
+              + '<br><i style="font-size:0.72rem;color:var(--muted-2);opacity:0.7">Disclaimer: Not financial advice.</i>';
+          }
+        }
+
+        // Confidence bar
+        const confEl = document.getElementById('oiPriceConfidence');
+        const confFillEl = document.getElementById('oiPriceConfFill');
+        const confLabelEl = document.getElementById('oiPriceConfLabel');
+        if (confEl && confFillEl && confLabelEl) {
+          if (scenario.scenarioIdx >= 1 && scenario.scenarioIdx <= 4) {
+            const pct = Math.round(scenario.confidence * 100);
+            let label = 'Weak';
+            let barColor = '#ff5252';
+            if (pct >= 70) { label = 'Strong'; barColor = '#4caf50'; }
+            else if (pct >= 40) { label = 'Moderate'; barColor = '#ffcc80'; }
+            confFillEl.style.width = pct + '%';
+            confFillEl.style.background = barColor;
+            confLabelEl.textContent = label + ' (' + pct + '%)';
+            confLabelEl.style.color = barColor;
+            confEl.style.display = 'flex';
+          } else {
+            confEl.style.display = 'none';
+          }
+        }
+
+        // Context row (funding rate + OI/Vol ratio)
+        const ctxEl = document.getElementById('oiPriceContext');
+        if (ctxEl) {
+          const items = [];
+          // Funding rate
+          if (Number.isFinite(scenario.fundingRate)) {
+            const ratePct = (scenario.fundingRate * 100).toFixed(4);
+            let rateColor = 'var(--muted)';
+            let rateNote = '';
+            if (scenario.fundingRate > 0.001) { rateColor = '#4caf50'; rateNote = ' (Longs pay — long crowded)'; }
+            else if (scenario.fundingRate > 0.0003) { rateColor = '#ffcc80'; rateNote = ' (Slight long bias)'; }
+            else if (scenario.fundingRate < -0.001) { rateColor = '#ff5252'; rateNote = ' (Shorts pay — short crowded)'; }
+            else if (scenario.fundingRate < -0.0003) { rateColor = '#64b5f6'; rateNote = ' (Slight short bias)'; }
+            items.push('<span class="bias-context-item"><span class="label">Funding:</span> <span class="value" style="color:' + rateColor + '">' + ratePct + '%' + rateNote + '</span></span>');
+          }
+          // OI/Volume ratio
+          if (Number.isFinite(scenario.oiVolRatio)) {
+            const ratio = scenario.oiVolRatio.toFixed(3);
+            let ratioColor = 'var(--muted)';
+            let ratioNote = '';
+            if (scenario.oiVolRatio > 0.5) { ratioColor = '#ffcc80'; ratioNote = ' (High leverage)'; }
+            else if (scenario.oiVolRatio < 0.1) { ratioColor = '#64b5f6'; ratioNote = ' (Spot-driven)'; }
+            else { ratioNote = ' (Balanced)'; }
+            items.push('<span class="bias-context-item"><span class="label">OI/Vol:</span> <span class="value" style="color:' + ratioColor + '">' + ratio + ratioNote + '</span></span>');
+          }
+          if (items.length > 0) {
+            ctxEl.innerHTML = items.join('');
+            ctxEl.style.display = 'flex';
+          } else {
+            ctxEl.style.display = 'none';
+          }
+        }
+
+        // Data warning badge
+        const warnEl = document.getElementById('oiPriceWarning');
+        if (warnEl) {
+          const warnings = [];
+          if (scenario.oiDataStale) warnings.push('OI data missing or stale — scenario may be unreliable');
+          if (scenario.klinesStale) warnings.push('Price kline data incomplete — 4h window may be unavailable');
+          if (warnings.length > 0) {
+            warnEl.innerHTML = '&#x26A0; ' + warnings.join(' | ');
+            warnEl.style.display = 'flex';
+          } else {
+            warnEl.style.display = 'none';
           }
         }
       },
@@ -6569,24 +6898,64 @@
         this.stopAutoRefresh();
         this.symbol = symbol;
         this.refresh(symbol);
+        // Fast timer: klines + OI history + current OI (data changes on candle boundaries)
         this.timer = setInterval(() => {
           if (this.symbol && state.isRunning) {
             this.refresh(this.symbol);
           }
-        }, 10000);
+        }, 30000);
+        // Slow timer: funding rate + 24h ticker (changes slowly, every 60s is sufficient)
+        this._slowTimer = setInterval(() => {
+          if (this.symbol && state.isRunning) {
+            this._refreshSlowData(this.symbol);
+          }
+        }, 60000);
       },
 
       stopAutoRefresh() {
         if (this.timer) { clearInterval(this.timer); this.timer = null; }
+        if (this._slowTimer) { clearInterval(this._slowTimer); this._slowTimer = null; }
+        this._isRefreshing = false;
+      },
+
+      // Refresh only slow-changing data (funding rate + 24h ticker)
+      async _refreshSlowData(symbol) {
+        const fetchOI = (url) => fetchJsonWithTimeout(url);
+        try {
+          const [fundingRes, ticker24hRes] = await Promise.allSettled([
+            fetchOI(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${encodeURIComponent(symbol)}`),
+            fetchOI(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${encodeURIComponent(symbol)}`)
+          ]);
+
+          // Funding rate
+          if (fundingRes.status === 'fulfilled' && fundingRes.value && fundingRes.value.lastFundingRate !== undefined) {
+            this.stats.fundingRate = parseFloat(fundingRes.value.lastFundingRate);
+            if (!Number.isFinite(this.stats.fundingRate)) this.stats.fundingRate = null;
+          }
+
+          // 24h volume & OI/Volume ratio
+          if (ticker24hRes.status === 'fulfilled' && ticker24hRes.value) {
+            const vol = parseFloat(ticker24hRes.value.volume);
+            const quoteVol = parseFloat(ticker24hRes.value.quoteVolume);
+            this.stats.volume24h = Number.isFinite(quoteVol) ? quoteVol : null;
+            if (Number.isFinite(this.stats.oiCurrent) && Number.isFinite(vol) && vol > 0) {
+              this.stats.oiVolRatio = this.stats.oiCurrent / vol;
+            }
+          }
+
+          // Re-render with updated context data
+          const scenario = this.computeScenario();
+          this.render(scenario);
+        } catch (e) {
+          console.warn('OI-Price Panel: slow data refresh error', e);
+        }
       },
 
       init() {
         // Tooltip: move popup to body so position:fixed works correctly
-        // (parent containers with position:relative or transforms break fixed positioning)
         const infoBtn = document.querySelector('.bias-info-btn');
         const tooltipPopup = document.querySelector('.bias-tooltip-popup');
         if (infoBtn && tooltipPopup) {
-          // Move popup to body to avoid any parent positioning issues
           document.body.appendChild(tooltipPopup);
 
           infoBtn.addEventListener('click', (e) => {
@@ -6594,14 +6963,14 @@
             const isActive = tooltipPopup.classList.toggle('active');
             if (isActive) {
               const btnRect = infoBtn.getBoundingClientRect();
-              const popupWidth = Math.min(400, window.innerWidth - 20);
+              const popupWidth = Math.min(440, window.innerWidth - 20);
               tooltipPopup.style.width = popupWidth + 'px';
               let top = btnRect.bottom + 8;
               let left = btnRect.left;
               if (left + popupWidth > window.innerWidth - 10) {
                 left = window.innerWidth - popupWidth - 10;
               }
-              const maxH = Math.min(window.innerHeight * 0.85, 600);
+              const maxH = Math.min(window.innerHeight * 0.85, 640);
               if (top + maxH > window.innerHeight) {
                 top = Math.max(10, btnRect.top - maxH - 8);
               }
@@ -6616,6 +6985,8 @@
             tooltipPopup.classList.remove('active');
           });
         }
+
+
       }
     };
 
@@ -7215,31 +7586,6 @@
           const sym = symEl.getAttribute('data-sym');
           if (sym) loadSymbol(sym);
         }
-      });
-
-      // Set up refresh buttons
-      document.querySelectorAll('.ranking-card-refresh').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const type = btn.getAttribute('data-refresh');
-          btn.style.opacity = '0.5';
-          btn.style.pointerEvents = 'none';
-
-          if (type === 'oi') {
-            await renderOIRanking();
-          } else if (type === 'funding') {
-            await fetchFundingRates();
-            renderFundingPositiveRanking();
-            renderFundingNegativeRanking();
-          } else {
-            await fetchRankingsData();
-            if (type === 'volume') renderVolumeRanking();
-            else if (type === 'gainers') renderGainersRanking();
-            else if (type === 'losers') renderLosersRanking();
-          }
-
-          btn.style.opacity = '1';
-          btn.style.pointerEvents = 'auto';
-        });
       });
 
       // Connect WebSocket for real-time ranking updates
@@ -8121,7 +8467,7 @@
           <p>Open Interest (OI) represents the total number of outstanding derivative contracts — such as futures or options — that have not been settled on an exchange like Binance. Unlike trading volume, which resets every period, OI accumulates and tells you how much capital is actively locked into a market at any given moment. For crypto futures traders, understanding open interest is essential for reading market sentiment and predicting potential price moves.</p>
           <h3>Why Open Interest Matters More Than Volume</h3>
           <p>Volume tells you how much was traded in the last 24 hours. OI tells you how many positions are still open and at risk. A price rally with rising OI means new money is entering long positions — a strong bullish signal indicating genuine demand. A rally with falling OI suggests short covering, not genuine buying interest, and the move may reverse quickly once the short-squeeze exhausts itself. This distinction is critical for Binance Futures traders who want to avoid getting caught on the wrong side of a fakeout.</p>
-          <h3>The Four Open Interest Scenarios Every Trader Must Know</h3>
+          <h3>The Four Open Interest Scenarios Matrix By MultiPerps Every Trader Must Know</h3>
           <ul>
             <li><strong>Rising Price + Rising OI:</strong> Strong trend confirmation. New longs are opening positions and pushing price higher. This is the ideal scenario for trend-following traders — ride the momentum.</li>
             <li><strong>Rising Price + Falling OI:</strong> Weak trend warning. Shorts are covering their positions, which is temporarily lifting price. Without new buying pressure, this rally is likely unsustainable. Be cautious and consider tightening stops.</li>
@@ -8706,7 +9052,7 @@
       <h2>Key Features</h2>
       <ul>
         <li><strong>Multi-Timeframe Charts:</strong> View 1m, 5m, 15m, 30m, 1h, 4h, daily, weekly, and monthly candlestick charts simultaneously, all updating in real time.</li>
-        <li><strong>OI-Price Matrix:</strong> Real-time 2\u00d72 scenario grid showing the relationship between price direction and open interest direction. Uses 168 hourly data points (7 days) for both Price and OI to compute multi-timeframe trends (4h, 24h, 7d). Direction determined by majority vote across timeframes. Identify Strong Uptrend, Short Covering, Strong Downtrend, or Exhaustion scenarios \u2014 all powered by real Binance data with 10-second auto-refresh.</li>
+        <li><strong>OI-Price Matrix:</strong> Real-time 2\u00d72 scenario grid showing the relationship between price direction and open interest direction. Uses 168 hourly data points (7 days) for both Price and OI to compute multi-timeframe trends (4h, 24h, 7d). Direction determined by majority vote across timeframes. Identify Strong Uptrend, Short Covering, Strong Downtrend, or Exhaustion scenarios \u2014 all powered by real Binance data with smart auto-refresh (30s/60s).</li>
         <li><strong>Price Alerts:</strong> Set up price alerts with audio notifications and visual popups. Alerts persist across browser sessions using local storage.</li>
         <li><strong>Market Rankings:</strong> Track top volume, top gainers, top losers, open interest leaders, and funding rate extremes across all Binance USDT-M perpetual contracts.</li>
         <li><strong>Multi-Ticker Dashboard:</strong> Monitor up to four tickers side by side on the same screen for instant comparison.</li>
@@ -8865,7 +9211,7 @@
           <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
           <h1>Open Interest Explained: What It Tells You About Market Sentiment</h1>
           <p>Open interest (OI) is one of the most important yet underutilized metrics in crypto futures trading. It represents the total number of outstanding derivative contracts that have not been settled. Unlike volume, which measures trading activity over a period, open interest tells you how much capital is currently committed to a market. This distinction is crucial for understanding market dynamics and predicting potential price moves.</p>
-          <h2>The Four Open Interest Scenarios</h2>
+          <h2>The Four Open Interest Scenarios Matrix By MultiPerps</h2>
           <ul>
             <li><strong>Rising price + Rising OI:</strong> Strong trend confirmation. New money is entering long positions, pushing prices higher. This is the healthiest uptrend scenario — ride the momentum.</li>
             <li><strong>Rising price + Falling OI:</strong> Weak rally warning. Short covering is driving the price increase, not new buying pressure. Once shorts have covered, the rally may stall.</li>
