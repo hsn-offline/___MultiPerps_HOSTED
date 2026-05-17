@@ -1159,6 +1159,8 @@
 
       .ticker-card {
         border-radius: 12px;
+        overflow: visible;
+        min-height: auto;
       }
 
       .chart-list {
@@ -2838,7 +2840,8 @@
     .chart-list,
     #multiAlertPanel,
     #multiTickerSection,
-    #rankingsSection {
+    #rankingsSection,
+    #oiPricePanel {
       scroll-margin-top: 52px;
     }
 
@@ -2855,7 +2858,8 @@
       .chart-list,
       #multiAlertPanel,
       #multiTickerSection,
-      #rankingsSection {
+      #rankingsSection,
+      #oiPricePanel {
         scroll-margin-top: 82px;
       }
     }
@@ -3767,6 +3771,9 @@
       .bias-ticker-price-row .header-price {
         font-size: 0.95rem;
       }
+      .bias-panel {
+        overflow: visible;
+      }
       .bias-sc-matrix {
         max-width: 100%;
       }
@@ -3787,8 +3794,12 @@
       .bias-title {
         font-size: 1.05rem;
       }
+      .bias-panel {
+        overflow: visible;
+      }
       .bias-ticker-price-row {
         gap: 3px;
+        white-space: normal;
       }
       .bias-ticker-price-row .ticker-title {
         font-size: 0.9rem;
