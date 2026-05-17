@@ -3520,7 +3520,7 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 14px 16px;
-      z-index: 200;
+      z-index: 5000;
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
       font-size: 0.88rem;
       line-height: 1.55;
@@ -3759,6 +3759,8 @@
         max-height: min(75vh, 480px);
         font-size: 0.82rem;
         padding: 12px 14px;
+        /* Ensure popup top accounts for mobile browser address bar */
+        top: max(60px, env(safe-area-inset-top, 0px) + 10px) !important;
       }
     }
     @media (max-width: 480px) {
@@ -3786,6 +3788,8 @@
         max-height: min(70vh, 440px);
         font-size: 0.78rem;
         padding: 10px 12px;
+        /* Ensure popup top accounts for mobile browser address bar */
+        top: max(60px, env(safe-area-inset-top, 0px) + 10px) !important;
       }
       .bias-sc-cell-name {
         font-size: 1.05rem;
@@ -7417,28 +7421,42 @@
             const isActive = tooltipPopup.classList.toggle('active');
             if (isActive) {
               const btnRect = infoBtn.getBoundingClientRect();
-              // Use visualViewport on mobile to account for address bar / virtual keyboard
+              const isMobile = window.innerWidth <= 768;
               const vv = window.visualViewport;
               const viewportHeight = vv ? vv.height : window.innerHeight;
               const viewportWidth = vv ? vv.width : window.innerWidth;
               const viewportOffsetTop = vv ? vv.offsetTop : 0;
               const viewportOffsetLeft = vv ? vv.offsetLeft : 0;
-              const popupWidth = Math.min(440, viewportWidth - 20);
+              const popupWidth = isMobile
+                ? Math.min(viewportWidth - 16, 380)
+                : Math.min(440, viewportWidth - 20);
               tooltipPopup.style.width = popupWidth + 'px';
-              let top = btnRect.bottom + 8;
-              let left = viewportOffsetLeft + 10;
-              // Center horizontally on mobile for better readability
-              left = viewportOffsetLeft + (viewportWidth - popupWidth) / 2;
-              left = Math.max(viewportOffsetLeft + 5, Math.min(left, viewportOffsetLeft + viewportWidth - popupWidth - 5));
-              const maxH = Math.min(viewportHeight * 0.85, 640);
-              if (top + maxH > viewportOffsetTop + viewportHeight) {
-                top = btnRect.top - maxH - 8;
+
+              // Reset scroll to top so first lines are visible
+              tooltipPopup.scrollTop = 0;
+
+              if (isMobile) {
+                // On mobile, position popup near top of visible area with safe padding
+                // to avoid browser address bar overlay
+                const safeTop = Math.max(viewportOffsetTop + 60, 60);
+                const maxH = Math.min(viewportHeight - safeTop - 20, viewportHeight * 0.75, 520);
+                tooltipPopup.style.top = safeTop + 'px';
+                tooltipPopup.style.left = (viewportOffsetLeft + (viewportWidth - popupWidth) / 2) + 'px';
+                tooltipPopup.style.maxHeight = maxH + 'px';
+              } else {
+                let top = btnRect.bottom + 8;
+                let left = btnRect.left;
+                if (left + popupWidth > window.innerWidth - 10) {
+                  left = window.innerWidth - popupWidth - 10;
+                }
+                const maxH = Math.min(window.innerHeight * 0.85, 640);
+                if (top + maxH > window.innerHeight) {
+                  top = Math.max(10, btnRect.top - maxH - 8);
+                }
+                tooltipPopup.style.top = top + 'px';
+                tooltipPopup.style.left = left + 'px';
+                tooltipPopup.style.maxHeight = maxH + 'px';
               }
-              // Ensure popup top is within visible viewport
-              top = Math.max(viewportOffsetTop + 5, top);
-              tooltipPopup.style.top = top + 'px';
-              tooltipPopup.style.left = left + 'px';
-              tooltipPopup.style.maxHeight = maxH + 'px';
             }
           });
           tooltipPopup.addEventListener('click', (e) => {
