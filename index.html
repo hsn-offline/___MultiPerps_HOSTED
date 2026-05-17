@@ -285,6 +285,22 @@
       .ticker-card { min-height: 100dvh; }
     }
 
+    /* Fix: When mobile keyboard is open, remove forced min-height and overflow hidden
+       so the search input can scroll into view above the keyboard */
+    body.mobile-keyboard-open .ticker-card {
+      min-height: auto !important;
+      overflow: visible !important;
+    }
+
+    body.mobile-keyboard-open .ticker-grid {
+      min-height: auto !important;
+    }
+
+    /* When keyboard is open, limit suggest menu height to visible area */
+    body.mobile-keyboard-open .ticker-suggest-list {
+      max-height: 200px;
+    }
+
     .card-header {
       display: flex;
       justify-content: space-between;
@@ -1197,7 +1213,15 @@
       .status-header-info {
         justify-content: center;
         flex-wrap: nowrap;
-        gap: 4px;
+        gap: 6px;
+      }
+      .status-header-info .ticker-title {
+        width: auto;
+        text-align: center;
+      }
+      .bias-ticker-price-row .ticker-title {
+        width: auto;
+        text-align: center;
       }
 
       .rankings-grid {
@@ -1278,6 +1302,24 @@
         white-space: normal;
         width: 100%;
         text-align: center;
+      }
+
+      /* Keep ticker + price + copy centered together as a group in status row */
+      .status-header-info .ticker-title {
+        width: auto;
+        text-align: center;
+      }
+
+      /* Keep ticker + price centered together in OI-Price panel header */
+      .bias-ticker-price-row .ticker-title {
+        width: auto;
+        text-align: center;
+      }
+
+      .status-header-info {
+        justify-content: center;
+        flex-wrap: nowrap;
+        gap: 6px;
       }
 
       .header-price {
@@ -3382,7 +3424,7 @@
       justify-content: center;
       flex: 1;
       flex-wrap: wrap;
-      row-gap: 6px;
+      row-gap: 12px;
     }
     .bias-title {
       font-size: 1.35rem;
@@ -3694,6 +3736,7 @@
       .bias-header-left {
         flex-wrap: wrap;
         gap: 6px;
+        row-gap: 10px;
         justify-content: center;
       }
       .bias-title {
@@ -3720,6 +3763,7 @@
     @media (max-width: 480px) {
       .bias-header-left {
         gap: 4px;
+        row-gap: 10px;
       }
       .bias-title {
         font-size: 1.05rem;
@@ -5229,14 +5273,16 @@
 
       const mrect = menu.getBoundingClientRect();
       const maxLeft = window.innerWidth - mrect.width - pad;
-      const maxTop = window.innerHeight - mrect.height - pad;
+      // Use visualViewport height when available (accounts for mobile keyboard)
+      const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const maxTop = viewportHeight - mrect.height - pad;
 
       let left = rect.left + rect.width / 2 - mrect.width / 2;
       left = Math.max(pad, Math.min(left, maxLeft));
 
       const gap = 8;
       let topPx = rect.bottom + gap;
-      if (topPx + mrect.height > window.innerHeight - pad) {
+      if (topPx + mrect.height > viewportHeight - pad) {
         topPx = rect.top - gap - mrect.height;
       }
       topPx = Math.max(pad, Math.min(topPx, maxTop));
@@ -8758,10 +8804,33 @@
           state.tickerSuggest.activeInput = state.elements.tickerInput;
           state.tickerSuggest.onSelectCallback = null;
           renderTickerSuggestMenu();
-          // Scroll input into view on mobile to prevent virtual keyboard hiding it
-          setTimeout(() => {
-            state.elements.tickerInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 300);
+          // Mobile keyboard fix: detect keyboard open and scroll input into view
+          if (window.visualViewport) {
+            document.body.classList.add('mobile-keyboard-open');
+            const scrollInputAboveKeyboard = () => {
+              const input = state.elements.tickerInput;
+              if (!input) return;
+              const rect = input.getBoundingClientRect();
+              const vv = window.visualViewport;
+              // If input bottom is below the visible visual viewport area, scroll it up
+              const inputBottom = rect.bottom;
+              const visibleBottom = vv.height + vv.offsetTop;
+              if (inputBottom > visibleBottom || rect.top < vv.offsetTop) {
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            };
+            // Scroll after keyboard animation completes
+            setTimeout(scrollInputAboveKeyboard, 150);
+            setTimeout(scrollInputAboveKeyboard, 400);
+            // Also handle viewport resize (keyboard opening/closing)
+            vv.addEventListener('resize', scrollInputAboveKeyboard);
+            vv.addEventListener('scroll', scrollInputAboveKeyboard);
+          } else {
+            // Fallback for browsers without visualViewport
+            setTimeout(() => {
+              state.elements.tickerInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+          }
         });
       state.elements.tickerInput.addEventListener('input', () => {
         saveStored(STORAGE.tickerInput, state.elements.tickerInput.value);
@@ -8772,6 +8841,8 @@
         }, 300);
       });
         state.elements.tickerInput.addEventListener('blur', async () => {
+          // Remove mobile keyboard fix class
+          document.body.classList.remove('mobile-keyboard-open');
           if (Date.now() < state.tickerSuggest.ignoreBlurUntil) return;
           // Delay to allow menu clicks to process first
           setTimeout(() => {
@@ -8976,6 +9047,58 @@
       };
       setVH();
       window.addEventListener('resize', setVH);
+
+      // ===== Mobile Virtual Keyboard Fix =====
+      // Detect keyboard open/close via visualViewport and adjust layout
+      // so text inputs remain visible when the keyboard is shown.
+      if (window.visualViewport) {
+        let vvScrollHandler = null;
+        let vvResizeHandler = null;
+
+        const onInputFocus = (e) => {
+          if (e.target.matches('input[type="text"], input:not([type])')) {
+            document.body.classList.add('mobile-keyboard-open');
+            const focusedInput = e.target;
+            const scrollFocusedIntoView = () => {
+              if (!focusedInput.isConnected) return;
+              const rect = focusedInput.getBoundingClientRect();
+              const vv = window.visualViewport;
+              const visibleBottom = vv.height + vv.offsetTop;
+              // If the input is outside the visible area above the keyboard, scroll to it
+              if (rect.bottom > visibleBottom || rect.top < vv.offsetTop) {
+                focusedInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            };
+            // Multiple attempts to catch keyboard animation timing
+            setTimeout(scrollFocusedIntoView, 100);
+            setTimeout(scrollFocusedIntoView, 300);
+            setTimeout(scrollFocusedIntoView, 500);
+            // Also respond to visualViewport changes (keyboard opening)
+            vvResizeHandler = scrollFocusedIntoView;
+            vvScrollHandler = scrollFocusedIntoView;
+            window.visualViewport.addEventListener('resize', vvResizeHandler);
+            window.visualViewport.addEventListener('scroll', vvScrollHandler);
+          }
+        };
+
+        const onInputBlur = (e) => {
+          if (e.target.matches('input[type="text"], input:not([type])')) {
+            document.body.classList.remove('mobile-keyboard-open');
+            // Clean up visualViewport listeners
+            if (vvResizeHandler) {
+              window.visualViewport.removeEventListener('resize', vvResizeHandler);
+              vvResizeHandler = null;
+            }
+            if (vvScrollHandler) {
+              window.visualViewport.removeEventListener('scroll', vvScrollHandler);
+              vvScrollHandler = null;
+            }
+          }
+        };
+
+        document.addEventListener('focusin', onInputFocus);
+        document.addEventListener('focusout', onInputBlur);
+      }
 
       // Initialize rankings
       initRankings();
