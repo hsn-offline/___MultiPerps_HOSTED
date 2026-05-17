@@ -182,9 +182,9 @@
 
  <!-- Favicon -->
   <link rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.85em' font-size='85' fill='%2326e0d2' font-family='Arial, sans-serif'%3EM%3C/text%3E%3C/svg%3E"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.85em' font-size='85' fill='%2322AB94' font-family='Arial, sans-serif'%3EM%3C/text%3E%3C/svg%3E"
     type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23070814'/%3E%3Ctext y='0.85em' font-size='75' fill='%2326e0d2' font-family='Arial, sans-serif' x='12'%3EM%3C/text%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23010409'/%3E%3Ctext y='0.85em' font-size='75' fill='%2322AB94' font-family='Arial, sans-serif' x='12'%3EM%3C/text%3E%3C/svg%3E" />
   <style>
     * {
       margin: 0;
@@ -194,40 +194,54 @@
 
     :root {
       color-scheme: dark;
-      --bg-0: #070814;
-      --bg-1: #0e1024;
-      --card: rgba(255, 255, 255, 0.055);
-      --card-hover: rgba(255, 255, 255, 0.08);
-      --border: rgba(255, 255, 255, 0.10);
-      --border-2: rgba(255, 255, 255, 0.07);
-      --border-3: rgba(255, 255, 255, 0.05);
-      --text: rgba(255, 255, 255, 0.93);
-      --muted: rgba(255, 255, 255, 0.70);
-      --muted-2: rgba(255, 255, 255, 0.55);
-      --muted-3: rgba(255, 255, 255, 0.38);
-      --accent: #26e0d2;
-      --accent-2: #4aa3ff;
-      --warn: #ffcc80;
-      --good: #4caf50;
-      --good-bright: #5eff8a;
-      --bad: #ff5252;
-      --bad-bright: #ff4757;
-      --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-      --ring: 0 0 0 3px rgba(38, 224, 210, 0.18);
-      --section-bg: rgba(255, 255, 255, 0.03);
-      --section-border: rgba(255, 255, 255, 0.07);
-      --subtle-bg: rgba(255, 255, 255, 0.04);
-      --subtle-hover: rgba(255, 255, 255, 0.07);
-      --input-bg: rgba(0, 0, 0, 0.20);
-      --input-border: rgba(255, 255, 255, 0.12);
-      --input-focus: rgba(38, 224, 210, 0.6);
+
+      /* ── Background Layers (Coinglass-inspired) ─────────────── */
+      --bg-0: #010409;
+      --bg-1: #0D1117;
+
+      /* ── Card / Panel Surfaces ─────────────────────────────── */
+      --card: #161B22;
+      --card-hover: #1C2128;
+
+      /* ── Borders ───────────────────────────────────────────── */
+      --border: #30363D;
+      --border-2: #21262D;
+      --border-3: #1B1F24;
+
+      /* ── Text Hierarchy ────────────────────────────────────── */
+      --text: #E6EDF3;
+      --muted: #CDD7E1;
+      --muted-2: #9FA6AD;
+      --muted-3: #636B74;
+
+      /* ── Accent / Signal Colors ────────────────────────────── */
+      --accent: #22AB94;
+      --accent-2: #6188FF;
+      --warn: #F3C896;
+      --good: #0ECB81;
+      --good-bright: #22AB94;
+      --bad: #E5484C;
+      --bad-bright: #F23645;
+
+      /* ── Shadows & Focus ───────────────────────────────────── */
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+      --ring: 0 0 0 2px rgba(34, 171, 148, 0.35);
+
+      /* ── Section / Structural ──────────────────────────────── */
+      --section-bg: #0D1117;
+      --section-border: #21262D;
+      --subtle-bg: #0D1117;
+      --subtle-hover: #161B22;
+
+      /* ── Input Fields ──────────────────────────────────────── */
+      --input-bg: #0B0E11;
+      --input-border: #30363D;
+      --input-focus: rgba(34, 171, 148, 0.5);
     }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: radial-gradient(1200px 600px at 10% 0%, rgba(38, 224, 210, 0.08), rgba(0, 0, 0, 0) 55%),
-        radial-gradient(900px 500px at 90% 25%, rgba(74, 163, 255, 0.09), rgba(0, 0, 0, 0) 60%),
-        linear-gradient(135deg, var(--bg-0), var(--bg-1));
+      background: linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 100%);
       color: var(--text);
       min-height: 100vh;
       min-height: 100dvh;
@@ -305,13 +319,13 @@
 
     .header-price.price-up {
       color: var(--good);
-      text-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+      text-shadow: 0 0 10px rgba(14, 203, 129, 0.4);
       animation: flashPriceUp 0.6s ease-out;
     }
 
     .header-price.price-down {
       color: var(--bad);
-      text-shadow: 0 0 10px rgba(255, 82, 82, 0.4);
+      text-shadow: 0 0 10px rgba(229, 72, 76, 0.4);
       animation: flashPriceDown 0.6s ease-out;
     }
 
@@ -372,12 +386,12 @@
     .chart-context-menu {
       position: fixed;
       z-index: 2000;
-      background: rgba(0, 0, 0, 0.88);
-      border: 1px solid var(--border);
+      background: #010409;
+      border: 1px solid #30363D;
       border-radius: 10px;
       padding: 8px;
       min-width: 160px;
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
       display: none;
     }
 
@@ -401,11 +415,11 @@
     .ticker-suggest-menu {
       position: fixed;
       z-index: 2500;
-      background: rgba(10, 12, 24, 0.92);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: #010409;
+      border: 1px solid #30363D;
       border-radius: 12px;
       padding: 6px;
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
       display: none;
       overflow: hidden;
     }
@@ -526,8 +540,8 @@
     }
 
     .ticker-suggest-star.fav {
-      border-color: rgba(255, 204, 128, 0.45);
-      color: rgba(255, 204, 128, 0.95);
+      border-color: rgba(243, 200, 150, 0.45);
+      color: rgba(243, 200, 150, 0.95);
     }
 
     .ticker-suggest-right {
@@ -540,7 +554,7 @@
     }
 
     .ticker-suggest-right.up {
-      color: #4caf50;
+      color: #0ECB81;
     }
 
     .ticker-suggest-right.down {
@@ -685,7 +699,7 @@
 
     .chart-container {
       height: 166px;
-      background: rgba(0, 0, 0, 0.25);
+      background: #0B0E11;
       position: relative;
       overflow: hidden;
     }
@@ -839,11 +853,11 @@
     }
 
     .ranking-card-title .dot.funding-pos {
-      background: #00e676;
+      background: #0ECB81;
     }
 
     .ranking-card-title .dot.funding-neg {
-      background: #ff1744;
+      background: #F23645;
     }
 
     .ranking-table {
@@ -974,9 +988,9 @@
       transform: scale(1.15);
     }
     .ranking-fav-star.fav {
-      border-color: rgba(255,204,128,0.4);
-      background: rgba(255,204,128,0.1);
-      color: rgba(255,204,128,0.9);
+      border-color: rgba(243,200,150,0.4);
+      background: rgba(243,200,150,0.1);
+      color: rgba(243,200,150,0.9);
     }
 
     /* Trade link in ranking table */
@@ -989,7 +1003,7 @@
       border-radius: 5px;
       border: 1px solid rgba(37,99,235,0.3);
       background: rgba(37,99,235,0.1);
-      color: #6da3ff;
+      color: #6188FF;
       cursor: pointer;
       font-size: 0.9rem;
       font-weight: 700;
@@ -1000,17 +1014,17 @@
     .ranking-trade-link:hover {
       border-color: rgba(37,99,235,0.6);
       background: rgba(37,99,235,0.2);
-      color: #93bfff;
+      color: #8AA8FF;
       transform: scale(1.15);
     }
 
     @keyframes flashPriceUp {
-      0% { color: var(--good); text-shadow: 0 0 15px rgba(76, 175, 80, 0.6); }
+      0% { color: var(--good); text-shadow: 0 0 15px rgba(14, 203, 129, 0.6); }
       100% { color: var(--text); text-shadow: none; }
     }
 
     @keyframes flashPriceDown {
-      0% { color: var(--bad); text-shadow: 0 0 15px rgba(255, 82, 82, 0.6); }
+      0% { color: var(--bad); text-shadow: 0 0 15px rgba(229, 72, 76, 0.6); }
       100% { color: var(--text); text-shadow: none; }
     }
 
@@ -1504,20 +1518,20 @@
 
     /* Enhanced suggest menu */
     .ticker-suggest-menu {
-      background: rgba(12, 14, 28, 0.96);
-      border: 1px solid rgba(38, 224, 210, 0.25);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(38, 224, 210, 0.1);
+      background: #010409;
+      border: 1px solid rgba(34, 171, 148, 0.25);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(34, 171, 148, 0.1);
       backdrop-filter: blur(20px);
       border-radius: 12px;
     }
     .ticker-suggest-filter-btn.active {
-      background: linear-gradient(45deg, rgba(38,224,210,0.25), rgba(74,163,255,0.25));
-      border-color: rgba(38,224,210,0.5);
+      background: linear-gradient(45deg, rgba(34,171,148,0.25), rgba(97,136,255,0.25));
+      border-color: rgba(34,171,148,0.5);
       color: var(--accent);
     }
     .ticker-suggest-item.active {
-      background: rgba(38, 224, 210, 0.12);
-      border-color: rgba(38, 224, 210, 0.3);
+      background: rgba(34, 171, 148, 0.12);
+      border-color: rgba(34, 171, 148, 0.3);
     }
 
     /* Footer redesign */
@@ -1700,7 +1714,7 @@
     }
     .blog-card:hover {
       background: rgba(255,255,255,0.05);
-      border-color: rgba(38,224,210,0.3);
+      border-color: rgba(34,171,148,0.3);
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     }
@@ -1720,7 +1734,7 @@
       align-items: center;
     }
     .blog-card .blog-meta .tag {
-      background: rgba(38,224,210,0.12);
+      background: rgba(34,171,148,0.12);
       color: var(--accent);
       padding: 2px 8px;
       border-radius: 4px;
@@ -1752,7 +1766,7 @@
       flex-wrap: wrap;
     }
     .blog-detail .blog-meta .tag {
-      background: rgba(38,224,210,0.12);
+      background: rgba(34,171,148,0.12);
       color: var(--accent);
       padding: 3px 10px;
       border-radius: 4px;
@@ -1965,8 +1979,8 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: rgba(38, 224, 210, 0.12);
-      border: 1px solid rgba(38, 224, 210, 0.3);
+      background: rgba(34, 171, 148, 0.12);
+      border: 1px solid rgba(34, 171, 148, 0.3);
       color: var(--accent);
       font-weight: 800;
       font-size: 0.85rem;
@@ -1975,8 +1989,8 @@
       justify-content: center;
     }
     .share-step-num.done {
-      background: rgba(76, 175, 80, 0.15);
-      border-color: rgba(76, 175, 80, 0.5);
+      background: rgba(14, 203, 129, 0.15);
+      border-color: rgba(14, 203, 129, 0.5);
       color: var(--good);
     }
     .share-step-body {
@@ -2011,7 +2025,7 @@
       transform: translateY(-1px);
     }
     .share-copy-btn.copied {
-      border-color: rgba(76, 175, 80, 0.6);
+      border-color: rgba(14, 203, 129, 0.6);
       color: var(--good);
     }
     .share-copy-btn:disabled {
@@ -2036,11 +2050,11 @@
       min-width: 420px !important;
       max-width: 520px;
       background: linear-gradient(180deg, rgba(14,16,36,0.98) 0%, rgba(10,12,28,0.98) 100%);
-      border: 1px solid rgba(38, 224, 210, 0.25);
+      border: 1px solid rgba(34, 171, 148, 0.25);
       box-shadow: 
-        0 0 0 1px rgba(38, 224, 210, 0.08),
+        0 0 0 1px rgba(34, 171, 148, 0.08),
         0 24px 64px rgba(0,0,0,0.8),
-        0 0 40px rgba(38, 224, 210, 0.06);
+        0 0 40px rgba(34, 171, 148, 0.06);
       backdrop-filter: blur(32px) saturate(1.3);
       -webkit-backdrop-filter: blur(32px) saturate(1.3);
       border-radius: 16px;
@@ -2075,10 +2089,10 @@
       transform: translateY(-1px);
     }
     .ticker-suggest-filter-btn.active {
-      background: linear-gradient(135deg, rgba(38,224,210,0.25), rgba(74,163,255,0.25));
-      border-color: rgba(38,224,210,0.5);
+      background: linear-gradient(135deg, rgba(34,171,148,0.25), rgba(97,136,255,0.25));
+      border-color: rgba(34,171,148,0.5);
       color: var(--accent);
-      box-shadow: 0 0 16px rgba(38,224,210,0.12), inset 0 1px 0 rgba(255,255,255,0.1);
+      box-shadow: 0 0 16px rgba(34,171,148,0.12), inset 0 1px 0 rgba(255,255,255,0.1);
     }
     .ticker-suggest-list {
       max-height: 380px;
@@ -2094,14 +2108,14 @@
     }
     .ticker-suggest-item:hover,
     .ticker-suggest-item.active {
-      background: rgba(38, 224, 210, 0.08);
-      border-color: rgba(38, 224, 210, 0.2);
+      background: rgba(34, 171, 148, 0.08);
+      border-color: rgba(34, 171, 148, 0.2);
       transform: translateX(4px);
-      box-shadow: 0 2px 8px rgba(38,224,210,0.06);
+      box-shadow: 0 2px 8px rgba(34,171,148,0.06);
     }
     .ticker-suggest-item.active {
-      background: rgba(38, 224, 210, 0.12);
-      border-color: rgba(38, 224, 210, 0.3);
+      background: rgba(34, 171, 148, 0.12);
+      border-color: rgba(34, 171, 148, 0.3);
     }
     .ticker-suggest-left {
       gap: 12px;
@@ -2121,9 +2135,9 @@
       background: rgba(255,255,255,0.12);
     }
     .ticker-suggest-star.fav {
-      background: rgba(255, 204, 128, 0.12);
-      border-color: rgba(255, 204, 128, 0.4);
-      box-shadow: 0 0 8px rgba(255, 204, 128, 0.15);
+      background: rgba(243, 200, 150, 0.12);
+      border-color: rgba(243, 200, 150, 0.4);
+      box-shadow: 0 0 8px rgba(243, 200, 150, 0.15);
     }
     .ticker-suggest-right {
       font-size: 0.88rem;
@@ -2131,12 +2145,12 @@
       letter-spacing: 0.2px;
     }
     .ticker-suggest-right.up {
-      color: #5eff8a;
-      text-shadow: 0 0 8px rgba(94,255,138,0.2);
+      color: #22AB94;
+      text-shadow: 0 0 8px rgba(34,171,148,0.2);
     }
     .ticker-suggest-right.down {
       color: var(--bad-bright);
-      text-shadow: 0 0 8px rgba(255, 71, 87, 0.2);
+      text-shadow: 0 0 8px rgba(242, 54, 69, 0.2);
     }
     .ticker-suggest-item.placeholder {
       padding: 20px 14px;
@@ -2161,7 +2175,7 @@
     }
     .ticker-symbol-input:focus {
       border-color: var(--input-focus);
-      box-shadow: 0 0 0 3px rgba(38, 224, 210, 0.12), 0 4px 20px rgba(38, 224, 210, 0.08);
+      box-shadow: 0 0 0 3px rgba(34, 171, 148, 0.12), 0 4px 20px rgba(34, 171, 148, 0.08);
       background: rgba(0,0,0,0.30);
     }
     .ticker-symbol-input::placeholder {
@@ -2173,7 +2187,7 @@
     /* Brighter red colors - now unified with root vars */
     .header-price.price-down {
       color: var(--bad-bright);
-      text-shadow: 0 0 12px rgba(255, 71, 87, 0.5);
+      text-shadow: 0 0 12px rgba(242, 54, 69, 0.5);
     }
     .kline-change.down {
       color: var(--bad-bright);
@@ -2498,18 +2512,18 @@
     }
     .kline-rsi.overbought {
       color: var(--bad-bright);
-      border-color: rgba(255, 71, 87, 0.4);
-      background: rgba(255, 71, 87, 0.08);
+      border-color: rgba(242, 54, 69, 0.4);
+      background: rgba(242, 54, 69, 0.08);
     }
     .kline-rsi.oversold {
       color: var(--good);
-      border-color: rgba(76, 175, 80, 0.4);
-      background: rgba(76, 175, 80, 0.08);
+      border-color: rgba(14, 203, 129, 0.4);
+      background: rgba(14, 203, 129, 0.08);
     }
     .kline-rsi.neutral {
       color: var(--warn);
-      border-color: rgba(255, 204, 128, 0.3);
-      background: rgba(255, 204, 128, 0.06);
+      border-color: rgba(243, 200, 150, 0.3);
+      background: rgba(243, 200, 150, 0.06);
     }
 
     /* ==========================================
@@ -2570,10 +2584,10 @@
       color: var(--text);
     }
     .tracker-tf-btn.active {
-      background: linear-gradient(135deg, rgba(38, 224, 210, 0.2), rgba(74, 163, 255, 0.2));
-      border-color: rgba(38, 224, 210, 0.5);
+      background: linear-gradient(135deg, rgba(34, 171, 148, 0.2), rgba(97, 136, 255, 0.2));
+      border-color: rgba(34, 171, 148, 0.5);
       color: var(--accent);
-      box-shadow: 0 0 8px rgba(38, 224, 210, 0.15);
+      box-shadow: 0 0 8px rgba(34, 171, 148, 0.15);
     }
     .tracker-tf-btn:active {
       transform: scale(0.96);
@@ -2631,7 +2645,7 @@
     }
     .tracker-symbol:hover {
       color: #fff;
-      text-shadow: 0 0 10px rgba(38, 224, 210, 0.5);
+      text-shadow: 0 0 10px rgba(34, 171, 148, 0.5);
     }
     .tracker-price {
       font-size: 1.1rem;
@@ -2666,15 +2680,15 @@
     }
     .tracker-rsi.overbought {
       color: var(--bad-bright);
-      background: rgba(255, 71, 87, 0.1);
+      background: rgba(242, 54, 69, 0.1);
     }
     .tracker-rsi.oversold {
       color: var(--good);
-      background: rgba(76, 175, 80, 0.1);
+      background: rgba(14, 203, 129, 0.1);
     }
     .tracker-rsi.neutral {
       color: var(--warn);
-      background: rgba(255, 204, 128, 0.08);
+      background: rgba(243, 200, 150, 0.08);
     }
 
     .tracker-dropdown-input {
@@ -2695,7 +2709,7 @@
     }
     .tracker-dropdown-input:focus {
       border-color: var(--input-focus);
-      box-shadow: 0 0 0 3px rgba(38, 224, 210, 0.18);
+      box-shadow: 0 0 0 3px rgba(34, 171, 148, 0.18);
     }
     .tracker-dropdown-input::placeholder {
       color: var(--muted-2);
@@ -2719,7 +2733,7 @@
       padding: 6px 16px;
       border: 1px solid rgba(37, 99, 235, 0.5);
       background: rgba(37, 99, 235, 0.15);
-      color: #6da3ff;
+      color: #6188FF;
       border-radius: 6px;
       font-size: 0.85rem;
       font-weight: 600;
@@ -2731,7 +2745,7 @@
     .sticky-nav .nav-btn:hover {
       background: rgba(37, 99, 235, 0.25);
       border-color: rgba(37, 99, 235, 0.7);
-      color: #93bfff;
+      color: #8AA8FF;
     }
     /* Scroll offset so section headers aren't hidden behind the sticky nav */
     .chart-list,
@@ -2838,16 +2852,16 @@
       animation: alertPulse 1.5s infinite;
     }
     @keyframes alertPulse {
-      0% { opacity: 1; box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.5); }
-      50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(76, 175, 80, 0); }
-      100% { opacity: 1; box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+      0% { opacity: 1; box-shadow: 0 0 0 0 rgba(14, 203, 129, 0.5); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(14, 203, 129, 0); }
+      100% { opacity: 1; box-shadow: 0 0 0 0 rgba(14, 203, 129, 0); }
     }
 
     /* Alert Load Button */
     .alert-load-btn {
       border-color: rgba(37, 99, 235, 0.5) !important;
       background: rgba(37, 99, 235, 0.15) !important;
-      color: #6da3ff !important;
+      color: #6188FF !important;
       padding: 4px 10px !important;
       font-size: 0.72rem !important;
       font-weight: 700 !important;
@@ -2856,7 +2870,7 @@
     .alert-load-btn:hover {
       background: rgba(37, 99, 235, 0.25) !important;
       border-color: rgba(37, 99, 235, 0.7) !important;
-      color: #93bfff !important;
+      color: #8AA8FF !important;
     }
     .alert-load-btn:disabled {
       opacity: 0.3;
@@ -2885,11 +2899,11 @@
     }
     .alert-rt-price.price-up {
       color: var(--good);
-      text-shadow: 0 0 8px rgba(76, 175, 80, 0.35);
+      text-shadow: 0 0 8px rgba(14, 203, 129, 0.35);
     }
     .alert-rt-price.price-down {
       color: var(--bad-bright);
-      text-shadow: 0 0 8px rgba(255, 71, 87, 0.35);
+      text-shadow: 0 0 8px rgba(242, 54, 69, 0.35);
     }
 
     /* RT Price + Copy Button Group — keeps them side-by-side on mobile */
@@ -2914,7 +2928,7 @@
       opacity: 1;
     }
     .alert-copy-rt-btn.copied {
-      border-color: rgba(76, 175, 80, 0.6) !important;
+      border-color: rgba(14, 203, 129, 0.6) !important;
       color: var(--good) !important;
       opacity: 1;
     }
@@ -2948,19 +2962,19 @@
     }
     /* Keep active/toggled states */
     .copy-price-btn.copied {
-      border-color: rgba(76, 175, 80, 0.6);
+      border-color: rgba(14, 203, 129, 0.6);
       color: var(--good);
     }
     /* Trade button keeps blue color accent */
     .trade-btn {
       border-color: rgba(37, 99, 235, 0.5);
       background: rgba(37, 99, 235, 0.15);
-      color: #6da3ff;
+      color: #6188FF;
     }
     .trade-btn:hover {
       background: rgba(37, 99, 235, 0.25);
       border-color: rgba(37, 99, 235, 0.7);
-      color: #93bfff;
+      color: #8AA8FF;
     }
     /* Share button keeps blue accent */
     .share-btn {
@@ -3071,8 +3085,8 @@
       align-items: center;
       gap: 4px;
       padding: 4px 10px;
-      background: rgba(38,224,210,0.1);
-      border: 1px solid rgba(38,224,210,0.25);
+      background: rgba(34,171,148,0.1);
+      border: 1px solid rgba(34,171,148,0.25);
       border-radius: 999px;
       color: var(--accent);
       font-size: 0.85rem;
@@ -3083,8 +3097,8 @@
       white-space: nowrap;
     }
     .fav-ticker-chip:hover {
-      background: rgba(38,224,210,0.2);
-      border-color: rgba(38,224,210,0.45);
+      background: rgba(34,171,148,0.2);
+      border-color: rgba(34,171,148,0.45);
       transform: translateY(-1px);
     }
     .fav-ticker-chip .fav-remove {
@@ -3156,7 +3170,7 @@
     }
     .nav-link.active {
       color: var(--accent);
-      background: rgba(38, 224, 210, 0.1);
+      background: rgba(34, 171, 148, 0.1);
     }
 
     .back-to-dashboard {
@@ -3345,7 +3359,7 @@
     .bias-ticker-name {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #ffcc80;
+      color: #F3C896;
       margin-right: 10px;
       text-shadow: 0 1px 2px rgba(0,0,0,0.5);
     }
@@ -3375,9 +3389,9 @@
       line-height: 1;
     }
     .bias-info-btn:hover {
-      border-color: rgba(38, 224, 210, 0.5);
+      border-color: rgba(34, 171, 148, 0.5);
       color: var(--accent);
-      background: rgba(38, 224, 210, 0.08);
+      background: rgba(34, 171, 148, 0.08);
     }
     .bias-copy-btn {
       display: inline-flex;
@@ -3396,14 +3410,14 @@
       line-height: 1;
     }
     .bias-copy-btn:hover {
-      border-color: rgba(38, 224, 210, 0.5);
+      border-color: rgba(34, 171, 148, 0.5);
       color: var(--accent);
-      background: rgba(38, 224, 210, 0.08);
+      background: rgba(34, 171, 148, 0.08);
     }
     .bias-copy-btn.copied {
-      border-color: rgba(76, 175, 80, 0.5);
-      color: #4caf50;
-      background: rgba(76, 175, 80, 0.1);
+      border-color: rgba(14, 203, 129, 0.5);
+      color: #0ECB81;
+      background: rgba(14, 203, 129, 0.1);
     }
     .bias-tooltip-popup {
       display: none;
@@ -3478,8 +3492,8 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      background: rgba(255, 82, 82, 0.12);
-      border: 1px solid rgba(255, 82, 82, 0.3);
+      background: rgba(229, 72, 76, 0.12);
+      border: 1px solid rgba(229, 72, 76, 0.3);
       border-radius: 6px;
       padding: 4px 10px;
       font-size: 0.85rem;
@@ -3575,8 +3589,8 @@
     }
     /* Active scenario cell — clean highlight, no glow */
     .bias-sc-cell.active {
-      border-color: rgba(38, 224, 210, 0.7);
-      background: rgba(38, 224, 210, 0.12);
+      border-color: rgba(34, 171, 148, 0.7);
+      background: rgba(34, 171, 148, 0.12);
       box-shadow: none;
       transform: none;
     }
@@ -3592,24 +3606,24 @@
 
     /* Scenario-specific tinting when active — no glow, solid borders */
     .bias-sc-cell.active[data-sc="1"] {
-      border-color: rgba(76, 175, 80, 0.8);
-      background: rgba(76, 175, 80, 0.15);
+      border-color: rgba(14, 203, 129, 0.8);
+      background: rgba(14, 203, 129, 0.15);
       box-shadow: none;
     }
-    .bias-sc-cell.active[data-sc="1"] .bias-sc-cell-name { color: #ffffff; text-shadow: 0 0 10px rgba(94,255,138,0.5); }
-    .bias-sc-cell.active[data-sc="1"] .bias-sc-cell-bias { color: #ffffff; text-shadow: 0 0 8px rgba(94,255,138,0.4); }
+    .bias-sc-cell.active[data-sc="1"] .bias-sc-cell-name { color: #ffffff; text-shadow: 0 0 10px rgba(34,171,148,0.5); }
+    .bias-sc-cell.active[data-sc="1"] .bias-sc-cell-bias { color: #ffffff; text-shadow: 0 0 8px rgba(34,171,148,0.4); }
 
     .bias-sc-cell.active[data-sc="2"] {
-      border-color: rgba(255, 204, 128, 0.8);
-      background: rgba(255, 204, 128, 0.15);
+      border-color: rgba(243, 200, 150, 0.8);
+      background: rgba(243, 200, 150, 0.15);
       box-shadow: none;
     }
-    .bias-sc-cell.active[data-sc="2"] .bias-sc-cell-name { color: #ffffff; text-shadow: 0 0 10px rgba(255,204,128,0.5); }
-    .bias-sc-cell.active[data-sc="2"] .bias-sc-cell-bias { color: #ffffff; text-shadow: 0 0 8px rgba(255,204,128,0.4); }
+    .bias-sc-cell.active[data-sc="2"] .bias-sc-cell-name { color: #ffffff; text-shadow: 0 0 10px rgba(243,200,150,0.5); }
+    .bias-sc-cell.active[data-sc="2"] .bias-sc-cell-bias { color: #ffffff; text-shadow: 0 0 8px rgba(243,200,150,0.4); }
 
     .bias-sc-cell.active[data-sc="3"] {
-      border-color: rgba(255, 82, 82, 0.8);
-      background: rgba(255, 82, 82, 0.15);
+      border-color: rgba(229, 72, 76, 0.8);
+      background: rgba(229, 72, 76, 0.15);
       box-shadow: none;
     }
     .bias-sc-cell.active[data-sc="3"] .bias-sc-cell-name { color: #ffffff; text-shadow: 0 0 10px rgba(255,107,107,0.5); }
@@ -4329,8 +4343,8 @@
       }
       if (container.children.length >= 5) return;
       const toast = document.createElement('div');
-      const bgColor = type === 'up' ? 'rgba(76,175,80,0.92)' : 'rgba(255,71,87,0.92)';
-      const borderColor = type === 'up' ? 'rgba(76,175,80,0.6)' : 'rgba(255,71,87,0.6)';
+      const bgColor = type === 'up' ? 'rgba(14,203,129,0.92)' : 'rgba(242,54,69,0.92)';
+      const borderColor = type === 'up' ? 'rgba(14,203,129,0.6)' : 'rgba(242,54,69,0.6)';
       toast.style.cssText = `
         background:${bgColor};border:1px solid ${borderColor};border-radius:8px;
         padding:10px 14px;color:#fff;font-size:0.9rem;box-shadow:0 8px 24px rgba(0,0,0,0.4);
@@ -4596,9 +4610,9 @@
     const formatAlertLogEntry = (entry) => {
       // entry format: "TICKER: Crossed UP/DOWN $price at time"
       return entry
-        .replace(/^(\w+):/, '<span style="color:#ffcc80;font-weight:700;">$1</span>:')
-        .replace(/Crossed DOWN/g, '<span style="color:#ff4757;font-weight:700;">Crossed DOWN</span>')
-        .replace(/Crossed UP/g, '<span style="color:#4caf50;font-weight:700;">Crossed UP</span>');
+        .replace(/^(\w+):/, '<span style="color:#F3C896;font-weight:700;">$1</span>:')
+        .replace(/Crossed DOWN/g, '<span style="color:#F23645;font-weight:700;">Crossed DOWN</span>')
+        .replace(/Crossed UP/g, '<span style="color:#0ECB81;font-weight:700;">Crossed UP</span>');
     };
 
     const updateAlertLog = (slotIndex, message) => {
@@ -5356,9 +5370,9 @@
           const ctx = canvas.getContext('2d');
           if (!ctx) return;
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = '#1a1a1a';
+          ctx.fillStyle = '#0B0E11';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = '#666';
+          ctx.fillStyle = '#636B74';
           ctx.font = '12px Arial';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
@@ -5387,7 +5401,7 @@
       ctx.fillRect(0, 0, width, height);
 
       if (!candles || candles.length === 0) {
-        ctx.fillStyle = '#666';
+        ctx.fillStyle = '#636B74';
         ctx.font = `${Math.max(10, Math.floor(height * 0.08))}px Arial`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -5419,8 +5433,8 @@
         const yL = yFor(c.low);
 
         const up = c.close >= c.open;
-        ctx.strokeStyle = up ? '#4cff9b' : '#ff1744';
-        ctx.fillStyle = up ? '#4cff9b' : '#ff1744';
+        ctx.strokeStyle = up ? '#0ECB81' : '#F23645';
+        ctx.fillStyle = up ? '#0ECB81' : '#F23645';
         ctx.lineWidth = Math.max(1, Math.floor(width * 0.002));
 
         ctx.beginPath();
@@ -5487,9 +5501,9 @@
           const y = padding;
 
           ctx.fillStyle = chartBg;
-          ctx.fillStyle = diff >= 0 ? 'rgba(76, 175, 80, 1)' : 'rgba(255, 82, 82, 1)';
+          ctx.fillStyle = diff >= 0 ? 'rgba(14, 203, 129, 1)' : 'rgba(229, 72, 76, 1)';
           ctx.fillRect(x, y, rectW, rectH);
-          ctx.strokeStyle = diff >= 0 ? 'rgba(76, 175, 80, 1)' : 'rgba(255, 82, 82, 1)';
+          ctx.strokeStyle = diff >= 0 ? 'rgba(14, 203, 129, 1)' : 'rgba(229, 72, 76, 1)';
           ctx.lineWidth = 1;
           ctx.strokeRect(x + 0.5, y + 0.5, rectW - 1, rectH - 1);
           ctx.fillStyle = diff >= 0 ? '#FFFFFF' : '#FFFFFF';
@@ -5622,7 +5636,7 @@
                 <span class="bias-info-btn" title="How OI-Price Matrix works">?</span>
                 <span class="bias-tooltip-popup">
                   <strong>OI-Price Matrix (v2):</strong><br>
-                  Open Interest-Price Matrix analysis is a 2&times;2 scenario grid based on the relationship between <em>price direction</em> and <em>open interest direction</em> in futures markets. Price uses <b style="color:#4aa3ff">5m klines</b> (48 candles for 4h) and <b style="color:#4aa3ff">1h klines</b> (168 candles for 24h &amp; 7d). OI uses <b style="color:#4aa3ff">168 hourly snapshots</b> (7 days).<br><br>
+                  Open Interest-Price Matrix analysis is a 2&times;2 scenario grid based on the relationship between <em>price direction</em> and <em>open interest direction</em> in futures markets. Price uses <b style="color:#6188FF">5m klines</b> (48 candles for 4h) and <b style="color:#6188FF">1h klines</b> (168 candles for 24h &amp; 7d). OI uses <b style="color:#6188FF">168 hourly snapshots</b> (7 days).<br><br>
 
                   <strong style="color:var(--text)">EMA(5) Smoothing (Noise Reduction):</strong><br>
                   Instead of a single close or simple 3-candle average, each endpoint uses <b>EMA(5)</b> (Exponential Moving Average, period 5) of completed closes/snapshots. EMA gives more weight to recent data while filtering wicks and noise proportionally across all timeframes:<br>
@@ -5643,10 +5657,10 @@
                   <code style="color:var(--accent);font-size:0.88rem">signalStrength = agreement&times;0.4 + magnitude&times;0.35 + participation&times;0.25</code><br>
                   <span style="font-size:0.84rem;color:var(--muted-3)">Three interpretable components: <b>Agreement</b> (0.4): weighted fraction of votes agreeing with direction. <b>Magnitude</b> (0.35): average move size relative to adaptive threshold. <b>Participation</b> (0.25): fraction of timeframes providing data. Mapped: &lt;35% = Low, 35-65% = Moderate, &gt;65% = High.</span><br><br>
 
-                  <b style="color:#4caf50">&#x1F7E2; Price &uarr; + OI &uarr; = Strong Uptrend</b> &mdash; Long-side participation likely increasing; positioning expansion supports move. <b>Bias: Long</b><br><br>
+                  <b style="color:#0ECB81">&#x1F7E2; Price &uarr; + OI &uarr; = Strong Uptrend</b> &mdash; Long-side participation likely increasing; positioning expansion supports move. <b>Bias: Long</b><br><br>
                   <b style="color:var(--warn)">&#x1F7E1; Price &uarr; + OI &darr; = Short Covering</b> &mdash; Short covering likely contributing to rally; move may lack new long capital. <b>Bias: Careful Long</b><br><br>
-                  <b style="color:#ff5252">&#x1F534; Price &darr; + OI &uarr; = Strong Downtrend</b> &mdash; Short-side positioning likely expanding; downward pressure reinforced by new positions. <b>Bias: Short</b><br><br>
-                  <b style="color:#64b5f6">&#x1F535; Price &darr; + OI &darr; = Exhaustion</b> &mdash; Long liquidations or unwinds likely; forced selling may be near exhaustion. <b>Bias: Watch for reversal</b><br><br>
+                  <b style="color:#E5484C">&#x1F534; Price &darr; + OI &uarr; = Strong Downtrend</b> &mdash; Short-side positioning likely expanding; downward pressure reinforced by new positions. <b>Bias: Short</b><br><br>
+                  <b style="color:#6188FF">&#x1F535; Price &darr; + OI &darr; = Exhaustion</b> &mdash; Long liquidations or unwinds likely; forced selling may be near exhaustion. <b>Bias: Watch for reversal</b><br><br>
 
                   <strong style="color:var(--text)">Funding Rate Context:</strong><br>
                   <span style="font-size:0.84rem;color:var(--muted-3)">Fetched from Binance premiumIndex API. Positive rate = longs pay shorts (longs crowded). Negative rate = shorts pay longs (shorts crowded). Extreme values (&gt;0.1% or &lt;-0.1%) signal overleveraged positioning.</span><br><br>
@@ -5930,7 +5944,7 @@
       const el = state.elements;
       const hasError = state.wsStatus.level === 'error';
       const isConnecting = state.wsStatus.level === 'connecting';
-      const color = hasError ? '#ff5252' : (isConnecting ? '#ffb74d' : '#4caf50');
+      const color = hasError ? '#E5484C' : (isConnecting ? '#F3C896' : '#0ECB81');
 
       let indicatorClass = 'live-indicator';
       if (isConnecting) indicatorClass += ' connecting';
@@ -6995,7 +7009,7 @@
               if (fr > 0.001) frColor = 'var(--good)';
               else if (fr > 0.0003) frColor = 'var(--warn)';
               else if (fr < -0.001) frColor = 'var(--bad)';
-              else if (fr < -0.0003) frColor = '#64b5f6';
+              else if (fr < -0.0003) frColor = '#6188FF';
               oiFundingParts.push('<span style="color:' + frColor + ';font-weight:700">Funding Rate: ' + sign + frPct + '%</span>');
             }
             oiFundingLine = '<br><span style="font-size:0.92rem;">' + oiFundingParts.join(' <span style="color:var(--muted-3);font-weight:300">|</span> ') + '</span>';
@@ -7026,7 +7040,7 @@
               3: 'Short-side positioning likely expanding; downward pressure reinforced by new positions',
               4: 'Long liquidations or unwinds likely; forced selling may be near exhaustion'
             };
-            const colors = { 1: '#4caf50', 2: 'var(--warn)', 3: '#ff5252', 4: '#64b5f6' };
+            const colors = { 1: '#0ECB81', 2: 'var(--warn)', 3: '#E5484C', 4: '#6188FF' };
             const name = names[scenario.scenarioIdx] || '--';
             const desc = descriptions[scenario.scenarioIdx] || '';
             const color = colors[scenario.scenarioIdx] || 'var(--text)';
@@ -7034,9 +7048,9 @@
             // Build signal strength superscript
             const pct = Math.round(scenario.signalStrength * 100);
             let ssLabel = 'Low';
-            let ssColor = '#ff5252';
-            if (pct >= 65) { ssLabel = 'High'; ssColor = '#4caf50'; }
-            else if (pct >= 35) { ssLabel = 'Moderate'; ssColor = '#ffcc80'; }
+            let ssColor = '#E5484C';
+            if (pct >= 65) { ssLabel = 'High'; ssColor = '#0ECB81'; }
+            else if (pct >= 35) { ssLabel = 'Moderate'; ssColor = '#F3C896'; }
             const ssSup = '<sup style="font-size:0.85em;color:' + ssColor + ';font-weight:600;vertical-align:super;margin-left:4px">' + ssLabel + ' (' + pct + '%)</sup>';
 
             resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:' + color + '">' + name + '</b>' + ssSup
@@ -7055,10 +7069,10 @@
             const ratePct = (scenario.fundingRate * 100).toFixed(4);
             let rateColor = 'var(--muted)';
             let rateNote = '';
-            if (scenario.fundingRate > 0.001) { rateColor = '#4caf50'; rateNote = ' (Longs pay — long crowded)'; }
-            else if (scenario.fundingRate > 0.0003) { rateColor = '#ffcc80'; rateNote = ' (Slight long bias)'; }
-            else if (scenario.fundingRate < -0.001) { rateColor = '#ff5252'; rateNote = ' (Shorts pay — short crowded)'; }
-            else if (scenario.fundingRate < -0.0003) { rateColor = '#64b5f6'; rateNote = ' (Slight short bias)'; }
+            if (scenario.fundingRate > 0.001) { rateColor = '#0ECB81'; rateNote = ' (Longs pay — long crowded)'; }
+            else if (scenario.fundingRate > 0.0003) { rateColor = '#F3C896'; rateNote = ' (Slight long bias)'; }
+            else if (scenario.fundingRate < -0.001) { rateColor = '#E5484C'; rateNote = ' (Shorts pay — short crowded)'; }
+            else if (scenario.fundingRate < -0.0003) { rateColor = '#6188FF'; rateNote = ' (Slight short bias)'; }
             items.push('<span class="bias-context-item" title="Binance funding rate: positive = longs pay shorts, negative = shorts pay longs"><span class="label">Funding:</span> <span class="value" style="color:' + rateColor + '">' + ratePct + '%' + rateNote + '</span></span>');
           }
 
@@ -7067,17 +7081,17 @@
             const eqVal = scenario.oiExpansionQuality.toFixed(2);
             let eqColor = 'var(--muted)';
             let eqNote = '';
-            if (scenario.oiExpansionQuality > 0.5) { eqColor = '#ffcc80'; eqNote = ' (Aggressive leverage expansion)'; }
+            if (scenario.oiExpansionQuality > 0.5) { eqColor = '#F3C896'; eqNote = ' (Aggressive leverage expansion)'; }
             else if (scenario.oiExpansionQuality > 0.2) { eqColor = 'var(--accent-2)'; eqNote = ' (Moderate expansion)'; }
-            else { eqColor = '#64b5f6'; eqNote = ' (Volume-supported)'; }
+            else { eqColor = '#6188FF'; eqNote = ' (Volume-supported)'; }
             items.push('<span class="bias-context-item" title="OI Expansion Quality: measures leverage expansion vs trading activity. High = expanding OI with low volume (squeeze risk). Low = volume supports OI change."><span class="label">OI Exp Q:</span> <span class="value" style="color:' + eqColor + '">' + eqVal + eqNote + '</span></span>');
           } else if (Number.isFinite(scenario.oiVolRatio)) {
             // Fallback to legacy OI/Volume if Expansion Quality not available
             const ratio = scenario.oiVolRatio.toFixed(3);
             let ratioColor = 'var(--muted)';
             let ratioNote = '';
-            if (scenario.oiVolRatio > 0.5) { ratioColor = '#ffcc80'; ratioNote = ' (High leverage)'; }
-            else if (scenario.oiVolRatio < 0.1) { ratioColor = '#64b5f6'; ratioNote = ' (Spot-driven)'; }
+            if (scenario.oiVolRatio > 0.5) { ratioColor = '#F3C896'; ratioNote = ' (High leverage)'; }
+            else if (scenario.oiVolRatio < 0.1) { ratioColor = '#6188FF'; ratioNote = ' (Spot-driven)'; }
             else { ratioNote = ' (Balanced)'; }
             items.push('<span class="bias-context-item"><span class="label">OI/Vol:</span> <span class="value" style="color:' + ratioColor + '">' + ratio + ratioNote + '</span></span>');
           }
@@ -7088,9 +7102,9 @@
             let lpColor = 'var(--muted)';
             let lpLabel = 'Low';
             let lpDirection = scenario.liqPressure >= 0 ? 'Long' : 'Short';
-            if (lpAbs > 0.6) { lpColor = '#ff5252'; lpLabel = 'Elevated'; }
-            else if (lpAbs > 0.3) { lpColor = '#ffcc80'; lpLabel = 'Moderate'; }
-            else { lpColor = '#64b5f6'; lpLabel = 'Low'; }
+            if (lpAbs > 0.6) { lpColor = '#E5484C'; lpLabel = 'Elevated'; }
+            else if (lpAbs > 0.3) { lpColor = '#F3C896'; lpLabel = 'Moderate'; }
+            else { lpColor = '#6188FF'; lpLabel = 'Low'; }
             items.push('<span class="bias-context-item" title="Liquidation Pressure: derived from funding rate + OI expansion. Elevated = crowded side at risk of forced liquidation. Direction indicates which side is at risk."><span class="label">Liq Press:</span> <span class="value" style="color:' + lpColor + '">' + lpLabel + ' (' + lpDirection + '-side)</span></span>');
           }
 
@@ -7337,7 +7351,7 @@
               // Clone the panel into a narrow off-screen div so content reflows portrait
               const CAPTURE_W = 420;
               const wrapper = document.createElement('div');
-              wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;width:' + CAPTURE_W + 'px;overflow:hidden;z-index:-1;background:#070814;';
+              wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;width:' + CAPTURE_W + 'px;overflow:hidden;z-index:-1;background:#010409;';
               const clone = panel.cloneNode(true);
               // Remove tooltip popup from clone (it's moved to body in init)
               const popupInClone = clone.querySelector('.bias-tooltip-popup');
@@ -7391,7 +7405,7 @@
 
               // Capture at 3x scale for crisp 1080px-wide output (420 × ~2.57 ≈ 1080)
               const panelCanvas = await html2canvas(clone, {
-                backgroundColor: '#070814',
+                backgroundColor: '#010409',
                 scale: Math.ceil(1080 / CAPTURE_W),
                 useCORS: true,
                 logging: false
@@ -7415,15 +7429,15 @@
 
               // Background with subtle gradient
               const grad = ctx.createLinearGradient(0, 0, OUT_W, OUT_H);
-              grad.addColorStop(0, '#070814');
-              grad.addColorStop(1, '#0e1024');
+              grad.addColorStop(0, '#010409');
+              grad.addColorStop(1, '#0D1117');
               ctx.fillStyle = grad;
               ctx.fillRect(0, 0, OUT_W, OUT_H);
 
               // Thin accent line at top
               const accentGrad = ctx.createLinearGradient(0, 0, OUT_W, 0);
-              accentGrad.addColorStop(0, '#26e0d2');
-              accentGrad.addColorStop(1, '#4aa3ff');
+              accentGrad.addColorStop(0, '#22AB94');
+              accentGrad.addColorStop(1, '#6188FF');
               ctx.fillStyle = accentGrad;
               ctx.fillRect(0, 0, OUT_W, 3);
 
@@ -7444,9 +7458,9 @@
               const tfw = ctx.measureText(tickerName).width;
               const total1w = bfw + tfw;
               const sx1 = (OUT_W - total1w) / 2;
-              ctx.fillStyle = '#888';
+              ctx.fillStyle = '#9FA6AD';
               ctx.fillText(beforeTick, sx1, footerY);
-              ctx.fillStyle = '#ffcc80';
+              ctx.fillStyle = '#F3C896';
               ctx.fillText(tickerName, sx1 + bfw, footerY);
 
               // Line 2: "www.MultiPerps.com #MultiPerps #BTC"
@@ -7455,9 +7469,9 @@
               const t2w = ctx.measureText(tickerName).width;
               const total2w = p2w + t2w;
               const sx2 = (OUT_W - total2w) / 2;
-              ctx.fillStyle = '#555';
+              ctx.fillStyle = '#636B74';
               ctx.fillText(prefix2, sx2, footerY + textLineH);
-              ctx.fillStyle = '#ffcc80';
+              ctx.fillStyle = '#F3C896';
               ctx.fillText(tickerName, sx2 + p2w, footerY + textLineH);
 
               outCanvas.toBlob(async (blob) => {
@@ -9175,7 +9189,7 @@
             const chartListWidth = chartList.offsetWidth;
             const fhdScale = Math.max(2, Math.ceil(1920 / chartListWidth));
             const chartCanvas = await html2canvas(chartList, {
-              backgroundColor: '#070814',
+              backgroundColor: '#010409',
               scale: fhdScale,
               useCORS: true,
               logging: false
@@ -9197,7 +9211,7 @@
             const ctx = compositeCanvas.getContext('2d');
 
             // Draw background
-            ctx.fillStyle = '#070814';
+            ctx.fillStyle = '#010409';
             ctx.fillRect(0, 0, compositeCanvas.width, compositeCanvas.height);
 
             // Draw chart image at the top
@@ -9220,11 +9234,11 @@
             const startX = (compositeCanvas.width - totalWidth) / 2;
 
             ctx.textAlign = 'left';
-            ctx.fillStyle = '#d0d0d0';
+            ctx.fillStyle = '#CDD7E1';
             ctx.fillText(beforeTicker, startX, textY0);
-            ctx.fillStyle = '#ffcc80';
+            ctx.fillStyle = '#F3C896';
             ctx.fillText(tickerName, startX + beforeWidth, textY0);
-            ctx.fillStyle = '#d0d0d0';
+            ctx.fillStyle = '#CDD7E1';
             ctx.fillText(afterTicker, startX + beforeWidth + tickerWidth, textY0);
 
             // Line 3 (last non-empty): "www.MultiPerps.com #MultiPerps #TICKER" — color the ticker hashtag
@@ -9239,13 +9253,13 @@
                 const tickerHashWidth = ctx.measureText(hashTicker).width;
                 const totalW = prefixWidth + tickerHashWidth;
                 const sx = (compositeCanvas.width - totalW) / 2;
-                ctx.fillStyle = '#d0d0d0';
+                ctx.fillStyle = '#CDD7E1';
                 ctx.fillText(hashPrefix, sx, yPos);
-                ctx.fillStyle = '#ffcc80';
+                ctx.fillStyle = '#F3C896';
                 ctx.fillText(hashTicker, sx + prefixWidth, yPos);
               } else {
                 ctx.textAlign = 'center';
-                ctx.fillStyle = '#d0d0d0';
+                ctx.fillStyle = '#CDD7E1';
                 ctx.fillText(lineText, compositeCanvas.width / 2, yPos);
                 ctx.textAlign = 'left';
               }
