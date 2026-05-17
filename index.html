@@ -2640,8 +2640,8 @@
       order: 2;
       white-space: nowrap;
     }
-    .tracker-price.up { color: var(--good); }
-    .tracker-price.down { color: var(--bad-bright); }
+    .tracker-price.up { color: var(--good-bright); }
+    .tracker-price.down { color: var(--bad); }
     .tracker-chart-container {
       height: 215px;
       background: rgba(0, 0, 0, 0.25);
@@ -3101,6 +3101,9 @@
       font-size: 0.85rem;
       color: var(--muted-2);
     }
+    #favTickersSectionBottom {
+      margin-top: 12px;
+    }
 
 
     /* ============================================
@@ -3452,35 +3455,6 @@
       font-size: 1.08rem;
     }
 
-    /* Signal Strength bar (formerly "Confidence bar") */
-    .bias-confidence-bar {
-      width: 100%;
-      max-width: 520px;
-      margin: 4px auto 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.92rem;
-      color: var(--muted-2);
-    }
-    .bias-confidence-track {
-      flex: 1;
-      height: 6px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .bias-confidence-fill {
-      height: 100%;
-      border-radius: 3px;
-      transition: width 0.4s ease, background 0.4s ease;
-    }
-    .bias-confidence-label {
-      font-weight: 700;
-      white-space: nowrap;
-      min-width: 80px;
-      text-align: right;
-    }
 
     /* Context rows (funding, OI/Vol) */
     .bias-context-row {
@@ -3697,9 +3671,6 @@
       }
       .bias-sc-cell {
         padding: 10px 6px;
-      }
-      .bias-confidence-bar {
-        font-size: 0.82rem;
       }
       .bias-context-row {
         font-size: 0.82rem;
@@ -3972,34 +3943,39 @@
     };
 
     const renderFavTickers = () => {
-      const listEl = document.getElementById('favTickersList');
-      if (!listEl) return;
+      const listEls = [
+        document.getElementById('favTickersList'),
+        document.getElementById('favTickersListBottom')
+      ];
       const favs = Array.from(state.futuresFavorites);
-      if (favs.length === 0) {
-        listEl.innerHTML = '<span class="fav-tickers-empty">No favourites yet. Use ★ in the search dropdown to add.</span>';
-        return;
-      }
-      listEl.innerHTML = '';
-      for (const ticker of favs) {
-        const chip = document.createElement('span');
-        chip.className = 'fav-ticker-chip';
-        chip.title = `Load ${ticker}`;
-        const name = document.createElement('span');
-        name.textContent = ticker.replace('USDT', '');
-        chip.appendChild(name);
-        const remove = document.createElement('span');
-        remove.className = 'fav-remove';
-        remove.textContent = '✕';
-        remove.title = `Remove ${ticker} from favourites`;
-        remove.addEventListener('click', (e) => {
-          e.stopPropagation();
-          toggleFavoriteTicker(ticker);
-        });
-        chip.appendChild(remove);
-        chip.addEventListener('click', () => {
-          loadSymbol(ticker);
-        });
-        listEl.appendChild(chip);
+      for (const listEl of listEls) {
+        if (!listEl) continue;
+        if (favs.length === 0) {
+          listEl.innerHTML = '<span class="fav-tickers-empty">No favourites yet. Use ★ in the search dropdown to add.</span>';
+          continue;
+        }
+        listEl.innerHTML = '';
+        for (const ticker of favs) {
+          const chip = document.createElement('span');
+          chip.className = 'fav-ticker-chip';
+          chip.title = `Load ${ticker}`;
+          const name = document.createElement('span');
+          name.textContent = ticker.replace('USDT', '');
+          chip.appendChild(name);
+          const remove = document.createElement('span');
+          remove.className = 'fav-remove';
+          remove.textContent = '✕';
+          remove.title = `Remove ${ticker} from favourites`;
+          remove.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFavoriteTicker(ticker);
+          });
+          chip.appendChild(remove);
+          chip.addEventListener('click', () => {
+            loadSymbol(ticker);
+          });
+          listEl.appendChild(chip);
+        }
       }
     };
 
@@ -5639,7 +5615,9 @@
         <div class="bias-panel" id="oiPricePanel">
           <div class="bias-header">
             <div class="bias-header-left">
-              <span class="bias-ticker-name" id="biasTickerName"></span><span class="bias-title">Open Interest-Price Analysis</span>
+              <div class="ticker-title" id="tickerTitleCopy"><img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" class="binance-favicon" alt="Binance" onerror="this.style.display='none'" />${display}</div>
+              <div class="header-price" id="headerPriceCopy">Loading...</div>
+              <span class="bias-title">Open Interest-Price Analysis</span>
               <span class="bias-tooltip-wrap">
                 <span class="bias-info-btn" title="How OI-Price Matrix works">?</span>
                 <span class="bias-tooltip-popup">
@@ -5733,15 +5711,17 @@
                   <span class="bias-sc-cell-bias" id="biasScBias4">&#x1F535; Unwinds likely; watch reversal</span>
                 </div>
               </div>
+              <br/>
               <div id="oiPriceResult" style="text-align:center;margin-top:8px;font-size:1.1rem;color:var(--muted-2);line-height:1.6;"></div>
-              <div id="oiPriceConfidence" class="bias-confidence-bar" style="display:none;">
-                <span style="font-weight:600;">Signal Strength:</span>
-                <div class="bias-confidence-track"><div id="oiPriceConfFill" class="bias-confidence-fill"></div></div>
-                <span id="oiPriceConfLabel" class="bias-confidence-label"></span>
-              </div>
               <div id="oiPriceContext" class="bias-context-row" style="display:none;"></div>
               <div id="oiPriceWarning" class="bias-data-warning" style="display:none;"></div>
               <div id="oiPriceDisclaimer" style="display:none;text-align:center;margin-top:4px;"><i style="font-size:0.72rem;color:var(--muted-2);opacity:0.7">Disclaimer: Not financial advice.</i></div>
+            </div>
+            <div class="fav-tickers-section" id="favTickersSectionBottom">
+              <span class="fav-tickers-heading">★ Favourites:</span>
+              <div class="fav-tickers-list" id="favTickersListBottom">
+                <span class="fav-tickers-empty">No favourites yet. Use ★ in the search dropdown to add.</span>
+              </div>
             </div>
           </div>
         </div>
@@ -5983,6 +5963,11 @@
             state.elements.headerPrice.classList.add('price-down');
           }
         }
+      }
+      // Sync price copy in OI-Price Matrix header
+      if (state.elements.headerPriceCopy && state.elements.headerPrice) {
+        state.elements.headerPriceCopy.textContent = state.elements.headerPrice.textContent;
+        state.elements.headerPriceCopy.className = state.elements.headerPrice.className;
       }
             const display = state.symbol.replace('USDT', '');
       document.title = Number.isFinite(state.currentPrice) ? `${display} ${formatPrice(state.currentPrice)}` : display;
@@ -7046,30 +7031,17 @@
             const desc = descriptions[scenario.scenarioIdx] || '';
             const color = colors[scenario.scenarioIdx] || 'var(--text)';
 
-            resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:' + color + '">' + name + '</b>'
+            // Build signal strength superscript
+            const pct = Math.round(scenario.signalStrength * 100);
+            let ssLabel = 'Low';
+            let ssColor = '#ff5252';
+            if (pct >= 65) { ssLabel = 'High'; ssColor = '#4caf50'; }
+            else if (pct >= 35) { ssLabel = 'Moderate'; ssColor = '#ffcc80'; }
+            const ssSup = '<sup style="font-size:0.85em;color:' + ssColor + ';font-weight:600;vertical-align:super;margin-left:4px">' + ssLabel + ' (' + pct + '%)</sup>';
+
+            resultEl.innerHTML = '<b style="color:var(--text)">Result:</b> <b style="color:' + color + '">' + name + '</b>' + ssSup
               + '<br><span style="font-size:1rem;color:var(--muted-2);line-height:1.5">' + desc + '</span>'
               + oiFundingLine;
-          }
-        }
-
-        // Signal Strength bar (renamed from "Confidence")
-        const confEl = document.getElementById('oiPriceConfidence');
-        const confFillEl = document.getElementById('oiPriceConfFill');
-        const confLabelEl = document.getElementById('oiPriceConfLabel');
-        if (confEl && confFillEl && confLabelEl) {
-          if (scenario.scenarioIdx >= 1 && scenario.scenarioIdx <= 4) {
-            const pct = Math.round(scenario.signalStrength * 100);
-            let label = 'Low';
-            let barColor = '#ff5252';
-            if (pct >= 65) { label = 'High'; barColor = '#4caf50'; }
-            else if (pct >= 35) { label = 'Moderate'; barColor = '#ffcc80'; }
-            confFillEl.style.width = pct + '%';
-            confFillEl.style.background = barColor;
-            confLabelEl.textContent = label + ' (' + pct + '%)';
-            confLabelEl.style.color = barColor;
-            confEl.style.display = 'flex';
-          } else {
-            confEl.style.display = 'none';
           }
         }
 
@@ -7376,6 +7348,9 @@
               // Remove copy button from clone (don't show it in screenshot)
               const copyInClone = clone.querySelector('#oiCopyBtn');
               if (copyInClone) copyInClone.remove();
+              // Remove favourites row from clone (not needed in screenshot)
+              const favInClone = clone.querySelector('#favTickersSectionBottom');
+              if (favInClone) favInClone.remove();
               // Force the cloned panel to fill the wrapper width
               clone.style.width = '100%';
               clone.style.margin = '0';
@@ -7400,9 +7375,6 @@
               s('.bias-sc-cell.active .bias-sc-cell-name', { fontSize: '0.82rem' });
               // Result text below matrix
               s('#oiPriceResult', { fontSize: '1rem', marginTop: '4px', lineHeight: '1.4' });
-              // Signal Strength bar (formerly "Confidence bar")
-              s('.bias-confidence-bar', { fontSize: '0.72rem', maxWidth: '100%', gap: '5px' });
-              s('.bias-confidence-track', { height: '4px' });
               // Context row (funding, OI/Vol)
               s('.bias-context-row', { fontSize: '0.68rem', lineHeight: '1.4' });
               // Data warning
@@ -7588,6 +7560,9 @@
       if (state.elements.headerPrice) {
         state.elements.headerPrice.textContent = 'Loading...';
       }
+      if (state.elements.headerPriceCopy) {
+        state.elements.headerPriceCopy.textContent = 'Loading...';
+      }
       
       updatePriceUI();
 
@@ -7630,6 +7605,8 @@
       // Update ticker name in bias panel header
       const biasTickerEl = document.getElementById('biasTickerName');
       if (biasTickerEl) biasTickerEl.textContent = next.replace('USDT', '');
+      const biasTickerTitleCopy = document.getElementById('tickerTitleCopy');
+      if (biasTickerTitleCopy) biasTickerTitleCopy.innerHTML = '<img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" class="binance-favicon" alt="Binance" onerror="this.style.display=\'none\'" />' + next.replace('USDT', '');
       }
 
       if (wasRunning) start();
@@ -8449,7 +8426,7 @@
             const volUsdt = Number.isFinite(last.volume) ? last.volume : null;
             const volText = Number.isFinite(volUsdt) ? `, ${formatUsdtVolume(volUsdt)}` : '';
             changeEl.textContent = `${diff >= 0 ? '+' : ''}${pct.toFixed(2)}%${volText}`;
-            changeEl.style.color = diff >= 0 ? 'var(--good)' : 'var(--bad-bright)';
+            changeEl.style.color = diff >= 0 ? 'var(--good-bright)' : 'var(--bad)';
           }
         }
 
@@ -8680,6 +8657,7 @@
         card,
         tickerTitle: card.querySelector('#tickerTitle'),
         headerPrice: card.querySelector('#headerPrice'),
+        headerPriceCopy: card.querySelector('#headerPriceCopy'),
         copyPriceBtn: card.querySelector('#copyPriceBtn'),
         tickerInput: card.querySelector('#tickerInput'),
         alert1Input: card.querySelector('#alert1Input'),
@@ -8964,6 +8942,8 @@
       // Update ticker name in bias panel header
       const biasTickerEl2 = document.getElementById('biasTickerName');
       if (biasTickerEl2) biasTickerEl2.textContent = state.symbol.replace('USDT', '');
+      const biasTickerTitleCopy2 = document.getElementById('tickerTitleCopy');
+      if (biasTickerTitleCopy2) biasTickerTitleCopy2.innerHTML = '<img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" class="binance-favicon" alt="Binance" onerror="this.style.display=\'none\'" />' + state.symbol.replace('USDT', '');
           }
         }
       });
