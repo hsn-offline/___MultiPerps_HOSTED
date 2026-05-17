@@ -3350,11 +3350,20 @@
       gap: 8px;
       justify-content: center;
       flex: 1;
+      flex-wrap: wrap;
     }
     .bias-title {
       font-size: 1.1rem;
       font-weight: 700;
       color: var(--accent);
+    }
+    .bias-ticker-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 0 0 100%;
+      width: 100%;
     }
     .bias-ticker-name {
       font-size: 1.1rem;
@@ -5629,8 +5638,6 @@
         <div class="bias-panel" id="oiPricePanel">
           <div class="bias-header">
             <div class="bias-header-left">
-              <div class="ticker-title" id="tickerTitleCopy"><img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" class="binance-favicon" alt="Binance" onerror="this.style.display='none'" />${display}</div>
-              <div class="header-price" id="headerPriceCopy">Loading...</div>
               <span class="bias-title">Open Interest-Price Analysis</span>
               <span class="bias-tooltip-wrap">
                 <span class="bias-info-btn" title="How OI-Price Matrix works">?</span>
@@ -5696,6 +5703,10 @@
                 </span>
               </span>
               <span class="bias-copy-btn" id="oiCopyBtn" title="Copy OI-Price panel as image">⧉</span>
+              <div class="bias-ticker-price-row">
+                <div class="ticker-title" id="tickerTitleCopy"><img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" class="binance-favicon" alt="Binance" onerror="this.style.display='none'" />${display}</div>
+                <div class="header-price" id="headerPriceCopy">Loading...</div>
+              </div>
             </div>
           </div>
 
