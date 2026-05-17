@@ -20,11 +20,39 @@
 
   <!-- Primary SEO Meta Tags -->
   <title>MultiPerps — Real-Time Binance Futures Dashboard | Multi-Timeframe Charts &amp; Market Rankings</title>
-  <meta name="description" content="MultiPerps is a free real-time Binance Futures dashboard with live multi-timeframe candlestick charts (1m to 1M), OI-Price Matrix analysis (open interest vs price scenario signals), price alerts, open interest rankings, funding rates, and multi-ticker tracking for USDT perpetual contracts. No sign-up required." />
+  <!-- Dynamic SEO: updated by JS on ticker load -->
+  <meta id="meta-description" name="description" content="MultiPerps is a free real-time Binance Futures dashboard with live multi-timeframe candlestick charts (1m to 1M), OI-Price Matrix analysis (open interest vs price scenario signals), price alerts, open interest rankings, funding rates, and multi-ticker tracking for USDT perpetual contracts. No sign-up required." />
+  <meta id="meta-canonical" name="canonical" content="https://www.multiperps.com/" />
+  <meta id="og-url" property="og:url" content="https://www.multiperps.com/" />
+  <meta id="og-title" property="og:title" content="MultiPerps — Free Real-Time Binance Futures Dashboard" />
+  <meta id="og-description" property="og:description" content="Live multi-timeframe candlestick charts, OI-Price Matrix analysis, price alerts, open interest rankings, funding rates, and multi-ticker tracking for Binance USDT perpetual futures. Free, no sign-up." />
+  <meta id="twitter-title" name="twitter:title" content="MultiPerps — Free Real-Time Binance Futures Dashboard" />
+  <meta id="twitter-description" name="twitter:description" content="MultiPerps — All Timeframes. All Free. Watch live multi-timeframe candlestick charts, OI-Price Matrix analysis, price alerts, open interest rankings, funding rates &amp; multi-ticker tracking for Binance USDT perpetual futures." />
   <meta name="keywords" content="Binance Futures, crypto dashboard, real-time charts, candlestick charts, multi-timeframe analysis, price alerts, USDT perpetual, open interest, funding rates, crypto trading, BTC futures, ETH futures, crypto market rankings, free crypto tool, MultiPerps, Binance USDT-M, live crypto charts, futures trading dashboard, OI-Price Matrix, open interest price analysis, OI price scenario, crypto sentiment analysis, long short bias, futures market bias, OI price divergence, open interest analysis, crypto trading signals, funding rate analysis, OI trend analysis, short covering signal, long buildup, short unwind, market sentiment indicator" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="author" content="MultiPerps" />
-  <link rel="canonical" href="https://www.multiperps.com/" />
+  <link id="link-canonical" rel="canonical" href="https://www.multiperps.com/" />
+
+  <!-- Initial SEO from URL path (runs before app JS for crawler visibility) -->
+  <script>
+    (function(){
+      try{
+        var p=window.location.pathname.replace(/^\/+|\/+$/g,'');
+        if(p&&/^[A-Z0-9]{2,20}USDT$/i.test(p)){
+          var s=p.toUpperCase(),d=s.replace('USDT',''),b='https://www.multiperps.com',u=b+'/'+s;
+          document.title=d+' Binance Futures Chart \u2014 Multi-Timeframe & OI-Price Analysis | MultiPerps';
+          var mc=document.getElementById('meta-description');if(mc)mc.setAttribute('content',d+' Binance USDT-M perpetual futures live chart on MultiPerps. Real-time multi-timeframe candlestick charts (1m to 1M), OI-Price Matrix analysis, price alerts, open interest & funding rate data. Free, no sign-up.');
+          var lc=document.getElementById('link-canonical');if(lc)lc.setAttribute('href',u);
+          var mnc=document.getElementById('meta-canonical');if(mnc)mnc.setAttribute('content',u);
+          var ou=document.getElementById('og-url');if(ou)ou.setAttribute('content',u);
+          var ot=document.getElementById('og-title');if(ot)ot.setAttribute('content',d+' Binance Futures Chart \u2014 Multi-Timeframe & OI-Price Analysis | MultiPerps');
+          var od=document.getElementById('og-description');if(od)od.setAttribute('content',d+' Binance USDT-M perpetual futures live chart on MultiPerps. Real-time multi-timeframe candlestick charts, OI-Price Matrix analysis, price alerts, open interest & funding rate data. Free, no sign-up.');
+          var tt=document.getElementById('twitter-title');if(tt)tt.setAttribute('content',d+' Binance Futures Chart \u2014 Multi-Timeframe & OI-Price Analysis | MultiPerps');
+          var td=document.getElementById('twitter-description');if(td)td.setAttribute('content',d+' Binance USDT-M perpetual futures live chart on MultiPerps. Real-time multi-timeframe candlestick charts, OI-Price Matrix analysis, price alerts, open interest & funding rate data. Free, no sign-up.');
+        }
+      }catch(e){}
+    })();
+  </script>
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
@@ -283,22 +311,6 @@
 
     @supports (height: 100dvh) {
       .ticker-card { min-height: 100dvh; }
-    }
-
-    /* Fix: When mobile keyboard is open, remove forced min-height and overflow hidden
-       so the search input can scroll into view above the keyboard */
-    body.mobile-keyboard-open .ticker-card {
-      min-height: auto !important;
-      overflow: visible !important;
-    }
-
-    body.mobile-keyboard-open .ticker-grid {
-      min-height: auto !important;
-    }
-
-    /* When keyboard is open, limit suggest menu height to visible area */
-    body.mobile-keyboard-open .ticker-suggest-list {
-      max-height: 200px;
     }
 
     .card-header {
@@ -1213,15 +1225,7 @@
       .status-header-info {
         justify-content: center;
         flex-wrap: nowrap;
-        gap: 6px;
-      }
-      .status-header-info .ticker-title {
-        width: auto;
-        text-align: center;
-      }
-      .bias-ticker-price-row .ticker-title {
-        width: auto;
-        text-align: center;
+        gap: 4px;
       }
 
       .rankings-grid {
@@ -3424,7 +3428,7 @@
       justify-content: center;
       flex: 1;
       flex-wrap: wrap;
-      row-gap: 12px;
+      row-gap: 6px;
     }
     .bias-title {
       font-size: 1.35rem;
@@ -3520,7 +3524,7 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 14px 16px;
-      z-index: 5000;
+      z-index: 200;
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
       font-size: 0.88rem;
       line-height: 1.55;
@@ -3736,7 +3740,6 @@
       .bias-header-left {
         flex-wrap: wrap;
         gap: 6px;
-        row-gap: 10px;
         justify-content: center;
       }
       .bias-title {
@@ -3755,18 +3758,14 @@
         max-width: 100%;
       }
       .bias-tooltip-popup {
-        width: min(92vw, 360px);
-        max-height: min(75vh, 480px);
+        width: 290px;
+        max-height: min(80vh, 520px);
         font-size: 0.82rem;
-        padding: 12px 14px;
-        /* Ensure popup top accounts for mobile browser address bar */
-        top: max(60px, env(safe-area-inset-top, 0px) + 10px) !important;
       }
     }
     @media (max-width: 480px) {
       .bias-header-left {
         gap: 4px;
-        row-gap: 10px;
       }
       .bias-title {
         font-size: 1.05rem;
@@ -3782,14 +3781,6 @@
       }
       .bias-content {
         font-size: 0.92rem;
-      }
-      .bias-tooltip-popup {
-        width: min(95vw, 340px);
-        max-height: min(70vh, 440px);
-        font-size: 0.78rem;
-        padding: 10px 12px;
-        /* Ensure popup top accounts for mobile browser address bar */
-        top: max(60px, env(safe-area-inset-top, 0px) + 10px) !important;
       }
       .bias-sc-cell-name {
         font-size: 1.05rem;
@@ -3809,10 +3800,54 @@
         line-height: 1.5;
       }
     }
+
+    /* ============================================
+       FOLLOW @MULTIPERPS BANNER
+       ============================================ */
+    .follow-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: linear-gradient(90deg, rgba(34, 171, 148, 0.08) 0%, rgba(97, 136, 255, 0.08) 100%);
+      border-bottom: 1px solid var(--border-3);
+      color: var(--muted-2);
+      font-size: 0.82rem;
+      text-decoration: none;
+      transition: background 0.2s ease, color 0.2s ease;
+      position: relative;
+      z-index: 100;
+    }
+    .follow-banner:hover {
+      background: linear-gradient(90deg, rgba(34, 171, 148, 0.16) 0%, rgba(97, 136, 255, 0.16) 100%);
+      color: var(--text);
+    }
+    .follow-banner strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .follow-banner-icon {
+      font-size: 1rem;
+      color: var(--accent-2);
+      line-height: 1;
+    }
+    @media (max-width: 480px) {
+      .follow-banner {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+        gap: 6px;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <!-- Follow @MultiPerps subtle banner -->
+  <a href="https://x.com/MultiPerps" target="_blank" rel="noopener noreferrer" class="follow-banner" aria-label="Follow @MultiPerps on X for daily OI signals">
+    <span class="follow-banner-icon">&#120143;</span>
+    <span>Follow <strong>@MultiPerps</strong> for daily OI signals</span>
+  </a>
 
   <!-- Skip to content link for accessibility -->
   <a href="#mainContent" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to main content</a>
@@ -4000,8 +4035,13 @@
 
     const getSymbolFromUrl = () => {
       try {
+        // 1. Check query param ?symbol=BTCUSDT (legacy support)
         const raw = new URLSearchParams(window.location.search).get('symbol');
-        return normalizeSymbolValue(raw);
+        if (raw) return normalizeSymbolValue(raw);
+        // 2. Check pathname /BTCUSDT (new SEO-friendly URLs)
+        const path = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
+        if (path && /^[A-Z0-9]{2,20}USDT$/i.test(path)) return normalizeSymbolValue(path);
+        return '';
       } catch {
         return '';
       }
@@ -5284,16 +5324,14 @@
 
       const mrect = menu.getBoundingClientRect();
       const maxLeft = window.innerWidth - mrect.width - pad;
-      // Use visualViewport height when available (accounts for mobile keyboard)
-      const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      const maxTop = viewportHeight - mrect.height - pad;
+      const maxTop = window.innerHeight - mrect.height - pad;
 
       let left = rect.left + rect.width / 2 - mrect.width / 2;
       left = Math.max(pad, Math.min(left, maxLeft));
 
       const gap = 8;
       let topPx = rect.bottom + gap;
-      if (topPx + mrect.height > viewportHeight - pad) {
+      if (topPx + mrect.height > window.innerHeight - pad) {
         topPx = rect.top - gap - mrect.height;
       }
       topPx = Math.max(pad, Math.min(topPx, maxTop));
@@ -6106,7 +6144,7 @@
         state.elements.headerPriceCopy.className = state.elements.headerPrice.className;
       }
             const display = state.symbol.replace('USDT', '');
-      document.title = Number.isFinite(state.currentPrice) ? `${display} ${formatPrice(state.currentPrice)}` : display;
+      document.title = Number.isFinite(state.currentPrice) ? `${formatPrice(state.currentPrice)} ${display} — MultiPerps | Binance Futures Chart` : `${display} Binance Futures Chart — Multi-Timeframe & OI-Price Analysis | MultiPerps`;
       // Update chart meta with current price
       for (const interval of CONFIG.INTERVALS) {
         const chart = state.charts[interval];
@@ -7421,42 +7459,19 @@
             const isActive = tooltipPopup.classList.toggle('active');
             if (isActive) {
               const btnRect = infoBtn.getBoundingClientRect();
-              const isMobile = window.innerWidth <= 768;
-              const vv = window.visualViewport;
-              const viewportHeight = vv ? vv.height : window.innerHeight;
-              const viewportWidth = vv ? vv.width : window.innerWidth;
-              const viewportOffsetTop = vv ? vv.offsetTop : 0;
-              const viewportOffsetLeft = vv ? vv.offsetLeft : 0;
-              const popupWidth = isMobile
-                ? Math.min(viewportWidth - 16, 380)
-                : Math.min(440, viewportWidth - 20);
+              const popupWidth = Math.min(440, window.innerWidth - 20);
               tooltipPopup.style.width = popupWidth + 'px';
-
-              // Reset scroll to top so first lines are visible
-              tooltipPopup.scrollTop = 0;
-
-              if (isMobile) {
-                // On mobile, position popup near top of visible area with safe padding
-                // to avoid browser address bar overlay
-                const safeTop = Math.max(viewportOffsetTop + 60, 60);
-                const maxH = Math.min(viewportHeight - safeTop - 20, viewportHeight * 0.75, 520);
-                tooltipPopup.style.top = safeTop + 'px';
-                tooltipPopup.style.left = (viewportOffsetLeft + (viewportWidth - popupWidth) / 2) + 'px';
-                tooltipPopup.style.maxHeight = maxH + 'px';
-              } else {
-                let top = btnRect.bottom + 8;
-                let left = btnRect.left;
-                if (left + popupWidth > window.innerWidth - 10) {
-                  left = window.innerWidth - popupWidth - 10;
-                }
-                const maxH = Math.min(window.innerHeight * 0.85, 640);
-                if (top + maxH > window.innerHeight) {
-                  top = Math.max(10, btnRect.top - maxH - 8);
-                }
-                tooltipPopup.style.top = top + 'px';
-                tooltipPopup.style.left = left + 'px';
-                tooltipPopup.style.maxHeight = maxH + 'px';
+              let top = btnRect.bottom + 8;
+              let left = btnRect.left;
+              if (left + popupWidth > window.innerWidth - 10) {
+                left = window.innerWidth - popupWidth - 10;
               }
+              const maxH = Math.min(window.innerHeight * 0.85, 640);
+              if (top + maxH > window.innerHeight) {
+                top = Math.max(10, btnRect.top - maxH - 8);
+              }
+              tooltipPopup.style.top = top + 'px';
+              tooltipPopup.style.left = left + 'px';
             }
           });
           tooltipPopup.addEventListener('click', (e) => {
@@ -7696,7 +7711,42 @@
           titleEl.appendChild(document.createTextNode(displayText));
         }
       }
-      document.title = next.replace('USDT', '');
+      const displaySym = next.replace('USDT', '');
+      document.title = `${displaySym} Binance Futures Chart — Multi-Timeframe & OI-Price Analysis | MultiPerps`;
+
+      // ── Dynamic SEO meta updates ──────────────────────────────
+      try {
+        const sym = next.replace('USDT', '');
+        const fullSym = next; // e.g. BTCUSDT
+        const base = 'https://www.multiperps.com';
+        const tickerPath = '/' + fullSym;
+        const titleTag = `${sym} Binance Futures Chart — Multi-Timeframe & OI-Price Analysis | MultiPerps`;
+        const descTag = `${sym} Binance USDT-M perpetual futures live chart on MultiPerps. Real-time multi-timeframe candlestick charts (1m to 1M), OI-Price Matrix analysis, price alerts, open interest & funding rate data. Free, no sign-up.`;
+
+        document.title = titleTag;
+        const metaDesc = document.getElementById('meta-description');
+        if (metaDesc) metaDesc.setAttribute('content', descTag);
+        const linkCanon = document.getElementById('link-canonical');
+        if (linkCanon) linkCanon.setAttribute('href', base + tickerPath);
+        const metaCanon = document.getElementById('meta-canonical');
+        if (metaCanon) metaCanon.setAttribute('content', base + tickerPath);
+        const ogUrl = document.getElementById('og-url');
+        if (ogUrl) ogUrl.setAttribute('content', base + tickerPath);
+        const ogTitle = document.getElementById('og-title');
+        if (ogTitle) ogTitle.setAttribute('content', titleTag);
+        const ogDesc = document.getElementById('og-description');
+        if (ogDesc) ogDesc.setAttribute('content', descTag);
+        const twTitle = document.getElementById('twitter-title');
+        if (twTitle) twTitle.setAttribute('content', titleTag);
+        const twDesc = document.getElementById('twitter-description');
+        if (twDesc) twDesc.setAttribute('content', descTag);
+
+        // Update URL path: /BTCUSDT instead of ?symbol=BTCUSDT
+        if (state.urlSymbolMode) {
+          const newUrl = base + tickerPath;
+          window.history.replaceState(null, '', newUrl);
+        }
+      } catch (e) { /* non-critical */ }
 
       if (state.elements.alert1Input) {
         state.elements.alert1Input.value = loadStored(alertStorageKey(1, next), '');
@@ -8838,33 +8888,10 @@
           state.tickerSuggest.activeInput = state.elements.tickerInput;
           state.tickerSuggest.onSelectCallback = null;
           renderTickerSuggestMenu();
-          // Mobile keyboard fix: detect keyboard open and scroll input into view
-          if (window.visualViewport) {
-            document.body.classList.add('mobile-keyboard-open');
-            const scrollInputAboveKeyboard = () => {
-              const input = state.elements.tickerInput;
-              if (!input) return;
-              const rect = input.getBoundingClientRect();
-              const vv = window.visualViewport;
-              // If input bottom is below the visible visual viewport area, scroll it up
-              const inputBottom = rect.bottom;
-              const visibleBottom = vv.height + vv.offsetTop;
-              if (inputBottom > visibleBottom || rect.top < vv.offsetTop) {
-                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }
-            };
-            // Scroll after keyboard animation completes
-            setTimeout(scrollInputAboveKeyboard, 150);
-            setTimeout(scrollInputAboveKeyboard, 400);
-            // Also handle viewport resize (keyboard opening/closing)
-            vv.addEventListener('resize', scrollInputAboveKeyboard);
-            vv.addEventListener('scroll', scrollInputAboveKeyboard);
-          } else {
-            // Fallback for browsers without visualViewport
-            setTimeout(() => {
-              state.elements.tickerInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
-          }
+          // Scroll input into view on mobile to prevent virtual keyboard hiding it
+          setTimeout(() => {
+            state.elements.tickerInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
         });
       state.elements.tickerInput.addEventListener('input', () => {
         saveStored(STORAGE.tickerInput, state.elements.tickerInput.value);
@@ -8875,8 +8902,6 @@
         }, 300);
       });
         state.elements.tickerInput.addEventListener('blur', async () => {
-          // Remove mobile keyboard fix class
-          document.body.classList.remove('mobile-keyboard-open');
           if (Date.now() < state.tickerSuggest.ignoreBlurUntil) return;
           // Delay to allow menu clicks to process first
           setTimeout(() => {
@@ -9081,58 +9106,6 @@
       };
       setVH();
       window.addEventListener('resize', setVH);
-
-      // ===== Mobile Virtual Keyboard Fix =====
-      // Detect keyboard open/close via visualViewport and adjust layout
-      // so text inputs remain visible when the keyboard is shown.
-      if (window.visualViewport) {
-        let vvScrollHandler = null;
-        let vvResizeHandler = null;
-
-        const onInputFocus = (e) => {
-          if (e.target.matches('input[type="text"], input:not([type])')) {
-            document.body.classList.add('mobile-keyboard-open');
-            const focusedInput = e.target;
-            const scrollFocusedIntoView = () => {
-              if (!focusedInput.isConnected) return;
-              const rect = focusedInput.getBoundingClientRect();
-              const vv = window.visualViewport;
-              const visibleBottom = vv.height + vv.offsetTop;
-              // If the input is outside the visible area above the keyboard, scroll to it
-              if (rect.bottom > visibleBottom || rect.top < vv.offsetTop) {
-                focusedInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }
-            };
-            // Multiple attempts to catch keyboard animation timing
-            setTimeout(scrollFocusedIntoView, 100);
-            setTimeout(scrollFocusedIntoView, 300);
-            setTimeout(scrollFocusedIntoView, 500);
-            // Also respond to visualViewport changes (keyboard opening)
-            vvResizeHandler = scrollFocusedIntoView;
-            vvScrollHandler = scrollFocusedIntoView;
-            window.visualViewport.addEventListener('resize', vvResizeHandler);
-            window.visualViewport.addEventListener('scroll', vvScrollHandler);
-          }
-        };
-
-        const onInputBlur = (e) => {
-          if (e.target.matches('input[type="text"], input:not([type])')) {
-            document.body.classList.remove('mobile-keyboard-open');
-            // Clean up visualViewport listeners
-            if (vvResizeHandler) {
-              window.visualViewport.removeEventListener('resize', vvResizeHandler);
-              vvResizeHandler = null;
-            }
-            if (vvScrollHandler) {
-              window.visualViewport.removeEventListener('scroll', vvScrollHandler);
-              vvScrollHandler = null;
-            }
-          }
-        };
-
-        document.addEventListener('focusin', onInputFocus);
-        document.addEventListener('focusout', onInputBlur);
-      }
 
       // Initialize rankings
       initRankings();
@@ -9902,6 +9875,14 @@
             <span class="blog-card-link">Read more &rarr;</span>
           </div>
         </div>
+        <div class="blog-card" onclick="showBlogArticle(9)">
+          <div class="blog-card-body">
+            <div class="blog-card-date">May 18, 2026</div>
+            <div class="blog-card-title">Open Interest x Price Matrix Analysis: How to Read the Four Market Scenarios</div>
+            <div class="blog-card-excerpt">The OI-Price Matrix is a powerful 2x2 scenario grid that reveals whether money is entering or leaving a position. Learn how to read Strong Uptrend, Short Covering, Strong Downtrend, and Exhaustion signals across multiple timeframes.</div>
+            <span class="blog-card-link">Read more &rarr;</span>
+          </div>
+        </div>
       </div>
 
       <div id="blog-articles">
@@ -10053,6 +10034,73 @@
           <p>On Binance spot, short selling is not directly possible — you can only profit from price increases. On futures, going short is as simple as clicking the sell button. This makes futures the primary market for traders who want to profit from both rising and falling markets. The ability to short also enables hedging strategies, where you can protect your spot holdings by taking a short futures position during uncertain market conditions.</p>
           <h2>Which Is Right for You?</h2>
           <p>Spot trading is ideal for long-term investors who believe in the fundamental value of cryptocurrencies and want to accumulate over time. Futures trading is better suited for active traders who want to capitalize on both rising and falling markets, use leverage to amplify returns, and employ sophisticated strategies like hedging and arbitrage. Many experienced traders use both markets simultaneously — holding core positions in spot while actively trading futures for shorter-term opportunities. MultiPerps supports both approaches with real-time data for all Binance USDT-M perpetual contracts.</p>
+        </div>
+
+        <!-- Blog Article 9 — OI-Price Matrix -->
+        <div class="blog-full-article" id="blog-article-9">
+          <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
+          <h1>Open Interest x Price Matrix Analysis: How to Read the Four Market Scenarios</h1>
+          <p>The Open Interest x Price Matrix is one of the most powerful yet underused analytical frameworks available to crypto futures traders. By combining the direction of open interest changes with the direction of price changes, the OI-Price Matrix reveals whether capital is genuinely entering a market or simply rotating out of existing positions. This distinction is the difference between riding a sustainable trend and getting caught in a false breakout. In this guide, we break down each of the four scenarios in the matrix, explain how MultiPerps calculates these signals across multiple timeframes, and show you how to incorporate OI-Price analysis into your daily trading workflow.</p>
+
+          <h2>What Is the OI-Price Matrix?</h2>
+          <p>The OI-Price Matrix is a 2x2 scenario analysis grid that maps the relationship between open interest direction and price direction. Open interest represents the total number of outstanding derivative contracts that have not been settled. When open interest rises, new capital is entering the market. When open interest falls, existing positions are being closed. Price direction is straightforward — it tells you whether the market is moving up or down. But price alone does not tell you whether a move is supported by new capital or is simply the result of position unwinding. The OI-Price Matrix solves this problem by combining both dimensions into a single, interpretable framework.</p>
+          <p>On MultiPerps, the OI-Price Matrix panel analyzes 168 hourly data points (7 full days) for both price and open interest, computing multi-timeframe trends across three windows: 4-hour, 24-hour, and 7-day. Each timeframe independently determines whether OI and price are rising or falling, using EMA(5) smoothing to reduce noise. The direction is determined by comparing the current EMA(5) value against adaptive thresholds that adjust to each asset's rolling volatility, with a static fallback for assets with insufficient historical data. The three timeframes then cast weighted votes (4h = 1 vote, 24h = 2 votes, 7d = 3 votes), and the weighted majority determines the final signal displayed in the matrix.</p>
+
+          <h2>The Four Scenarios Explained</h2>
+
+          <h3>1. Strong Uptrend (OI Up + Price Up)</h3>
+          <p>When both open interest and price are rising simultaneously, the market is in a Strong Uptrend. This is the healthiest and most sustainable bullish scenario because it means new capital is actively entering long positions and pushing prices higher. The rising OI confirms that the price increase is not just a short-covering bounce — it is being driven by genuine buying pressure from market participants who are opening new positions. Traders should view this signal as confirmation that the uptrend has institutional or widespread retail support, and that momentum is likely to continue until OI begins to plateau or decline.</p>
+          <p>In practice, a Strong Uptrend signal on the 24-hour and 7-day timeframes carries more weight than one appearing only on the 4-hour timeframe. When all three timeframes agree on Strong Uptrend, the signal is at its most reliable. This is the ideal environment for holding long positions, trailing stops, and looking for pullback entries rather than trying to pick tops. Fighting a multi-timeframe Strong Uptrend by shorting is one of the most common mistakes made by inexperienced traders.</p>
+
+          <h3>2. Short Covering (OI Down + Price Up)</h3>
+          <p>When price is rising but open interest is falling, the OI-Price Matrix identifies this as Short Covering. This scenario occurs when existing short sellers are closing their positions by buying back into the market, which pushes price upward. The key distinction is that no new capital is entering the market — the price increase is being driven entirely by position exits rather than new buying pressure. This makes Short Covering rallies inherently less sustainable than Strong Uptrend moves, because once the shorts have finished covering, there is no fresh demand to keep the price elevated.</p>
+          <p>Short Covering often appears during sharp but brief rallies in otherwise bearish markets. It can also appear at the beginning of a trend reversal, where initial short covering creates enough upward momentum to attract new longs. The critical question is whether the Short Covering transitions into a Strong Uptrend (new longs enter as OI begins rising again) or stalls and reverses once the covering is complete. Traders should be cautious about entering new long positions during a Short Covering signal unless they see confirming evidence that OI is beginning to turn positive. This signal is particularly useful as an early warning that a rally may be running out of fuel.</p>
+
+          <h3>3. Strong Downtrend (OI Up + Price Down)</h3>
+          <p>When open interest is rising but price is falling, the matrix signals a Strong Downtrend. This is the mirror image of the Strong Uptrend and is equally significant. Rising OI during a price decline means new short positions are being opened aggressively — fresh capital is entering the market on the bearish side. This is the most sustainable bearish scenario because the selling pressure is being driven by new positions rather than forced liquidations. A Strong Downtrend indicates that the bears are in control and are actively adding to their positions, making it dangerous to try to catch the bottom.</p>
+          <p>The Strong Downtrend signal is particularly powerful when it appears across the 24-hour and 7-day timeframes simultaneously. This multi-timeframe agreement suggests that the bearish conviction is not just a short-term spike but a sustained shift in market positioning. Traders should use this signal to avoid counter-trend long positions, tighten stops on any existing longs, and consider aligned short setups. The Strong Downtrend often precedes accelerated downside moves as the weight of new short positions creates a self-reinforcing cycle of selling pressure.</p>
+
+          <h3>4. Exhaustion (OI Down + Price Down)</h3>
+          <p>When both open interest and price are falling, the matrix signals Exhaustion. This is perhaps the most nuanced and valuable signal in the OI-Price Matrix because it identifies the end of a move rather than the continuation of one. Falling OI during a price decline means that existing long positions are being forcibly closed — either through deliberate capitulation or liquidation cascades. The selling is not being driven by new short sellers entering the market; it is being driven by existing longs giving up and exiting. This is an important distinction because once the longs have finished capitulating, the selling pressure naturally subsides, and the market becomes vulnerable to a reversal.</p>
+          <p>Exhaustion signals often appear at the tail end of a prolonged downtrend and can serve as an early warning that a bottom may be forming. However, timing the exact reversal is notoriously difficult. An Exhaustion signal does not mean the market will immediately reverse — it means the conditions for a reversal are developing. Prudent traders use this signal to reduce short exposure, tighten stop-losses on active shorts, and begin watching for bullish reversal patterns on lower timeframes. When an Exhaustion signal on the 4-hour or 24-hour timeframe coincides with a key support level and a bullish candlestick pattern, the probability of a meaningful bounce increases substantially.</p>
+
+          <h2>How MultiPerps Calculates the OI-Price Signal</h2>
+          <p>Understanding the calculation methodology behind the OI-Price Matrix helps you interpret the signals with greater confidence. MultiPerps uses a multi-step process that goes well beyond a simple price-and-OI comparison:</p>
+          <ul>
+            <li><strong>Data Collection:</strong> The system fetches 168 hourly data points (7 full days) for both price and open interest from the Binance Futures API. This provides a statistically meaningful dataset that captures intraday, daily, and weekly trends. Additional data points are fetched from the 5-minute and 1-hour intervals for the 4-hour timeframe calculation, and the 24-hour ticker summary for funding rate context.</li>
+            <li><strong>EMA(5) Smoothing:</strong> Both the price and OI series are smoothed using a 5-period Exponential Moving Average before any trend determination is made. This is critical because raw OI data can be noisy, especially on shorter timeframes. The EMA(5) acts as a lightweight noise filter that preserves the directional signal while removing short-term fluctuations that would otherwise produce false readings.</li>
+            <li><strong>Adaptive Thresholds:</strong> Rather than using a fixed percentage threshold to determine whether OI or price is "rising" or "falling," MultiPerps calculates adaptive thresholds based on each asset's rolling volatility. This means that a 2% OI change might be significant for a stablecoin pair but insignificant for a volatile meme coin. The adaptive system ensures that signals are calibrated to each asset's own behavior, with a static threshold fallback for newly listed assets that do not yet have sufficient historical data.</li>
+            <li><strong>Weighted Timeframe Voting:</strong> Each timeframe (4h, 24h, 7d) independently determines the OI and price direction, then casts a weighted vote. The 4-hour timeframe receives 1 vote, the 24-hour timeframe receives 2 votes, and the 7-day timeframe receives 3 votes. This weighting reflects the fact that longer timeframes carry more structural significance — a 7-day trend is more reliable than a 4-hour trend. A weighted majority is required to produce a directional signal; otherwise, the matrix displays "No Clear Signal" with an explanation of the disagreement between timeframes.</li>
+          </ul>
+
+          <h2>Signal Strength Scoring</h2>
+          <p>Beyond the simple directional signal, MultiPerps computes a Signal Strength score that quantifies how confident the matrix is about its reading. The Signal Strength is composed of three components:</p>
+          <ul>
+            <li><strong>Agreement Score:</strong> Measures how many timeframes agree on the same signal. If all three timeframes show Strong Uptrend, the agreement score is maximum. If only the 7-day timeframe shows Strong Uptrend while the shorter timeframes disagree, the agreement score is lower. Higher agreement means more reliable signals.</li>
+            <li><strong>Magnitude Score:</strong> Evaluates the size of the OI and price changes relative to the adaptive thresholds. A small OI change that barely crosses the threshold produces a lower magnitude score than a large, decisive move. This helps distinguish between borderline signals and strong, unambiguous ones.</li>
+            <li><strong>Participation Score:</strong> Assesses how broadly the move is distributed across the market. High participation means the OI and price changes are consistent and sustained rather than driven by a single anomalous data point. This filters out flash crashes and brief spikes that might otherwise trigger false signals.</li>
+          </ul>
+          <p>These three components are combined into a composite Signal Strength score that gives you a quick at-a-glance assessment of signal quality. A high Signal Strength score means you can trade with more confidence on the matrix reading, while a low score suggests caution and the need for additional confirmation from other indicators or chart patterns.</p>
+
+          <h2>Additional Indicators: OI Expansion Quality and Liquidation Pressure</h2>
+          <p>The OI-Price Matrix panel on MultiPerps includes two supplementary indicators that provide deeper context for the primary signal:</p>
+          <p><strong>OI Expansion Quality</strong> measures whether the change in open interest is healthy or potentially problematic. High-quality OI expansion occurs when new positions are being opened gradually and consistently, supporting a sustainable trend. Low-quality OI expansion happens when OI spikes rapidly in a short period, often indicating overcrowded positioning that is vulnerable to a sharp reversal. This indicator helps you avoid entering positions at the peak of a crowded trade — one of the most common sources of significant losses in futures markets.</p>
+          <p><strong>Liquidation Pressure</strong> estimates the intensity of forced position closures based on the speed and magnitude of price and OI changes. High liquidation pressure suggests that leveraged positions are being forcibly unwound, which often precedes violent price swings in both directions. When liquidation pressure is extreme, even technically sound trading setups can fail because the sheer force of liquidation flows overwhelms normal market dynamics. This indicator acts as a risk filter — when liquidation pressure is elevated, position sizes should be reduced and stop-losses tightened.</p>
+
+          <h2>Funding Rate Context</h2>
+          <p>The OI-Price Matrix does not exist in isolation — it must be interpreted alongside the funding rate environment. MultiPerps includes funding rate context directly within the matrix panel to make this integration seamless. The funding rate tells you how much longs are paying shorts (positive funding) or shorts are paying longs (negative funding) every eight hours. When combined with the OI-Price signal, funding rate context reveals whether the market's positioning is sustainable or stretched to an extreme.</p>
+          <p>For example, a Strong Uptrend signal combined with moderate positive funding is a healthy environment — new longs are entering and paying a reasonable cost to maintain their positions. However, a Strong Uptrend with extremely high positive funding suggests the market is overcrowded on the long side, making it vulnerable to a long liquidation cascade if price dips even slightly. Conversely, a Strong Downtrend with extremely negative funding suggests the market is overcrowded on the short side, creating conditions for a short squeeze. The funding rate context transforms the OI-Price signal from a simple directional reading into a comprehensive positioning analysis.</p>
+
+          <h2>Putting It All Together: A Trading Workflow</h2>
+          <p>Here is a practical workflow for incorporating the OI-Price Matrix into your daily trading routine on MultiPerps:</p>
+          <ul>
+            <li><strong>Step 1 — Start with the 7-day signal:</strong> Open the OI-Price Matrix panel on your primary ticker and check the 7-day signal first. This establishes the macro context. If the 7-day signal is Strong Uptrend, your default bias should be bullish for the week. If it is Strong Downtrend, your default bias should be bearish.</li>
+            <li><strong>Step 2 — Confirm with the 24-hour signal:</strong> The 24-hour signal provides the intermediate-term picture. When the 24-hour signal agrees with the 7-day signal, you have a high-conviction environment. When they disagree, the market is in transition and you should trade with smaller positions and tighter stops.</li>
+            <li><strong>Step 3 — Use the 4-hour signal for timing:</strong> The 4-hour signal is your tactical tool for entries and exits. Look for the 4-hour signal to align with the longer-term signals before entering a trade. For example, in a 7-day Strong Uptrend, wait for the 4-hour signal to also show Strong Uptrend before adding to your long position.</li>
+            <li><strong>Step 4 — Check Signal Strength and OI Expansion Quality:</strong> Before committing capital, verify that Signal Strength is above average and OI Expansion Quality is healthy. Low Signal Strength or poor expansion quality means the signal is unreliable and should be treated as a watch-and-wait situation rather than an actionable trade.</li>
+            <li><strong>Step 5 — Cross-reference with funding rate:</strong> Finally, check the funding rate. Extreme funding in the direction of your trade is a warning sign. Moderate funding is a green light. Extremely negative funding when you are looking to go long (or vice versa) can actually be a contrarian confirmation that the market is overcrowded on the wrong side.</li>
+          </ul>
+          <p>The OI-Price Matrix is not a standalone trading system — it is a positioning analysis tool that tells you whether the market's structure supports your directional thesis. Combined with traditional technical analysis (support, resistance, candlestick patterns) and risk management (position sizing, stop-losses), it provides a significant edge over traders who look at price charts alone. MultiPerps makes this analysis available for free, in real time, across all Binance USDT-M perpetual contracts, with no sign-up required. Start using the OI-Price Matrix on your next trade and see what you have been missing.</p>
         </div>
       </div>
     </div>
