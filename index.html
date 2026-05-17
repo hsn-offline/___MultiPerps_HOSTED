@@ -1197,6 +1197,8 @@
       .status-header-info {
         justify-content: center;
         flex: 1 1 100%;
+        flex-wrap: nowrap;
+        gap: 4px;
       }
 
       .rankings-grid {
@@ -1241,6 +1243,17 @@
         width: 20px;
         height: 20px;
         font-size: 0.75rem;
+      }
+      .bias-ticker-price-row {
+        justify-content: center;
+        gap: 4px;
+        flex-wrap: nowrap;
+      }
+      .bias-ticker-price-row .ticker-title {
+        font-size: 1rem;
+      }
+      .bias-ticker-price-row .header-price {
+        font-size: 1rem;
       }
     }
 
@@ -1385,6 +1398,17 @@
     .footer-source a:hover {
       color: var(--accent);
     }
+      .bias-ticker-price-row {
+        justify-content: center;
+        gap: 3px;
+        flex-wrap: nowrap;
+      }
+      .bias-ticker-price-row .ticker-title {
+        font-size: 1rem;
+      }
+      .bias-ticker-price-row .header-price {
+        font-size: 1rem;
+      }
 
     @media (max-width: 480px) {
       .site-footer {
@@ -1637,6 +1661,8 @@
       .status-header-info {
         justify-content: center;
         flex: 1 1 100%;
+        flex-wrap: nowrap;
+        gap: 4px;
       }
     }
     @media (max-width: 1140px) {
@@ -2338,6 +2364,8 @@
       .status-header-info {
         justify-content: center;
         flex: 1 1 100%;
+        flex-wrap: nowrap;
+        gap: 4px;
       }
       /* Multi-alert mobile: single column, wrap alert fields */
       .multi-alert-inputs {
@@ -2430,6 +2458,8 @@
       .status-header-info {
         justify-content: center;
         flex: 1 1 100%;
+        flex-wrap: nowrap;
+        gap: 4px;
       }
     }
 
@@ -3364,6 +3394,7 @@
       gap: 8px;
       flex: 0 0 100%;
       width: 100%;
+      flex-wrap: nowrap;
     }
     .bias-ticker-name {
       font-size: 1.1rem;
