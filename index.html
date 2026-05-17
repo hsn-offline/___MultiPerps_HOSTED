@@ -3755,9 +3755,10 @@
         max-width: 100%;
       }
       .bias-tooltip-popup {
-        width: 290px;
-        max-height: min(80vh, 520px);
+        width: min(92vw, 360px);
+        max-height: min(75vh, 480px);
         font-size: 0.82rem;
+        padding: 12px 14px;
       }
     }
     @media (max-width: 480px) {
@@ -3779,6 +3780,12 @@
       }
       .bias-content {
         font-size: 0.92rem;
+      }
+      .bias-tooltip-popup {
+        width: min(95vw, 340px);
+        max-height: min(70vh, 440px);
+        font-size: 0.78rem;
+        padding: 10px 12px;
       }
       .bias-sc-cell-name {
         font-size: 1.05rem;
@@ -7410,19 +7417,28 @@
             const isActive = tooltipPopup.classList.toggle('active');
             if (isActive) {
               const btnRect = infoBtn.getBoundingClientRect();
-              const popupWidth = Math.min(440, window.innerWidth - 20);
+              // Use visualViewport on mobile to account for address bar / virtual keyboard
+              const vv = window.visualViewport;
+              const viewportHeight = vv ? vv.height : window.innerHeight;
+              const viewportWidth = vv ? vv.width : window.innerWidth;
+              const viewportOffsetTop = vv ? vv.offsetTop : 0;
+              const viewportOffsetLeft = vv ? vv.offsetLeft : 0;
+              const popupWidth = Math.min(440, viewportWidth - 20);
               tooltipPopup.style.width = popupWidth + 'px';
               let top = btnRect.bottom + 8;
-              let left = btnRect.left;
-              if (left + popupWidth > window.innerWidth - 10) {
-                left = window.innerWidth - popupWidth - 10;
+              let left = viewportOffsetLeft + 10;
+              // Center horizontally on mobile for better readability
+              left = viewportOffsetLeft + (viewportWidth - popupWidth) / 2;
+              left = Math.max(viewportOffsetLeft + 5, Math.min(left, viewportOffsetLeft + viewportWidth - popupWidth - 5));
+              const maxH = Math.min(viewportHeight * 0.85, 640);
+              if (top + maxH > viewportOffsetTop + viewportHeight) {
+                top = btnRect.top - maxH - 8;
               }
-              const maxH = Math.min(window.innerHeight * 0.85, 640);
-              if (top + maxH > window.innerHeight) {
-                top = Math.max(10, btnRect.top - maxH - 8);
-              }
+              // Ensure popup top is within visible viewport
+              top = Math.max(viewportOffsetTop + 5, top);
               tooltipPopup.style.top = top + 'px';
               tooltipPopup.style.left = left + 'px';
+              tooltipPopup.style.maxHeight = maxH + 'px';
             }
           });
           tooltipPopup.addEventListener('click', (e) => {
