@@ -163,7 +163,7 @@
         "name": "What is MultiFlow on MultiPerps?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "MultiFlow (OI x Price Indicator) is a real-time market regime classifier that reveals what is happening beneath price action by tracking the relationship between price movement and open interest across three timeframes (1H, 4H, 1D). It classifies the market into four scenarios per timeframe: Strong Uptrend (Price up + OI up), Weak Rally (Price up + OI down), Strong Downtrend (Price down + OI up), and Exhaustion (Price down + OI down). Three hard filters prevent false signals: F1 Z-score threshold gate, F8 Wilder's ADX regime gate, and F10 per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars). Soft filters (F3 Z_Vol, F4 Z_FR) provide context without changing the scenario. A composite Signal Strength (Score: -100 to +100) with directional label (BULLISH/BEARISH/FLAT) and per-TF mini summary is displayed below the chart columns. Each timeframe classifies independently — users decide how to weigh signals."
+          "text": "MultiFlow (OI x Price Indicator) is a real-time market regime classifier that reveals what is happening beneath price action by tracking the relationship between price movement and open interest across three timeframes (1H, 4H, 1D). It classifies the market into four scenarios per timeframe: Strong Uptrend (Price up + OI up), Weak Rally (Price up + OI down), Strong Downtrend (Price down + OI up), and Exhaustion (Price down + OI down). Three hard filters prevent false signals: Significance Gate (Z-score threshold), Trend Detection Gate (Wilder's ADX regime gate), and Data Readiness Gate (per-TF cold start guard: 1H: 55, 4H: 55, 1D: 21 bars). Soft context filters (Volume Context / Z_Vol, Funding Rate Context / Z_FR) provide context without changing the scenario. A composite Signal Strength (Score: -100 to +100) with directional label (BULLISH/BEARISH/FLAT) and per-TF mini summary is displayed below the chart columns. Each timeframe classifies independently — users decide how to weigh signals."
         }
       },
       {
@@ -171,7 +171,7 @@
         "name": "How does the OI-Price analysis detect market bias?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "MultiFlow detects market bias by computing Z-scores for price and open interest across three timeframes (1H, 4H, 1D) using a configurable uniform lookback window with expanding-window method. Each timeframe independently classifies the market into one of four scenarios based on whether Z_Price and Z_OI breach their thresholds (|Z_Price|>1.5, |Z_OI|>2.0). Hard filters are applied before classification: F1 (Z-score gate) ensures thresholds are breached, F8 (Wilder's ADX regime) only classifies in trending markets (ADX>=20), and F10 (per-TF cold start guard) requires minimum 55 data points for 1H, 55 for 4H, and 21 for 1D. A composite row below the columns shows the directional label (BULLISH/BEARISH/FLAT), Signal Strength Score (-100 to +100), and per-TF scenario summary. Each column shows only the Z_Price and Z_OI chart lines with Z-score values below. There is no voting — users decide how to weigh signals across timeframes based on their trading style."
+          "text": "MultiFlow detects market bias by computing Z-scores for price and open interest across three timeframes (1H, 4H, 1D) using a configurable uniform lookback window with expanding-window method. Each timeframe independently classifies the market into one of four scenarios based on whether Z_Price and Z_OI breach their thresholds (|Z_Price|>1.5, |Z_OI|>2.0). Hard filters are applied before classification: Significance Gate (Z-score threshold) ensures thresholds are breached, Trend Detection Gate (Wilder's ADX regime) only classifies in trending markets (ADX>=20), and Data Readiness Gate (per-TF cold start guard) requires minimum 55 data points for 1H, 55 for 4H, and 21 for 1D. A composite row below the columns shows the directional label (BULLISH/BEARISH/FLAT), Signal Strength Score (-100 to +100), and per-TF scenario summary. Each column shows only the Z_Price and Z_OI chart lines with Z-score values below. There is no voting — users decide how to weigh signals across timeframes based on their trading style."
         }
       }
     ]
@@ -4260,7 +4260,7 @@
 
     const formatPrice = (value) => {
       if (!Number.isFinite(value)) return '-----';
-      return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`;
+      return `${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`;
     };
 
     const formatPlainNumber = (value) => {
@@ -4585,7 +4585,14 @@
     };
 
     // ===== Multi-Alert Background Monitor =====
+    // Guard to prevent overlapping checkMultiAlerts invocations
+    let _alertCheckInProgress = false;
+    // Debounce timer for alert WS reconnects — prevents rapid reconnection on alert add/update
+    let _alertWsDebounce = null;
     const checkMultiAlerts = async () => {
+      if (_alertCheckInProgress) return;
+      _alertCheckInProgress = true;
+      try {
       const alerts = state.multiAlerts;
       if (!alerts || alerts.length === 0) return;
 
@@ -4671,6 +4678,9 @@
       }
       renderAlertLiveStatus();
       renderAlertRtPrices();
+      } finally {
+        _alertCheckInProgress = false;
+      }
     };
 
     const startMultiAlertMonitor = () => {
@@ -4678,7 +4688,14 @@
       // FIX: Removed !document.hidden guard — alerts MUST work when tab is in background.
       // That's the whole point of alerts: they fire when you're NOT watching.
       state.alertTimer = setInterval(() => checkMultiAlerts(), 1000);
-      reconnectPrimaryWs(); // Reconnect primary WS to include alert streams
+      // Reconnect primary WS to include alert streams — but skip if called from start()
+      // since start() already calls connectBinanceFutures() separately.
+      // Use a flag to avoid double-connecting.
+      if (state._wsAlreadyConnecting) {
+        state._wsAlreadyConnecting = false; // reset after one use
+      } else {
+        reconnectPrimaryWs();
+      }
       renderAlertLiveStatus();
     };
 
@@ -4863,7 +4880,9 @@
         state.multiAlerts[emptyIdx] = { ticker: sym, price: p, lastTriggered: 0 };
         saveMultiAlerts(state.multiAlerts);
         renderAlertSlots();
-        startMultiAlertMonitor();
+        // Debounce WS reconnect to avoid rapid reconnection on alert add
+        clearTimeout(_alertWsDebounce);
+        _alertWsDebounce = setTimeout(() => startMultiAlertMonitor(), 500);
         return true;
       }
       // Count only active (non-null, non-pending) alerts
@@ -4876,7 +4895,8 @@
       state.multiAlerts.push({ ticker: sym, price: p, lastTriggered: 0 });
       saveMultiAlerts(state.multiAlerts);
       renderAlertSlots();
-      startMultiAlertMonitor();
+      clearTimeout(_alertWsDebounce);
+      _alertWsDebounce = setTimeout(() => startMultiAlertMonitor(), 500);
       return true;
     };
 
@@ -4923,7 +4943,8 @@
           state.multiAlerts[index] = { ticker: sym, price: p, lastTriggered: 0 };
           saveMultiAlerts(state.multiAlerts);
           renderAlertSlots();
-          startMultiAlertMonitor();
+          clearTimeout(_alertWsDebounce);
+          _alertWsDebounce = setTimeout(() => startMultiAlertMonitor(), 500);
         }
         return;
       }
@@ -5843,8 +5864,8 @@
 
   <strong style="color:var(--text)">How It Works &mdash; Processing Pipeline</strong><br>
   <span style="font-size:0.78rem;color:var(--muted-3);font-family:monospace">
-  Raw Data &rarr; F10: Cold Start? (1H: &ge;55, 4H: &ge;55, 1D: &ge;21) &rarr; F8: ADX &ge; 20? &rarr; F1: Z-Score Gate? &rarr;<br>
-  Classify: Price&uarr;/&darr; x OI&uarr;/&darr; &rarr; Soft Filters (F3: Z_Vol, F4: Z_FR) &rarr;<br>
+  Raw Data &rarr; Data Readiness? (&ge;55/55/21 bars) &rarr; Trend Detection? (ADX &ge; 20) &rarr; Significance? (Z-Score Gate) &rarr;<br>
+  Classify: Price&uarr;/&darr; x OI&uarr;/&darr; &rarr; Context Filters (Z_Vol, Z_FR) &rarr;<br>
   Signal Strength &rarr; Output</span><br><br>
 
   <strong style="color:var(--text)">The Four Scenarios (Classification = Price x OI only)</strong><br>
@@ -5859,19 +5880,19 @@
   <span style="font-size:0.82rem;color:var(--muted-3)">
   <span style="color:#3B82F6"><b>Z_Price</b></span> &mdash; Z-score of closing prices (primary chart line)<br>
   <span style="color:#F59E0B"><b>Z_OI</b></span> &mdash; Z-score of open interest (primary chart line)<br>
-  <span style="color:#10B981"><b>Z_Vol</b></span> &mdash; Z-score of volume (Advanced toggle, context filter F3)<br>
-  <span style="color:#A78BFA"><b>Z_FR</b></span> &mdash; Z-score of funding rate (Advanced toggle, context filter F4)</span><br><br>
+  <span style="color:#10B981"><b>Z_Vol</b></span> &mdash; Z-score of volume (Advanced toggle, Volume Context Filter)<br>
+  <span style="color:#A78BFA"><b>Z_FR</b></span> &mdash; Z-score of funding rate (Advanced toggle, Funding Rate Context Filter)</span><br><br>
 
   <strong style="color:var(--text)">Hard Filters (must pass to classify)</strong><br>
   <span style="font-size:0.82rem;color:var(--muted-3)">
-  <b>F1</b> Z-score threshold gate &mdash; both |Z_Price| &gt; 1.5 and |Z_OI| &gt; 2.0 must breach<br>
-  <b>F8</b> Wilder's ADX &ge; 20 regime gate &mdash; only classifies in trending markets<br>
-  <b>F10</b> Cold start guard &mdash; requires at least 55 bars (1H), 55 bars (4H), 21 bars (1D)</span><br><br>
+  <b>Significance Gate</b> (Z-Score Threshold) &mdash; both |Z_Price| &gt; 1.5 and |Z_OI| &gt; 2.0 must breach<br>
+  <b>Trend Detection Gate</b> (ADX &ge; 20) &mdash; only classifies in trending markets<br>
+  <b>Data Readiness Gate</b> (Cold Start Guard) &mdash; requires at least 55 bars (1H), 55 bars (4H), 21 bars (1D)</span><br><br>
 
   <strong style="color:var(--text)">Soft Filters (context only, never change scenario)</strong><br>
   <span style="font-size:0.82rem;color:var(--muted-3)">
-  <b>F3</b> Z_Vol confirmation &mdash; provides volume context<br>
-  <b>F4</b> Z_FR confirmation &mdash; provides funding rate context; flags squeeze if extreme</span><br><br>
+  <b>Volume Context</b> (Z_Vol) &mdash; provides volume context<br>
+  <b>Funding Rate Context</b> (Z_FR) &mdash; provides funding rate context; flags squeeze if extreme</span><br><br>
 
   <strong style="color:var(--text)">Signal Strength (Score: -100 to +100)</strong><br>
   <span style="font-size:0.82rem;color:var(--muted-3)">
@@ -6222,7 +6243,7 @@
         state.elements.headerPriceCopy.className = state.elements.headerPrice.className;
       }
             const display = state.symbol.replace('USDT', '');
-      document.title = Number.isFinite(state.currentPrice) ? `${state.currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 })} ${display} — MultiPerps | Binance Futures Chart` : `${display} Binance Futures Chart — Multi-Timeframe & OI-Price Analysis | MultiPerps`;
+      document.title = Number.isFinite(state.currentPrice) ? `${formatPrice(state.currentPrice)} ${display} — MultiPerps | Binance Futures Chart` : `${display} Binance Futures Chart — Multi-Timeframe & OI-Price Analysis | MultiPerps`;
       // Update chart meta with current price
       for (const interval of CONFIG.INTERVALS) {
         const chart = state.charts[interval];
@@ -6541,11 +6562,9 @@
             try { ws.close(); } catch { }
             return;
           }
-          if (navigator.onLine === false) {
-            state.wsStatus = { text: 'Inactive', level: 'error' };
-          } else {
-            state.wsStatus = { text: 'Active', level: 'ok' };
-          }
+          // If onopen fired, the connection is working — always show Active.
+          // Don't check navigator.onLine here: if WS connected, network is clearly up.
+          state.wsStatus = { text: 'Active', level: 'ok' };
           state.reconnectAttempts = 0;
           state.lastMessageTime = Date.now();
           _binanceErrorState.wsConsecutiveFails = 0; // Reset on successful connect
@@ -6554,7 +6573,8 @@
           // On reconnection, refresh kline data to fill any gaps from the
           // offline/disconnected period. Skip on the very first connect
           // (the start() function already fetches klines before connecting).
-          if (state.lastTradeTime !== null) {
+          // Also skip if handleNetworkOnline already fetched klines before connecting.
+          if (state.lastTradeTime !== null && !state._skipReconnectKlineRefresh) {
             Promise.all(CONFIG.INTERVALS.map(async (interval) => {
               const chart = state.charts[interval];
               if (!chart) return;
@@ -6567,10 +6587,12 @@
               redrawCharts();
             }).catch(() => {});
           }
+          state._skipReconnectKlineRefresh = false; // always reset the flag
 
           // On reconnection, refresh tracker klines to fill gaps
+          // Delay tracker kline refresh so it doesn't compete for bandwidth with primary klines
           if (stateTracker._wasConnected) {
-            fetchTrackerKlines().catch(() => {});
+            setTimeout(() => fetchTrackerKlines().catch(() => {}), 2000);
           }
           stateTracker._wasConnected = true;
 
@@ -6833,6 +6855,7 @@
           const stale = Date.now() - state.lastMessageTime > CONFIG.STALE_RECONNECT_MS;
           if (stale && state.ws) {
             try { state.ws.close(); } catch { }
+            state.ws = null; // Prevent repeated close attempts on next health tick
           }
         }
 
@@ -6846,7 +6869,12 @@
       }, CONFIG.HEALTH_UPDATE_INTERVAL_MS);
 
       updateCountdowns();
-      if (state.multiAlerts.length > 0) startMultiAlertMonitor();
+      // Set flag to prevent startMultiAlertMonitor from double-connecting WS
+      // since start() already called connectBinanceFutures() above
+      if (state.multiAlerts.length > 0) {
+        state._wsAlreadyConnecting = true;
+        startMultiAlertMonitor();
+      }
     };
 
     const stop = () => {
@@ -6877,8 +6905,8 @@
     const MF_OI_THRESH = 2.0;      // |Z_OI| threshold — OI must exceed this to classify
 
     // Noise Filter Parameters
-    const MF_ADX_THRESH = 20;      // F8: ADX regime gate — only classify in trending markets (ADX > this)
-    const MF_COLD_START_MIN = { '1H': 55, '4H': 55, '1D': 21 };  // F10: Per-TF cold start guard — 1H=55, 4H=55, 1D=21
+    const MF_ADX_THRESH = 20;      // Trend Detection Gate — only classify in trending markets (ADX > this)
+    const MF_COLD_START_MIN = { '1H': 55, '4H': 55, '1D': 21 };  // Data Readiness Gate — minimum bars per TF before classification
 
     // Scenario definitions (name, color, description, bias — change colors/names here)
     const MF_SCENARIOS = {
@@ -7270,7 +7298,7 @@
         // Each TF is classified independently using:
         //   1. Expanding-window Z-scores (no lookahead bias)
         //   2. Robust Z-scores for classification (outlier-resistant)
-        //   3. 3 noise filters: F1 (Z-gate), F8 (ADX), F10 (cold start)
+        //   3. 3 hard filters: Significance Gate (Z-threshold), Trend Detection Gate (ADX), Data Readiness Gate (cold start)
         //   4. No MTF voting — each TF result stands alone
         const scenarios = {};
         let agreeMap = {};  // scenario -> count of TFs agreeing
@@ -7325,7 +7353,7 @@
           const zPriceRobust = _zRobust(curPrice, closesN);
           const zOiRobust = _zRobust(curOi, oiN);
 
-          // ADX regime check (F8)
+          // ADX regime check (Trend Detection Gate)
           let adxOk = true;
           if (candles.length >= 28) {
             const adx = _wilderAdx(candles, 14);
@@ -7344,7 +7372,7 @@
           }
 
           // Signal classifies immediately (no persistence wait).
-          // F8 ADX gate: if not trending, force neutral (unless already neutral)
+          // Trend Detection Gate (ADX): if not trending, force neutral (unless already neutral)
           let finalScenario = rawScenario;
           if (!adxOk && rawScenario !== 0) {
             finalScenario = 0;
@@ -7716,7 +7744,7 @@
                   else if (child.nodeType === Node.ELEMENT_NODE && child.id !== 'compositeCopyBtn') summaryText += child.textContent;
                 }
                 summaryText = summaryText.trim().replace(/\s+/g, ' ').replace(/\|/g, ' | ');
-                const text = '$' + tickerName + ' ' + dirText + '\n\n' + scoreText + '\n\n' + summaryText + '\n\nTry: www.MultiPerps.com for OI x Price signals.\n\n#MultiPerps\n';
+                const text = '$' + tickerName + ' - ' + dirText + '\n\n' + scoreText + '\n\n' + summaryText + '\n\nFree | No signup' + '\n\nTry: www.MultiPerps.com for OI signals.\n\n#MultiPerps #BinanceFutures\n';
                 copyText(text).then((ok) => {
                   if (ok) {
                     copyBtn.textContent = '\u2713';
@@ -8151,7 +8179,7 @@
         const base = window.location.origin;
         const tickerPath = '/' + fullSym;
         const titleTag = `${sym} Binance Futures Chart — Multi-Timeframe & OI-Price Analysis | MultiPerps`;
-        const descTag = `${sym} Binance USDT-M perpetual futures live chart on MultiPerps. Real-time multi-timeframe candlestick charts (1m to 1M), MultiFlow OI x Price analysis, price alerts, open interest & funding rate data. Free, no sign-up.`;
+        const descTag = `${sym} Binance USDT-M perpetual futures live chart on MultiPerps. Real-time multi-timeframe candlestick charts (1m to 1M), MultiFlow OI x Price analysis, price alerts, open interest & funding rate data. Free, No sign-up.`;
 
         document.title = titleTag;
         const metaDesc = document.getElementById('meta-description');
@@ -9295,7 +9323,6 @@
       restoreAlertLogUI();
       renderFavTickers();
       // Debounced alert WS restart — avoids reconnecting WS on every keystroke
-      let _alertWsDebounce = null;
       const debouncedStartAlertMonitor = () => {
         clearTimeout(_alertWsDebounce);
         _alertWsDebounce = setTimeout(() => startMultiAlertMonitor(), 1500);
@@ -9703,7 +9730,7 @@
         const tickerName = state.symbol.replace('USDT','');
         currentShareText = `$${tickerName} across all timeframes 👀
             \nTrack 9 timeframes at once —  1m • 5m • 15m • 30m • 1h • 4h • 1D • 1W • 1M
-            \nFree | No signup.
+            \nFree | No signup
             \nTry: www.MultiPerps.com
             \n#MultiPerps #BinanceFutures \n`;
         // Reset step states
@@ -9897,9 +9924,9 @@
       // ===== Footer page modal links =====
       const pageContents = {
         about: `<h2>About MultiPerps</h2>
-          <div class="modal-section"><p>MultiPerps is a free, real-time Binance Futures dashboard built for crypto traders who need clean, fast market data for USDT perpetual contracts. We provide live price tracking, multi-timeframe candlestick charts with RSI indicators, and comprehensive market rankings — all in your browser with zero installation and zero sign-up. So, our slogan is "MultiPerps — All Timeframes. All Free."</p></div>
+          <div class="modal-section"><p>MultiPerps is a free, real-time Binance Futures dashboard built for crypto traders who need clean, fast market data for USDT perpetual contracts. We provide live price tracking, multi-timeframe candlestick charts with RSI indicators, the MultiFlow OI x Price Indicator with scenario biases and squeeze detection, and comprehensive market rankings — all in your browser with zero installation and zero sign-up. So, our slogan is "MultiPerps — All Timeframes. All Free."</p></div>
           <div class="modal-section"><p>Our mission is to deliver institutional-grade data visualization in a lightweight, privacy-focused package. No accounts, no tracking, no bloat. Whether you trade Bitcoin, Ethereum, Solana, or any of the 200+ USDT-M perpetual futures on Binance, MultiPerps gives you the edge you need to make informed trading decisions.</p></div>
-          <div class="modal-section"><p>MultiPerps supports nine real-time chart timeframes (1m, 5m, 15m, 30m, 1h, 4h, 1d, 1w, 1M), live market rankings for volume, gainers, losers, open interest, and funding rates, plus built-in price alerts with audio notifications — all powered by direct Binance WebSocket feeds for zero-latency data delivery.</p></div>`,
+          <div class="modal-section"><p>MultiPerps supports nine real-time chart timeframes (1m, 5m, 15m, 30m, 1h, 4h, 1d, 1w, 1M), the MultiFlow indicator (multi-timeframe Z-score OI x Price classifier with Composite Signal Score, scenario biases, and squeeze detection), live market rankings for volume, gainers, losers, open interest, and funding rates, plus built-in price alerts with audio notifications — all powered by direct Binance WebSocket feeds for zero-latency data delivery.</p></div>`,
         disclaimer: `<h2>Disclaimer</h2>
           <div class="modal-section"><p>This dashboard is provided for informational purposes only and does not constitute financial advice. Cryptocurrency futures trading carries substantial risk of loss.</p></div>
           <div class="modal-section"><p>MultiPerps is not responsible for any trading decisions made based on data displayed. Prices are sourced from Binance public APIs and may experience delays. Always verify critical data on official exchange platforms before executing trades.</p></div>`,
@@ -10031,10 +10058,8 @@
       // 1. Re-fetch current price immediately via REST
       await fetchCurrentPrice(state.symbol);
 
-      // 2. Reconnect primary WebSocket (now includes kline + miniTicker + alert + tracker streams)
-      connectBinanceFutures();
-
-      // 3. Re-fetch kline data for all intervals to fill gaps from offline period
+      // 2. Re-fetch kline data for all intervals to fill gaps from offline period
+      //    (do this BEFORE connecting WS so onopen doesn't duplicate the fetch)
       try {
         await Promise.all(CONFIG.INTERVALS.map(async (interval) => {
           const chart = state.charts[interval];
@@ -10048,6 +10073,11 @@
         redrawCharts();
       } catch {}
 
+      // 3. Reconnect primary WebSocket (now includes kline + miniTicker + alert + tracker streams)
+      //    Set flag to skip onopen kline refresh since we just fetched them above
+      state._skipReconnectKlineRefresh = true;
+      connectBinanceFutures();
+
       // 4. Alert streams are now included in the primary WS reconnect above —
       // just update the alert live status UI.
       if (state.alertTimer && state.multiAlerts.some(a => a && a.ticker && Number.isFinite(a.price))) {
@@ -10055,6 +10085,8 @@
       }
 
       // 5. Reconnect rankings WebSocket + refresh REST data
+      // Reset _wasConnected so rankings WS onopen doesn't duplicate the fetch below
+      state.rankings._wasConnected = false;
       try {
         await Promise.all([fetchRankingsData(), fetchFundingRates()]);
         renderAllRankings();
@@ -10070,9 +10102,9 @@
         } catch {}
       }
 
-      // Final status update — let ws.onopen set 'Active' once connection is confirmed
-      state.wsStatus = { text: 'Reconnecting...', level: 'connecting' };
-      updateStatus();
+      // Don't overwrite status here — ws.onopen already sets 'Active' once connected,
+      // and overwriting would cause the status to show "Reconnecting..." even when
+      // the connection is already established (race condition with async awaits above).
     };
 
     window.addEventListener('offline', handleNetworkOffline);
@@ -10102,7 +10134,7 @@
     <div class="footer-top">
       <div class="footer-col">
         <div class="footer-brand">MultiPerps</div>
-        <div class="footer-desc">With the slogan "All Timeframes. All Free.", MultiPerps provides a free real-time Binance Futures dashboard for USDT perpetual markets. Track prices across multiple timeframes, monitor open interest and funding rates, and set price alerts — all with no sign-up required.</div>
+        <div class="footer-desc">With the slogan "All Timeframes. All Free.", MultiPerps provides a free real-time Binance Futures dashboard for USDT perpetual markets. Track prices across multiple timeframes, analyze OI x Price scenarios with the MultiFlow indicator (including squeeze detection and Composite Signal Score), and set price alerts — all with no sign-up required.</div>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">About</div>
@@ -10114,6 +10146,7 @@
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Resources</div>
+        <a href="#/blog/9">MultiFlow Indicator Guide</a>
         <a href="#" data-page="alerts">Dashboard Alerts Guide</a>
         <a href="#" data-page="usdt">Donation</a>
       </div>
@@ -10153,7 +10186,7 @@
       <h2>Key Features</h2>
       <ul>
         <li><strong>Multi-Timeframe Charts:</strong> View 1m, 5m, 15m, 30m, 1h, 4h, daily, weekly, and monthly candlestick charts simultaneously, all updating in real time.</li>
-        <li><strong>MultiFlow — OI x Price Indicator:</strong> Multi-timeframe Z-score normalization indicator displayed as 3 independent charts (1H, 4H, 1D) side by side on desktop, stacked vertically on mobile. Each column has its own chart with 2 primary metric lines (Z_Price, Z_OI) and 2 advanced lines (Z_Vol, Z_FR) via Advanced toggle. Uses uniform configurable lookback windows with expanding-window Z-scores for reproducible results. Classification thresholds: |Z_Price| &gt; 1.5 and |Z_OI| &gt; 2.0. Applies hard filters (Z-score gate, Wilder's ADX regime gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars)) and context filters (Z_Vol, Z_FR). Composite Signal Strength (Score: -100 to +100, directional label: BULLISH/BEARISH/FLAT) and per-TF scenario summary displayed below columns. No voting — each TF is independent and users decide how to weigh signals. Squeeze detection and funding rate context — all powered by real Binance data with smart auto-refresh (30s/60s).</li>
+        <li><strong>MultiFlow — OI x Price Indicator:</strong> Multi-timeframe Z-score normalization indicator displayed as 3 independent charts (1H, 4H, 1D) side by side on desktop, stacked vertically on mobile. Each column has its own chart with 2 primary metric lines (Z_Price, Z_OI) and 2 advanced lines (Z_Vol, Z_FR) via Advanced toggle. Uses uniform configurable lookback windows with expanding-window Z-scores for reproducible results. Classification thresholds: |Z_Price| &gt; 1.5 and |Z_OI| &gt; 2.0. Applies hard filters (Significance Gate / Z-Score Threshold, Trend Detection Gate / Wilder's ADX &ge; 20, Data Readiness Gate / Cold Start Guard: 1H: 55, 4H: 55, 1D: 21 bars) and soft context filters (Volume Context Filter / Z_Vol, Funding Rate Context Filter / Z_FR). Four scenarios carry directional biases: Strong Uptrend (bias: Long), Weak Rally (bias: Careful Long), Strong Downtrend (bias: Short), Exhaustion (bias: Watch for Reversal). Composite Signal Score (weighted: 1H&times;0.30 + 4H&times;0.40 + 1D&times;0.30, range -100 to +100) with directional label (BULLISH/BEARISH/FLAT) and per-TF scenario summary displayed below columns. Squeeze detection flags potential Short Squeeze (Z_FR &lt; -2.0 AND Z_OI &lt; -2.0) and Long Squeeze (Z_FR &gt; +2.0 AND Z_OI &lt; -2.0) conditions. No voting — each TF is independent and users decide how to weigh signals. All powered by real Binance data with smart auto-refresh (30s/60s).</li>
         <li><strong>Price Alerts:</strong> Set up price alerts with audio notifications and visual popups. Alerts persist across browser sessions using local storage.</li>
         <li><strong>Market Rankings:</strong> Track top volume, top gainers, top losers, open interest leaders, and funding rate extremes across all Binance USDT-M perpetual contracts.</li>
         <li><strong>Multi-Ticker Dashboard:</strong> Monitor up to four tickers side by side on the same screen for instant comparison.</li>
@@ -10207,7 +10240,7 @@
           <div class="blog-card-body">
             <div class="blog-card-date">Apr 2, 2025</div>
             <div class="blog-card-title">Open Interest Explained: What It Tells You About Market Sentiment</div>
-            <div class="blog-card-excerpt">Open interest reveals how much capital is committed to a futures market. Discover the four OI x Price scenarios that help traders predict trend strength and reversals.</div>
+            <div class="blog-card-excerpt">Open interest reveals how much capital is committed to a futures market. Discover the four OI x Price scenarios (with directional biases), learn why OI matters more than volume, and see how the MultiFlow indicator automates this analysis with Z-score normalization, squeeze detection, and composite signal scoring.</div>
             <span class="blog-card-link">Read more &rarr;</span>
           </div>
         </div>
@@ -10319,18 +10352,33 @@
         <div class="blog-full-article" id="blog-article-4">
           <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
           <h1>Open Interest Explained: What It Tells You About Market Sentiment</h1>
-          <p>Open interest (OI) is one of the most important yet underutilized metrics in crypto futures trading. It represents the total number of outstanding derivative contracts that have not been settled. Unlike volume, which measures trading activity over a period, open interest tells you how much capital is currently committed to a market. This distinction is crucial for understanding market dynamics and predicting potential price moves.</p>
-          <h2>The Four Open Interest Scenarios Matrix By MultiPerps</h2>
+          <p>Open interest (OI) is one of the most important yet underutilized metrics in crypto futures trading. It represents the total number of outstanding derivative contracts that have not been settled. Unlike volume, which measures trading activity over a period, open interest tells you how much capital is currently committed to a market. This distinction is crucial for understanding market dynamics and predicting potential price moves. In this guide, we explain what open interest is, break down the four OI x Price scenarios that form the foundation of market regime analysis, and introduce how MultiPerps' MultiFlow indicator puts these scenarios into practice with Z-score normalization, squeeze detection, and composite signal scoring across multiple timeframes.</p>
+
+          <h2>What Is Open Interest?</h2>
+          <p>Open interest represents the total number of active, unsettled derivative contracts in the market. Every time a buyer and a seller open a new position against each other, open interest increases by one contract. When both parties close their existing positions, open interest decreases. If one party opens a new position while the other closes an existing one, open interest remains unchanged. This three-way dynamic is what makes OI so informative: it tells you not just that trading happened, but whether new capital is entering the market or existing capital is leaving. On Binance USDT-M perpetual futures, open interest is measured in the base currency of the contract (e.g., BTC for BTCUSDT) and is updated in real time as positions are opened and closed.</p>
+
+          <h2>The Four Open Interest Scenarios Matrix</h2>
+          <p>The relationship between price movement and open interest change reveals the underlying dynamics of a market move. When you combine these two dimensions, four distinct scenarios emerge. Each scenario carries a <strong>bias</strong> — a directional lean that tells you the most likely interpretation and appropriate trading posture. These four scenarios are the conceptual foundation behind the MultiFlow OI x Price Indicator on MultiPerps.</p>
           <ul>
-            <li><strong>Rising price + Rising OI:</strong> Strong trend confirmation. New money is entering long positions, pushing prices higher. This is the healthiest uptrend scenario — ride the momentum.</li>
-            <li><strong>Rising price + Falling OI:</strong> Weak Rally warning. No new long capital is driving the price increase, only existing shorts closing. Once shorts have covered, the rally may stall.</li>
-            <li><strong>Falling price + Rising OI:</strong> Strong downtrend. New short positions are being opened aggressively. Avoid long trades and look for short setups aligned with the trend.</li>
-            <li><strong>Falling price + Falling OI:</strong> Exhaustion signal. Longs are capitulating and closing positions. Once selling pressure exhausts itself, watch for a potential reversal.</li>
+            <li><strong>Rising price + Rising OI (Strong Uptrend, Bias: Long):</strong> New money is entering long positions, pushing prices higher while open interest expands. This is the healthiest uptrend scenario — the move is backed by genuine positioning expansion. Ride the momentum with confidence, as the positive OI confirms real buying pressure, not just short covering. MultiFlow classifies this as S1 (Strong Uptrend) when Z_Price &gt; +1.5 AND Z_OI &gt; +2.0.</li>
+            <li><strong>Rising price + Falling OI (Weak Rally, Bias: Careful Long):</strong> No new long capital is driving the price increase — only existing shorts closing. Once shorts have covered, the rally may stall or reverse because there is no fresh demand to sustain the price level. Exercise caution on any long bias, use tighter stops, and watch for signs of either a transition to Strong Uptrend (if OI starts rising) or a reversal. MultiFlow classifies this as S2 (Weak Rally) when Z_Price &gt; +1.5 AND Z_OI &lt; -2.0.</li>
+            <li><strong>Falling price + Rising OI (Strong Downtrend, Bias: Short):</strong> New short positions are being opened aggressively, reinforcing the downward pressure with fresh capital. This is the most sustainable bearish scenario because selling is driven by new positions rather than forced liquidations. Avoid long trades and look for short setups aligned with the trend. MultiFlow classifies this as S3 (Strong Downtrend) when Z_Price &lt; -1.5 AND Z_OI &gt; +2.0.</li>
+            <li><strong>Falling price + Falling OI (Exhaustion, Bias: Watch for Reversal):</strong> Longs are capitulating and closing positions, causing both price and OI to decline. Once selling pressure exhausts itself and the remaining longs have finished unwinding, the market becomes vulnerable to a reversal. This is not a directional bias in the traditional sense — it signals that the current move may be running out of fuel. MultiFlow classifies this as S4 (Exhaustion) when Z_Price &lt; -1.5 AND Z_OI &lt; -2.0.</li>
           </ul>
+          <p>When neither Z-score breaches its threshold, or when the hard filters (Data Readiness Gate, Trend Detection Gate, or Significance Gate) block classification, the result is <strong>Neutral (No Directional Bias)</strong>. For a full deep-dive into how MultiFlow computes these classifications using Z-score normalization, expanding-window robust statistics, and the complete processing pipeline, see our dedicated <a href="#/blog/9">MultiFlow Indicator Guide</a>.</p>
+
           <h2>Why Open Interest Matters More Than Volume</h2>
-          <p>Volume tells you how much was traded, but not whether positions are being opened or closed. A high-volume day could be driven entirely by position closing (falling OI), which has very different implications than new positions being opened (rising OI). By tracking OI alongside price, you get a much clearer picture of whether a trend is supported by new capital or running on fumes.</p>
+          <p>Volume tells you how much was traded, but not whether positions are being opened or closed. A high-volume day could be driven entirely by position closing (falling OI), which has very different implications than new positions being opened (rising OI). By tracking OI alongside price, you get a much clearer picture of whether a trend is supported by new capital or running on fumes. This is precisely why the MultiFlow indicator uses Z_OI as one of its two primary classification metrics — OI direction is the key that disambiguates whether a price move has structural backing or is a thin, low-conviction move that may reverse at any moment.</p>
+
+          <h2>How MultiFlow Automates OI x Price Analysis</h2>
+          <p>While the four scenarios described above are conceptually straightforward, applying them consistently across multiple assets and timeframes is challenging in practice. Raw OI numbers vary dramatically between contracts (Bitcoin OI is measured in BTC, while altcoin OI may be in millions of tokens), making cross-asset comparison impossible without normalization. This is where MultiPerps' MultiFlow indicator adds value.</p>
+          <p>MultiFlow converts both price and OI into Z-scores — a statistical measure that expresses how extreme the current reading is relative to its own recent history, measured in standard deviations. A Z-score of +2.0 means the current value is 2 standard deviations above its recent average — unusually high regardless of the underlying unit. This Z-score normalization makes the four scenarios directly comparable across every Binance USDT-M perpetual contract, from BTCUSDT to the smallest altcoin, because the thresholds are always the same: |Z_Price| &gt; 1.5 and |Z_OI| &gt; 2.0.</p>
+          <p>MultiFlow also applies a structured processing pipeline to filter out noise. Three hard filters must all pass before a scenario is classified: the Data Readiness Gate (ensures enough historical bars exist for reliable Z-score computation), the Trend Detection Gate (Wilder's ADX must be at or above 20, confirming a trending market), and the Significance Gate (both Z_Price and Z_OI must breach their thresholds simultaneously). Two soft filters — the Volume Context Filter (Z_Vol) and the Funding Rate Context Filter (Z_FR) — provide additional context without changing the scenario classification. The Funding Rate Context Filter also powers MultiFlow's squeeze detection, which flags potential Short Squeeze (Z_FR &lt; -2.0 AND Z_OI &lt; -2.0) and Long Squeeze (Z_FR &gt; +2.0 AND Z_OI &lt; -2.0) conditions when market positioning becomes extreme.</p>
+          <p>Each of the three timeframes (1H, 4H, 1D) classifies independently, and a Composite Signal Score summarizes the directional lean across all three. The score is a weighted average (1H&times;0.30 + 4H&times;0.40 + 1D&times;0.30) that ranges from -100 (maximum bearish conviction) to +100 (maximum bullish conviction), with directional labels of BEARISH, FLAT, or BULLISH. This gives you an at-a-glance summary while still preserving the independence of each timeframe's analysis.</p>
+
           <h2>Using OI in Your Trading Strategy</h2>
-          <p>Monitor sudden spikes in open interest before major events — they often signal an impending volatile move. When OI and funding rates both reach extremes simultaneously, it frequently precedes a significant price correction as overcrowded positions get liquidated. MultiPerps tracks OI rankings in real time across all Binance USDT-M perpetual contracts, giving you instant visibility into where the smart money is positioning.</p>
+          <p>Monitor sudden spikes in open interest before major events — they often signal an impending volatile move. When OI and funding rates both reach extremes simultaneously, it frequently precedes a significant price correction as overcrowded positions get liquidated. The MultiFlow indicator's squeeze detection system automates this analysis by flagging when Z_FR and Z_OI reach extreme levels at the same time, alerting you to potential Short Squeeze or Long Squeeze conditions before they resolve. MultiPerps also tracks OI rankings in real time across all Binance USDT-M perpetual contracts, giving you instant visibility into where the smart money is positioning.</p>
+          <p>For a comprehensive guide on reading the MultiFlow indicator — including the complete processing pipeline, how the Composite Signal Score works, and practical step-by-step instructions for incorporating scenario analysis into your daily trading workflow — see our dedicated <a href="#/blog/9">MultiFlow Indicator Guide</a>.</p>
         </div>
 
         <!-- Blog Article 5 -->
@@ -10408,7 +10456,7 @@
         <div class="blog-full-article" id="blog-article-9">
           <a class="blog-back-btn" onclick="showBlogListing()">&larr; Back to Blog</a>
           <h1>MultiFlow — OI x Price Indicator: How to Read the Four Market Scenarios</h1>
-          <p>The MultiFlow OI x Price Indicator is one of the most powerful yet underused analytical frameworks available to crypto futures traders. By computing Z-scores for both open interest and price across multiple timeframes, MultiFlow reveals whether capital is genuinely entering a market or simply rotating out of existing positions. Unlike traditional OI-price indicators that use simple percentage changes or EMA smoothing, MultiFlow uses Z-score normalization to self-calibrate thresholds for each asset, eliminating the need for manual tuning. This distinction is the difference between riding a sustainable trend and getting caught in a false breakout. In this guide, we break down each of the four scenarios in the matrix, explain how MultiFlow calculates these signals across multiple timeframes using a uniform configurable lookback window, and show you how to incorporate OI-Price analysis into your daily trading workflow.</p>
+          <p>The MultiFlow OI x Price Indicator is one of the most powerful yet underused analytical frameworks available to crypto futures traders. By computing Z-scores for both open interest and price across multiple timeframes, MultiFlow reveals whether capital is genuinely entering a market or simply rotating out of existing positions. Unlike traditional OI-price indicators that use simple percentage changes or EMA smoothing, MultiFlow uses Z-score normalization to self-calibrate thresholds for each asset, eliminating the need for manual tuning. This distinction is the difference between riding a sustainable trend and getting caught in a false breakout. In this guide, we break down each of the four scenarios in the matrix, explain how MultiFlow calculates these signals across multiple timeframes using a uniform configurable lookback window, detail the Composite Signal Score and Squeeze Detection features, and show you how to incorporate OI-Price analysis into your daily trading workflow.</p>
 
           <h2>What Is MultiFlow?</h2>
           <p>MultiFlow is a real-time market indicator that helps you understand what is happening beneath the surface of price action. While most traders only watch price candles, MultiFlow tracks the relationship between price movement and open interest (OI) across three different timeframes at once.</p>
@@ -10425,22 +10473,22 @@
           <p>All three timeframes use the same configurable lookback window (MF_LOOKBACK_BARS). This means each timeframe looks back at the same number of candles for its interval (e.g. with 42 bars: 42 one-hour candles for 1H, 42 four-hour candles for 4H, 42 daily candles for 1D), so you can fairly compare how extreme a reading is across all three. There is NO combined signal. Each timeframe is classified on its own, and you decide how to weigh the three timeframes based on your own trading style and timeframe preference.</p>
 
           <h2>The Four Scenarios</h2>
-          <p>For each timeframe, MultiFlow classifies the market into one of four scenarios based on whether the Z-score of price and the Z-score of open interest breach their respective thresholds:</p>
+          <p>For each timeframe, MultiFlow classifies the market into one of four scenarios based on whether the Z-score of price and the Z-score of open interest breach their respective thresholds. Each scenario also carries a <strong>bias</strong> indicator that tells you the directional lean and the appropriate trading posture:</p>
 
-          <h3>1. Strong Uptrend (Z_Price &gt; +1.5 AND Z_OI &gt; +2.0)</h3>
-          <p>New longs entering, trend supported by OI. Both price and open interest are significantly above their recent averages. New long positions are likely entering the market, and the move is supported by genuine positioning expansion. This is the healthiest type of uptrend. The positive Z_OI confirms that the price increase is not just a Weak Rally bounce — it is being driven by real buying pressure. Traders should view this as confirmation that the uptrend has widespread support, and that momentum is likely to continue until Z_OI begins to normalize or turn negative.</p>
+          <h3>1. Strong Uptrend (Z_Price &gt; +1.5 AND Z_OI &gt; +2.0) — Bias: Long</h3>
+          <p>New longs entering, trend supported by OI. Both price and open interest are significantly above their recent averages. New long positions are likely entering the market, and the move is supported by genuine positioning expansion. This is the healthiest type of uptrend. The positive Z_OI confirms that the price increase is not just a Weak Rally bounce — it is being driven by real buying pressure. Traders should view this as confirmation that the uptrend has widespread support, and that momentum is likely to continue until Z_OI begins to normalize or turn negative. The <strong>bias is Long</strong>, meaning the scenario favors long-side positioning and momentum continuation strategies.</p>
 
-          <h3>2. Weak Rally (Z_Price &gt; +1.5 AND Z_OI &lt; -2.0)</h3>
-          <p>Weak Rally, no new long capital entering. Price is elevated but open interest is dropping. The rally lacks genuine buying conviction — it is likely driven by short sellers closing positions rather than new buyers stepping in. The move may stall or reverse once the position closing exhausts itself. This makes Weak Rally moves inherently less sustainable than Strong Uptrend moves, because there is no fresh demand to keep the price elevated. The critical question is whether the Weak Rally transitions into a Strong Uptrend (Z_OI begins rising above +2.0) or stalls and reverses once the closing is complete.</p>
+          <h3>2. Weak Rally (Z_Price &gt; +1.5 AND Z_OI &lt; -2.0) — Bias: Careful Long</h3>
+          <p>Price is elevated but open interest is dropping. The rally lacks genuine buying conviction — it is likely driven by short sellers closing positions rather than new buyers stepping in. The move may stall or reverse once the position closing exhausts itself. This makes Weak Rally moves inherently less sustainable than Strong Uptrend moves, because there is no fresh demand to keep the price elevated. The critical question is whether the Weak Rally transitions into a Strong Uptrend (Z_OI begins rising above +2.0) or stalls and reverses once the closing is complete. The <strong>bias is Careful Long</strong> — while price is above average, the lack of OI support means you should exercise caution on any long bias, use tighter stops, and watch for signs of reversal or transition to Strong Uptrend.</p>
 
-          <h3>3. Strong Downtrend (Z_Price &lt; -1.5 AND Z_OI &gt; +2.0)</h3>
-          <p>New shorts entering, bearish momentum with OI. Price is falling while open interest is rising. New short positions are likely being opened, reinforcing the downward pressure. This is a strongly bearish signal with fresh selling conviction. A positive Z_OI during a price decline means new short positions are being opened aggressively — fresh capital is entering the market on the bearish side. This is the most sustainable bearish scenario because the selling pressure is being driven by new positions rather than forced liquidations.</p>
+          <h3>3. Strong Downtrend (Z_Price &lt; -1.5 AND Z_OI &gt; +2.0) — Bias: Short</h3>
+          <p>Price is falling while open interest is rising. New short positions are likely being opened, reinforcing the downward pressure. This is a strongly bearish signal with fresh selling conviction. A positive Z_OI during a price decline means new short positions are being opened aggressively — fresh capital is entering the market on the bearish side. This is the most sustainable bearish scenario because the selling pressure is being driven by new positions rather than forced liquidations. The <strong>bias is Short</strong>, meaning the scenario favors short-side positioning and momentum continuation strategies on the bearish side.</p>
 
-          <h3>4. Exhaustion (Z_Price &lt; -1.5 AND Z_OI &lt; -2.0)</h3>
-          <p>Long liquidations, selling pressure may be ending. Both price and open interest are falling. Longs are likely being liquidated or unwinding, and the selling may be nearing exhaustion. This scenario often precedes a reversal or a period of consolidation. A negative Z_OI during a price decline means that existing long positions are being forcibly closed — either through deliberate capitulation or liquidation cascades. Once the longs have finished capitulating, the selling pressure naturally subsides, and the market becomes vulnerable to a reversal.</p>
+          <h3>4. Exhaustion (Z_Price &lt; -1.5 AND Z_OI &lt; -2.0) — Bias: Watch for Reversal</h3>
+          <p>Both price and open interest are falling. Longs are likely being liquidated or unwinding, and the selling may be nearing exhaustion. This scenario often precedes a reversal or a period of consolidation. A negative Z_OI during a price decline means that existing long positions are being forcibly closed — either through deliberate capitulation or liquidation cascades. Once the longs have finished capitulating, the selling pressure naturally subsides, and the market becomes vulnerable to a reversal. The <strong>bias is Watch for Reversal</strong> — this is not a directional bias in the traditional sense. Instead, it signals that the current move may be running out of fuel and you should be alert for a potential reversal or consolidation, rather than positioning for trend continuation.</p>
 
-          <h3>Neutral</h3>
-          <p>Neither Z-score breaches its threshold, or noise filters blocked the classification. No statistically significant signal detected. The market may be ranging, transitioning, or not trending strongly enough to classify.</p>
+          <h3>Neutral — Bias: No Directional Bias</h3>
+          <p>Neither Z-score breaches its threshold, or noise filters blocked the classification. No statistically significant signal detected. The market may be ranging, transitioning, or not trending strongly enough to classify. With <strong>no directional bias</strong>, this scenario suggests waiting for a clearer signal before committing capital.</p>
 
           <h2>How the Z-Scores Work</h2>
           <p>A Z-score measures how far the current value is from its own recent average, expressed in units of standard deviation. A Z-score of 0 means the current value is exactly at its average. A Z-score of +2 means it is 2 standard deviations above the average — unusually high. A Z-score of -2 means 2 standard deviations below — unusually low.</p>
@@ -10448,41 +10496,72 @@
 
           <h2>Two Primary Metrics + Two Advanced Metrics</h2>
           <ul>
-            <li><strong style="color:#3B82F6">Z_Price (Blue)</strong> — The Z-score of closing prices. Shows whether price is statistically high or low vs. its recent range.</li>
-            <li><strong style="color:#F59E0B">Z_OI (Amber)</strong> — The Z-score of open interest. Shows whether total outstanding positions are expanding or contracting relative to recent levels.</li>
-            <li><strong style="color:#10B981">Z_Vol (Green)</strong> — The Z-score of trading volume. Provides context on whether participation is above or below normal. High volume often confirms the significance of a move.</li>
-            <li><strong style="color:#A78BFA">Z_FR (Purple)</strong> — A normalized funding rate indicator. Shows whether longs are paying shorts (positive) or vice versa (negative), and how extreme that payment is. Extreme funding rates can signal overcrowded positioning.</li>
+            <li><strong style="color:#3B82F6">Z_Price (Blue)</strong> — The Z-score of closing prices. Shows whether price is statistically high or low vs. its recent range. This is one of the two primary chart lines always visible on each timeframe column.</li>
+            <li><strong style="color:#F59E0B">Z_OI (Amber)</strong> — The Z-score of open interest. Shows whether total outstanding positions are expanding or contracting relative to recent levels. This is the second primary chart line always visible on each timeframe column.</li>
+            <li><strong style="color:#10B981">Z_Vol (Green)</strong> — The Z-score of trading volume. Provides context on whether participation is above or below normal. High volume often confirms the significance of a move. Visible when the Advanced toggle is enabled, and serves as a soft context filter (Volume Context Filter).</li>
+            <li><strong style="color:#A78BFA">Z_FR (Purple)</strong> — A normalized funding rate indicator. Shows whether longs are paying shorts (positive) or vice versa (negative), and how extreme that payment is. Extreme funding rates can signal overcrowded positioning and trigger squeeze alerts. Visible when the Advanced toggle is enabled, and serves as a soft context filter (Funding Rate Context Filter) that also feeds into squeeze detection.</li>
           </ul>
           <p>The chart area ranges from -3.5 to +3.5 on the Y-axis. Horizontal dashed blue lines mark the price threshold (&plusmn;1.5), and dashed amber lines mark the OI threshold (&plusmn;2.0). The zero line is shown as a solid faint line. When lines cross these thresholds, it signals a statistically unusual reading that may result in a scenario classification.</p>
 
-          <h2>Noise Filters — Preventing False Signals</h2>
-          <p>MultiFlow applies three hard filters before classifying a scenario. These filters are designed to prevent whipsaws and avoid triggering on noise:</p>
-          <ul>
-            <li><strong>F1 — Z-Score Threshold Gate:</strong> Both the price Z-score and the OI Z-score must breach their respective thresholds (|Z_Price| &gt; 1.5 and |Z_OI| &gt; 2.0) in the same direction for any scenario to be assigned. If only one metric is extreme, the result is Neutral.</li>
-            <li><strong>F8 — ADX Regime Gate (ADX &gt; 20):</strong> The Average Directional Index (ADX) measures whether the market is trending. MultiFlow uses Wilder's ADX (matching Binance/TradingView values) and only classifies scenarios when ADX is above 20, indicating a trending market. In ranging or choppy conditions, the indicator intentionally stays Neutral to avoid reading noise as signal.</li>
-            <li><strong>F10 — Per-TF Cold Start Guard:</strong> Classification is blocked until enough data is available (minimum 55 bars (1H), 55 bars (4H), 21 bars (1D)). This prevents unreliable readings when the indicator first loads or when a new ticker is selected and data is still being fetched. If insufficient data is available, the chart displays an overlay message indicating how many bars are needed.</li>
-          </ul>
-          <p>When a scenario is classified, it means all three filters have passed. When the result is Neutral, it could be because none of the thresholds are breached, the market is not trending, or there is not enough data yet.</p>
+          <h2>Processing Pipeline — How Signals Are Generated</h2>
+          <p>MultiFlow processes raw market data through a structured pipeline of filters before producing a scenario classification. Understanding this pipeline helps you interpret why a particular timeframe might show Neutral even when the chart lines look extreme. The pipeline flows as follows:</p>
+          <p style="font-family:monospace;font-size:0.92rem;color:var(--muted-2);background:rgba(255,255,255,0.04);padding:10px 14px;border-radius:6px;line-height:1.7">Raw Data &rarr; Data Readiness Gate &rarr; Trend Detection Gate &rarr; Significance Gate &rarr; Classify (Price&uarr;/&darr; &times; OI&uarr;/&darr;) &rarr; Context Filters &rarr; Signal Strength &rarr; Output</p>
 
-          <h2>Squeeze Detection and Funding Rate Context</h2>
-          <p>MultiFlow can also detect potential squeeze conditions. A <strong>Short Squeeze</strong> is triggered when the funding rate is extremely negative (longs paying shorts at a very high rate) AND open interest is collapsing (Z_OI &lt; -2.0). This suggests that heavy short interest may be forced to cover rapidly. A <strong>Long Squeeze</strong> is triggered when the funding rate is extremely positive AND open interest is collapsing, suggesting overcrowded long positions may be liquidating.</p>
-          <p>The <strong>Funding Rate Context</strong> tells you how much longs are paying shorts (positive funding) or shorts are paying longs (negative funding) every eight hours. When combined with the scenario signal, funding rate context reveals whether the market's positioning is sustainable or stretched to an extreme. For example, a Strong Uptrend with moderate positive funding is healthy, but a Strong Uptrend with extremely high positive funding suggests the market is overcrowded on the long side and vulnerable to a long liquidation cascade.</p>
+          <h3>Hard Filters (must ALL pass to classify)</h3>
+          <p>These three gates are mandatory. If any one of them fails, the result is Neutral regardless of how extreme the Z-scores appear:</p>
+          <ul>
+            <li><strong>Data Readiness Gate (Cold Start Guard):</strong> Classification is blocked until enough historical data is available &mdash; minimum 55 bars for 1H, 55 bars for 4H, and 21 bars for 1D. This prevents unreliable readings when the indicator first loads or when a new ticker is selected and data is still being fetched. If insufficient data is available, the chart displays an overlay message indicating how many bars are still needed. This gate ensures that Z-scores are computed from a statistically meaningful sample, not just a handful of candles.</li>
+            <li><strong>Trend Detection Gate (ADX &ge; 20):</strong> The Average Directional Index (ADX) measures whether the market is trending. MultiFlow uses Wilder's ADX (matching Binance/TradingView values) and only classifies scenarios when ADX is at or above 20, indicating a trending market. In ranging or choppy conditions where ADX falls below 20, the indicator intentionally stays Neutral to avoid reading noise as signal. This is crucial because Z-score extremes in a range-bound market often produce whipsaws that look like trends but resolve quickly.</li>
+            <li><strong>Significance Gate (Z-Score Threshold):</strong> Both the price Z-score and the OI Z-score must breach their respective thresholds (|Z_Price| &gt; 1.5 and |Z_OI| &gt; 2.0) in the same direction for any scenario to be assigned. If only one metric is extreme while the other remains within its normal range, the result is Neutral. This dual-threshold requirement ensures that classifications only occur when both price and positioning confirm a statistically unusual condition simultaneously.</li>
+          </ul>
+          <p>When a scenario is classified, it means all three hard filters have passed. When the result is Neutral, it could be because none of the thresholds are breached, the market is not trending (ADX below 20), or there is not enough data yet (cold start guard).</p>
+
+          <h3>Soft Filters (context only, never change the scenario)</h3>
+          <p>After a scenario is classified, two additional filters provide contextual color. These soft filters can never change the scenario classification &mdash; they only add depth to your interpretation:</p>
+          <ul>
+            <li><strong>Volume Context Filter (Z_Vol):</strong> The Z-score of trading volume tells you whether participation in the current move is above or below normal. High Z_Vol confirms the significance of a scenario (e.g., a Strong Uptrend with Z_Vol above +1.0 has heavy participation backing it). Low Z_Vol may indicate a thin or low-conviction move, even if the scenario classification is technically correct. This filter helps you gauge the quality and sustainability of the signal.</li>
+            <li><strong>Funding Rate Context Filter (Z_FR):</strong> The Z-score of the funding rate reveals the cost of holding positions. Extreme positive Z_FR means longs are paying shorts at an unusually high rate (overcrowded long side). Extreme negative Z_FR means shorts are paying longs (overcrowded short side). This filter also feeds into the squeeze detection system, which flags potential short or long squeeze conditions when funding reaches extreme levels alongside collapsing OI.</li>
+          </ul>
+
+          <h2>Composite Signal Score</h2>
+          <p>While each timeframe classifies independently and there is no voting, MultiFlow provides a <strong>Composite Signal Score</strong> that summarizes the directional lean across all three timeframes into a single number. This score is displayed below the three chart columns alongside a directional label (BULLISH, BEARISH, or FLAT) and a per-timeframe mini summary.</p>
+          <p>The Composite Signal Score works as follows:</p>
+          <ul>
+            <li>Each scenario is assigned a numeric value: <strong>Strong Uptrend (S1) = +100</strong>, <strong>Weak Rally (S2) = +30</strong>, <strong>Exhaustion (S4) = -30</strong>, <strong>Strong Downtrend (S3) = -100</strong>, <strong>Neutral = 0</strong>.</li>
+            <li>The composite score is a weighted average across timeframes: <strong>Score = (1H &times; 0.30) + (4H &times; 0.40) + (1D &times; 0.30)</strong>. The 4H timeframe receives the highest weight (40%) because it balances responsiveness and stability, while 1H and 1D each contribute 30%.</li>
+            <li>A <strong>positive score</strong> indicates a lean toward the long side (BULLISH), a <strong>negative score</strong> indicates a lean toward the short side (BEARISH), and a <strong>score near zero</strong> suggests no clear edge (FLAT).</li>
+          </ul>
+          <p>For example, if 1H shows Strong Uptrend (+100), 4H shows Weak Rally (+30), and 1D shows Neutral (0), the composite score would be: (100 &times; 0.30) + (30 &times; 0.40) + (0 &times; 0.30) = 30 + 12 + 0 = <strong>+42 (BULLISH)</strong>. This tells you there is a moderate long-side lean but the daily timeframe is not confirming, suggesting caution. If all three timeframes show Strong Uptrend, the score would be +100, indicating maximum bullish conviction. Conversely, all three showing Strong Downtrend yields -100 (maximum bearish conviction).</p>
+          <p>The directional label thresholds are: <strong>BEARISH</strong> when Score &lt; -20, <strong>BULLISH</strong> when Score &gt; +20, and <strong>FLAT</strong> when the Score is between -20 and +20. Slight variants like SLIGHTLY BULLISH or SLIGHTLY BEARISH appear for marginal readings near these thresholds. Remember, the composite score is a summary tool &mdash; always check the per-timeframe breakdown to understand where the signal is coming from, rather than trading solely off the composite number.</p>
+
+          <h2>Squeeze Detection</h2>
+          <p>MultiFlow includes a dedicated squeeze detection system that flags when market positioning has become extreme enough to trigger a potential forced liquidation cascade. Squeeze conditions appear in the context row below the charts and add urgency to the scenario analysis. There are two types:</p>
+
+          <h3>Short Squeeze</h3>
+          <p>A Short Squeeze is triggered when <strong>Z_FR &lt; -2.0 AND Z_OI &lt; -2.0</strong>. This means the funding rate is extremely negative (shorts are paying longs at a very high rate, indicating heavy short-side overcrowding) and open interest is collapsing (positions are being rapidly unwound). The combination of overcrowded shorts and falling OI suggests that a rapid short-covering event may be underway, forcing shorts to buy back their positions and driving price sharply higher. Short squeezes can produce explosive upward moves in a very short period, making them critical to identify early.</p>
+
+          <h3>Long Squeeze</h3>
+          <p>A Long Squeeze is triggered when <strong>Z_FR &gt; +2.0 AND Z_OI &lt; -2.0</strong>. This means the funding rate is extremely positive (longs are paying shorts at a very high rate, indicating heavy long-side overcrowding) and open interest is collapsing. The combination of overcrowded longs and falling OI suggests that long liquidations are accelerating, forcing longs to sell their positions and driving price sharply lower. Long squeezes often result in cascading liquidation events where the price drops rapidly as forced selling begets more forced selling.</p>
+
+          <p>Squeeze alerts should be interpreted in the context of the current scenario. For example, a Short Squeeze signal alongside a Weak Rally scenario suggests that the recent price bounce may be driven by forced short covering rather than genuine buying interest &mdash; and may resolve quickly once the squeeze exhausts itself. A Long Squeeze alongside a Strong Downtrend with high ADX confirms that the bearish move is being amplified by forced liquidations, which can extend the move but also increase the probability of a sharp reversal once the liquidation cascade ends.</p>
 
           <h2>How to Use MultiFlow — A Practical Approach</h2>
           <ul>
-            <li><strong>Step 1 — Read the composite signal row:</strong> Below the three chart columns, you will see a directional label (BULLISH, BEARISH, FLAT, or their slight variants) along with the composite Signal Strength Score. This gives you an instant read on the overall bias across all three timeframes. The per-TF mini summary shows which scenario each timeframe is in.</li>
-            <li><strong>Step 2 — Start with the 1D column:</strong> The daily timeframe gives you the big picture. If 1D shows Strong Uptrend, the structural trend is bullish. If it shows Exhaustion, the market may be setting up for a reversal. If it is Neutral, the longer-term picture is unclear.</li>
-            <li><strong>Step 3 — Check the 4H column for alignment:</strong> If 1D says Strong Uptrend and 4H also says Strong Uptrend, you have multi-timeframe agreement on the bullish side. If 4H disagrees (e.g., shows Weak Rally while 1D says Strong Uptrend), the shorter-term momentum may be fading.</li>
-            <li><strong>Step 4 — Use 1H for timing:</strong> The 1H column reacts fastest. It can help you time entries and exits within the broader trend identified by 4H and 1D. An Exhaustion reading on 1H while 4H and 1D remain bullish could signal a short-term pullback within an overall uptrend.</li>
+            <li><strong>Step 1 — Read the Composite Signal Score:</strong> Below the three chart columns, you will see a directional label (BULLISH, BEARISH, FLAT, or their slight variants) along with the composite Signal Strength Score (-100 to +100). This gives you an instant read on the overall bias across all three timeframes. The per-TF mini summary shows which scenario each timeframe is in and its bias (Long, Careful Long, Short, Watch for Reversal, or No Directional Bias).</li>
+            <li><strong>Step 2 — Start with the 1D column:</strong> The daily timeframe gives you the big picture. If 1D shows Strong Uptrend (bias: Long), the structural trend is bullish. If it shows Exhaustion (bias: Watch for Reversal), the market may be setting up for a reversal. If it is Neutral (no directional bias), the longer-term picture is unclear.</li>
+            <li><strong>Step 3 — Check the 4H column for alignment:</strong> If 1D says Strong Uptrend and 4H also says Strong Uptrend, you have multi-timeframe agreement on the bullish side. If 4H disagrees (e.g., shows Weak Rally with Careful Long bias while 1D says Strong Uptrend), the shorter-term momentum may be fading and you should exercise caution.</li>
+            <li><strong>Step 4 — Use 1H for timing:</strong> The 1H column reacts fastest. It can help you time entries and exits within the broader trend identified by 4H and 1D. An Exhaustion reading (Watch for Reversal bias) on 1H while 4H and 1D remain bullish could signal a short-term pullback within an overall uptrend.</li>
             <li><strong>Step 5 — Watch the Z-score lines:</strong> The scenario name is a summary. The actual Z-score lines in each column tell you how close the reading is to the threshold. A Z_Price at +1.4 is almost at the +1.5 threshold — the next candle could push it into classification. A Z_Price at +3.0 is extremely extended.</li>
-            <li><strong>Step 6 — Consider context:</strong> Always look at the OI and funding rate values below the charts. A Strong Uptrend with rising OI and moderate positive funding is different from a Strong Uptrend with extreme funding (which could mean overcrowding). A squeeze alert adds urgency to the analysis.</li>
+            <li><strong>Step 6 — Check for squeeze alerts:</strong> If the context row below the charts shows a Short Squeeze or Long Squeeze flag, it adds urgency. A Short Squeeze alongside Weak Rally means the bounce may be driven by forced short covering. A Long Squeeze alongside Strong Downtrend confirms the bearish move is being amplified by liquidations.</li>
+            <li><strong>Step 7 — Consider the full context:</strong> Always look at the OI value, funding rate, and volume below the charts. A Strong Uptrend with rising OI and moderate positive funding is different from a Strong Uptrend with extreme funding (which could mean overcrowding). The soft filters (Volume Context and Funding Rate Context) add nuance that the scenario classification alone does not capture.</li>
           </ul>
 
           <h2>Important Limitations &amp; Disclaimers</h2>
           <ul>
-            <li>MultiFlow is an analytical tool, not a trading signal generator. It classifies market conditions based on statistical relationships between price and open interest. It does NOT tell you to buy or sell.</li>
+            <li>MultiFlow is an analytical tool, not a trading signal generator. It classifies market conditions based on statistical relationships between price and open interest. It does NOT tell you to buy or sell. The bias labels (Long, Careful Long, Short, Watch for Reversal) describe the scenario's directional lean, not a recommended trade.</li>
             <li>Z-scores are relative, not absolute. A Z-score of +2.0 means "unusually high compared to the last N bars" — not "guaranteed to keep going up." Markets can remain extreme longer than expected.</li>
-            <li>No voting means you decide. Unlike some indicators that combine multiple timeframes into a single verdict, MultiFlow shows each timeframe independently. You must decide how to reconcile conflicting signals.</li>
+            <li>The Composite Signal Score is a summary convenience, not a definitive verdict. No voting means you decide. Unlike some indicators that combine multiple timeframes into a single verdict, MultiFlow shows each timeframe independently. You must decide how to reconcile conflicting signals.</li>
+            <li>Squeeze alerts indicate elevated risk of forced liquidations, not a guaranteed directional move. Squeezes can resolve quickly or extend further than expected. Use them as a risk alert, not a trade signal.</li>
             <li>Data comes from Binance public APIs. There may be brief delays, gaps, or stale data during high-traffic periods. A warning badge appears when data may be unreliable.</li>
             <li>Past patterns do not guarantee future results. The scenarios are based on historical statistical relationships that may not hold in all market conditions.</li>
             <li>Not financial advice. Always do your own research and never risk more than you can afford to lose.</li>
