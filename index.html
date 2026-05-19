@@ -316,6 +316,27 @@
       .ticker-card { min-height: 100dvh; }
     }
 
+    /* Fix: When mobile keyboard is open, remove forced min-height and overflow hidden
+       so the search input can scroll into view above the keyboard */
+    body.mobile-keyboard-open .ticker-card {
+      min-height: auto !important;
+      overflow: visible !important;
+    }
+
+    body.mobile-keyboard-open .ticker-grid {
+      min-height: auto !important;
+    }
+
+    /* When keyboard is open, also handle the sticky nav overlapping the input */
+    body.mobile-keyboard-open .sticky-nav {
+      position: relative;
+    }
+
+    /* When keyboard is open, limit suggest menu height to visible area */
+    body.mobile-keyboard-open .ticker-suggest-list {
+      max-height: 200px;
+    }
+
     .card-header {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -2733,6 +2754,13 @@
         padding: 5px 10px;
         font-size: 0.78rem;
       }
+      /* Ensure ticker input has scroll margin to clear sticky nav on mobile */
+      .ticker-symbol-input {
+        scroll-margin-top: 60px;
+      }
+      .alert-price-input {
+        scroll-margin-top: 60px;
+      }
     }
     @media (max-width: 480px) {
       .sticky-nav {
@@ -2753,6 +2781,13 @@
       #rankingsSection,
       #oiPricePanel {
         scroll-margin-top: 82px;
+      }
+      /* Ensure ticker input has scroll margin to clear sticky nav on small mobile */
+      .ticker-symbol-input {
+        scroll-margin-top: 90px;
+      }
+      .alert-price-input {
+        scroll-margin-top: 90px;
       }
     }
 
@@ -9192,10 +9227,33 @@
           state.tickerSuggest.activeInput = state.elements.tickerInput;
           state.tickerSuggest.onSelectCallback = null;
           renderTickerSuggestMenu();
-          // Scroll input into view on mobile to prevent virtual keyboard hiding it
-          setTimeout(() => {
-            state.elements.tickerInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 300);
+          // Mobile keyboard fix: detect keyboard open and scroll input into view
+          if (window.visualViewport) {
+            document.body.classList.add('mobile-keyboard-open');
+            const scrollInputAboveKeyboard = () => {
+              const input = state.elements.tickerInput;
+              if (!input) return;
+              const rect = input.getBoundingClientRect();
+              const vv = window.visualViewport;
+              // If input bottom is below the visible visual viewport area, scroll it up
+              const inputBottom = rect.bottom;
+              const visibleBottom = vv.height + vv.offsetTop;
+              if (inputBottom > visibleBottom || rect.top < vv.offsetTop) {
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            };
+            // Scroll after keyboard animation completes
+            setTimeout(scrollInputAboveKeyboard, 150);
+            setTimeout(scrollInputAboveKeyboard, 400);
+            // Also handle viewport resize (keyboard opening/closing)
+            vv.addEventListener('resize', scrollInputAboveKeyboard);
+            vv.addEventListener('scroll', scrollInputAboveKeyboard);
+          } else {
+            // Fallback for browsers without visualViewport
+            setTimeout(() => {
+              state.elements.tickerInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+          }
         });
       state.elements.tickerInput.addEventListener('input', () => {
         saveStored(STORAGE.tickerInput, state.elements.tickerInput.value);
@@ -9206,6 +9264,8 @@
         }, 300);
       });
         state.elements.tickerInput.addEventListener('blur', async () => {
+          // Remove mobile keyboard fix class
+          document.body.classList.remove('mobile-keyboard-open');
           if (Date.now() < state.tickerSuggest.ignoreBlurUntil) return;
           // Delay to allow menu clicks to process first
           setTimeout(() => {
