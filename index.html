@@ -3687,23 +3687,18 @@
     }
 
     /* Canvas chart area */
-    /* Panel content — premium inner glow + fine brand border */
     .multioi-content {
       display: flex;
       flex-direction: column;
       align-items: stretch;
       gap: 0;
-      border: 1px solid rgba(34, 171, 148, 0.20);
+      border: 0px solid transparent;
       border-radius: 12px;
-      padding: 20px;
-      background: linear-gradient(180deg,
-        rgba(34, 171, 148, 0.04) 0%,
-        rgba(0, 0, 0, 0) 100%);
+      padding: 0px;
+      background: transparent;
       font-size: 1.0rem;
       position: relative;
-      box-shadow:
-        inset 0 0 30px rgba(34,171,148,0.03),
-        inset 0 1px 0 rgba(34,171,148,0.08);
+      box-shadow:transparent;
     }
     /* ── Three-Column Card Layout ── */
     .multioi-three-card-layout {
@@ -3793,13 +3788,12 @@
     /* Container for quadrant wrap + axis labels */
     .quadrant-with-axes {
       position: relative;
-      padding: 1.0em 1.6em 0.5em 1.6em;
+      padding: 1.6em 1.6em 0.5em 2.2em;
       flex: 1 1 auto;
       min-height: 0;
     }
 
     /* Composite signal row — below the 3 columns */
-    /* Hero composite signal — badge/pill background */
     .multioi-composite-signal {
       text-align: center;
       padding: 10px 16px 6px;
@@ -3877,7 +3871,7 @@
     .composite-score-label {
       font-size: 0.78rem;
       font-weight: 500;
-      color: var(--muted-3);
+      color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.08em;
       text-align: center;
@@ -3960,7 +3954,7 @@
       display: none;
     }
     .composite-tf-summary {
-      font-size: 0.88rem;
+      font-size: 1.0rem;
       font-weight: 600;
       color: var(--muted-2);
       margin-top: 2px;
@@ -4002,11 +3996,11 @@
       white-space: nowrap;
     }
     .composite-tf-item .tf-label {
-      font-weight: 700;
+      font-weight: 800;
       color: var(--muted);
     }
     .composite-tf-item .tf-scenario {
-      font-weight: 600;
+      font-weight: 800;
     }
     .composite-tf-sep {
       display: none;
@@ -4363,7 +4357,7 @@
       transform: translateX(-50%);
     }
     .quadrant-axis-label--left {
-      left: 0;
+      left: -0.3em;
       top: 50%;
       transform: translateY(-50%) rotate(-90deg);
       transform-origin: center center;
@@ -4416,9 +4410,9 @@
     .quadrant-bubble--1d {
       width: clamp(38px, 5.2vw, 54px);
       height: clamp(38px, 5.2vw, 54px);
-      background: radial-gradient(circle at 35% 35%, #c4b5fd, #A78BFA 60%, #8b5cf6);
-      border: 2px solid rgba(167,139,250,0.5);
-      box-shadow: 0 0 12px rgba(167,139,250,0.50), 0 0 24px rgba(167,139,250,0.20), inset 0 1px 3px rgba(255,255,255,0.2);
+      background: radial-gradient(circle at 35% 35%, #8b5cf6, #7c3aed 60%, #5b21b6);
+      border: 2px solid rgba(124,58,237,0.6);
+      box-shadow: 0 0 12px rgba(124,58,237,0.50), 0 0 24px rgba(124,58,237,0.20), inset 0 1px 3px rgba(255,255,255,0.15);
       animation: glowOrb1d 2.0s ease-in-out infinite;
     }
 
@@ -4431,8 +4425,8 @@
       50% { box-shadow: 0 0 18px rgba(91,140,255,0.65), 0 0 36px rgba(91,140,255,0.30), 0 0 54px rgba(91,140,255,0.10), inset 0 1px 3px rgba(255,255,255,0.25); transform: scale(1.04); }
     }
     @keyframes glowOrb1d {
-      0%, 100% { box-shadow: 0 0 12px rgba(167,139,250,0.50), 0 0 24px rgba(167,139,250,0.20), inset 0 1px 3px rgba(255,255,255,0.2); transform: scale(1); }
-      50% { box-shadow: 0 0 18px rgba(167,139,250,0.65), 0 0 36px rgba(167,139,250,0.30), 0 0 54px rgba(167,139,250,0.10), inset 0 1px 3px rgba(255,255,255,0.25); transform: scale(1.04); }
+      0%, 100% { box-shadow: 0 0 12px rgba(124,58,237,0.50), 0 0 24px rgba(124,58,237,0.20), inset 0 1px 3px rgba(255,255,255,0.15); transform: scale(1); }
+      50% { box-shadow: 0 0 18px rgba(124,58,237,0.65), 0 0 36px rgba(124,58,237,0.30), 0 0 54px rgba(124,58,237,0.10), inset 0 1px 3px rgba(255,255,255,0.2); transform: scale(1.04); }
     }
 
     /* Bubble hover — glow ring (tooltips handled by overlay layer JS) */
@@ -4462,15 +4456,9 @@
       border: none;
     }
 
-    /* Ghost trail removed */
-
-    /* ── Z-score label removed (values shown on dots and hover tooltips instead) ── */
-
     /* ── Tooltip overlay layer — sits outside overflow:hidden wrap ── */
     .quadrant-tooltip-layer {
       position: absolute;
-      /* Align with the quadrant-wrap inside quadrant-with-axes */
-      /* These offsets account for: section-title height + scenario-labels-row + quadrant-with-axes padding */
       top: 0;
       left: 0;
       right: 0;
@@ -4587,19 +4575,17 @@
     .multioi-sparkline-card canvas {
       width: 100%;
       flex: 1 1 0;
-      min-height: 46px;
+      min-height: 48px;
       border-radius: 2px;
       background: rgba(0,0,0,0.15);
       display: block;
     }
 
-
-
     /* ============================================
        SIGNAL PHRASE ROW
        ============================================ */
     .multioi-signal-phrase {
-      font-size: 0.82rem;
+      font-size: 0.96rem;
       font-weight: 400;
       color: var(--text);
       text-align: center;
@@ -4612,23 +4598,19 @@
       font-weight: 800;
     }
     .multioi-signal-phrase .signal-action {
-      font-weight: 700;
+      font-weight: 800;
     }
     .multioi-signal-phrase .signal-scenario {
       font-weight: 800;
     }
     .multioi-signal-phrase .signal-tf {
       color: var(--accent-2);
-      font-weight: 600;
-      font-size: 0.9rem;
+      font-weight: 800;
+      font-size: 1rem;
     }
 
 
-
-    /* ── Quadrant legend — removed (dead code) ── */
-
     /* ── Watermark inside the quadrant ── */
-    /* Premium brand watermark — more visible, more memorable */
     .quadrant-watermark {
       position: absolute;
       bottom: 8px;
@@ -4685,8 +4667,8 @@
       color: #5B8CFF;
     }
     .quadrant-legend-pip--1d {
-      background: radial-gradient(circle at 35% 35%, #c4b5fd, #A78BFA);
-      color: #A78BFA;
+      background: radial-gradient(circle at 35% 35%, #8b5cf6, #7c3aed);
+      color: #7c3aed;
     }
     .quadrant-legend-text {
       font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
@@ -4789,7 +4771,7 @@
         gap: 2px;
       }
       .multioi-signal-phrase {
-        font-size: 0.9rem;
+        font-size: 0.96rem;
       }
     }
     @media (max-width: 480px) {
@@ -4861,7 +4843,7 @@
         font-size: 0.65rem;
       }
       .composite-tf-summary {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         font-weight: 600;
         gap: 1px;
         line-height: 1.4;
@@ -9509,9 +9491,6 @@
             overlayTip.style.display = '';
           }
 
-          // Z-score label removed — values are already shown on the dots themselves
-          // and in the hover tooltips
-
           // ── Keyboard navigation for dots ──
           if (!bubble._kbNavAdded) {
             bubble._kbNavAdded = true;
@@ -9728,8 +9707,6 @@
               );
             }
             summaryEl.innerHTML = tfSummaryParts.join('');
-            // Re-append copy button after innerHTML update — now attached to composite-content-wrapper
-            // so it appears centered after the score row, outside the tf-summary
             let copyBtn = document.getElementById('compositeCopyBtn');
             const wrapperEl = compositeEl.querySelector('.composite-content-wrapper');
             if (!copyBtn) {
