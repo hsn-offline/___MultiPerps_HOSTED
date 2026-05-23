@@ -96,7 +96,7 @@
     },
     "featureList": [
       "Real-time multi-timeframe candlestick charts",
-      "Multi OI — Open Interest Price Indicator with Z-score normalization, Wilder's ADX gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars), quadrant grid visualization with per-TF Z-score labels, composite Signal Strength (Bullish/Bearish Scenario + Score) with sparklines (Score, Price, Funding), optimized for desktop and mobile",
+      "Multi OI — Open Interest Price Indicator with Z-score normalization, Wilder's ADX gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars), quadrant grid visualization with per-TF Z-score labels, composite Signal Strength (Bullish/Bearish Scenario + Score) with sparklines (Score, Price, Volume, Funding), optimized for desktop and mobile",
       "Open interest screener — screen and rank open interest across all Binance USDT-M perpetual contracts",
       "Funding rate screener — monitor and rank funding rates to spot overcrowded positions and potential reversals",
       "Crypto funding rate context — extreme funding rate Z-scores flag crowded positioning and potential reversal risk across timeframes",
@@ -104,7 +104,7 @@
       "Open interest vs price divergence detection across 3 timeframes (1H, 4H, 1D) with configurable uniform lookback window",
       "Crypto market bias and sentiment signals (Strong Uptrend, Weak Rally, Strong Downtrend, Exhaustion)",
       "Independent per-timeframe classification with no voting — users decide how to weigh signals",
-      "Noise filters: Z-score threshold gate, Wilder's ADX gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars), sparklines for visual soft context (Score, Price, Funding)",
+      "Noise filters: Z-score threshold gate, Wilder's ADX gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars), sparklines for visual soft context (Score, Price, Volume, Funding)",
       "Funding rate context analysis",
       "Price alerts with audio notifications",
       "Open interest rankings",
@@ -168,7 +168,7 @@
         "name": "What is Multi OI on MultiPerps?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Multi OI (Open Interest Price Indicator) is a real-time market scenario classifier that reveals what is happening beneath price action by tracking the relationship between price movement and open interest across three timeframes (1H, 4H, 1D). It classifies the market into four scenarios per timeframe: Strong Uptrend (Price up + OI up), Weak Rally (Price up + OI down), Strong Downtrend (Price down + OI up), and Exhaustion (Price down + OI down). Three hard filters prevent false signals: Significance Gate (Z-score threshold), Trend Detection Gate (Wilder's ADX gate), and Data Readiness Gate (per-TF cold start guard: 1H: 55, 4H: 55, 1D: 21 bars). Three sparklines (Composite Score, Price, Funding Rate) provide visual soft context at the user's discretion. A composite Signal Strength (Score: -100 to +100) with directional label (Bullish/Bearish Scenario) and per-TF mini summary is displayed above the quadrant grid. Each timeframe classifies independently — users decide how to weigh signals."
+          "text": "Multi OI (Open Interest Price Indicator) is a real-time market scenario classifier that reveals what is happening beneath price action by tracking the relationship between price movement and open interest across three timeframes (1H, 4H, 1D). It classifies the market into four scenarios per timeframe: Strong Uptrend (Price up + OI up), Weak Rally (Price up + OI down), Strong Downtrend (Price down + OI up), and Exhaustion (Price down + OI down). Three hard filters prevent false signals: Significance Gate (Z-score threshold), Trend Detection Gate (Wilder's ADX gate), and Data Readiness Gate (per-TF cold start guard: 1H: 55, 4H: 55, 1D: 21 bars). Four sparklines (Composite Score, Price, Volume, Funding Rate) provide visual soft context at the user's discretion. A composite Signal Strength (Score: -100 to +100) with directional label (Bullish/Bearish Scenario) and per-TF mini summary is displayed above the quadrant grid. Each timeframe classifies independently — users decide how to weigh signals."
         }
       },
       {
@@ -176,7 +176,7 @@
         "name": "How does the Open Interest Price analysis detect market bias?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Multi OI detects market bias by computing Z-scores for price and open interest across three timeframes (1H, 4H, 1D) using a configurable uniform lookback window with expanding-window method. Each timeframe independently classifies the market into one of four scenarios based on whether Z_Price and Z_OI breach their thresholds (|Z_Price|>1.5, |Z_OI|>2.0). Hard filters are applied before classification: Significance Gate (Z-score threshold) ensures thresholds are breached, Trend Detection Gate (Wilder's ADX filter) only classifies in trending markets (ADX>=20), and Data Readiness Gate (per-TF cold start guard) requires minimum 55 data points for 1H, 55 for 4H, and 21 for 1D. A composite row above the quadrant grid shows the directional label (Bullish/Bearish Scenario), Signal Strength Score (-100 to +100), and per-TF scenario summary with Z-score values. Three sparklines (Score, Price, Funding) provide visual soft context at the user's discretion. There is no voting — users decide how to weigh signals across timeframes based on their trading style."
+          "text": "Multi OI detects market bias by computing Z-scores for price and open interest across three timeframes (1H, 4H, 1D) using a configurable uniform lookback window with expanding-window method. Each timeframe independently classifies the market into one of four scenarios based on whether Z_Price and Z_OI breach their thresholds (|Z_Price|>1.5, |Z_OI|>2.0). Hard filters are applied before classification: Significance Gate (Z-score threshold) ensures thresholds are breached, Trend Detection Gate (Wilder's ADX filter) only classifies in trending markets (ADX>=20), and Data Readiness Gate (per-TF cold start guard) requires minimum 55 data points for 1H, 55 for 4H, and 21 for 1D. A composite row above the quadrant grid shows the directional label (Bullish/Bearish Scenario), Signal Strength Score (-100 to +100), and per-TF scenario summary with Z-score values. Four sparklines (Score, Price, Volume, Funding) provide visual soft context at the user's discretion. There is no voting — users decide how to weigh signals across timeframes based on their trading style."
         }
       }
     ]
@@ -3753,7 +3753,7 @@
     .multioi-card--composite .multioi-composite-signal {
       background: transparent;
       border: none;
-      padding: 6px 4px;
+      padding: 12px 8px;
       margin: 0;
       box-shadow: none;
     }
@@ -3789,21 +3789,30 @@
     /* Container for quadrant wrap + axis labels */
     .quadrant-with-axes {
       position: relative;
-      padding: 1.6em 1.6em 0.5em 2.2em;
+      padding: 1.6em 1.6em 0.5em 0.4em;
       flex: 1 1 auto;
       min-height: 0;
+    }
+    /* Flex row: Y-axis label (left) + quadrant wrap (right) — prevents label overlap */
+    .quadrant-body-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex: 1 1 auto;
+      min-height: 0;
+      gap: 0.3em;
     }
 
     /* Composite signal row — below the 3 columns */
     .multioi-composite-signal {
       text-align: center;
-      padding: 6px 14px 4px;
-      margin-top: 2px;
-      margin-bottom: 2px;
+      padding: 14px 16px 12px;
+      margin-top: 4px;
+      margin-bottom: 4px;
       background: rgba(0,0,0,0.25);
       border: 1px solid rgba(34,171,148,0.15);
       border-radius: 10px;
-      line-height: 1.2;
+      line-height: 1.4;
       position: relative;
     }
     /* Hero signal inner glow — subtle ambient light */
@@ -3866,19 +3875,20 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
-      gap: 4px;
+      gap: 14px;
     }
     .composite-direction-row {
       width: 100%;
       text-align: center;
+      padding: 4px 0;
     }
     .composite-score-row {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
-      margin-top: 2px;
+      gap: 6px;
+      margin-top: 6px;
     }
     .composite-score-label {
       font-size: 0.88rem;
@@ -3971,15 +3981,15 @@
       font-size: 1.12rem;
       font-weight: 600;
       color: var(--muted);
-      margin-top: 0px;
-      line-height: 1.35;
+      margin-top: 4px;
+      line-height: 1.85;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       width: fit-content;
       margin-left: auto;
       margin-right: auto;
-      gap: 1px;
+      gap: 6px;
       text-align: left;
       font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
     }
@@ -4025,8 +4035,6 @@
     .composite-tf-sep {
       display: none;
     }
-
-    /* Legend — removed (dead code, display:none) */
 
     /* Context row (OI, Funding) */
     .multioi-context-row {
@@ -4082,7 +4090,7 @@
        ============================================ */
     .multioi-quadrant-wrap {
       position: relative;
-      width: 100%;
+      flex: 1 1 0%;
       aspect-ratio: 1 / 1;
       max-width: 100%;
       margin: 0;
@@ -4140,16 +4148,17 @@
     }
 
     .quadrant-cell--su { border-right-color: rgba(14,203,129,0.18); border-bottom-color: rgba(14,203,129,0.18); }
-    .quadrant-cell--wr { border-bottom-color: rgba(251,191,36,0.18); }
-    .quadrant-cell--sd { border-right-color: rgba(239,68,68,0.18); }
+    .quadrant-cell--wr { border-left-color: rgba(251,191,36,0.18); border-bottom-color: rgba(251,191,36,0.18); }
+    .quadrant-cell--sd { border-top-color: rgba(239,68,68,0.18); border-right-color: rgba(239,68,68,0.18); }
+    .quadrant-cell--ex { border-top-color: rgba(167,139,250,0.18); border-left-color: rgba(167,139,250,0.18); }
 
     /* Cell backgrounds — glassmorphism with semi-transparent tinted gradients */
     .quadrant-cell--su {
-      background: linear-gradient(135deg, rgba(14,203,129,0.12) 0%, rgba(34,171,148,0.06) 50%, rgba(14,203,129,0.10) 100%);
+      background: linear-gradient(315deg, rgba(14,203,129,0.12) 0%, rgba(34,171,148,0.06) 50%, rgba(14,203,129,0.10) 100%);
       border: 1px solid rgba(14,203,129,0.12);
     }
     .quadrant-cell--wr {
-      background: linear-gradient(135deg, rgba(251,191,36,0.10) 0%, rgba(245,158,11,0.05) 50%, rgba(251,191,36,0.08) 100%);
+      background: linear-gradient(225deg, rgba(251,191,36,0.10) 0%, rgba(245,158,11,0.05) 50%, rgba(251,191,36,0.08) 100%);
       border: 1px solid rgba(251,191,36,0.12);
     }
     .quadrant-cell--sd {
@@ -4157,13 +4166,13 @@
       border: 1px solid rgba(239,68,68,0.12);
     }
     .quadrant-cell--ex {
-      background: linear-gradient(135deg, rgba(167,139,250,0.10) 0%, rgba(139,92,246,0.05) 50%, rgba(167,139,250,0.08) 100%);
+      background: linear-gradient(45deg, rgba(167,139,250,0.10) 0%, rgba(139,92,246,0.05) 50%, rgba(167,139,250,0.08) 100%);
       border: 1px solid rgba(167,139,250,0.12);
     }
 
     /* Active quadrant highlight — 3-layer glow for memorable screenshot look */
     .quadrant-cell.active--su {
-      background: linear-gradient(135deg, rgba(14,203,129,0.32) 0%, rgba(34,171,148,0.18) 50%, rgba(14,203,129,0.25) 100%);
+      background: linear-gradient(315deg, rgba(14,203,129,0.32) 0%, rgba(34,171,148,0.18) 50%, rgba(14,203,129,0.25) 100%);
       border-color: rgba(38, 212, 172, 0.6);
       box-shadow:
         inset 0 0 20px rgba(38, 212, 172, 0.15),
@@ -4171,7 +4180,7 @@
         0 0 40px rgba(38, 212, 172, 0.10);
     }
     .quadrant-cell.active--wr {
-      background: linear-gradient(135deg, rgba(251,191,36,0.30) 0%, rgba(245,158,11,0.16) 50%, rgba(251,191,36,0.22) 100%);
+      background: linear-gradient(225deg, rgba(251,191,36,0.30) 0%, rgba(245,158,11,0.16) 50%, rgba(251,191,36,0.22) 100%);
       border-color: rgba(251, 191, 36, 0.6);
       box-shadow:
         inset 0 0 20px rgba(251, 191, 36, 0.12),
@@ -4187,7 +4196,7 @@
         0 0 40px rgba(239, 68, 68, 0.10);
     }
     .quadrant-cell.active--ex {
-      background: linear-gradient(135deg, rgba(167,139,250,0.30) 0%, rgba(139,92,246,0.16) 50%, rgba(167,139,250,0.22) 100%);
+      background: linear-gradient(45deg, rgba(167,139,250,0.30) 0%, rgba(139,92,246,0.16) 50%, rgba(167,139,250,0.22) 100%);
       border-color: rgba(167, 139, 250, 0.6);
       box-shadow:
         inset 0 0 20px rgba(167, 139, 250, 0.12),
@@ -4199,9 +4208,6 @@
       border-color: rgba(255,255,255,0.08);
     }
 
-    /* ── Internal cell titles/descriptions — removed (dead code) ── */
-
-    /* ── Scenario labels — OUTSIDE the quadrant cells, above/below the grid ── */
     .quadrant-scenario-labels-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -4341,7 +4347,7 @@
       border-left: 0.5em solid rgba(34,171,148,0.5);
     }
 
-    /* Axis labels — OUTSIDE the wrap, positioned in the quadrant-with-axes padding zone */
+    /* Axis labels — top label is absolute in padding zone; left label is in-flow (flex row) */
     .quadrant-axis-label {
       position: absolute;
       z-index: 20;
@@ -4370,17 +4376,25 @@
       opacity: 0.5;
       letter-spacing: 0.06em;
     }
-    /* Position axis labels in the padding zone of .quadrant-with-axes */
+    /* Position axis labels: top in padding zone, left in flex body row */
     .quadrant-axis-label--top {
       top: 0;
       left: 50%;
       transform: translateX(-50%);
     }
     .quadrant-axis-label--left {
-      left: -0.3em;
-      top: 50%;
-      transform: translateY(-50%) rotate(-90deg);
+      position: relative;
+      left: auto;
+      top: auto;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
       transform-origin: center center;
+      flex-shrink: 0;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.15em;
     }
     /* ── bottom and right axis labels removed ── */
 
@@ -4405,54 +4419,33 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.15);
       transition: left 0.4s cubic-bezier(0.16,1,0.3,1), top 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s, border-color 0.2s;
     }
-    .quadrant-bubble:hover {
-      border-color: rgba(255,255,255,0.5);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2), 0 0 12px currentColor;
-    }
-
-    /* TF Glow Orbs — premium pulsing brand-colored orbs */
+    /* TF Bubbles — clean, no glow */
     .quadrant-bubble--1h {
       width: clamp(30px, 3.8vw, 40px);
       height: clamp(30px, 3.8vw, 40px);
       background: radial-gradient(circle at 35% 35%, #2dd4a8, #22AB94 60%, #1a8a76);
       border: 2px solid rgba(38,212,172,0.5);
-      box-shadow: 0 0 12px rgba(34,171,148,0.50), 0 0 24px rgba(34,171,148,0.20), inset 0 1px 3px rgba(255,255,255,0.2);
-      animation: glowOrb1h 2.0s ease-in-out infinite;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 1px 3px rgba(255,255,255,0.2);
     }
     .quadrant-bubble--4h {
       width: clamp(34px, 4.4vw, 46px);
       height: clamp(34px, 4.4vw, 46px);
-      background: radial-gradient(circle at 35% 35%, #a8c4ff, #6EA8FE 50%, #3b6fd4);
+      background: radial-gradient(circle at 35% 35%, #7EA3FF, #4C6FD1 50%, #243F8F);
       border: 2px solid rgba(110,168,254,0.55);
-      box-shadow: 0 0 14px rgba(110,168,254,0.50), 0 0 28px rgba(110,168,254,0.20), inset 0 1px 3px rgba(255,255,255,0.25);
-      animation: glowOrb4h 2.0s ease-in-out infinite;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 1px 3px rgba(255,255,255,0.25);
     }
     .quadrant-bubble--1d {
       width: clamp(38px, 5.2vw, 54px);
       height: clamp(38px, 5.2vw, 54px);
       background: radial-gradient(circle at 35% 35%, #6d3fbb, #4c1d95 60%, #360f6e);
       border: 2px solid rgba(76,29,149,0.7);
-      box-shadow: 0 0 10px rgba(76,29,149,0.40), 0 0 20px rgba(76,29,149,0.15), inset 0 1px 3px rgba(255,255,255,0.12);
-      animation: glowOrb1d 2.0s ease-in-out infinite;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 1px 3px rgba(255,255,255,0.12);
     }
 
-    @keyframes glowOrb1h {
-      0%, 100% { box-shadow: 0 0 12px rgba(34,171,148,0.50), 0 0 24px rgba(34,171,148,0.20), inset 0 1px 3px rgba(255,255,255,0.2); transform: scale(1); }
-      50% { box-shadow: 0 0 18px rgba(34,171,148,0.65), 0 0 36px rgba(34,171,148,0.30), 0 0 54px rgba(34,171,148,0.10), inset 0 1px 3px rgba(255,255,255,0.25); transform: scale(1.04); }
-    }
-    @keyframes glowOrb4h {
-      0%, 100% { box-shadow: 0 0 14px rgba(110,168,254,0.50), 0 0 28px rgba(110,168,254,0.20), inset 0 1px 3px rgba(255,255,255,0.25); transform: scale(1); }
-      50% { box-shadow: 0 0 20px rgba(110,168,254,0.65), 0 0 40px rgba(110,168,254,0.30), 0 0 60px rgba(110,168,254,0.10), inset 0 1px 3px rgba(255,255,255,0.30); transform: scale(1.04); }
-    }
-    @keyframes glowOrb1d {
-      0%, 100% { box-shadow: 0 0 10px rgba(76,29,149,0.40), 0 0 20px rgba(76,29,149,0.15), inset 0 1px 3px rgba(255,255,255,0.12); transform: scale(1); }
-      50% { box-shadow: 0 0 14px rgba(76,29,149,0.55), 0 0 28px rgba(76,29,149,0.22), 0 0 42px rgba(76,29,149,0.08), inset 0 1px 3px rgba(255,255,255,0.18); transform: scale(1.04); }
-    }
-
-    /* Bubble hover — glow ring (tooltips handled by overlay layer JS) */
+    /* Bubble hover — subtle highlight (no glow ring) */
     .quadrant-bubble:hover {
-      border-color: rgba(255,255,255,0.5);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2), 0 0 12px currentColor;
+      border-color: rgba(255,255,255,0.6);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.25);
     }
 
     .quadrant-bubble-label {
@@ -4464,17 +4457,17 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-size: clamp(0.6rem, 1.1vw, 0.82rem);
+      font-size: clamp(0.7rem, 1.2vw, 0.9rem);
       font-weight: 800;
       font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
-      color: rgba(255, 255, 255, 0.97);
+      color: var(--text);
       white-space: nowrap;
       text-shadow: 0 1px 4px rgba(0,0,0,0.95), 0 0 8px rgba(0,0,0,0.6);
       background: transparent;
       padding: 2px 5px;
       border-radius: 4px;
       border: none;
-      backdrop-filter: blur(2px);
+      backdrop-filter: none;
     }
 
     /* ── Tooltip overlay layer — sits outside overflow:hidden wrap ── */
@@ -4590,6 +4583,20 @@
     .multioi-sparkline-card.hovering .multioi-sparkline-hover-val {
       opacity: 1;
     }
+    .multioi-sparkline-last-val {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+      letter-spacing: 0;
+      text-transform: none;
+      margin-left: 6px;
+      opacity: 0.85;
+    }
+    .multioi-sparkline-card:hover .multioi-sparkline-last-val,
+    .multioi-sparkline-card.hovering .multioi-sparkline-last-val {
+      opacity: 0;
+    }
 
     /* Hide quadrant legend (moved out of Grid View card) */
     .quadrant-legend {
@@ -4612,10 +4619,12 @@
       font-weight: 600;
       color: var(--text);
       text-align: left;
-      line-height: 1.25;
-      margin-top: 2px;
+      line-height: 1.6;
+      margin-top: 8px;
       border-left: 3px solid var(--accent);
       padding-left: 10px;
+      padding-top: 4px;
+      padding-bottom: 4px;
     }
 
     .multioi-signal-phrase .signal-sym {
@@ -4633,7 +4642,6 @@
       font-weight: 800;
       font-size: 1rem;
     }
-
 
     /* ── Watermark inside the quadrant ── */
     .quadrant-watermark {
@@ -4760,12 +4768,41 @@
       }
       .multioi-quadrant-wrap {
         aspect-ratio: 1 / 1;
-        max-width: 100%;
+        flex: 1 1 0%;
         margin: 0;
       }
-      .quadrant-with-axes { padding: 0.6em 1.0em 0.3em 1.0em; }
+      .quadrant-with-axes { padding: 1.6em 1.0em 0.3em 0.3em; }
       .quadrant-scenario-labels-row--top { margin-bottom: 0.3em; }
       .quadrant-scenario-labels-row--bottom { margin-top: 0.3em; }
+      /* Fix: axis label overlapping quadrant on mobile */
+      .quadrant-axis-label--top {
+        font-size: clamp(0.5rem, 1.1vw, 0.75rem);
+        top: 0.2em;
+      }
+      /* Allow scenario labels to wrap on narrow mobile */
+      .quadrant-scenario-label {
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+      .quadrant-scenario-label__name {
+        font-size: clamp(0.6rem, 2vw, 1.05rem);
+      }
+      .quadrant-scenario-label__desc {
+        font-size: clamp(0.5rem, 1.5vw, 0.88rem);
+      }
+      /* Fix: Y-axis label overlap on narrow screens */
+      .quadrant-axis-label--left {
+        font-size: clamp(0.5rem, 1.1vw, 0.75rem);
+        padding: 0 0.05em;
+      }
+      /* Fix: prevent card clipping of quadrant content */
+      .multioi-card--grid {
+        overflow: visible;
+      }
+      .multioi-card--grid .multioi-card__body {
+        overflow: visible;
+      }
       .multioi-tooltip-popup {
         width: calc(100vw - 32px);
         max-width: 440px;
@@ -4776,7 +4813,7 @@
         padding: 16px;
       }
       .multioi-composite-signal {
-        padding: 8px 10px 4px;
+        padding: 12px 12px 8px;
         margin-top: 3px;
       }
       .composite-direction {
@@ -4793,11 +4830,12 @@
       .composite-tf-summary {
         font-size: 0.92rem;
         font-weight: 600;
-        gap: 1px;
-        line-height: 1.3;
+        gap: 5px;
+        line-height: 1.6;
       }
       .multioi-signal-phrase {
         font-size: 1.0rem;
+        line-height: 1.4;
       }
     }
     @media (max-width: 480px) {
@@ -4843,18 +4881,47 @@
       }
       .multioi-quadrant-wrap {
         aspect-ratio: 1 / 1;
-        max-width: 100%;
+        flex: 1 1 0%;
         margin: 0;
       }
-      .quadrant-with-axes { padding: 0.5em 0.7em 0.25em 0.7em; }
+      .quadrant-with-axes { padding: 1.4em 0.7em 0.25em 0.2em; }
       .quadrant-scenario-labels-row--top { margin-bottom: 0.2em; }
       .quadrant-scenario-labels-row--bottom { margin-top: 0.2em; }
+      /* Fix: axis label overlapping quadrant on small mobile */
+      .quadrant-axis-label--top {
+        font-size: clamp(0.45rem, 1.3vw, 0.7rem);
+        top: 0.1em;
+      }
+      /* Allow scenario labels to wrap on very narrow mobile */
+      .quadrant-scenario-label {
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+      .quadrant-scenario-label__name {
+        font-size: clamp(0.55rem, 2.2vw, 1.05rem);
+      }
+      .quadrant-scenario-label__desc {
+        font-size: clamp(0.45rem, 1.6vw, 0.88rem);
+      }
+      /* Fix: Y-axis label overlap on very narrow screens */
+      .quadrant-axis-label--left {
+        font-size: clamp(0.45rem, 1.3vw, 0.7rem);
+        padding: 0 0;
+      }
+      /* Fix: prevent card clipping of quadrant content */
+      .multioi-card--grid {
+        overflow: visible;
+      }
+      .multioi-card--grid .multioi-card__body {
+        overflow: visible;
+      }
       .multioi-context-row {
         font-size: 0.85rem;
         line-height: 1.5;
       }
       .multioi-composite-signal {
-        padding: 6px 8px 3px;
+        padding: 10px 8px 6px;
         margin-top: 2px;
       }
       .composite-direction {
@@ -4871,8 +4938,8 @@
       .composite-tf-summary {
         font-size: 0.88rem;
         font-weight: 600;
-        gap: 1px;
-        line-height: 1.3;
+        gap: 4px;
+        line-height: 1.5;
       }
       .multioi-tooltip-popup {
         width: calc(100vw - 24px);
@@ -4895,7 +4962,6 @@
         font-size: 0.68rem;
       }
     }
-
 
     /* ============================================
        FOLLOW @MULTIPERPS BANNER
@@ -6996,6 +7062,7 @@
         low: parseFloat(k[3]),
         close: parseFloat(k[4]),
         volume: parseFloat(k[5]),
+        quoteVolume: parseFloat(k[7]),
         closeTime: k[6],
       }));
     };
@@ -7234,7 +7301,7 @@
       }
     };
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* ═════════════════════════════════════════════════════════════
        ██  CARD BUILDER (HTML template)
        ═══════════════════════════════════════════════════════════════ */
     const buildCard = (symbol) => {
@@ -7350,7 +7417,7 @@
   <b style="color:var(--text)">1.</b> Read Composite Signal first — direction + score<br>
   <b style="color:var(--text)">2.</b> Check Timeframe Agreement (1D → 4H → 1H) — all 3 agree = high conviction<br>
   <b style="color:var(--text)">3.</b> Check per-TF Z-scores in the summary — values approaching thresholds = transition incoming<br>
-  <b style="color:var(--text)">4.</b> Check sparklines (Score, Price, Funding) — visual context for trend direction and extremes<br>
+  <b style="color:var(--text)">4.</b> Check sparklines (Score, Price, Volume, Funding) — visual context for trend direction and extremes<br>
   <b style="color:var(--text)">5.</b> Respect Neutral — no signal IS a signal<br>
   <b style="color:var(--text)">6.</b> You Decide — Scalpers weigh 1H | Swing weigh 4H | Position weigh 1D</span><br><br>
 
@@ -7363,7 +7430,19 @@
   <span style="font-size:1rem;color:var(--muted-3)">
   <b>Score</b> — Composite score history (21 pts). Rising = strengthening signal, falling = deteriorating.<br>
   <b>Price</b> — 4H close price history (21 pts). Shows price trend direction for context.<br>
+  <b>Volume</b> — 4H quote volume history (21 pts, USDT). Shows capital flow intensity.<br>
   <b>Funding</b> — 4H funding rate history (21 pts). Spikes = crowded positioning, carry cost extremes.</span><br><br>
+
+  <strong style="color:var(--text)">Data Update Frequency</strong><br>
+  <span style="font-size:1rem;color:var(--muted-3);font-family:monospace;line-height:1.7">
+  <b style="color:#26D4AC">● Real-time (WebSocket, ~1–3s):</b><br>
+  &nbsp;&nbsp;OI Notional (context row) · Funding Rate (context row)<br>
+  &nbsp;&nbsp;Sparkline title values: Price · Volume · Funding<br><br>
+  <b style="color:#5B8CFF">● Computed (REST, every 30s):</b><br>
+  &nbsp;&nbsp;Composite Score · Per-TF Scenarios · Z-scores · Quadrant Grid<br>
+  &nbsp;&nbsp;All sparkline canvases · Signal Phrase<br><br>
+  <b style="color:var(--muted-2)">● Slow (REST, every 60s):</b><br>
+  &nbsp;&nbsp;Funding rate REST fallback (WS is primary)</span><br><br>
 
   <strong style="color:var(--text)">Live Values</strong><br>
   <span id="oiTooltipLiveValues" style="font-size:1.0rem;color:var(--muted-3)">Awaiting data...</span><br><br>
@@ -7408,10 +7487,11 @@
                         <span class="composite-score-value" id="compositeScoreValue">0</span>
                       </div>
                       <div class="composite-tf-summary" id="compositeTfSummary">
-                        <div class="composite-tf-item"><span class="tf-label">1H:</span> <span class="tf-scenario">Neutral —</span></div>
-                        <div class="composite-tf-item"><span class="tf-label">4H:</span> <span class="tf-scenario">Neutral —</span></div>
-                        <div class="composite-tf-item"><span class="tf-label">1D:</span> <span class="tf-scenario">Neutral —</span></div>
+                        <div class="composite-tf-item"><span class="tf-label">1H:</span> <span class="tf-scenario">Neutral </span></div>
+                        <div class="composite-tf-item"><span class="tf-label">4H:</span> <span class="tf-scenario">Neutral </span></div>
+                        <div class="composite-tf-item"><span class="tf-label">1D:</span> <span class="tf-scenario">Neutral </span></div>
                       </div>
+                      <br>
                       <div class="multioi-signal-phrase" id="multioiSignalPhrase">Awaiting data...</div>
                     </div>
                   </div>
@@ -7423,7 +7503,7 @@
                 <div class="multioi-card__title">Grid View</div>
                 <div class="multioi-card__body">
                   <div class="multioi-quadrant-section">
-                    <!-- Top scenario labels — ABOVE the quadrant -->
+                    <!-- Top scenario labels — ABOVE the quadrant (Price ≥ 0 row: SU left, WR right) -->
                     <div class="quadrant-scenario-labels-row quadrant-scenario-labels-row--top">
                       <div class="quadrant-scenario-label quadrant-scenario-label--su" id="qExtLabelSU">
                         <span class="quadrant-scenario-label__name">Strong Uptrend</span>
@@ -7437,15 +7517,16 @@
 
                     <!-- Quadrant with axis labels -->
                     <div class="quadrant-with-axes">
-                      <!-- Axis labels — outside the wrap, in the padding/margin zone -->
+                      <!-- Top axis label — above the quadrant -->
                       <div class="quadrant-axis-label quadrant-axis-label--top">
-                        <span class="quadrant-axis-label__main">X = Price</span>
+                        <span class="quadrant-axis-label__main">X = Open Interest</span>
                       </div>
-                      <div class="quadrant-axis-label quadrant-axis-label--left">
-                        <span class="quadrant-axis-label__main">Y = OI</span>
-                      </div>
-
-                      <div class="multioi-quadrant-wrap" id="multioiQuadrantWrap">
+                      <!-- Row: Y-axis label on the left + quadrant on the right (no overlap) -->
+                      <div class="quadrant-body-row">
+                        <div class="quadrant-axis-label quadrant-axis-label--left">
+                          <span class="quadrant-axis-label__main">Y = Price</span>
+                        </div>
+                        <div class="multioi-quadrant-wrap" id="multioiQuadrantWrap">
                         <!-- Crosshair center lines -->
                         <div class="quadrant-crosshair-h">
                           <div class="quadrant-arrow-left"></div>
@@ -7456,21 +7537,24 @@
                           <div class="quadrant-arrow-down"></div>
                         </div>
 
-                        <!-- 4 Quadrant Cells — NO titles/descriptions inside -->
+                        <!-- 4 Quadrant Cells — Grid layout for X=OI (positive LEFT), Y=Price (positive TOP) -->
+                        <!-- Row 1 (Price ≥ 0): SU (Price≥0,OI≥0) | WR (Price≥0,OI<0) -->
+                        <!-- Row 2 (Price < 0): SD (Price<0,OI≥0) | EX (Price<0,OI<0) -->
                         <div class="multioi-quadrant-grid">
                           <div class="quadrant-cell quadrant-cell--su" id="qCellSU"></div>
                           <div class="quadrant-cell quadrant-cell--wr" id="qCellWR"></div>
                           <div class="quadrant-cell quadrant-cell--sd" id="qCellSD"></div>
                           <div class="quadrant-cell quadrant-cell--ex" id="qCellEX"></div>
                         </div>
-                        <!-- Brand Watermark -->
-                        <div class="quadrant-watermark">MultiPerps.com</div>
-                      </div>
+                          <!-- Brand Watermark -->
+                          <div class="quadrant-watermark">MultiPerps.com</div>
+                        </div>
+                      </div><!-- /quadrant-body-row -->
                     </div>
                     <!-- Tooltip/Z-label overlay layer — outside overflow:hidden, positioned relative to quadrant-section -->
                     <div class="quadrant-tooltip-layer" id="quadrantTooltipLayer"></div>
 
-                    <!-- Bottom scenario labels — BELOW the quadrant -->
+                    <!-- Bottom scenario labels — BELOW the quadrant (Price < 0 row: SD left, EX right) -->
                     <div class="quadrant-scenario-labels-row quadrant-scenario-labels-row--bottom">
                       <div class="quadrant-scenario-label quadrant-scenario-label--sd" id="qExtLabelSD">
                         <span class="quadrant-scenario-label__name">Strong Downtrend</span>
@@ -7492,15 +7576,19 @@
                 <div class="multioi-card__body">
                   <div class="multioi-sparklines-section">
                     <div class="multioi-sparkline-card" data-sparkline="composite">
-                      <div class="multioi-sparkline-card__title">Composite Score <span class="multioi-sparkline-hover-val" id="compositeHoverVal"></span></div>
+                      <div class="multioi-sparkline-card__title">Composite Score <span class="multioi-sparkline-hover-val" id="compositeHoverVal"></span><span class="multioi-sparkline-last-val" id="compositeLastVal"></span></div>
                       <canvas id="compositeSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="price">
-                      <div class="multioi-sparkline-card__title">Price (4H) <span class="multioi-sparkline-hover-val" id="priceHoverVal"></span></div>
+                      <div class="multioi-sparkline-card__title">Price (4H) <span class="multioi-sparkline-hover-val" id="priceHoverVal"></span><span class="multioi-sparkline-last-val" id="priceLastVal"></span></div>
                       <canvas id="priceSparklineCanvas"></canvas>
                     </div>
+                    <div class="multioi-sparkline-card" data-sparkline="volume">
+                      <div class="multioi-sparkline-card__title">Volume (4H) <span class="multioi-sparkline-hover-val" id="volumeHoverVal"></span><span class="multioi-sparkline-last-val" id="volumeLastVal"></span></div>
+                      <canvas id="volumeSparklineCanvas"></canvas>
+                    </div>
                     <div class="multioi-sparkline-card" data-sparkline="funding">
-                      <div class="multioi-sparkline-card__title">Funding Rate (4H) <span class="multioi-sparkline-hover-val" id="fundingHoverVal"></span></div>
+                      <div class="multioi-sparkline-card__title">Funding Rate (4H) <span class="multioi-sparkline-hover-val" id="fundingHoverVal"></span><span class="multioi-sparkline-last-val" id="fundingLastVal"></span></div>
                       <canvas id="fundingSparklineCanvas"></canvas>
                     </div>
                   </div>
@@ -8049,7 +8137,7 @@
             const diff = last.close - last.open;
             const pct = (diff / last.open) * 100;
             const sign = diff > 0 ? '+' : '';
-            const volUsdt = Number.isFinite(last.volume) ? last.volume : null;
+            const volUsdt = Number.isFinite(last.quoteVolume) ? last.quoteVolume : (Number.isFinite(last.volume) ? last.volume : null);
             const volText = Number.isFinite(volUsdt) ? `, ${formatUsdtVolume(volUsdt)}` : '';
             chart.changeEl.textContent = `${sign}${pct.toFixed(2)}%${volText}`;
             chart.changeEl.classList.remove('up', 'down');
@@ -8381,6 +8469,7 @@
                   low: parseFloat(k.l),
                   close: parseFloat(k.c),
                   volume: parseFloat(k.v),
+                  quoteVolume: parseFloat(k.q),
                   closeTime: k.T,
                 };
 
@@ -8394,7 +8483,21 @@
                 chart.dirty = true;
                 chart.lastUpdate = Date.now();
               }
-            }
+
+              // Update sparkline last-values from WS for 4H interval (no extra API)
+              if (interval === '4h' && oiPricePanel.symbol === mainSymUpper) {
+                const qv = parseFloat(k.q);
+                const closePrice = parseFloat(k.c);
+                if (Number.isFinite(qv)) {
+                  const volEl = document.getElementById('volumeLastVal');
+                  if (volEl) volEl.textContent = '$' + formatUsdtVolume(qv);
+                }
+                if (Number.isFinite(closePrice)) {
+                  const priceEl = document.getElementById('priceLastVal');
+                  if (priceEl) priceEl.textContent = '$' + closePrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 });
+                }
+              }
+            } // end if (sym === mainSymUpper)
 
             // Tracker kline (only for tracker symbols with matching interval)
             if (trackerSymbolSet.has(sym) && interval === trackerInterval) {
@@ -8405,6 +8508,7 @@
                 low: parseFloat(k.l),
                 close: parseFloat(k.c),
                 volume: parseFloat(k.v),
+                quoteVolume: parseFloat(k.q),
                 closeTime: k.T,
               };
               const idx = stateTracker.symbols.indexOf(sym);
@@ -8515,6 +8619,7 @@
                   low: parseFloat(k.l),
                   close: parseFloat(k.c),
                   volume: parseFloat(k.v),
+                  quoteVolume: parseFloat(k.q),
                   closeTime: k.T,
                 };
                 const idx = stateTracker.symbols.indexOf(sym);
@@ -8792,7 +8897,7 @@
       return adx;
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* ═════════════════════════════════════════════════════════════
        ██  MULTI OI INDICATOR (Open Interest Price)
        ═══════════════════════════════════════════════════════════════ */
     // ── Main panel object ──
@@ -8817,7 +8922,6 @@
       stats: {
         oiCurrent: null,
         fundingRate: null,
-        volume24h: null,
         oiDataStale: false,
         klinesStale: false,
         zPrice: {},     // per-TF current Z_Price
@@ -8849,7 +8953,6 @@
         // Reset
         this.stats.oiCurrent = null;
         this.stats.fundingRate = null;
-        this.stats.volume24h = null;
         this.stats.oiDataStale = false;
         this.stats.klinesStale = false;
         this.stats.zPrice = {};
@@ -8896,9 +8999,6 @@
           // Funding rate (current)
           apiCalls.push(fetchOI(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${encodeURIComponent(symbol)}`));
           apiLabels.push('funding');
-          // 24h ticker
-          apiCalls.push(fetchOI(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${encodeURIComponent(symbol)}`));
-          apiLabels.push('ticker24h');
 
           const results = await Promise.allSettled(apiCalls);
           if (this._refreshId !== myId) return;
@@ -8918,7 +9018,7 @@
             const oiHistRes = dataMap['oiHist_' + tf.key];
             const frHistRes = dataMap['frHist_' + tf.key];
 
-            const tfData = { closes: [], volumes: [], oi: [], candles: [], fundingRates: [], frTimestamps: [], klineTimestamps: [], oiTimestamps: [] };
+            const tfData = { closes: [], volumes: [], quoteVolumes: [], oi: [], candles: [], fundingRates: [], frTimestamps: [], klineTimestamps: [], oiTimestamps: [] };
 
             // Parse klines — use completed candles only, skip the last (potentially partial)
             if (klinesRes.status === 'fulfilled' && Array.isArray(klinesRes.value) && klinesRes.value.length >= 3) {
@@ -8926,12 +9026,14 @@
               // Skip the very last candle (it's still forming / partial)
               for (let i = 0; i < raw.length - 1; i++) {
                 const c = parseFloat(raw[i][4]); // close
-                const v = parseFloat(raw[i][5]); // volume
+                const v = parseFloat(raw[i][5]); // volume (base asset)
+                const qv = parseFloat(raw[i][7]); // quote volume (USDT)
                 const h = parseFloat(raw[i][2]); // high
                 const l = parseFloat(raw[i][3]); // low
                 const ts = parseInt(raw[i][6]);   // close time (ms)
                 if (Number.isFinite(c)) tfData.closes.push(c);
                 if (Number.isFinite(v)) tfData.volumes.push(v);
+                if (Number.isFinite(qv)) tfData.quoteVolumes.push(qv);
                 if (Number.isFinite(h) && Number.isFinite(l) && Number.isFinite(c)) {
                   tfData.candles.push({ high: h, low: l, close: c });
                 }
@@ -8992,6 +9094,7 @@
               if (kStartIdx >= 0 && kEndIdx >= kStartIdx && (alignStart > kStart || alignEnd < kEnd)) {
                 tfData.closes = tfData.closes.slice(kStartIdx, kEndIdx + 1);
                 tfData.volumes = tfData.volumes.slice(kStartIdx, kEndIdx + 1);
+                tfData.quoteVolumes = tfData.quoteVolumes.slice(kStartIdx, kEndIdx + 1);
                 tfData.candles = tfData.candles.slice(kStartIdx, kEndIdx + 1);
                 tfData.klineTimestamps = tfData.klineTimestamps.slice(kStartIdx, kEndIdx + 1);
               }
@@ -9012,6 +9115,7 @@
             const N = tf.lookback;
             if (tfData.closes.length > N) tfData.closes = tfData.closes.slice(-N);
             if (tfData.volumes.length > N) tfData.volumes = tfData.volumes.slice(-N);
+            if (tfData.quoteVolumes.length > N) tfData.quoteVolumes = tfData.quoteVolumes.slice(-N);
             if (tfData.candles.length > N) tfData.candles = tfData.candles.slice(-N);
             if (tfData.oi.length > N) tfData.oi = tfData.oi.slice(-N);
             if (tfData.fundingRates.length > N) tfData.fundingRates = tfData.fundingRates.slice(-N);
@@ -9037,12 +9141,6 @@
           if (dataMap.funding.status === 'fulfilled' && dataMap.funding.value && dataMap.funding.value.lastFundingRate !== undefined) {
             this.stats.fundingRate = parseFloat(dataMap.funding.value.lastFundingRate);
             if (!Number.isFinite(this.stats.fundingRate)) this.stats.fundingRate = null;
-          }
-
-          // 24h volume
-          if (dataMap.ticker24h.status === 'fulfilled' && dataMap.ticker24h.value) {
-            const qv = parseFloat(dataMap.ticker24h.value.quoteVolume);
-            this.stats.volume24h = Number.isFinite(qv) ? qv : null;
           }
 
         } catch (e) {
@@ -9189,10 +9287,10 @@
         // Dots are positioned INSIDE their respective cell element,
         // so they can never escape the cell boundaries.
         //
-        // Quadrant layout:
-        //   SU (top-left)  | WR (top-right)     Z_Price > 0 = top half
+        // Quadrant layout (X = OI, Y = Price):
+        //   SU (top-left)   | WR (top-right)    Z_Price > 0 = top half
         //   ---------------+---------------     Z_OI    > 0 = left half
-        //   SD (bot-left)  | EX (bot-right)     Z_Price < 0 = bottom half
+        //   SD (bot-left)   | EX (bot-right)    Z_Price < 0 = bottom half
         //                                        Z_OI    < 0 = right half
         //
         // Within each cell, the "center edge" (adjacent to crosshair) = Z = 0,
@@ -9209,11 +9307,12 @@
 
         // Quadrant cell IDs and which sign pair they represent
         // key: 'priceSign_oiSign' → cell element ID
+        // Axes: X = OI (left = positive), Y = Price (up = positive)
         const cellLookup = {
-          'pos_pos': 'qCellSU',   // Z_Price >= 0, Z_OI >= 0  → Strong Uptrend (top-left)
-          'pos_neg': 'qCellWR',   // Z_Price >= 0, Z_OI <  0  → Weak Rally     (top-right)
-          'neg_pos': 'qCellSD',   // Z_Price <  0, Z_OI >= 0  → Strong Downtrend (bot-left)
-          'neg_neg': 'qCellEX'    // Z_Price <  0, Z_OI <  0  → Exhaustion     (bot-right)
+          'pos_pos': 'qCellSU',   // Z_Price >= 0, Z_OI >= 0  → Strong Uptrend   (top-left)
+          'pos_neg': 'qCellWR',   // Z_Price >= 0, Z_OI <  0  → Weak Rally       (top-right)
+          'neg_pos': 'qCellSD',   // Z_Price <  0, Z_OI >= 0  → Strong Downtrend (bottom-left)
+          'neg_neg': 'qCellEX'    // Z_Price <  0, Z_OI <  0  → Exhaustion       (bottom-right)
         };
 
         // Highlight active quadrant cells + external labels
@@ -9242,9 +9341,11 @@
           }
         }
 
-        // ── Equal-axis (symmetric) normalization ──
-        // Use a single symmetric range for both axes so equal Z-scores
-        // produce equal visual travel in X and Y (true Cartesian mapping).
+        // ── Independent per-axis normalization ──
+        // Each axis (Price / OI) uses its own dynamic range so dots spread
+        // proportionally within each axis regardless of scale differences.
+        // E.g. Z_Price=4 on X and Z_OI=123 on Y both map to ~100% travel
+        // on their respective axes — dots never crush to center.
         let allZP = [], allZO = [];
         for (const tfKey of tfKeys) {
           const sc = this.classification && this.classification.scenarios[tfKey];
@@ -9253,24 +9354,25 @@
             if (Number.isFinite(sc.zOi)) allZO.push(sc.zOi);
           }
         }
-        // Compute the single max range across both axes
+        // Compute per-axis ranges
         const zPmin = allZP.length > 0 ? Math.min(...allZP) : -Q_MAX_Z;
         const zPmax = allZP.length > 0 ? Math.max(...allZP) : Q_MAX_Z;
         const zOmin = allZO.length > 0 ? Math.min(...allZO) : -Q_MAX_Z;
         const zOmax = allZO.length > 0 ? Math.max(...allZO) : Q_MAX_Z;
-        // Ensure zero is included
+        // Ensure zero is included in each axis range
         const pLo = Math.min(zPmin, 0);
         const pHi = Math.max(zPmax, 0);
         const oLo = Math.min(zOmin, 0);
         const oHi = Math.max(zOmax, 0);
-        // Single symmetric max: the largest absolute bound across both axes, at least Q_MAX_Z
-        const normMax = Math.max(Math.abs(pLo), Math.abs(pHi), Math.abs(oLo), Math.abs(oHi), Q_MAX_Z);
+        // Independent symmetric max per axis, at least Q_MAX_Z
+        const normMaxP = Math.max(Math.abs(pLo), Math.abs(pHi), Q_MAX_Z);
+        const normMaxO = Math.max(Math.abs(oLo), Math.abs(oHi), Q_MAX_Z);
 
         // ── Helper: compute dot position within its quadrant cell ──
         // Uses per-axis normalization so dots spread proportionally
         // within the actual data range, not the raw Z values.
         //
-        // Coordinate mapping within each cell:
+        // Coordinate mapping within each cell (X=OI, Y=Price):
         //   • The inner edge (adjacent to crosshair)  = 0% travel from that edge
         //   • The outer corner (diagonally opposite)   = 100% travel
         //   • Symmetric padding (PAD) keeps dots away from all edges
@@ -9285,16 +9387,17 @@
           const priceUp = zPrice >= 0;
           const oiUp   = zOi   >= 0;
 
-          // Equal-axis normalization: same denominator for both axes
-          const fracP = Math.min(Math.abs(zPrice) / normMax, 1.0);
-          const fracO = Math.min(Math.abs(zOi)   / normMax, 1.0);
+          // Independent per-axis normalization: each axis uses its own scale
+          const fracP = Math.min(Math.abs(zPrice) / normMaxP, 1.0);
+          const fracO = Math.min(Math.abs(zOi)   / normMaxO, 1.0);
 
           // Usable range inside cell after padding (Q_PAD on each side)
           const usableLo  = Q_PAD;
           const usableHi  = 100 - Q_PAD;
           const usableSpan = usableHi - usableLo;
 
-          // Horizontal: OI-positive cells have OI growing left→right toward crosshair
+          // X-axis = OI: OI-positive cells (left half) have OI growing right→left toward crosshair
+          // (right edge of cell = crosshair side for left-half cells)
           let leftPct;
           if (oiUp) {
             leftPct = usableHi - fracO * usableSpan;
@@ -9302,7 +9405,8 @@
             leftPct = usableLo + fracO * usableSpan;
           }
 
-          // Vertical: Price-positive cells have price growing bottom→top toward crosshair
+          // Y-axis = Price: Price-positive cells (top half) have Price growing bottom→top toward crosshair
+          // (bottom edge of cell = crosshair side for top-half cells)
           let topPct;
           if (priceUp) {
             topPct = usableHi - fracP * usableSpan;
@@ -9716,13 +9820,13 @@
           // Per-TF mini summary with Z-scores
           if (summaryEl) {
             const tfSummaryParts = [];
-            const dirSymbols = { 1: '\u2191', 2: '\u2191', 3: '\u2193', 4: '\u26A0', 0: '—' };
+            const dirSymbols = { 1: '\u2191', 2: '\u2191', 3: '\u2193', 4: '\u26A0', 0: '' };
             const dirColors = { 1: '#26D4AC', 2: '#F3A052', 3: '#F23645', 4: '#A78BFA', 0: '#6B7280' };
             for (const tf of MF_TIMEFRAMES) {
               const sc = classification.scenarios[tf.key];
               const idx = sc ? sc.idx : 0;
               const scDef = MF_SCENARIOS[idx] || MF_SCENARIOS[0];
-              const symbol = dirSymbols[idx] || '—';
+              const symbol = dirSymbols[idx] ?? '';
               const color = dirColors[idx] || '#6B7280';
               const zP = sc && Number.isFinite(sc.zPrice) ? (sc.zPrice >= 0 ? '+' : '') + sc.zPrice.toFixed(1) : '--';
               const zO = sc && Number.isFinite(sc.zOi) ? (sc.zOi >= 0 ? '+' : '') + sc.zOi.toFixed(1) : '--';
@@ -9830,10 +9934,11 @@
           discEl.style.display = hasAnyScenario ? 'block' : 'none';
         }
 
-        // ── Sparklines (Composite Score, Price, Funding) ──
+        // ── Sparklines (Composite Score, Price, Volume, Funding) ──
         this.renderCompositeSparkline();
         this.renderPriceSparkline();
         this.renderFundingSparkline();
+        this.renderVolumeSparkline();
       },
 
       async refresh(symbol) {
@@ -9900,7 +10005,7 @@
         }
         if (Number.isFinite(this.stats.fundingRate)) {
           const fr = this.stats.fundingRate;
-          const frPct = (fr * 100).toFixed(4);
+          const frPct = (fr * 100).toFixed(6);
           const sign = fr > 0 ? '+' : '';
           // Trend arrow for funding rate
           let frArrow = '→';
@@ -9914,7 +10019,14 @@
           items.push('<span class="multioi-context-item"><span class="label">Funding:</span> <span class="value" style="color:' + frColor + ';font-weight:700">' + sign + frPct + '% ' + frArrow + '</span></span>');
         }
 
+        // Insert a line break after the first item (OI Notional) for mobile readability
+        if (items.length >= 2) {
+          items.splice(1, 0, '<br>');
+        }
         ctxEl.innerHTML = items.join(' <span style="color:var(--muted-3);font-weight:300">|</span> ');
+        // Clean up stray pipes around <br>
+        ctxEl.innerHTML = ctxEl.innerHTML.replace(/<span[^>]*>\|<\/span>\s*<br>/g, '<br>');
+        ctxEl.innerHTML = ctxEl.innerHTML.replace(/<br>\s*<span[^>]*>\|<\/span>/g, '<br>');
         ctxEl.style.display = items.length > 0 ? 'block' : 'none';
       },
 
@@ -9946,6 +10058,11 @@
           linePositive: '#26D4AC',
           lineNegative: '#F23645',
         });
+
+        // Show last value in title
+        const lastVal = history[history.length - 1];
+        const lastEl = document.getElementById('compositeLastVal');
+        if (lastEl && Number.isFinite(lastVal)) lastEl.textContent = (lastVal >= 0 ? '+' : '') + lastVal.toFixed(0);
       },
 
       renderPriceSparkline() {
@@ -9968,6 +10085,10 @@
           lineNegative: up ? '#5B8CFF' : '#F23645',
           fillBaseline: 'bottom',  // fill from bottom instead of zero
         });
+
+        // Show last value in title
+        const lastEl = document.getElementById('priceLastVal');
+        if (lastEl && Number.isFinite(lastPrice)) lastEl.textContent = '$' + lastPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 });
       },
 
       renderFundingSparkline() {
@@ -9985,6 +10106,39 @@
           linePositive: '#A78BFA',
           lineNegative: '#A78BFA',
         });
+
+        // Show last value in title
+        const lastFr = history[history.length - 1];
+        const lastEl = document.getElementById('fundingLastVal');
+        if (lastEl && Number.isFinite(lastFr)) lastEl.textContent = (lastFr >= 0 ? '+' : '') + (lastFr * 100).toFixed(6) + '%';
+      },
+
+      renderVolumeSparkline() {
+        const canvas = document.getElementById('volumeSparklineCanvas');
+        if (!canvas) return;
+        const d = this.tfData['4H'];
+        // Use quote volume (USDT) to match rankings display
+        const volArr = (d && d.quoteVolumes && d.quoteVolumes.length >= 2) ? d.quoteVolumes : (d && d.volumes ? d.volumes : []);
+        if (volArr.length < 2) return;
+        const history = volArr.slice(-21);
+        if (history.length < 2) return;
+
+        this._drawSparkline(canvas, history, {
+          zeroLine: false,
+          fillPositive: '#5B8CFF',
+          fillNegative: '#5B8CFF',
+          linePositive: '#7EB4FF',
+          lineNegative: '#7EB4FF',
+          lineWidth: 2,
+          fillBaseline: 'bottom',
+        });
+
+        // Show last value in title (USDT) — use same format as chart section
+        const lastVol = history[history.length - 1];
+        const lastEl = document.getElementById('volumeLastVal');
+        if (lastEl && Number.isFinite(lastVol)) {
+          lastEl.textContent = '$' + formatUsdtVolume(lastVol);
+        }
       },
 
       /**
@@ -10054,7 +10208,7 @@
 
         // Main line
         ctx.strokeStyle = lineColor;
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = opts.lineWidth || 1.5;
         ctx.lineJoin = 'round';
         ctx.beginPath();
         for (let i = 0; i < history.length; i++) {
@@ -10084,19 +10238,11 @@
       async _refreshSlowData(symbol) {
         const fetchOI = (url) => fetchJsonWithTimeout(url);
         try {
-          const [fundingRes, ticker24hRes] = await Promise.allSettled([
-            fetchOI(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${encodeURIComponent(symbol)}`),
-            fetchOI(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${encodeURIComponent(symbol)}`)
-          ]);
+          const fundingRes = await fetchOI(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${encodeURIComponent(symbol)}`);
 
-          if (fundingRes.status === 'fulfilled' && fundingRes.value && fundingRes.value.lastFundingRate !== undefined) {
-            this.stats.fundingRate = parseFloat(fundingRes.value.lastFundingRate);
+          if (fundingRes && fundingRes.lastFundingRate !== undefined) {
+            this.stats.fundingRate = parseFloat(fundingRes.lastFundingRate);
             if (!Number.isFinite(this.stats.fundingRate)) this.stats.fundingRate = null;
-          }
-
-          if (ticker24hRes.status === 'fulfilled' && ticker24hRes.value) {
-            const qv = parseFloat(ticker24hRes.value.quoteVolume);
-            this.stats.volume24h = Number.isFinite(qv) ? qv : null;
           }
 
           // Re-render with updated data
@@ -10322,8 +10468,9 @@
       _initSparklineHover() {
         const sparklineMap = [
           { canvasId: 'compositeSparklineCanvas', valId: 'compositeHoverVal', getHistory: () => this._scoreHistory, format: v => (v >= 0 ? '+' : '') + v.toFixed(0) },
-          { canvasId: 'priceSparklineCanvas', valId: 'priceHoverVal', getHistory: () => { const d = this.tfData['4H']; return d && d.closes ? d.closes.slice(-21) : []; }, format: v => '$' + v.toLocaleString(undefined, { maximumFractionDigits: 2 }) },
-          { canvasId: 'fundingSparklineCanvas', valId: 'fundingHoverVal', getHistory: () => { const d = this.tfData['4H']; return d && d.fundingRates ? d.fundingRates.slice(-21) : []; }, format: v => (v >= 0 ? '+' : '') + (v * 100).toFixed(4) + '%' },
+          { canvasId: 'priceSparklineCanvas', valId: 'priceHoverVal', getHistory: () => { const d = this.tfData['4H']; return d && d.closes ? d.closes.slice(-21) : []; }, format: v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 8 }) },
+          { canvasId: 'volumeSparklineCanvas', valId: 'volumeHoverVal', getHistory: () => { const d = this.tfData['4H']; return (d && d.quoteVolumes && d.quoteVolumes.length >= 2) ? d.quoteVolumes.slice(-21) : (d && d.volumes ? d.volumes.slice(-21) : []); }, format: v => '$' + formatUsdtVolume(v) },
+          { canvasId: 'fundingSparklineCanvas', valId: 'fundingHoverVal', getHistory: () => { const d = this.tfData['4H']; return d && d.fundingRates ? d.fundingRates.slice(-21) : []; }, format: v => (v >= 0 ? '+' : '') + (v * 100).toFixed(6) + '%' },
         ];
 
         for (const sm of sparklineMap) {
@@ -10985,6 +11132,12 @@
                   if (oiPricePanel.stats.fundingRate !== wsFunding.fundingRate) {
                     oiPricePanel.stats.fundingRate = wsFunding.fundingRate;
                     oiPricePanel.renderContextRow();
+                    // Update fundingLastVal sparkline title (no extra API)
+                    const frEl = document.getElementById('fundingLastVal');
+                    if (frEl) {
+                      const fr = wsFunding.fundingRate;
+                      frEl.textContent = (fr >= 0 ? '+' : '') + (fr * 100).toFixed(6) + '%';
+                    }
                   }
                 }
               }
@@ -11431,7 +11584,7 @@
           if (Number.isFinite(last.open) && last.open !== 0) {
             const diff = last.close - last.open;
             const pct = (diff / last.open) * 100;
-            const volUsdt = Number.isFinite(last.volume) ? last.volume : null;
+            const volUsdt = Number.isFinite(last.quoteVolume) ? last.quoteVolume : (Number.isFinite(last.volume) ? last.volume : null);
             const volText = Number.isFinite(volUsdt) ? `, ${formatUsdtVolume(volUsdt)}` : '';
             changeEl.textContent = `${diff >= 0 ? '+' : ''}${pct.toFixed(2)}%${volText}`;
             changeEl.style.color = diff >= 0 ? 'var(--good-bright)' : 'var(--bad)';
@@ -11685,6 +11838,7 @@
             oiPricePanel.renderCompositeSparkline();
             oiPricePanel.renderPriceSparkline();
             oiPricePanel.renderFundingSparkline();
+            oiPricePanel.renderVolumeSparkline();
           }
         }, 120);
       });
@@ -12589,7 +12743,7 @@
       <h2>Key Features</h2>
       <ul>
         <li><strong>Multi-Timeframe Charts:</strong> View 1m, 5m, 15m, 30m, 1h, 4h, daily, weekly, and monthly candlestick charts simultaneously, all updating in real time.</li>
-        <li><strong>Multi OI — Open Interest Price Indicator:</strong> See what's really driving a price move — not just the candles, but the positioning behind them. Multi OI tracks the relationship between price and open interest across three timeframes (1H, 4H, 1D) and classifies the market into four easy-to-read scenarios: <em>Strong Uptrend</em> (new money pushing price up — bias: Long), <em>Weak Rally</em> (price rising but losing steam — bias: Careful Long), <em>Strong Downtrend</em> (fresh short selling driving price down — bias: Short), and <em>Exhaustion</em> (positions closing, move may be ending — bias: Watch for Reversal). A Composite Signal Score summarizes the overall directional lean across all three timeframes at a glance (Bullish Scenario, Bearish Scenario, or No Clear Scenario). Built-in noise filters prevent false signals by only classifying when the data is sufficient and the market is trending. Three sparklines (Score, Price, Funding) provide visual soft context at your discretion. All data is live from Binance with automatic refresh.</li>
+        <li><strong>Multi OI — Open Interest Price Indicator:</strong> See what's really driving a price move — not just the candles, but the positioning behind them. Multi OI tracks the relationship between price and open interest across three timeframes (1H, 4H, 1D) and classifies the market into four easy-to-read scenarios: <em>Strong Uptrend</em> (new money pushing price up — bias: Long), <em>Weak Rally</em> (price rising but losing steam — bias: Careful Long), <em>Strong Downtrend</em> (fresh short selling driving price down — bias: Short), and <em>Exhaustion</em> (positions closing, move may be ending — bias: Watch for Reversal). A Composite Signal Score summarizes the overall directional lean across all three timeframes at a glance (Bullish Scenario, Bearish Scenario, or No Clear Scenario). Built-in noise filters prevent false signals by only classifying when the data is sufficient and the market is trending. Four sparklines (Score, Price, Volume, Funding) provide visual soft context at your discretion. All data is live from Binance with real-time WebSocket updates.</li>
         <li><strong>Multi-Type Alerts:</strong> Set price alerts or funding rate alerts with audio notifications and visual popups. Each of the four alert slots supports any alert type — mix and match as needed. All alerts persist across browser sessions using local storage and fire in real time via Binance WebSocket feeds.</li>
         <li><strong>Market Rankings:</strong> Track top volume, top gainers, top losers, open interest leaders, and funding rate extremes across all Binance USDT-M perpetual contracts.</li>
         <li><strong>Multi-Ticker Dashboard:</strong> Monitor up to four tickers side by side on the same screen for instant comparison.</li>
@@ -12870,7 +13024,7 @@
 
           <h2>The Core Idea: Price + OI = The Full Story</h2>
           <p>When price moves, there are only two possible drivers: new capital entering the market, or existing positions being closed. Price alone cannot tell you which one is happening. Open interest (OI) reveals the answer. When price rises and OI rises alongside it, new longs are entering — that is a sustainable trend. When price rises but OI falls, shorts are simply covering — that move is fragile. Multi OI normalizes both price and OI into <strong>Robust Z-scores</strong> (a statistical measure of how extreme a reading is compared to its recent history, using median + MAD to resist outlier distortion) and classifies the result into one of four scenarios per timeframe.</p>
-          <p>The Multi OI panel on MultiPerps tracks three timeframes simultaneously — 1H, 4H, and 1D — all using the same configurable lookback window (55 bars by default), meaning 55 one-hour candles for 1H, 55 four-hour candles for 4H, and 55 daily candles for 1D. This lets you fairly compare how extreme a reading is across all three. Each timeframe classifies independently, and you decide how to weigh them based on your trading style. Three sparklines below the composite signal provide visual soft context: the composite score trend, 4H price direction, and 4H funding rate history — use them at your discretion to add conviction or caution to your reading.</p>
+          <p>The Multi OI panel on MultiPerps tracks three timeframes simultaneously — 1H, 4H, and 1D — all using the same configurable lookback window (55 bars by default), meaning 55 one-hour candles for 1H, 55 four-hour candles for 4H, and 55 daily candles for 1D. This lets you fairly compare how extreme a reading is across all three. Each timeframe classifies independently, and you decide how to weigh them based on your trading style. Four sparklines below the composite signal provide visual soft context: the composite score trend, 4H price direction, 4H quote volume (USDT), and 4H funding rate history — use them at your discretion to add conviction or caution to your reading.</p>
 
           <h2>The Four Scenarios — And What to Do About Each</h2>
           <p>For each timeframe, Multi OI classifies the market into one of four scenarios when both the Robust price Z-score and the Robust OI Z-score breach their respective thresholds (|Z_Price| &gt; 1.5, |Z_OI| &gt; 2.0). Each scenario carries a <strong>bias</strong> that tells you the directional lean and the appropriate trading posture. When the thresholds are not breached, or when hard filters block classification, the result is Neutral.</p>
@@ -12892,7 +13046,7 @@
 
           <h2>How Signals Are Generated — The Processing Pipeline</h2>
           <p>Multi OI processes raw market data through a structured pipeline of filters before producing a scenario classification. Understanding this pipeline helps you interpret why a particular timeframe might show Neutral even when the Z-score values look extreme. All Z-scores in Multi OI use <strong>Robust Z-scores</strong> (median + MAD, outlier-resistant) — for both display and classification. This is a deliberate choice: crypto markets are heavily skewed with frequent outliers (liquidation cascades, OI flash-crashes, funding rate spikes) that distort mean and standard deviation, compressing Standard Z-scores toward zero and masking genuinely unusual conditions. Robust Z resists outlier contamination, ensuring that the displayed values are exactly what drives the classification — no confusing discrepancy between displayed values and scenario logic.</p>
-          <p style="font-family:monospace;font-size:1rem;color:var(--muted-2);background:rgba(255,255,255,0.04);padding:12px 14px;border-radius:6px;line-height:1.9">Raw Data (Klines [Price + Volume] + OI Hist + Funding Hist + Current OI/FR + 24h Ticker)<br>
+          <p style="font-family:monospace;font-size:1rem;color:var(--muted-2);background:rgba(255,255,255,0.04);padding:12px 14px;border-radius:6px;line-height:1.9">Raw Data (Klines [Price + Volume] + OI Hist + Funding Hist + Current OI/FR)<br>
           &nbsp;&nbsp;│<br>
           &nbsp;&nbsp;│&nbsp;&nbsp;<span style="color:var(--accent)">For EACH timeframe (1H, 4H, 1D) independently:</span><br>
           &nbsp;&nbsp;│<br>
@@ -12923,10 +13077,11 @@
           <p>When a scenario is classified, it means all three hard filters have passed. When the result is Neutral, it could be because none of the thresholds are breached, the market is not trending (ADX below 20), or there is not enough data yet (cold start guard).</p>
 
           <h3>Sparklines — Visual Soft Context (use at your discretion)</h3>
-          <p>Three sparklines appear below the composite signal row, providing visual context at a glance. Unlike the hard filters, sparklines do not affect classification — they are advisory tools that help you form your own judgment about the quality and context of the current signal.</p>
+          <p>Four sparklines appear below the composite signal row, providing visual context at a glance. Unlike the hard filters, sparklines do not affect classification — they are advisory tools that help you form your own judgment about the quality and context of the current signal.</p>
           <ul>
             <li><strong>Composite Score Sparkline</strong> — Shows the last 21 values of the composite signal score. A rising line means conviction is strengthening across timeframes; a falling line means it is deteriorating. This is particularly useful for spotting transitions before they hit the quadrant — if the score line is heading toward zero from bullish territory, a scenario change may be coming.</li>
             <li><strong>Price Sparkline (4H)</strong> — Shows the last 21 four-hour close prices. Use this to gauge whether price is trending, ranging, or at an extreme. A Strong Uptrend signal combined with a price sparkline going parabolic may indicate the move is overextended, while a Strong Uptrend with price just turning up suggests an early entry.</li>
+            <li><strong>Volume Sparkline (4H)</strong> — Shows the last 21 four-hour quote volumes (USDT). Rising volume confirms genuine capital flow behind a price move; declining volume during a rally signals weakening conviction. A Strong Uptrend with expanding volume is higher conviction than one with shrinking volume. Volume spikes often precede or coincide with trend changes.</li>
             <li><strong>Funding Rate Sparkline (4H)</strong> — Shows the last 21 four-hour funding rates. Spikes in the funding rate indicate crowded positioning — longs paying extreme rates carry squeeze risk if OI begins to collapse. Flat or moderate funding means positioning costs are normal. This is your early warning for potential liquidation cascades.</li>
           </ul>
           <p>These sparklines are soft context — use them at your discretion to add conviction or caution, but never as standalone signals.</p>
@@ -12940,7 +13095,7 @@
           <p>Both Z-scores use <strong>Robust Z</strong> (median + MAD, outlier-resistant) — the same values used for classification. Unlike Standard Z-scores (mean + standard deviation), Robust Z-scores resist outlier contamination, so one extreme event does not compress all other readings toward zero. This means the values displayed are exactly what drives the classification — no discrepancy between displayed values and scenario logic.</p>
 
           <h2>Composite Signal Score</h2>
-          <p>While each timeframe classifies independently and there is no voting, Multi OI provides a <strong>Composite Signal Score</strong> that summarizes the directional lean across all three timeframes into a single number. This score is displayed above the quadrant grid alongside a directional label, a per-timeframe mini summary with Z-score values, and three sparklines showing score, price, and funding rate history.</p>
+          <p>While each timeframe classifies independently and there is no voting, Multi OI provides a <strong>Composite Signal Score</strong> that summarizes the directional lean across all three timeframes into a single number. This score is displayed above the quadrant grid alongside a directional label, a per-timeframe mini summary with Z-score values, and four sparklines showing score, price, volume, and funding rate history.</p>
           <ul>
             <li>Each scenario is assigned a numeric value: <strong>Strong Uptrend (S1) = +100</strong>, <strong>Weak Rally (S2) = +30</strong>, <strong>Exhaustion (S4) = -30</strong>, <strong>Strong Downtrend (S3) = -100</strong>, <strong>Neutral = 0</strong>.</li>
             <li>The composite score is a weighted average: <strong>Score = (1H &times; 0.30) + (4H &times; 0.40) + (1D &times; 0.30)</strong>. The 4H timeframe receives the highest weight (40%) because it balances responsiveness and stability, while 1H and 1D each contribute 30%.</li>
@@ -12977,10 +13132,11 @@
           </ul>
 
           <h3>Step 4: Check Sparklines for Visual Context</h3>
-          <p>Three sparklines below the composite signal provide at-a-glance context. Use them at your discretion — they do not change the classification, but they help you judge conviction and spot extremes.</p>
+          <p>Four sparklines below the composite signal provide at-a-glance context. Use them at your discretion — they do not change the classification, but they help you judge conviction and spot extremes.</p>
           <ul>
             <li><strong>Composite Score sparkline:</strong> Is conviction strengthening (rising) or deteriorating (falling)? A score heading toward zero from either side warns of a transition.</li>
             <li><strong>Price sparkline:</strong> Is price trending or ranging? A parabolic price line in a Strong Uptrend may be overextended; a price just turning up suggests early entry.</li>
+            <li><strong>Volume sparkline:</strong> Is volume rising or falling with the move? Rising volume confirms conviction; declining volume during a rally signals weakness.</li>
             <li><strong>Funding Rate sparkline:</strong> Are funding rates spiking? Spikes indicate crowded positioning and squeeze risk. Flat funding means normal conditions.</li>
           </ul>
 
@@ -13000,7 +13156,7 @@
             <li><strong style="color:#A78BFA">Exhaustion (S4 = -30)</strong> — Price↓ + OI↓. Liquidations, selling exhausting. Bias: <b>Watch for Reversal</b>. Action: Do not short, watch for reversal signals.</li>
             <li><strong style="color:#6B7280">Neutral (= 0)</strong> — No statistical edge. Bias: <b>No Directional Bias</b>. Action: Reduce size, widen stops, or stay flat.</li>
             <li><strong>Composite Direction</strong> — Score ≥ +30 = Bullish Scenario | 0 &lt; Score &lt; +30 = Slightly Bullish Scenario | Score = 0 = No Clear Scenario | -30 &lt; Score &lt; 0 = Slightly Bearish Scenario | Score ≤ -30 = Bearish Scenario. Weights: 1H 30%, 4H 40%, 1D 30%.</li>
-            <li><strong>Sparklines (Soft Context)</strong> — Score trend (21 pts), Price 4H (21 pts), Funding 4H (21 pts). Use at your discretion for conviction and context.</li>
+            <li><strong>Sparklines (Soft Context)</strong> — Score trend (21 pts), Price 4H (21 pts), Volume 4H (21 pts, USDT), Funding 4H (21 pts). Use at your discretion for conviction and context.</li>
           </ul>
 
           <h2>Important Limitations &amp; Disclaimers</h2>
