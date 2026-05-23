@@ -1099,10 +1099,10 @@
       justify-content: center;
       align-items: center;
       gap: 10px;
-      padding: 22px 12px 12px;
+      padding: 10px 12px 8px;
       flex-wrap: wrap;
-      border-bottom: 1px solid var(--section-border);
-      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(34,171,148,0.15);
+      margin-bottom: 12px;
     }
 
     .chart-action-buttons {
@@ -2523,7 +2523,7 @@
         padding: 6px 10px;
         gap: 6px;
         border-radius: 8px;
-        margin-bottom: 6px;
+        margin-bottom: 12px;
       }
       .fav-tickers-heading {
         font-size: 0.8rem;
@@ -2551,7 +2551,7 @@
       .fav-tickers-section {
         padding: 5px 8px;
         gap: 4px;
-        margin-bottom: 4px;
+        margin-bottom: 12px;
       }
       .fav-tickers-heading {
         font-size: 0.75rem;
@@ -3293,6 +3293,7 @@
       border: 1px solid var(--border-3);
       border-radius: 8px;
       flex-wrap: wrap;
+      margin-bottom: 12px;
     }
     .fav-tickers-heading {
       font-size: 0.85rem;
@@ -3563,15 +3564,15 @@
       border-radius: 0;
       overflow: visible;
       position: relative;
-      padding: 0 24px 12px 24px;
+      padding: 0 28px 8px 28px;
       font-family: 'Inter', 'SF Pro Display', -apple-system, 'Segoe UI', sans-serif;
     }
     .multioi-header {
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      padding: 8px 12px;
-      margin-bottom: 12px;
+      padding: 6px 12px;
+      margin-bottom: 8px;
       background: transparent;
       border: none;
       border-radius: 10px;
@@ -3710,37 +3711,37 @@
     }
 
     .multioi-card {
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(34, 171, 148, 0.15);
-      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(34,171,148,0.05) 0%, rgba(0,0,0,0.35) 100%);
+      border: 1px solid rgba(34, 171, 148, 0.25);
+      border-radius: 16px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
     .multioi-card:hover {
-      border-color: rgba(34, 171, 148, 0.30);
-      box-shadow: 0 0 20px rgba(34, 171, 148, 0.06);
+      border-color: rgba(34, 171, 148, 0.45);
+      box-shadow: 0 0 24px rgba(34, 171, 148, 0.08);
     }
 
     .multioi-card__title {
-      font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+      font-size: clamp(0.78rem, 1.2vw, 0.92rem);
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.14em;
       color: var(--accent);
       text-align: center;
-      padding: 10px 14px 8px;
+      padding: 8px 16px 6px;
       border-bottom: 1px solid rgba(34, 171, 148, 0.12);
       background: linear-gradient(180deg, rgba(34, 171, 148, 0.06) 0%, transparent 100%);
       flex-shrink: 0;
     }
 
     .multioi-card__body {
-      padding: 12px;
+      padding: 10px 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 5px;
       flex: 1 1 auto;
     }
 
@@ -3796,13 +3797,13 @@
     /* Composite signal row — below the 3 columns */
     .multioi-composite-signal {
       text-align: center;
-      padding: 10px 16px 6px;
-      margin-top: 4px;
-      margin-bottom: 4px;
+      padding: 6px 14px 4px;
+      margin-top: 2px;
+      margin-bottom: 2px;
       background: rgba(0,0,0,0.25);
-      border: 1px solid rgba(34,171,148,0.12);
+      border: 1px solid rgba(34,171,148,0.15);
       border-radius: 10px;
-      line-height: 1.25;
+      line-height: 1.2;
       position: relative;
     }
     /* Hero signal inner glow — subtle ambient light */
@@ -3820,7 +3821,7 @@
       justify-content: center;
       align-items: baseline;
       gap: 10px;
-      margin-bottom: 6px;
+      margin-bottom: 2px;
       position: relative;
       z-index: 1;
     }
@@ -3830,6 +3831,17 @@
       color: var(--accent);
       white-space: nowrap;
       letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .composite-ticker-favicon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: contain;
+      flex-shrink: 0;
+      vertical-align: middle;
     }
     .composite-ticker-price {
       font-size: 1.4rem;
@@ -3854,7 +3866,7 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
-      gap: 6px;
+      gap: 4px;
     }
     .composite-direction-row {
       width: 100%;
@@ -3865,45 +3877,47 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
-      margin-top: 4px;
+      gap: 3px;
+      margin-top: 2px;
     }
     .composite-score-label {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.10em;
       text-align: center;
     }
     .composite-score-value {
       font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
-      font-size: 1.8rem;
-      font-weight: 700;
+      font-size: 2.3rem;
+      font-weight: 800;
       line-height: 1;
       color: var(--muted);
       transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1), text-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       font-variant-numeric: tabular-nums;
     }
     .composite-score-value.bullish {
-      color: #26D4AC;
-      text-shadow: 0 0 16px rgba(38, 212, 172, 0.3);
+      color: #00FFB8;
+      text-shadow: 0 0 24px rgba(0, 255, 184, 0.35), 0 0 48px rgba(0, 255, 184, 0.12);
     }
     .composite-score-value.slightly-bullish {
-      color: rgba(38, 212, 172, 0.7);
+      color: rgba(38, 212, 172, 0.85);
+      text-shadow: 0 0 12px rgba(38, 212, 172, 0.2);
     }
     .composite-score-value.bearish {
-      color: #F23645;
-      text-shadow: 0 0 16px rgba(242, 54, 69, 0.3);
+      color: #FF4D5D;
+      text-shadow: 0 0 24px rgba(255, 77, 93, 0.35), 0 0 48px rgba(255, 77, 93, 0.12);
     }
     .composite-score-value.slightly-bearish {
-      color: rgba(242, 54, 69, 0.7);
+      color: rgba(242, 54, 69, 0.85);
+      text-shadow: 0 0 12px rgba(242, 54, 69, 0.2);
     }
     .composite-score-value.flat {
-      color: #6B7280;
+      color: #7B8794;
     }
     .composite-direction {
-      font-size: 1.35rem;
+      font-size: 1.5rem;
       font-weight: 900;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -3939,33 +3953,33 @@
       display: inline-block;
     }
     .composite-direction.bullish {
-      color: #26D4AC;
-      text-shadow: 0 0 20px rgba(38, 212, 172, 0.35), 0 0 40px rgba(38, 212, 172, 0.15);
+      color: #00FFB8;
+      text-shadow: 0 0 24px rgba(0, 255, 184, 0.4), 0 0 48px rgba(0, 255, 184, 0.15);
     }
-    .composite-direction.slightly-bullish { color: rgba(38, 212, 172, 0.65); text-shadow: 0 0 12px rgba(38, 212, 172, 0.2); }
+    .composite-direction.slightly-bullish { color: rgba(38, 212, 172, 0.8); text-shadow: 0 0 14px rgba(38, 212, 172, 0.25); }
     .composite-direction.bearish {
-      color: #F23645;
-      text-shadow: 0 0 20px rgba(242, 54, 69, 0.35), 0 0 40px rgba(242, 54, 69, 0.15);
+      color: #FF4D5D;
+      text-shadow: 0 0 24px rgba(255, 77, 93, 0.4), 0 0 48px rgba(255, 77, 93, 0.15);
     }
-    .composite-direction.slightly-bearish { color: rgba(242, 54, 69, 0.65); text-shadow: 0 0 12px rgba(242, 54, 69, 0.2); }
-    .composite-direction.flat { color: #6B7280; }
+    .composite-direction.slightly-bearish { color: rgba(242, 54, 69, 0.8); text-shadow: 0 0 14px rgba(242, 54, 69, 0.25); }
+    .composite-direction.flat { color: #7B8794; }
     /* Legacy .composite-score kept for compatibility but hidden — replaced by .composite-score-row */
     .composite-score {
       display: none;
     }
     .composite-tf-summary {
-      font-size: 1.0rem;
+      font-size: 1.12rem;
       font-weight: 600;
-      color: var(--muted-2);
-      margin-top: 2px;
-      line-height: 1.5;
+      color: var(--muted);
+      margin-top: 0px;
+      line-height: 1.35;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       width: fit-content;
       margin-left: auto;
       margin-right: auto;
-      gap: 3px;
+      gap: 1px;
       text-align: left;
       font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
     }
@@ -4002,6 +4016,12 @@
     .composite-tf-item .tf-scenario {
       font-weight: 800;
     }
+    /* Color-coded TF scenarios for instant readability */
+    .composite-tf-item .tf-scenario.scenario-su { color: var(--good); }
+    .composite-tf-item .tf-scenario.scenario-wr { color: var(--warn); }
+    .composite-tf-item .tf-scenario.scenario-sd { color: var(--bad); }
+    .composite-tf-item .tf-scenario.scenario-ex { color: #A78BFA; }
+    .composite-tf-item .tf-scenario.scenario-neutral { color: var(--muted-2); }
     .composite-tf-sep {
       display: none;
     }
@@ -4376,12 +4396,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: clamp(0.72rem, 1.2vw, 1.02rem);
+      font-size: clamp(0.78rem, 1.3vw, 1.05rem);
       font-weight: 900;
       color: #ffffff;
       letter-spacing: 0.04em;
       user-select: none;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.4);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.5);
       box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.15);
       transition: left 0.4s cubic-bezier(0.16,1,0.3,1), top 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s, border-color 0.2s;
     }
@@ -4402,17 +4422,17 @@
     .quadrant-bubble--4h {
       width: clamp(34px, 4.4vw, 46px);
       height: clamp(34px, 4.4vw, 46px);
-      background: radial-gradient(circle at 35% 35%, #7eaaff, #5B8CFF 60%, #3d5fb3);
-      border: 2px solid rgba(91,140,255,0.5);
-      box-shadow: 0 0 12px rgba(91,140,255,0.50), 0 0 24px rgba(91,140,255,0.20), inset 0 1px 3px rgba(255,255,255,0.2);
+      background: radial-gradient(circle at 35% 35%, #a8c4ff, #6EA8FE 50%, #3b6fd4);
+      border: 2px solid rgba(110,168,254,0.55);
+      box-shadow: 0 0 14px rgba(110,168,254,0.50), 0 0 28px rgba(110,168,254,0.20), inset 0 1px 3px rgba(255,255,255,0.25);
       animation: glowOrb4h 2.0s ease-in-out infinite;
     }
     .quadrant-bubble--1d {
       width: clamp(38px, 5.2vw, 54px);
       height: clamp(38px, 5.2vw, 54px);
-      background: radial-gradient(circle at 35% 35%, #8b5cf6, #7c3aed 60%, #5b21b6);
-      border: 2px solid rgba(124,58,237,0.6);
-      box-shadow: 0 0 12px rgba(124,58,237,0.50), 0 0 24px rgba(124,58,237,0.20), inset 0 1px 3px rgba(255,255,255,0.15);
+      background: radial-gradient(circle at 35% 35%, #6d3fbb, #4c1d95 60%, #360f6e);
+      border: 2px solid rgba(76,29,149,0.7);
+      box-shadow: 0 0 10px rgba(76,29,149,0.40), 0 0 20px rgba(76,29,149,0.15), inset 0 1px 3px rgba(255,255,255,0.12);
       animation: glowOrb1d 2.0s ease-in-out infinite;
     }
 
@@ -4421,12 +4441,12 @@
       50% { box-shadow: 0 0 18px rgba(34,171,148,0.65), 0 0 36px rgba(34,171,148,0.30), 0 0 54px rgba(34,171,148,0.10), inset 0 1px 3px rgba(255,255,255,0.25); transform: scale(1.04); }
     }
     @keyframes glowOrb4h {
-      0%, 100% { box-shadow: 0 0 12px rgba(91,140,255,0.50), 0 0 24px rgba(91,140,255,0.20), inset 0 1px 3px rgba(255,255,255,0.2); transform: scale(1); }
-      50% { box-shadow: 0 0 18px rgba(91,140,255,0.65), 0 0 36px rgba(91,140,255,0.30), 0 0 54px rgba(91,140,255,0.10), inset 0 1px 3px rgba(255,255,255,0.25); transform: scale(1.04); }
+      0%, 100% { box-shadow: 0 0 14px rgba(110,168,254,0.50), 0 0 28px rgba(110,168,254,0.20), inset 0 1px 3px rgba(255,255,255,0.25); transform: scale(1); }
+      50% { box-shadow: 0 0 20px rgba(110,168,254,0.65), 0 0 40px rgba(110,168,254,0.30), 0 0 60px rgba(110,168,254,0.10), inset 0 1px 3px rgba(255,255,255,0.30); transform: scale(1.04); }
     }
     @keyframes glowOrb1d {
-      0%, 100% { box-shadow: 0 0 12px rgba(124,58,237,0.50), 0 0 24px rgba(124,58,237,0.20), inset 0 1px 3px rgba(255,255,255,0.15); transform: scale(1); }
-      50% { box-shadow: 0 0 18px rgba(124,58,237,0.65), 0 0 36px rgba(124,58,237,0.30), 0 0 54px rgba(124,58,237,0.10), inset 0 1px 3px rgba(255,255,255,0.2); transform: scale(1.04); }
+      0%, 100% { box-shadow: 0 0 10px rgba(76,29,149,0.40), 0 0 20px rgba(76,29,149,0.15), inset 0 1px 3px rgba(255,255,255,0.12); transform: scale(1); }
+      50% { box-shadow: 0 0 14px rgba(76,29,149,0.55), 0 0 28px rgba(76,29,149,0.22), 0 0 42px rgba(76,29,149,0.08), inset 0 1px 3px rgba(255,255,255,0.18); transform: scale(1.04); }
     }
 
     /* Bubble hover — glow ring (tooltips handled by overlay layer JS) */
@@ -4444,16 +4464,17 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-size: clamp(0.5rem, 0.9vw, 0.72rem);
-      font-weight: 700;
+      font-size: clamp(0.6rem, 1.1vw, 0.82rem);
+      font-weight: 800;
       font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
       color: rgba(255, 255, 255, 0.97);
       white-space: nowrap;
       text-shadow: 0 1px 4px rgba(0,0,0,0.95), 0 0 8px rgba(0,0,0,0.6);
       background: transparent;
-      padding: 2px 4px;
-      border-radius: 0;
+      padding: 2px 5px;
+      border-radius: 4px;
       border: none;
+      backdrop-filter: blur(2px);
     }
 
     /* ── Tooltip overlay layer — sits outside overflow:hidden wrap ── */
@@ -4474,17 +4495,19 @@
     .quadrant-tooltip-layer .bubble-tooltip {
       pointer-events: auto;
       position: absolute;
-      background: rgba(1, 4, 9, 0.95);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 5px 8px;
-      font-size: 0.65rem;
+      background: rgba(1, 4, 9, 0.96);
+      border: 1px solid rgba(34,171,148,0.30);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.72rem;
       font-weight: 600;
       color: var(--text);
       white-space: nowrap;
       transition: opacity 0.2s, transform 0.2s;
       z-index: 100;
-      line-height: 1.4;
+      line-height: 1.45;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,171,148,0.08);
+      backdrop-filter: blur(8px);
     }
     .quadrant-tooltip-layer .bubble-tooltip::after {
       content: '';
@@ -4492,8 +4515,8 @@
       top: 100%;
       left: 50%;
       transform: translateX(-50%);
-      border: 4px solid transparent;
-      border-top-color: var(--border);
+      border: 5px solid transparent;
+      border-top-color: rgba(34,171,148,0.30);
     }
 
     /* ── Section titles (no longer used as card titles replaced them, but keep for compat) ── */
@@ -4585,12 +4608,14 @@
        SIGNAL PHRASE ROW
        ============================================ */
     .multioi-signal-phrase {
-      font-size: 0.96rem;
-      font-weight: 400;
+      font-size: 1.1rem;
+      font-weight: 600;
       color: var(--text);
-      text-align: center;
+      text-align: left;
       line-height: 1.25;
-      margin-top: 1px;
+      margin-top: 2px;
+      border-left: 3px solid var(--accent);
+      padding-left: 10px;
     }
 
     .multioi-signal-phrase .signal-sym {
@@ -4616,20 +4641,20 @@
       bottom: 8px;
       right: 10px;
       font-family: 'Inter', sans-serif;
-      font-size: clamp(0.62rem, 1.125vw, 0.85rem);
-      font-weight: 800;
-      color: rgba(34, 171, 148, 0.22);
+      font-size: clamp(0.68rem, 1.2vw, 0.9rem);
+      font-weight: 900;
+      color: rgba(34, 171, 148, 0.35);
       letter-spacing: 0.15em;
       text-transform: uppercase;
       pointer-events: none;
       z-index: 5;
       user-select: none;
       transition: opacity 0.3s, color 0.3s;
-      text-shadow: 0 0 8px rgba(34,171,148,0.10);
+      text-shadow: 0 0 12px rgba(34,171,148,0.15);
     }
     .multioi-quadrant-wrap:hover .quadrant-watermark {
-      color: rgba(34, 171, 148, 0.35);
-      text-shadow: 0 0 12px rgba(34,171,148,0.15);
+      color: rgba(34, 171, 148, 0.50);
+      text-shadow: 0 0 16px rgba(34,171,148,0.20);
     }
 
     /* ── Always-visible TF Legend ── */
@@ -4663,12 +4688,12 @@
       color: #22AB94;
     }
     .quadrant-legend-pip--4h {
-      background: radial-gradient(circle at 35% 35%, #7eaaff, #5B8CFF);
-      color: #5B8CFF;
+      background: radial-gradient(circle at 35% 35%, #a8c4ff, #6EA8FE);
+      color: #6EA8FE;
     }
     .quadrant-legend-pip--1d {
-      background: radial-gradient(circle at 35% 35%, #8b5cf6, #7c3aed);
-      color: #7c3aed;
+      background: radial-gradient(circle at 35% 35%, #6d3fbb, #4c1d95);
+      color: #4c1d95;
     }
     .quadrant-legend-text {
       font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
@@ -4755,23 +4780,24 @@
         margin-top: 3px;
       }
       .composite-direction {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
         font-weight: 900;
         letter-spacing: 0.06em;
       }
       .composite-score-value {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
       }
       .composite-score-label {
-        font-size: 0.7rem;
+        font-size: 0.78rem;
       }
       .composite-tf-summary {
-        font-size: 0.82rem;
+        font-size: 0.92rem;
         font-weight: 600;
-        gap: 2px;
+        gap: 1px;
+        line-height: 1.3;
       }
       .multioi-signal-phrase {
-        font-size: 0.96rem;
+        font-size: 1.0rem;
       }
     }
     @media (max-width: 480px) {
@@ -4832,21 +4858,21 @@
         margin-top: 2px;
       }
       .composite-direction {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         font-weight: 900;
         letter-spacing: 0.04em;
       }
       .composite-score-value {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
       }
       .composite-score-label {
-        font-size: 0.65rem;
+        font-size: 0.72rem;
       }
       .composite-tf-summary {
-        font-size: 0.8rem;
+        font-size: 0.88rem;
         font-weight: 600;
         gap: 1px;
-        line-height: 1.4;
+        line-height: 1.3;
       }
       .multioi-tooltip-popup {
         width: calc(100vw - 24px);
@@ -7370,7 +7396,7 @@
                 <div class="multioi-card__body">
                   <div class="multioi-composite-signal" id="multioiCompositeSignal">
                     <div class="composite-ticker-header">
-                      <span class="composite-ticker-title" id="compositeTickerTitle"></span>
+                      <span class="composite-ticker-title" id="compositeTickerTitle"><img id="compositeTickerFavicon" src="" class="composite-ticker-favicon" alt="" style="display:none" /></span>
                       <span class="composite-ticker-price" id="compositeTickerPrice">Loading...</span>
                     </div>
                     <div class="composite-content-wrapper">
@@ -9419,22 +9445,19 @@
           bubble.style.display = 'flex';
 
           // ── Compute position for tooltip/zlabel relative to the quadrant-section ──
-          // The tooltip layer now overlays the entire quadrant-section.
+          // The tooltip layer overlays the entire quadrant-section.
           // We compute the bubble position as percentage of the section.
           const section = document.querySelector('.multioi-quadrant-section');
           const wrapEl = document.getElementById('multioiQuadrantWrap');
           if (!section || !wrapEl) continue;
 
-          const sectionRect = section.getBoundingClientRect();
-          const wrapRect = wrapEl.getBoundingClientRect();
-
-          // Pixel offset of wrap within section
-          const wrapOffsetX = wrapRect.left - sectionRect.left;
-          const wrapOffsetY = wrapRect.top - sectionRect.top;
+          // Use offsetTop/Left relative to section for accurate positioning (not getBoundingClientRect which is viewport-relative)
+          const wrapOffsetX = wrapEl.offsetLeft;
+          const wrapOffsetY = wrapEl.offsetTop;
 
           // Bubble pixel position relative to quadrant-section
-          const bubblePxLeft = wrapOffsetX + wrapRect.width * pos.leftPct / 100;
-          const bubblePxTop  = wrapOffsetY + wrapRect.height * pos.topPct / 100;
+          const bubblePxLeft = wrapOffsetX + wrapEl.offsetWidth * pos.leftPct / 100;
+          const bubblePxTop  = wrapOffsetY + wrapEl.offsetHeight * pos.topPct / 100;
 
           // ── Overlay tooltip (outside overflow:hidden) ──
           let overlayTip = document.getElementById('qOverlayTip_' + tfKey);
@@ -9473,21 +9496,25 @@
             const zP = Number.isFinite(sc.zPrice) ? (sc.zPrice >= 0 ? '+' : '') + sc.zPrice.toFixed(1) : '--';
             const zO = Number.isFinite(sc.zOi) ? (sc.zOi >= 0 ? '+' : '') + sc.zOi.toFixed(1) : '--';
             overlayTip.innerHTML = '<b style="color:' + scDef.color + '">' + tfKey + ': ' + scDef.name + '</b><br>' +
-              '<span style="color:#5B8CFF">Z_P:</span> ' + zP + ' | <span style="color:#F3A052">Z_OI:</span> ' + zO;
-            // Smart placement: if dot is in top 30% of wrap, show tooltip below; otherwise above
+              '<span style="color:#6EA8FE">Z_P:</span> ' + zP + ' | <span style="color:#F3A052">Z_OI:</span> ' + zO;
+            // Smart placement: if dot is in top 40% of wrap, show tooltip below; otherwise above
             overlayTip.style.position = 'absolute';
             overlayTip.style.left = bubblePxLeft + 'px';
-            if (pos.topPct < 30) {
-              // Dot near top — show tooltip below
-              overlayTip.style.top = (bubblePxTop + 22) + 'px';
+            if (pos.topPct < 40) {
+              // Dot near top — show tooltip below the dot
+              overlayTip.style.top = (bubblePxTop + 28) + 'px';
               overlayTip.style.bottom = 'auto';
-              overlayTip.style.transform = 'translateX(-50%) translateY(4px)';
+              overlayTip.style.transform = 'translateX(-50%) translateY(0)';
             } else {
-              // Default: show tooltip above
-              overlayTip.style.bottom = (sectionRect.height - bubblePxTop + 6) + 'px';
-              overlayTip.style.top = 'auto';
-              overlayTip.style.transform = 'translateX(-50%) translateY(4px)';
+              // Default: show tooltip above the dot
+              overlayTip.style.top = (bubblePxTop - 42) + 'px';
+              overlayTip.style.bottom = 'auto';
+              overlayTip.style.transform = 'translateX(-50%) translateY(0)';
             }
+            // Clamp horizontal: don't let tooltip overflow left/right edges of section
+            const tipHalfWidth = 75; // approximate half tooltip width
+            const clampedLeft = Math.max(tipHalfWidth + 4, Math.min(bubblePxLeft, section.offsetWidth - tipHalfWidth - 4));
+            overlayTip.style.left = clampedLeft + 'px';
             overlayTip.style.display = '';
           }
 
@@ -9702,8 +9729,9 @@
               const zScorePart = idx > 0
                 ? ' <span style="font-size:0.78rem;color:var(--muted-3)">(<span style="color:#5B8CFF">' + zP + '</span>, <span style="color:#F3A052">' + zO + '</span>)</span>'
                 : '';
+              const scClass = { 1: 'scenario-su', 2: 'scenario-wr', 3: 'scenario-sd', 4: 'scenario-ex', 0: 'scenario-neutral' }[idx] || 'scenario-neutral';
               tfSummaryParts.push(
-                '<div class="composite-tf-item"><span class="tf-label">' + tf.key + ':</span> <span class="tf-scenario" style="color:' + color + ';font-weight:600">' + scDef.name + '</span> ' + symbol + zScorePart + '</div>'
+                '<div class="composite-tf-item"><span class="tf-label">' + tf.key + ':</span> <span class="tf-scenario ' + scClass + '">' + scDef.name + '</span> ' + symbol + zScorePart + '</div>'
               );
             }
             summaryEl.innerHTML = tfSummaryParts.join('');
@@ -10156,7 +10184,7 @@
               }
 
               const canvas = await html2canvas(panel, {
-                backgroundColor: '#0D1117',
+                backgroundColor: '#0A0E14',
                 scale: 2,
                 logging: false,
                 useCORS: true,
@@ -10184,7 +10212,7 @@
               const ctx = compositeCanvas.getContext('2d');
 
               // Draw background
-              ctx.fillStyle = '#0D1117';
+              ctx.fillStyle = '#0A0E14';
               ctx.fillRect(0, 0, compositeCanvas.width, compositeCanvas.height);
 
               // Draw panel image at the top
@@ -10378,7 +10406,18 @@
       }
       // Update composite ticker title copy
       if (state.elements.compositeTickerTitle) {
-        state.elements.compositeTickerTitle.textContent = displayText;
+        const favImg = document.getElementById('compositeTickerFavicon');
+        if (favImg) {
+          favImg.src = 'https://bin.bnbstatic.com/static/images/common/favicon.ico';
+          favImg.alt = displayText;
+          favImg.style.display = 'inline-block';
+          favImg.onerror = function() { this.style.display = 'none'; };
+        }
+        // Remove old text nodes, keep img, then append new text
+        const oldTextNodes = [];
+        state.elements.compositeTickerTitle.childNodes.forEach(n => { if (n.nodeType === 3) oldTextNodes.push(n); });
+        oldTextNodes.forEach(n => n.remove());
+        state.elements.compositeTickerTitle.appendChild(document.createTextNode(displayText));
       }
       if (state.elements.compositeTickerPrice) {
         state.elements.compositeTickerPrice.textContent = 'Loading...';
