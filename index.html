@@ -4822,21 +4822,25 @@
         z-index: 2;
         pointer-events: none;
         text-align: center;
-        line-height: 1.2;
+        line-height: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
+        gap: 0;
         font-size: clamp(0.7rem, 1.2vw, 0.9rem);
         font-weight: 800;
         font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', ui-monospace, monospace;
-        color: var(--text);
+        color: #fff;
         white-space: nowrap;
-        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 8px rgba(0, 0, 0, 0.6);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 6px rgba(0, 0, 0, 0.8);
         background: transparent;
-        padding: 2px 5px;
-        border-radius: 4px;
+        padding: 0;
+        border-radius: 0;
         border: none;
-        backdrop-filter: none
+        backdrop-filter: none;
+        width: 100%;
+        height: 100%
       }
 
       .quadrant-tooltip-layer {
@@ -9474,8 +9478,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               if (labelEl && sc) {
                 const zP = Number.isFinite(sc.zPrice) ? (sc.zPrice >= 0 ? '+' : '') + sc.zPrice.toFixed(1) : '--';
                 const zO = Number.isFinite(sc.zOi) ? (sc.zOi >= 0 ? '+' : '') + sc.zOi.toFixed(1) : '--';
-                labelEl.innerHTML = tfKey + '<br><span style="font-size:0.6em;opacity:0.85;font-weight:700"><span style="color:#6EA8FE">' + zP +
-                  '<\/span>|<span style="color:#F3A052">' + zO + '<\/span><\/span>';
+                labelEl.innerHTML = '<span style="display:block;line-height:1;font-size:1.1em;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.9),0 0 6px rgba(0,0,0,0.6);">' + tfKey + '<\/span><span style="display:block;line-height:0.95;font-size:0.62em;font-weight:700;margin-top:1px;color:#C8C8C8;text-shadow:0 1px 2px rgba(0,0,0,0.75),0 0 3px rgba(0,0,0,0.4);">' + zP +
+                  '<\/span><span style="display:block;line-height:0.95;font-size:0.62em;font-weight:800;margin-top:1px;color:#C8C8C8;text-shadow:0 1px 2px rgba(0,0,0,0.75),0 0 3px rgba(0,0,0,0.4);">' + zO + '<\/span>';
               }
               if (bubble.parentElement !== targetEl) {
                 targetEl.appendChild(bubble);
