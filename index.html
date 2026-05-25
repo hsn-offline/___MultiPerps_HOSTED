@@ -4092,19 +4092,12 @@
 
       .quadrant-with-axes {
         position: relative;
-        padding: 1.6em 1.6em 0.5em 0.4em;
+        padding: 0.5em 0.4em;
         flex: 1 1 auto;
         min-height: 0
       }
 
-      .quadrant-body-row {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        flex: 1 1 auto;
-        min-height: 0;
-        gap: 0.3em
-      }
+      
 
       .multioi-composite-signal {
         text-align: center;
@@ -4724,49 +4717,13 @@
         border-left: 0.5em solid rgba(34, 171, 148, 0.5)
       }
 
-      .quadrant-axis-label {
-        position: absolute;
-        z-index: 20;
-        pointer-events: none;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--muted-2);
-        white-space: nowrap;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0;
-        opacity: 0.9;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5)
-      }
+      
 
-      .quadrant-axis-label__main {
-        font-size: clamp(0.5rem, 1.1vw, 0.85rem);
-        font-weight: 800;
-        letter-spacing: 0.12em
-      }
+      
 
-      .quadrant-axis-label--top {
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%)
-      }
+      
 
-      .quadrant-axis-label--left {
-        position: relative;
-        left: auto;
-        top: auto;
-        writing-mode: vertical-rl;
-        transform: rotate(180deg);
-        transform-origin: center center;
-        flex-shrink: 0;
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 0 0.15em
-      }
+      
 
       .quadrant-bubble {
         position: absolute;
@@ -4791,9 +4748,9 @@
       .quadrant-bubble--1h {
         width: clamp(30px, 3.8vw, 40px);
         height: clamp(30px, 3.8vw, 40px);
-        background: radial-gradient(circle at 35% 35%, #2dd4a8, #22AB94 60%, #1a8a76);
-        border: 2px solid rgba(38, 212, 172, 0.5);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.2)
+        background: radial-gradient(circle at 35% 35%, #0d8a6a, #0a6b52 60%, #074d3b);
+        border: 2px solid rgba(13, 138, 106, 0.6);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.15)
       }
 
       .quadrant-bubble--4h {
@@ -5095,7 +5052,7 @@
         }
 
         .quadrant-with-axes {
-          padding: 1.6em 1.0 0.3em 0.3em
+          padding: 0.5em 0.3em
         }
 
         .quadrant-scenario-labels-row--top {
@@ -5106,10 +5063,7 @@
           margin-top: 0.3em
         }
 
-        .quadrant-axis-label--top {
-          font-size: clamp(0.5rem, 1.1vw, 0.75rem);
-          top: 0.2em
-        }
+        
 
         .quadrant-scenario-label {
           white-space: normal;
@@ -5125,10 +5079,7 @@
           font-size: clamp(0.5rem, 1.5vw, 0.88rem)
         }
 
-        .quadrant-axis-label--left {
-          font-size: clamp(0.5rem, 1.1vw, 0.75rem);
-          padding: 0 0.05em
-        }
+        
 
         .multioi-card--grid {
           overflow: visible
@@ -5231,7 +5182,7 @@
         }
 
         .quadrant-with-axes {
-          padding: 1.4em 0.7em 0.25em 0.2em
+          padding: 0.4em 0.2em
         }
 
         .quadrant-scenario-labels-row--top {
@@ -5242,10 +5193,7 @@
           margin-top: 0.2em
         }
 
-        .quadrant-axis-label--top {
-          font-size: clamp(0.45rem, 1.3vw, 0.7rem);
-          top: 0.1em
-        }
+        
 
         .quadrant-scenario-label {
           white-space: normal;
@@ -5261,10 +5209,7 @@
           font-size: clamp(0.45rem, 1.6vw, 0.88rem)
         }
 
-        .quadrant-axis-label--left {
-          font-size: clamp(0.45rem, 1.3vw, 0.7rem);
-          padding: 0 0
-        }
+        
 
         .multioi-card--grid {
           overflow: visible
@@ -7617,18 +7562,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                         <span class="quadrant-scenario-label__desc">Price ↑ + OI ↓</span>
                       </div>
                     </div>
-
-                    <!-- Quadrant with axis labels -->
                     <div class="quadrant-with-axes">
-                      <!-- Top axis label — above the quadrant -->
-                      <div class="quadrant-axis-label quadrant-axis-label--top">
-                        <span class="quadrant-axis-label__main">X = Open Interest</span>
-                      </div>
-                      <!-- Row: Y-axis label on the left + quadrant on the right (no overlap) -->
-                      <div class="quadrant-body-row">
-                        <div class="quadrant-axis-label quadrant-axis-label--left">
-                          <span class="quadrant-axis-label__main">Y = Price</span>
-                        </div>
                         <div class="multioi-quadrant-wrap" id="multioiQuadrantWrap">
                         <!-- Crosshair center lines -->
                         <div class="quadrant-crosshair-h">
@@ -7652,7 +7586,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                           <!-- Brand Watermark -->
                           <div class="quadrant-watermark">MultiPerps.com</div>
                         </div>
-                      </div><!-- /quadrant-body-row -->
                     </div>
                     <!-- Tooltip/Z-label overlay layer — outside overflow:hidden, positioned relative to quadrant-section -->
                     <div class="quadrant-tooltip-layer" id="quadrantTooltipLayer"></div>
@@ -10104,9 +10037,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const fr = this.stats.fundingRate;
               const frPct = (fr * 100).toFixed(6);
               const sign = fr > 0 ? '+' : '';
-              let frArrow = '→';
-              if (fr > 0.0003) frArrow = '↗';
-              else if (fr < -0.0003) frArrow = '↘';
               let frColor = 'var(--text)';
               if (fr > 0.001) frColor = '#26D4AC';
               else if (fr > 0.0003) frColor = 'var(--warn)';
@@ -10114,7 +10044,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               else if (fr < -0.0003) frColor = '#5B8CFF';
               items.push(
                 '<span class="multioi-context-item"><span class="label">Funding:<\/span><span class="value" style="color:' +
-                frColor + ';font-weight:700">' + sign + frPct + '% ' + frArrow + '<\/span><\/span>');
+                frColor + ';font-weight:700">' + sign + frPct + '%<\/span><\/span>');
             }
             if (items.length >= 2) {
               items.splice(1, 0, '<br>');
