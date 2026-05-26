@@ -8467,7 +8467,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                       state.prevPrice = price;
                       renderAlertRtPrices();
                       updateChartMetas();
-
+                      // Update OI notional title immediately when price changes
                       const rtOi = parseFloat(oiPricePanel.stats.oiCurrent);
                       if (Number.isFinite(rtOi)) {
                         const oiEl = document.getElementById('oiLastVal');
@@ -9222,12 +9222,15 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   }
                 }
                 const N = tf.lookback;
-                if (tfData.closes.length > N) tfData.closes = tfData.closes.slice(-N);
-                if (tfData.volumes.length > N) tfData.volumes = tfData.volumes.slice(-N);
-                if (tfData.quoteVolumes.length > N) tfData.quoteVolumes = tfData.quoteVolumes.slice(-N);
-                if (tfData.candles.length > N) tfData.candles = tfData.candles.slice(-N);
-                if (tfData.oi.length > N) tfData.oi = tfData.oi.slice(-N);
-                if (tfData.fundingRates.length > N) tfData.fundingRates = tfData.fundingRates.slice(-N);
+                // Keep enough bars for lookback + composite sparkline backfill
+                // (MF_SPARKLINE_POINTS - 1 historical scores computed from 4H boundaries)
+                const maxKeep = N + (MF_SPARKLINE_POINTS - 1);
+                if (tfData.closes.length > maxKeep) tfData.closes = tfData.closes.slice(-maxKeep);
+                if (tfData.volumes.length > maxKeep) tfData.volumes = tfData.volumes.slice(-maxKeep);
+                if (tfData.quoteVolumes.length > maxKeep) tfData.quoteVolumes = tfData.quoteVolumes.slice(-maxKeep);
+                if (tfData.candles.length > maxKeep) tfData.candles = tfData.candles.slice(-maxKeep);
+                if (tfData.oi.length > maxKeep) tfData.oi = tfData.oi.slice(-maxKeep);
+                if (tfData.fundingRates.length > maxKeep) tfData.fundingRates = tfData.fundingRates.slice(-maxKeep);
                 if (tfData.closes.length > 0 && tfData.oi.length > 0 && tfData.closes.length !== tfData.oi.length) {
                   const minLen = Math.min(tfData.closes.length, tfData.oi.length);
                   console.warn(
@@ -13670,7 +13673,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               <li>Robust Z-scores are relative, not absolute. A Robust Z-score of +2.0 means "unusually high compared to
                 the last N bars" — not "guaranteed to keep going up." Markets can remain extreme longer than expected.
               </li>
-              <li>The Composite Signal Score is a summary convenience, not a definitive verdict. It is a weighted sum — each timeframe contributes proportionally to its weight. You decide how to reconcile conflicting signals.</li>
+              <li>The Composite Signal Score is a summary convenience, not a definitive verdict. It is a weighted sum (not a voting mechanism) — each timeframe contributes proportionally to its weight. You decide how to reconcile conflicting signals.</li>
               <li>Data comes from Binance public APIs. There may be brief delays, gaps, or stale data during
                 high-traffic periods. A warning badge appears when data may be unreliable.</li>
               <li>Past patterns do not guarantee future results. The scenarios are based on historical statistical
