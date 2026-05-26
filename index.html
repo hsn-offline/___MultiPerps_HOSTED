@@ -116,15 +116,15 @@
           "url": "https://www.multiperps.com"
         },
         "featureList": ["Real-time multi-timeframe candlestick charts",
-          "Multi OI — Open Interest Price Indicator with Z-score normalization, Wilder's ADX gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars), quadrant grid visualization with per-TF Z-score labels, composite Signal Strength (Bullish/Bearish Scenario + Score) with sparklines (Score, Price, Volume, Funding, OI Notional), optimized for desktop and mobile",
+          "Multi OI — Open Interest Price Indicator with Z-score normalization, Wilder's ADX gate, per-TF cold start guard (30m: 34, 1H: 34, 4H: 34 bars), quadrant grid visualization with per-TF Z-score labels, composite Signal Strength (Bullish/Bearish Scenario + Score) with sparklines (Score, Price, Volume, Funding, OI Notional), optimized for desktop and mobile",
           "Open interest screener — screen and rank open interest across all Binance USDT-M perpetual contracts",
           "Funding rate screener — monitor and rank funding rates to spot overcrowded positions and potential reversals",
           "Crypto funding rate context — extreme funding rate Z-scores flag crowded positioning and potential reversal risk across timeframes",
-          "OI price analysis — classify market scenarios by tracking open interest vs price divergence using Robust Z-scores across 1H, 4H, 1D timeframes",
-          "Open interest vs price divergence detection across 3 timeframes (1H, 4H, 1D) with 55-bar lookback for 1H/4H and ~30-bar for 1D (Binance OI API 30-day limit)",
-          "Crypto market bias and sentiment signals (Strong Uptrend, Weak Rally, Strong Downtrend, Exhaustion)",
-          "Independent per-timeframe classification with no voting — users decide how to weigh signals",
-          "Noise filters: Z-score threshold gate, Wilder's ADX gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars), sparklines for visual soft context (Score, Price, Volume, Funding, OI Notional)",
+          "OI price analysis — classify market scenarios by tracking open interest vs price divergence using Robust Z-scores across 30m, 1H, 4H timeframes",
+          "Open interest vs price divergence detection across 3 timeframes (30m, 1H, 4H) with 34-bar lookback for all timeframes",
+          "Crypto market bias and sentiment signals (Strong Uptrend, Weak Rally, Strong Downtrend, Exhaustion) with Z-score thresholds |Z_Price|>2.0 and |Z_OI|>2.0",
+          "Independent per-timeframe classification with no voting — users decide how to weigh signals across 30m, 1H, 4H",
+          "Noise filters: Z-score threshold gate (|Z_Price|>2.0, |Z_OI|>2.0), Wilder's ADX gate, per-TF cold start guard (30m: 34, 1H: 34, 4H: 34 bars), sparklines for visual soft context (Score, Price, Volume, Funding, OI Notional)",
           "Funding rate context analysis",
           "Price alerts with audio notifications",
           "Open interest rankings",
@@ -180,14 +180,14 @@
           "name": "What is Multi OI on MultiPerps?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Multi OI (Open Interest Price Indicator) is a real-time market scenario classifier that reveals what is happening beneath price action by tracking the relationship between price movement and open interest across three timeframes (1H, 4H, 1D). It classifies the market into four scenarios per timeframe: Strong Uptrend (Price up + OI up), Weak Rally (Price up + OI down), Strong Downtrend (Price down + OI up), and Exhaustion (Price down + OI down). Three hard filters prevent false signals: Significance Gate (Z-score threshold), Trend Detection Gate (Wilder's ADX gate), and Data Readiness Gate (per-TF cold start guard: 1H: 55, 4H: 55, 1D: 21 bars). Five sparklines (Composite Score, Price, Volume, Funding Rate, OI Notional) provide visual soft context at the user's discretion. A composite Signal Strength (Score: -100 to +100) with directional label (Bullish/Bearish Scenario) and per-TF mini summary is displayed above the quadrant grid. The Signal Remark is built in 3 steps: (1) classify each TF, (2) group by scenario, (3) pick core phrase. Mixed signals are split into three sub-types: Moving the same way with different strength, Timeframes disagree, and Momentum is fading on one timeframe. Each timeframe classifies independently — users decide how to weigh signals."
+            "text": "Multi OI (Open Interest Price Indicator) is a real-time market scenario classifier that reveals what is happening beneath price action by tracking the relationship between price movement and open interest across three timeframes (30m, 1H, 4H). It classifies the market into four scenarios per timeframe: Strong Uptrend (Price up + OI up), Weak Rally (Price up + OI down), Strong Downtrend (Price down + OI up), and Exhaustion (Price down + OI down). Three hard filters prevent false signals: Significance Gate (Z-score threshold), Trend Detection Gate (Wilder's ADX gate), and Data Readiness Gate (per-TF cold start guard: 30m: 34, 1H: 34, 4H: 34 bars). Five sparklines (Composite Score, Price, Volume, Funding Rate, OI Notional) provide visual soft context at the user's discretion. A composite Signal Strength (Score: -100 to +100) with directional label (Bullish/Bearish Scenario) and per-TF mini summary is displayed above the quadrant grid. The Signal Remark is built in 3 steps: (1) classify each TF, (2) group by scenario, (3) pick core phrase. Mixed signals are split into three sub-types: Moving the same way with different strength, Timeframes disagree, and Momentum is fading on one timeframe. Each timeframe classifies independently — users decide how to weigh signals."
           }
         }, {
           "@type": "Question",
           "name": "How does the Open Interest Price analysis detect market bias?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Multi OI detects market bias by computing Z-scores for price and open interest across three timeframes (1H, 4H, 1D) using a 55-bar lookback window for 1H and 4H, and a ~30-bar lookback for 1D. Each timeframe independently classifies the market into one of four scenarios based on whether Z_Price and Z_OI breach their thresholds (|Z_Price|>1.5, |Z_OI|>2.0). Hard filters are applied before classification: Significance Gate (Z-score threshold) ensures thresholds are breached, Trend Detection Gate (Wilder's ADX filter) only classifies in trending markets (ADX>=20), and Data Readiness Gate (per-TF cold start guard) requires minimum 55 data points for 1H, 55 for 4H, and 21 for 1D. A composite row above the quadrant grid shows the directional label (Bullish/Bearish Scenario), Signal Strength Score (-100 to +100), and per-TF scenario summary with Z-score values. Five sparklines (Score, Price, Volume, Funding, OI Notional) provide visual soft context at the user's discretion. There is no voting — users decide how to weigh signals across timeframes based on their trading style."
+            "text": "Multi OI detects market bias by computing Z-scores for price and open interest across three timeframes (30m, 1H, 4H) using a 34-bar lookback window for all timeframes. Each timeframe independently classifies the market into one of four scenarios based on whether Z_Price and Z_OI breach their thresholds (|Z_Price|>2.0, |Z_OI|>2.0). Hard filters are applied before classification: Significance Gate (Z-score threshold) ensures thresholds are breached, Trend Detection Gate (Wilder's ADX filter) only classifies in trending markets (ADX>=20), and Data Readiness Gate (per-TF cold start guard) requires minimum 34 data points for all timeframes (30m, 1H, 4H). A composite row above the quadrant grid shows the directional label (Bullish/Bearish Scenario), Signal Strength Score (-100 to +100), and per-TF scenario summary with Z-score values. Five sparklines (Score, Price, Volume, Funding, OI Notional) provide visual soft context at the user's discretion. There is no voting — users decide how to weigh signals across timeframes based on their trading style."
           }
         }]
       }
@@ -4491,6 +4491,67 @@
         margin: 1px auto 0
       }
 
+      .multioi-coldstart-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        background: rgba(10, 11, 13, 0.75);
+        border-radius: 8px;
+        z-index: 5;
+        pointer-events: none
+      }
+
+      .multioi-coldstart-overlay__title {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #9CA3AF;
+        letter-spacing: 0.03em
+      }
+
+      .multioi-coldstart-overlay__tfs {
+        display: flex;
+        gap: 10px;
+        font-size: 0.72rem;
+        font-family: monospace
+      }
+
+      .multioi-coldstart-overlay__tf {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px
+      }
+
+      .multioi-coldstart-overlay__tf-label {
+        color: #6B7280;
+        font-weight: 600
+      }
+
+      .multioi-coldstart-overlay__tf-value {
+        font-weight: 700
+      }
+
+      .multioi-coldstart-overlay__tf-value.ready {
+        color: #26D4AC
+      }
+
+      .multioi-coldstart-overlay__tf-value.partial {
+        color: #F3A052
+      }
+
+      .multioi-coldstart-overlay__tf-value.empty {
+        color: #6B7280
+      }
+
+      .scenario-coldstart {
+        opacity: 0.65;
+        font-style: italic
+      }
+
       .multioi-quadrant-wrap {
         position: relative;
         flex: 1 1 0%;
@@ -4816,12 +4877,12 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.25)
       }
 
-      .quadrant-bubble--1d {
-        width: clamp(38px, 5.2vw, 54px);
-        height: clamp(38px, 5.2vw, 54px);
-        background: radial-gradient(circle at 35% 35%, #6d3fbb, #4c1d95 60%, #360f6e);
-        border: 2px solid rgba(76, 29, 149, 0.7);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.12)
+      .quadrant-bubble--30m {
+        width: clamp(30px, 3.8vw, 40px);
+        height: clamp(30px, 3.8vw, 40px);
+        background: radial-gradient(circle at 35% 35%, #00CED1, #009B9E 60%, #00686A);
+        border: 2px solid rgba(0, 206, 209, 0.6);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.15)
       }
 
       .quadrant-bubble:hover {
@@ -7496,28 +7557,28 @@ opacity:0.7; transition:opacity 0.2s; }
                 <span class="multioi-info-btn" title="How Multi OI works">?</span>
                 <span class="multioi-tooltip-popup">
   <strong style="font-size:1.2rem">Multi OI — Open Interest Price Indicator</strong><br>
-  <span style="color:var(--muted-2);font-size:1.0rem">A real-time market scenario classifier that tracks price vs. open interest (OI) across 1H, 4H, 1D timeframes. It classifies market scenarios based on OI-Price relationship using Robust Z-score normalization (median + MAD, outlier-resistant), ADX, and per-TF cold start guards.</span><br><br>
+  <span style="color:var(--muted-2);font-size:1.0rem">A real-time market scenario classifier that tracks price vs. open interest (OI) across 30m, 1H, 4H timeframes. It classifies market scenarios based on OI-Price relationship using Robust Z-score normalization (median + MAD, outlier-resistant), ADX, and per-TF cold start guards.</span><br><br>
 
   <strong style="color:var(--text)">Processing Pipeline</strong><br>
   <span style="font-size:1rem;color:var(--muted-3);font-family:monospace;line-height:1.7">
 Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
 &nbsp;&nbsp;│<br>
-  &nbsp;&nbsp;│&nbsp;&nbsp;<span style="color:var(--accent)">For EACH timeframe (1H, 4H, 1D) independently:</span><br>
+  &nbsp;&nbsp;│&nbsp;&nbsp;<span style="color:var(--accent)">For EACH timeframe (30m, 1H, 4H) independently:</span><br>
 &nbsp;&nbsp;│<br>
-  &nbsp;&nbsp;├─► <b>HARD FILTER 1:</b> Data Readiness? (1H≥55, 4H≥55, 1D≥21 bars, all TFs ≥28 candles for ADX)<br>
+  &nbsp;&nbsp;├─► <b>HARD FILTER 1:</b> Data Readiness? (30m≥34, 1H≥34, 4H≥34 bars, all TFs ≥29 candles for ADX)<br>
 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (insufficient data — includes specific reason: closes/OI/candles)<br>
   &nbsp;&nbsp;├─► <b>HARD FILTER 2:</b> Market Trending? (Wilder's ADX ≥ 20)<br>
 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (ranging/choppy)<br>
-  &nbsp;&nbsp;├─► <b>HARD FILTER 3:</b> Both Z-scores Significant? (|Z_Price|&gt;1.5 AND |Z_OI|&gt;2.0)<br>
+  &nbsp;&nbsp;├─► <b>HARD FILTER 3:</b> Both Z-scores Significant? (|Z_Price|&gt;2.0 AND |Z_OI|&gt;2.0)<br>
 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (both must confirm)<br>
   &nbsp;&nbsp;├─► <b>CLASSIFY</b> (using Robust Z-scores):<br>
-  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +1.5 &amp; Z_OI &gt; +2.0 → <b style="color:#26D4AC">Strong Uptrend (+100)</b><br>
-  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +1.5 &amp; Z_OI &lt; -2.0 → <b style="color:#F3A052">Weak Rally (+30)</b><br>
-  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -1.5 &amp; Z_OI &gt; +2.0 → <b style="color:#F23645">Strong Downtrend (-100)</b><br>
-  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -1.5 &amp; Z_OI &lt; -2.0 → <b style="color:#A78BFA">Exhaustion (-30)</b><br>
+  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +2.0 &amp; Z_OI &gt; +2.0 → <b style="color:#26D4AC">Strong Uptrend (+100)</b><br>
+  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +2.0 &amp; Z_OI &lt; -2.0 → <b style="color:#F3A052">Weak Rally (+30)</b><br>
+  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -2.0 &amp; Z_OI &gt; +2.0 → <b style="color:#F23645">Strong Downtrend (-100)</b><br>
+  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -2.0 &amp; Z_OI &lt; -2.0 → <b style="color:#A78BFA">Exhaustion (-30)</b><br>
   &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Otherwise → <b style="color:#6B7280">Neutral (0)</b><br>
   &nbsp;&nbsp;└─► <b>COMPOSITE OUTPUT</b>:<br>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Score = (1H × 0.30) + (4H × 0.40) + (1D × 0.30)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Score = (30m × 0.30) + (1H × 0.40) + (4H × 0.30)<br>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Score ≥ +30 → <b style="color:#26D4AC">Bullish</b> | 0→+30 → Slightly Bullish | Score = 0 → <b style="color:#6B7280">No Clear</b> | -30→0 → Slightly Bearish | ≤-30 → <b style="color:#F23645">Bearish</b></span><br><br>
 
   <strong style="color:var(--text)">The Five Signals</strong><br>
@@ -7531,17 +7592,17 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
   <strong style="color:var(--text)">How to Read</strong><br>
   <span style="font-size:1rem;color:var(--muted-3);font-family:monospace;line-height:1.65">
   <b style="color:var(--text)">1.</b> Read Composite Signal first — direction + score<br>
-  <b style="color:var(--text)">2.</b> Check Timeframe Agreement (1D → 4H → 1H) — all 3 agree = high conviction<br>
+  <b style="color:var(--text)">2.</b> Check Timeframe Agreement (4H → 1H → 30m) — all 3 agree = high conviction<br>
   <b style="color:var(--text)">3.</b> Read Signal Remark — classification + core phrase<br>
   <b style="color:var(--text)">4.</b> Check per-TF Z-scores in the summary — values approaching thresholds = transition incoming<br>
   <b style="color:var(--text)">5.</b> Check sparklines (Score, Price, Volume, Funding, OI Notional) — visual context for trend direction and extremes<br>
   <b style="color:var(--text)">6.</b> Respect Neutral — no signal IS a signal<br>
-  <b style="color:var(--text)">7.</b> You Decide — Scalpers weigh 1H | Swing weigh 4H | Position weigh 1D</span><br><br>
+  <b style="color:var(--text)">7.</b> You Decide — Scalpers weigh 30m | Swing weigh 1H | Position weigh 4H</span><br><br>
 
   <strong style="color:var(--text)">Signal Remark — How It's Generated</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
   The remark is built in 3 steps, each adding a layer of meaning:<br>
-  <b>Step 1:</b> Classify each TF (1H, 4H, 1D) into a scenario using Z_Price and Z_OI (2x2 quadrant)<br>
+  <b>Step 1:</b> Classify each TF (30m, 1H, 4H) into a scenario using Z_Price and Z_OI (2x2 quadrant)<br>
   <b>Step 2:</b> Group non-neutral TFs by scenario, count how many distinct scenarios appear<br>
   <b>Step 3:</b> Pick the core phrase — all agree? one scenario on some TFs? mixed signals?<br>
   &nbsp;&nbsp;&nbsp;Mixed signals split into: <b>Moving the same way, different strength</b> (both bullish or both bearish, but one is weak), <b>Timeframes disagree</b> (including bull+EX since EX price direction opposes bull), or <b>Momentum is fading</b> (bear+EX)</span><br><br>
@@ -7550,21 +7611,20 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
   <span style="font-size:1rem;color:var(--muted-3)">
   <span style="color:#5B8CFF"><b>Z_Price</b></span> — Robust Z-score of prices (median + MAD, outlier-resistant). Current candle is excluded from its own baseline to avoid self-inclusion bias.<br>
   <span style="color:#F3A052"><b>Z_OI</b></span> — Robust Z-score of open interest (median + MAD, outlier-resistant). Current candle is excluded from its own baseline to avoid self-inclusion bias.<br>
-  <b>Boundary rule:</b> |Z_Price| > 1.5 and |Z_OI| > 2.0 are <b>strict</b> inequalities — a value exactly at the threshold does NOT trigger classification (e.g., Z_Price = +1.5 stays Neutral, Z_Price = +1.51 classifies as above threshold).</span><br><br>
+  <b>Boundary rule:</b> |Z_Price| > 2.0 and |Z_OI| > 2.0 are <b>strict</b> inequalities — a value exactly at the threshold does NOT trigger classification (e.g., Z_Price = +2.0 stays Neutral, Z_Price = +2.01 classifies as above threshold).</span><br><br>
 
   <strong style="color:var(--text)">Sparklines (Soft Context)</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
   <b>Score</b> — Composite score history (9 pts, 4H intervals). Rising = strengthening signal, falling = deteriorating.<br>
   <b>Price</b> — 4H close price history (9 pts). Shows price trend direction for context.<br>
   <b>Volume</b> — 4H quote volume history (9 pts, USDT). Shows capital flow intensity.<br>
-  <b>Funding</b> — 4H funding rate history (9 pts). Spikes = crowded positioning, carry cost extremes.<br>
+  <b>Funding</b> — Funding rate history (9 pts, 4H/8H settlement intervals — varies by contract). Spikes = crowded positioning, carry cost extremes.<br>
   <b>OI Notional</b> — 4H OI notional value history (9 pts). Rising = new capital entering, falling = unwinding.</span><br><br>
 
   <strong style="color:var(--text)">Data Update Frequency</strong><br>
   <span style="font-size:1rem;color:var(--muted-3);font-family:monospace;line-height:1.7">
   <b style="color:#26D4AC">● Real-time (WebSocket, ~1–3s):</b><br>
-&nbsp;&nbsp;OI Notional (context row) · Funding Rate (context row)<br>
-  &nbsp;&nbsp;Sparkline title values: Price · Volume · Funding<br><br>
+&nbsp;&nbsp;Sparkline title values: Price · Volume · Funding · OI Notional<br><br>
   <b style="color:#5B8CFF">● Computed (REST, every 30s):</b><br>
 &nbsp;&nbsp;Composite Score · Per-TF Scenarios · Z-scores · Quadrant Grid<br>
   &nbsp;&nbsp;All sparkline canvases · Signal Remark<br><br>
@@ -7611,9 +7671,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                         <span class="composite-score-value" id="compositeScoreValue">0</span>
                       </div>
                       <div class="composite-tf-summary" id="compositeTfSummary">
+                        <div class="composite-tf-item"><span class="tf-label">30m:</span> <span class="tf-scenario">Neutral </span></div>
                         <div class="composite-tf-item"><span class="tf-label">1H:</span> <span class="tf-scenario">Neutral </span></div>
                         <div class="composite-tf-item"><span class="tf-label">4H:</span> <span class="tf-scenario">Neutral </span></div>
-                        <div class="composite-tf-item"><span class="tf-label">1D:</span> <span class="tf-scenario">Neutral </span></div>
                       </div>
                       <div class="multioi-signal-remark" id="multioiSignalRemark">Awaiting data...</div>
                     </div>
@@ -7639,6 +7699,11 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     </div>
                     <div class="quadrant-with-axes">
                         <div class="multioi-quadrant-wrap" id="multioiQuadrantWrap">
+                        <!-- Cold start progress overlay -->
+                        <div class="multioi-coldstart-overlay" id="coldStartOverlay" style="display:none">
+                          <div class="multioi-coldstart-overlay__title">Warming Up</div>
+                          <div class="multioi-coldstart-overlay__tfs" id="coldStartTfs"></div>
+                        </div>
                         <!-- Crosshair center lines -->
                         <div class="quadrant-crosshair-h">
                           <div class="quadrant-arrow-left"></div>
@@ -7681,9 +7746,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 </div>
               </div>
 
-              <!-- Card 3: Context View -->
+              <!-- Card 3: Trend View -->
               <div class="multioi-card multioi-card--context">
-                <div class="multioi-card__title">Context View</div>
+                <div class="multioi-card__title">Trend View</div>
                 <div class="multioi-card__body">
                   <div class="multioi-sparklines-section">
                     <div class="multioi-sparkline-card" data-sparkline="composite">
@@ -7699,7 +7764,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                       <canvas id="volumeSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="funding">
-                      <div class="multioi-sparkline-card__title">Funding Rate (Last 9, 4H) <span class="multioi-sparkline-hover-val" id="fundingHoverVal"></span><span class="multioi-sparkline-last-val" id="fundingLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">Funding Rate (Last 9, 4H/8H) <span class="multioi-sparkline-hover-val" id="fundingHoverVal"></span><span class="multioi-sparkline-last-val" id="fundingLastVal"></span></div>
                       <canvas id="fundingSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="oi">
@@ -7707,7 +7772,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                       <canvas id="oiSparklineCanvas"></canvas>
                     </div>
                   </div>
-                  <div id="oiPriceContext" class="multioi-context-row" style="display:none;"></div>
+
                   <div id="oiPriceDisclaimer" style="display:none;text-align:center;margin-top:4px;"><i style="font-size:0.6rem;color:var(--muted-2);opacity:0.6">Not financial advice.</i></div>
                 </div>
               </div>
@@ -8496,7 +8561,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     if (Number.isFinite(oi) && oiPricePanel.symbol === mainSymUpper) {
                       if (oiPricePanel.stats.oiCurrent !== oi) {
                         oiPricePanel.stats.oiCurrent = oi;
-                        oiPricePanel.renderContextRow();
                         // Update OI notional title immediately
                         const rtPrice = state.currentPrice;
                         if (Number.isFinite(rtPrice)) {
@@ -8849,9 +8913,14 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           updateStatus();
           updateCountdowns();
         };
-        const MF_LOOKBACK_BARS = 55;
+        const MF_LOOKBACK_BARS = 34;
         const MF_SPARKLINE_POINTS = 9;
         const MF_TIMEFRAMES = [{
+          key: '30m',
+          lookback: MF_LOOKBACK_BARS,
+          klineInterval: '30m',
+          oiPeriod: '30m'
+        }, {
           key: '1H',
           lookback: MF_LOOKBACK_BARS,
           klineInterval: '1h',
@@ -8861,24 +8930,21 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           lookback: MF_LOOKBACK_BARS,
           klineInterval: '4h',
           oiPeriod: '4h'
-        }, {
-          key: '1D',
-          lookback: MF_LOOKBACK_BARS,
-          klineInterval: '1d',
-          oiPeriod: '1d'
         }];
-        const MF_PRICE_THRESH = 1.5;
+        const MF_PRICE_THRESH = 2.0;
         const MF_OI_THRESH = 2.0;
         const MF_ADX_THRESH = 20;
+        const MF_ADX_PERIOD = 14;
+        const MF_ADX_MIN_CANDLES = 2 * MF_ADX_PERIOD + 1; // 29 — minimum candles for Wilder's ADX
         const MF_COLD_START_MIN = {
-          '1H': 55,
-          '4H': 55,
-          '1D': 21
+          '30m': 34,
+          '1H': 34,
+          '4H': 34
         };
         const MF_TF_WEIGHTS = {
-          '1H': 0.30,
-          '4H': 0.40,
-          '1D': 0.30
+          '30m': 0.30,
+          '1H': 0.40,
+          '4H': 0.30
         };
         const MF_SCENARIOS = {
           1: {
@@ -8915,15 +8981,22 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
 
         function _mfMedian(arr) {
           if (!arr || arr.length === 0) return NaN;
-          const sorted = arr.slice().sort((a, b) => a - b);
+          // Filter out non-finite values to prevent silent wrong results
+          const valid = arr.filter(v => Number.isFinite(v));
+          if (valid.length === 0) return NaN;
+          const sorted = valid.sort((a, b) => a - b);
           const mid = Math.floor(sorted.length / 2);
           return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
         }
 
         function _mfMad(arr) {
           if (!arr || arr.length === 0) return NaN;
-          const med = _mfMedian(arr);
-          const devs = arr.map(v => Math.abs(v - med));
+          // Filter out non-finite values before computing deviations
+          const valid = arr.filter(v => Number.isFinite(v));
+          if (valid.length === 0) return NaN;
+          const med = _mfMedian(valid);
+          if (!Number.isFinite(med)) return NaN;
+          const devs = valid.map(v => Math.abs(v - med));
           return _mfMedian(devs);
         }
 
@@ -8935,7 +9008,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
         }
 
         function _wilderAdx(candles, period) {
-          if (!candles || candles.length < 2 * period) return NaN;
+          if (!candles || candles.length < 2 * period + 1) return NaN;
           const plusDMs = [],
             minusDMs = [],
             trs = [];
@@ -8998,6 +9071,41 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           return adx;
         }
 
+        /**
+         * Shared TF classification logic — single source of truth.
+         * Used by both computeClassification() and _backfillCompositeHistory()
+         * to guarantee identical classification for the same Z-scores.
+         * Returns scenario index: 0=Neutral, 1=SU, 2=WR, 3=SD, 4=EX
+         */
+        function _classifyTf(zPrice, zOi, adx) {
+          const adxOk = Number.isFinite(adx) && adx >= MF_ADX_THRESH;
+          if (!Number.isFinite(zPrice) || !Number.isFinite(zOi) || !adxOk) return 0;
+          if (zPrice > MF_PRICE_THRESH && zOi > MF_OI_THRESH) return 1;
+          if (zPrice > MF_PRICE_THRESH && zOi < -MF_OI_THRESH) return 2;
+          if (zPrice < -MF_PRICE_THRESH && zOi > MF_OI_THRESH) return 3;
+          if (zPrice < -MF_PRICE_THRESH && zOi < -MF_OI_THRESH) return 4;
+          return 0;
+        }
+
+        /**
+         * Shared composite score calculation using integer-weight math.
+         * Used by both computeClassification() and _backfillCompositeHistory()
+         * to ensure the same formula everywhere.
+         * Weights: 30m=30, 1H=40, 4H=30 (percentage as integers, divide by 100 at the end)
+         * Scenario weights: SU=+100, WR=+30, SD=-100, EX=-30, Neutral=0
+         */
+        function _computeCompositeScore(scenarios) {
+          const SCENARIO_WEIGHTS = { 0: 0, 1: 100, 2: 30, 3: -100, 4: -30 };
+          const TF_INT_WEIGHTS = { '30m': 30, '1H': 40, '4H': 30 };
+          let score = 0;
+          for (const tfKey of ['30m', '1H', '4H']) {
+            const sc = scenarios[tfKey];
+            if (sc) score += (SCENARIO_WEIGHTS[sc.idx] || 0) * (TF_INT_WEIGHTS[tfKey] || 0);
+          }
+          score = Math.round(score / 100);
+          return Math.max(-100, Math.min(100, score));
+        }
+
 //MULTI OI INDICATOR
         const oiPricePanel = {
           symbol: null,
@@ -9009,6 +9117,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           _lastComputeTime: 0,
           _wsSparklineTimer: null,
           _scoreHistory: [],
+          _backfillCache: null,       // Cached backfill history points (without live score)
+          _backfillLast4hTs: null,    // Last 4H kline timestamp when backfill was computed
           tfData: {},
           classification: {
             scenarios: {},
@@ -9046,6 +9156,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             this.stats.klinesStale = false;
             this.stats.zPrice = {};
             this.stats.zOi = {};
+            // Reset backfill cache on symbol change
+            this._backfillCache = null;
+            this._backfillLast4hTs = null;
             try {
               const key = 'mf_scoreHistory_' + symbol;
               const stored = localStorage.getItem(key);
@@ -9067,22 +9180,21 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const apiLabels = [];
               for (const tf of MF_TIMEFRAMES) {
                 const coldMin = MF_COLD_START_MIN[tf.key] || 21;
-                const fetchLimit = (() => {
-                  // Need enough bars for lookback + SPARKLINE_POINTS historical composite backfill
-                  // 4H needs: 55 lookback + 8 historical points = 63; 1H needs: 55 + 32 = 87; 1D needs: 55 + 2 = 57
-                  const extra = { '1H': 35, '4H': 10, '1D': 35 };
-                  return Math.max(coldMin + 5, 30) + (extra[tf.key] || 0);
-                })();
+                // Fetch limits: klines API supports up to 1500, OI hist API supports up to 500
+                const klineLimits = { '30m': 360, '1H': 180, '4H': 50 };
+                const oiLimits = { '30m': 350, '1H': 180, '4H': 50 };
+                const klineLimit = klineLimits[tf.key] || 50;
+                const oiLimit = oiLimits[tf.key] || 50;
                 apiCalls.push(fetchJsonWithTimeout(
-                  `https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=${tf.klineInterval}&limit=${fetchLimit}`
+                  `https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=${tf.klineInterval}&limit=${klineLimit}`
                   ));
                 apiLabels.push('klines_' + tf.key);
                 apiCalls.push(fetchJsonWithTimeout(
-                  `https://fapi.binance.com/futures/data/openInterestHist?symbol=${encodeURIComponent(symbol)}&period=${tf.oiPeriod}&limit=${fetchLimit}`
+                  `https://fapi.binance.com/futures/data/openInterestHist?symbol=${encodeURIComponent(symbol)}&period=${tf.oiPeriod}&limit=${oiLimit}`
                   ));
                 apiLabels.push('oiHist_' + tf.key);
               }
-              // Funding rate is a contract-level property — fetch once for the sparkline (4H periods)
+              // Funding rate is a contract-level property — fetch once for the sparkline (4H/8H settlement intervals, varies by contract)
               apiCalls.push(fetchJsonWithTimeout(
                 `https://fapi.binance.com/fapi/v1/fundingRate?symbol=${encodeURIComponent(symbol)}&limit=${MF_SPARKLINE_POINTS + 1}`
                 ));
@@ -9131,6 +9243,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   oi: [],
                   candles: [],
                   fundingRates: [],
+                  fundingTimestamps: [],
                   klineTimestamps: [],
                   oiTimestamps: []
                 };
@@ -9222,35 +9335,57 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   }
                 }
                 const N = tf.lookback;
-                // Keep enough bars for lookback + composite sparkline backfill
-                // (MF_SPARKLINE_POINTS - 1 historical scores computed from 4H boundaries)
-                const maxKeep = N + (MF_SPARKLINE_POINTS - 1);
+                // Each TF needs enough bars for lookback + backfill at the 4H cadence
+                // 4H: N + (SPARKLINE_POINTS-1) = 34 + 8 = 42
+                // 1H: (N + SPARKLINE_POINTS-1) × 4 + 3 = 42×4+3 = 171
+                // 30m: (N + SPARKLINE_POINTS-1) × 8 + 7 = 42×8+7 = 343
+                const maxKeepMap = {
+                  '4H': N + (MF_SPARKLINE_POINTS - 1),           // 42
+                  '1H': (N + MF_SPARKLINE_POINTS - 1) * 4 + 3,   // 171
+                  '30m': (N + MF_SPARKLINE_POINTS - 1) * 8 + 7    // 343
+                };
+                const maxKeep = maxKeepMap[tf.key] || (N + MF_SPARKLINE_POINTS - 1);
                 if (tfData.closes.length > maxKeep) tfData.closes = tfData.closes.slice(-maxKeep);
                 if (tfData.volumes.length > maxKeep) tfData.volumes = tfData.volumes.slice(-maxKeep);
                 if (tfData.quoteVolumes.length > maxKeep) tfData.quoteVolumes = tfData.quoteVolumes.slice(-maxKeep);
                 if (tfData.candles.length > maxKeep) tfData.candles = tfData.candles.slice(-maxKeep);
+                if (tfData.klineTimestamps.length > maxKeep) tfData.klineTimestamps = tfData.klineTimestamps.slice(-maxKeep);
                 if (tfData.oi.length > maxKeep) tfData.oi = tfData.oi.slice(-maxKeep);
-                if (tfData.fundingRates.length > maxKeep) tfData.fundingRates = tfData.fundingRates.slice(-maxKeep);
+                if (tfData.oiTimestamps.length > maxKeep) tfData.oiTimestamps = tfData.oiTimestamps.slice(-maxKeep);
+                if (tfData.fundingRates && tfData.fundingRates.length > maxKeep) tfData.fundingRates = tfData.fundingRates.slice(-maxKeep);
+                if (tfData.fundingTimestamps && tfData.fundingTimestamps.length > maxKeep) tfData.fundingTimestamps = tfData.fundingTimestamps.slice(-maxKeep);
                 if (tfData.closes.length > 0 && tfData.oi.length > 0 && tfData.closes.length !== tfData.oi.length) {
+                  // Trim from the start to keep the most recent aligned data
                   const minLen = Math.min(tfData.closes.length, tfData.oi.length);
                   console.warn(
-                    `MultiOI: ${tf.key} closes/oi length mismatch after trimming (${tfData.closes.length} vs ${tfData.oi.length}), trimming both to ${minLen}`
+                    `MultiOI: ${tf.key} closes/oi length mismatch after trimming (${tfData.closes.length} vs ${tfData.oi.length}), trimming both to ${minLen} from start`
                     );
                   tfData.closes = tfData.closes.slice(-minLen);
                   tfData.volumes = tfData.volumes.slice(-minLen);
                   tfData.quoteVolumes = tfData.quoteVolumes.slice(-minLen);
                   tfData.candles = tfData.candles.slice(-minLen);
+                  tfData.klineTimestamps = tfData.klineTimestamps.slice(-minLen);
                   tfData.oi = tfData.oi.slice(-minLen);
+                  tfData.oiTimestamps = tfData.oiTimestamps.slice(-minLen);
+                  // Cross-check: verify first and last timestamps still align
+                  if (tfData.klineTimestamps.length > 0 && tfData.oiTimestamps.length > 0) {
+                    const firstK = tfData.klineTimestamps[0];
+                    const firstO = tfData.oiTimestamps[0];
+                    const lastK = tfData.klineTimestamps[tfData.klineTimestamps.length - 1];
+                    const lastO = tfData.oiTimestamps[tfData.oiTimestamps.length - 1];
+                    if (Math.abs(firstK - firstO) > 60000 || Math.abs(lastK - lastO) > 60000) {
+                      console.warn(`MultiOI: ${tf.key} timestamp misalignment after mismatch trim — first(k=${firstK},o=${firstO}), last(k=${lastK},o=${lastO})`);
+                    }
+                  }
                 }
                 const coldMin = MF_COLD_START_MIN[tf.key] || 21;
-                const adxMinCandles = 28;
                 if (tfData.closes.length < coldMin || tfData.oi.length < coldMin || tfData.candles.length <
-                  adxMinCandles) {
+                  MF_ADX_MIN_CANDLES) {
                   const parts = [];
                   if (tfData.closes.length < coldMin) parts.push('closes=' + tfData.closes.length + '<' + coldMin);
                   if (tfData.oi.length < coldMin) parts.push('oi=' + tfData.oi.length + '<' + coldMin);
-                  if (tfData.candles.length < adxMinCandles) parts.push('candles=' + tfData.candles.length + '<' +
-                    adxMinCandles);
+                  if (tfData.candles.length < MF_ADX_MIN_CANDLES) parts.push('candles=' + tfData.candles.length + '<' +
+                    MF_ADX_MIN_CANDLES);
                   console.warn(`MultiOI: ${tf.key} post-alignment data low — ${parts.join(', ')}`);
                 }
                 this.tfData[tf.key] = tfData;
@@ -9304,18 +9439,19 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const oi = d.oi;
               const candles = d.candles;
               const coldMin = MF_COLD_START_MIN[tf.key] || 21;
-              const adxMinCandles = 28;
-              if (closes.length < coldMin || oi.length < coldMin || candles.length < adxMinCandles) {
+              if (closes.length < coldMin || oi.length < coldMin || candles.length < MF_ADX_MIN_CANDLES) {
                 const parts = [];
                 if (closes.length < coldMin) parts.push('closes=' + closes.length + '<' + coldMin);
                 if (oi.length < coldMin) parts.push('oi=' + oi.length + '<' + coldMin);
-                if (candles.length < adxMinCandles) parts.push('candles=' + candles.length + '<' + adxMinCandles +
+                if (candles.length < MF_ADX_MIN_CANDLES) parts.push('candles=' + candles.length + '<' + MF_ADX_MIN_CANDLES +
                   ' (ADX)');
                 if (closes.length > 0 || oi.length > 0) {
                   console.warn(`MultiOI: ${tf.key} cold start — ${parts.join(', ')}`);
                 }
                 scenarios[tf.key] = {
                   idx: 0,
+                  coldStart: true,
+                  coldStartParts: parts,
                   reason: 'Insufficient data (cold start — ' + parts.join(', ') + ')'
                 };
                 continue;
@@ -9329,67 +9465,39 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const oiBaseline = oiN.slice(0, -1);
               const zPrice = closesBaseline.length > 0 ? _zRobust(curPrice, closesBaseline) : NaN;
               const zOi = oiBaseline.length > 0 ? _zRobust(curOi, oiBaseline) : NaN;
-              let adxOk = false;
               let adxValue = NaN;
-              if (candles.length >= 28) {
-                adxValue = _wilderAdx(candles, 14);
-                if (Number.isFinite(adxValue) && adxValue >= MF_ADX_THRESH) {
-                  adxOk = true;
-                }
+              if (candles.length >= MF_ADX_MIN_CANDLES) {
+                adxValue = _wilderAdx(candles, MF_ADX_PERIOD);
               }
               this.stats.zPrice[tf.key] = zPrice;
               this.stats.zOi[tf.key] = zOi;
-              if (!adxOk) {
-                const reason = !Number.isFinite(adxValue) ?
-                  'No trend detected (ADX returned NaN — possibly insufficient price data)' :
-                  'No trend detected (ADX ' + adxValue.toFixed(1) + ' < ' + MF_ADX_THRESH + ')';
-                scenarios[tf.key] = {
-                  idx: 0,
-                  zPrice: zPrice,
-                  zOi: zOi,
-                  adx: adxValue,
-                  reason: reason
-                };
-                continue;
-              }
-              let finalScenario = 0;
+              // Classify using shared helper
+              const finalScenario = _classifyTf(zPrice, zOi, adxValue);
               let reason = '';
-              if (!Number.isFinite(zPrice) || !Number.isFinite(zOi)) {
-                finalScenario = 0;
-                reason = 'Z-score not computable';
-              } else if (zPrice > MF_PRICE_THRESH && zOi > MF_OI_THRESH) {
-                finalScenario = 1;
-              } else if (zPrice > MF_PRICE_THRESH && zOi < -MF_OI_THRESH) {
-                finalScenario = 2;
-              } else if (zPrice < -MF_PRICE_THRESH && zOi > MF_OI_THRESH) {
-                finalScenario = 3;
-              } else if (zPrice < -MF_PRICE_THRESH && zOi < -MF_OI_THRESH) {
-                finalScenario = 4;
-              } else {
-                reason = 'Z-scores below thresholds (|Z_P|<=' + MF_PRICE_THRESH + ' or |Z_OI|<=' + MF_OI_THRESH + ')';
+              if (finalScenario === 0) {
+                if (!Number.isFinite(zPrice) || !Number.isFinite(zOi)) {
+                  reason = !Number.isFinite(adxValue) ?
+                    'No trend detected (ADX returned NaN — possibly insufficient price data)' :
+                    'Z-score not computable';
+                } else if (!Number.isFinite(adxValue) || adxValue < MF_ADX_THRESH) {
+                  reason = !Number.isFinite(adxValue) ?
+                    'No trend detected (ADX returned NaN — possibly insufficient price data)' :
+                    'No trend detected (ADX ' + adxValue.toFixed(1) + ' < ' + MF_ADX_THRESH + ')';
+                } else {
+                  reason = 'Z-scores below thresholds (|Z_P|<=' + MF_PRICE_THRESH + ' or |Z_OI|<=' + MF_OI_THRESH + ')';
+                }
               }
               scenarios[tf.key] = {
                 idx: finalScenario,
                 zPrice: zPrice,
                 zOi: zOi,
                 adx: adxValue,
+                coldStart: false,
                 reason: finalScenario === 0 ? reason : ''
               };
             }
-            const SCENARIO_WEIGHTS = {
-              0: 0,
-              1: 100,
-              2: 30,
-              3: -100,
-              4: -30
-            };
-            let signalStrength = 0;
-            for (const tf of MF_TIMEFRAMES) {
-              const sc = scenarios[tf.key];
-              if (sc) signalStrength += (SCENARIO_WEIGHTS[sc.idx] || 0) * (MF_TF_WEIGHTS[tf.key] || 0);
-            }
-            signalStrength = Math.round(signalStrength);
-            signalStrength = Math.max(-100, Math.min(100, signalStrength));
+            // Compute composite score using shared helper (integer-weight math)
+            const signalStrength = _computeCompositeScore(scenarios);
             this.classification = {
               scenarios,
               signalStrength
@@ -9404,128 +9512,181 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
            * For each of the last (MF_SPARKLINE_POINTS - 1) completed 4H candles,
            * compute a full 3-TF composite score using the data available at that point.
            * The current live score is always the last point.
+           * Uses the same integer-weight math and cold-start guards as computeClassification().
            */
           _backfillCompositeHistory() {
             const d4h = this.tfData['4H'];
             const d1h = this.tfData['1H'];
-            const d1d = this.tfData['1D'];
+            const d30m = this.tfData['30m'];
             if (!d4h || !d4h.closes || d4h.closes.length < 2) return;
+            // Check if 4H candle boundary has changed since last backfill
+            const current4hTs = d4h.klineTimestamps && d4h.klineTimestamps.length > 0
+              ? d4h.klineTimestamps[d4h.klineTimestamps.length - 1]
+              : null;
+            // Use cached backfill if 4H candle hasn't closed and cache exists
+            if (this._backfillCache && this._backfillLast4hTs !== null && current4hTs === this._backfillLast4hTs) {
+              // Just append live score to cached backfill
+              const cached = this._backfillCache;
+              const history = [...cached];
+              if (this.classification && Number.isFinite(this.classification.signalStrength)) {
+                history.push(this.classification.signalStrength);
+              }
+              if (history.length > 0) {
+                const existing = this._scoreHistory || [];
+                const keepOld = Math.max(0, existing.length - history.length);
+                this._scoreHistory = [...existing.slice(0, keepOld), ...history].slice(-MF_SPARKLINE_POINTS);
+              }
+              return;
+            }
+            // Full recomputation needed (new 4H candle or first run)
             // Number of historical points to backfill (current live score = last point)
             const backfillCount = MF_SPARKLINE_POINTS - 1;
             // We need the 4H data to have enough bars: lookback + backfillCount
-            const N4h = MF_LOOKBACK_BARS;
-            const totalNeeded4h = N4h + backfillCount;
-            if (d4h.closes.length < N4h + 1) return; // Not enough for even 1 point
+            const N = MF_LOOKBACK_BARS;
+            const totalNeeded4h = N + backfillCount;
+            if (d4h.closes.length < N + 1) return; // Not enough for even 1 point
             // Determine how many points we can actually compute
-            const maxPoints = Math.min(backfillCount, d4h.closes.length - N4h);
+            const maxPoints = Math.min(backfillCount, d4h.closes.length - N);
             const history = [];
             for (let p = maxPoints; p >= 1; p--) {
               // For historical point p, the "current" 4H bar is at index closes.length - 1 - p
               // The lookback window for Z-score is the N bars before that
               const endIdx = d4h.closes.length - 1 - p; // the bar being classified
-              const startIdx = endIdx - N4h; // lookback start
+              const startIdx = endIdx - N; // lookback start
               if (startIdx < 0) continue;
-              // 4H Z-scores
+              // 4H Z-scores — cold-start guard: need at least N closes and N OI, and MF_ADX_MIN_CANDLES for ADX
+              let zPrice4h = NaN, zOi4h = NaN, adx4h = NaN;
               const closes4h = d4h.closes.slice(startIdx, endIdx + 1);
               const oi4h = d4h.oi && d4h.oi.length > endIdx ? d4h.oi.slice(startIdx, endIdx + 1) : [];
-              const curPrice4h = closes4h[closes4h.length - 1];
-              const curOi4h = oi4h.length > 0 ? oi4h[oi4h.length - 1] : NaN;
-              const baselineClose4h = closes4h.slice(0, -1);
-              const baselineOi4h = oi4h.length > 1 ? oi4h.slice(0, -1) : [];
-              const zPrice4h = baselineClose4h.length > 0 ? _zRobust(curPrice4h, baselineClose4h) : NaN;
-              const zOi4h = baselineOi4h.length > 0 ? _zRobust(curOi4h, baselineOi4h) : NaN;
+              if (closes4h.length >= N && oi4h.length >= N) {
+                const curPrice4h = closes4h[closes4h.length - 1];
+                const curOi4h = oi4h[oi4h.length - 1];
+                const baselineClose4h = closes4h.slice(0, -1);
+                const baselineOi4h = oi4h.length > 1 ? oi4h.slice(0, -1) : [];
+                zPrice4h = baselineClose4h.length > 0 ? _zRobust(curPrice4h, baselineClose4h) : NaN;
+                zOi4h = baselineOi4h.length > 0 ? _zRobust(curOi4h, baselineOi4h) : NaN;
+              }
               // 4H ADX
-              const candles4h = d4h.candles && d4h.candles.length > endIdx ? d4h.candles.slice(Math.max(0, endIdx - 27), endIdx + 1) : [];
-              const adx4h = candles4h.length >= 28 ? _wilderAdx(candles4h, 14) : NaN;
+              const candles4h = d4h.candles && d4h.candles.length > endIdx ? d4h.candles.slice(Math.max(0, endIdx - (MF_ADX_MIN_CANDLES - 1)), endIdx + 1) : [];
+              adx4h = candles4h.length >= MF_ADX_MIN_CANDLES ? _wilderAdx(candles4h, MF_ADX_PERIOD) : NaN;
               // 1H Z-scores: each 4H bar = 4 × 1H bars, so we need data up to 4H bar endIdx
-              // 1H bar index for 4H bar endIdx ≈ endIdx * 4 (approximate, aligned by timestamp)
+              // Uses N (34) as the lookback count for 1H bars (same as live classification)
               let zPrice1h = NaN, zOi1h = NaN, adx1h = NaN;
               if (d1h && d1h.closes && d1h.closes.length >= MF_COLD_START_MIN['1H']) {
                 const endIdx1h = Math.min(endIdx * 4 + 3, d1h.closes.length - 1);
-                const startIdx1h = endIdx1h - N4h; // same lookback count
+                const startIdx1h = endIdx1h - N; // same lookback count as live classification
                 if (startIdx1h >= 0) {
                   const closes1h = d1h.closes.slice(startIdx1h, endIdx1h + 1);
                   const oi1h = d1h.oi && d1h.oi.length > endIdx1h ? d1h.oi.slice(startIdx1h, endIdx1h + 1) : [];
-                  const curPrice1h = closes1h[closes1h.length - 1];
-                  const curOi1h = oi1h.length > 0 ? oi1h[oi1h.length - 1] : NaN;
-                  const blClose1h = closes1h.slice(0, -1);
-                  const blOi1h = oi1h.length > 1 ? oi1h.slice(0, -1) : [];
-                  zPrice1h = blClose1h.length > 0 ? _zRobust(curPrice1h, blClose1h) : NaN;
-                  zOi1h = blOi1h.length > 0 ? _zRobust(curOi1h, blOi1h) : NaN;
-                  const candles1h = d1h.candles && d1h.candles.length > endIdx1h ? d1h.candles.slice(Math.max(0, endIdx1h - 27), endIdx1h + 1) : [];
-                  adx1h = candles1h.length >= 28 ? _wilderAdx(candles1h, 14) : NaN;
+                  // Cold-start guard for 1H: need at least N bars
+                  if (closes1h.length >= N && oi1h.length >= N) {
+                    const curPrice1h = closes1h[closes1h.length - 1];
+                    const curOi1h = oi1h[oi1h.length - 1];
+                    const blClose1h = closes1h.slice(0, -1);
+                    const blOi1h = oi1h.length > 1 ? oi1h.slice(0, -1) : [];
+                    zPrice1h = blClose1h.length > 0 ? _zRobust(curPrice1h, blClose1h) : NaN;
+                    zOi1h = blOi1h.length > 0 ? _zRobust(curOi1h, blOi1h) : NaN;
+                  }
+                  const candles1h = d1h.candles && d1h.candles.length > endIdx1h ? d1h.candles.slice(Math.max(0, endIdx1h - (MF_ADX_MIN_CANDLES - 1)), endIdx1h + 1) : [];
+                  adx1h = candles1h.length >= MF_ADX_MIN_CANDLES ? _wilderAdx(candles1h, MF_ADX_PERIOD) : NaN;
                 }
               }
-              // 1D Z-scores
-              let zPrice1d = NaN, zOi1d = NaN, adx1d = NaN;
-              if (d1d && d1d.closes && d1d.closes.length >= MF_COLD_START_MIN['1D']) {
-                // Each 4H bar is within a single 1D bar; use the 1D bar that contains this 4H bar
-                // Approximate: 1D bar index ≈ floor(endIdx / 6) (6 × 4H = 24H = 1D)
-                const endIdx1d = Math.min(Math.floor(endIdx / 6), d1d.closes.length - 1);
-                const startIdx1d = endIdx1d - MF_COLD_START_MIN['1D']; // use cold start min as lookback for 1D
-                if (startIdx1d >= 0) {
-                  const closes1d = d1d.closes.slice(startIdx1d, endIdx1d + 1);
-                  const oi1d = d1d.oi && d1d.oi.length > endIdx1d ? d1d.oi.slice(startIdx1d, endIdx1d + 1) : [];
-                  const curPrice1d = closes1d[closes1d.length - 1];
-                  const curOi1d = oi1d.length > 0 ? oi1d[oi1d.length - 1] : NaN;
-                  const blClose1d = closes1d.slice(0, -1);
-                  const blOi1d = oi1d.length > 1 ? oi1d.slice(0, -1) : [];
-                  zPrice1d = blClose1d.length > 0 ? _zRobust(curPrice1d, blClose1d) : NaN;
-                  zOi1d = blOi1d.length > 0 ? _zRobust(curOi1d, blOi1d) : NaN;
-                  const candles1d = d1d.candles && d1d.candles.length > endIdx1d ? d1d.candles.slice(Math.max(0, endIdx1d - 27), endIdx1d + 1) : [];
-                  adx1d = candles1d.length >= 28 ? _wilderAdx(candles1d, 14) : NaN;
+              // 30m Z-scores: each 4H bar = 8 × 30m bars, so we need data up to 4H bar endIdx
+              // Uses N (34) as the lookback count for 30m bars (same as live classification)
+              let zPrice30m = NaN, zOi30m = NaN, adx30m = NaN;
+              if (d30m && d30m.closes && d30m.closes.length >= MF_COLD_START_MIN['30m']) {
+                const endIdx30m = Math.min(endIdx * 8 + 7, d30m.closes.length - 1);
+                const startIdx30m = endIdx30m - N; // same lookback count as live classification
+                if (startIdx30m >= 0) {
+                  const closes30m = d30m.closes.slice(startIdx30m, endIdx30m + 1);
+                  const oi30m = d30m.oi && d30m.oi.length > endIdx30m ? d30m.oi.slice(startIdx30m, endIdx30m + 1) : [];
+                  // Cold-start guard for 30m: need at least N bars
+                  if (closes30m.length >= N && oi30m.length >= N) {
+                    const curPrice30m = closes30m[closes30m.length - 1];
+                    const curOi30m = oi30m[oi30m.length - 1];
+                    const blClose30m = closes30m.slice(0, -1);
+                    const blOi30m = oi30m.length > 1 ? oi30m.slice(0, -1) : [];
+                    zPrice30m = blClose30m.length > 0 ? _zRobust(curPrice30m, blClose30m) : NaN;
+                    zOi30m = blOi30m.length > 0 ? _zRobust(curOi30m, blOi30m) : NaN;
+                  }
+                  const candles30m = d30m.candles && d30m.candles.length > endIdx30m ? d30m.candles.slice(Math.max(0, endIdx30m - (MF_ADX_MIN_CANDLES - 1)), endIdx30m + 1) : [];
+                  adx30m = candles30m.length >= MF_ADX_MIN_CANDLES ? _wilderAdx(candles30m, MF_ADX_PERIOD) : NaN;
                 }
               }
-              // Classify each TF
+              // Classify each TF using shared helper
               const scenarios = {};
-              for (const [tfKey, zp, zo, adx] of [['1H', zPrice1h, zOi1h, adx1h], ['4H', zPrice4h, zOi4h, adx4h], ['1D', zPrice1d, zOi1d, adx1d]]) {
-                const adxOk = Number.isFinite(adx) && adx >= MF_ADX_THRESH;
-                if (!Number.isFinite(zp) || !Number.isFinite(zo) || !adxOk) {
-                  scenarios[tfKey] = { idx: 0 };
-                } else if (zp > MF_PRICE_THRESH && zo > MF_OI_THRESH) {
-                  scenarios[tfKey] = { idx: 1 };
-                } else if (zp > MF_PRICE_THRESH && zo < -MF_OI_THRESH) {
-                  scenarios[tfKey] = { idx: 2 };
-                } else if (zp < -MF_PRICE_THRESH && zo > MF_OI_THRESH) {
-                  scenarios[tfKey] = { idx: 3 };
-                } else if (zp < -MF_PRICE_THRESH && zo < -MF_OI_THRESH) {
-                  scenarios[tfKey] = { idx: 4 };
-                } else {
-                  scenarios[tfKey] = { idx: 0 };
-                }
+              for (const [tfKey, zp, zo, adx] of [['30m', zPrice30m, zOi30m, adx30m], ['1H', zPrice1h, zOi1h, adx1h], ['4H', zPrice4h, zOi4h, adx4h]]) {
+                scenarios[tfKey] = { idx: _classifyTf(zp, zo, adx) };
               }
-              // Compute composite score
-              const WEIGHTS = { 0: 0, 1: 100, 2: 30, 3: -100, 4: -30 };
-              let score = 0;
-              for (const tfKey of ['1H', '4H', '1D']) {
-                const sc = scenarios[tfKey];
-                if (sc) score += (WEIGHTS[sc.idx] || 0) * (MF_TF_WEIGHTS[tfKey] || 0);
-              }
-              score = Math.round(Math.max(-100, Math.min(100, score)));
+              // Compute composite score using shared helper (same as computeClassification)
+              const score = _computeCompositeScore(scenarios);
               history.push(score);
             }
+            // Cache the backfill history (without live score) for reuse until 4H candle closes
+            this._backfillCache = history.slice();
+            this._backfillLast4hTs = current4hTs;
             // Append current live score as the last point
             if (this.classification && Number.isFinite(this.classification.signalStrength)) {
               history.push(this.classification.signalStrength);
             }
             if (history.length > 0) {
-              this._scoreHistory = history.slice(-MF_SPARKLINE_POINTS);
+              // Merge with existing history: preserve older points that backfill didn't recompute
+              const existing = this._scoreHistory || [];
+              // Replace the last existing points with the new backfill + live score
+              // Keep any older points beyond what backfill produces
+              const keepOld = Math.max(0, existing.length - history.length);
+              this._scoreHistory = [...existing.slice(0, keepOld), ...history].slice(-MF_SPARKLINE_POINTS);
             }
           },
           renderQuadrant() {
             const wrap = document.getElementById('multioiQuadrantWrap');
             if (!wrap) return;
+            // Cold-start progress overlay
+            const coldStartOverlay = document.getElementById('coldStartOverlay');
+            const coldStartTfs = document.getElementById('coldStartTfs');
+            if (coldStartOverlay && coldStartTfs && this.classification && this.classification.scenarios) {
+              const anyColdStart = MF_TIMEFRAMES.some(tf => {
+                const sc = this.classification.scenarios[tf.key];
+                return sc && sc.coldStart;
+              });
+              if (anyColdStart) {
+                let html = '';
+                for (const tf of MF_TIMEFRAMES) {
+                  const d = this.tfData[tf.key];
+                  const sc = this.classification.scenarios[tf.key];
+                  const coldMin = MF_COLD_START_MIN[tf.key] || 34;
+                  if (sc && sc.coldStart) {
+                    const closesLen = d ? d.closes.length : 0;
+                    const oiLen = d ? d.oi.length : 0;
+                    const bestLen = Math.min(closesLen, oiLen);
+                    const statusClass = bestLen >= coldMin ? 'ready' : (bestLen > 0 ? 'partial' : 'empty');
+                    html += '<div class="multioi-coldstart-overlay__tf"><span class="multioi-coldstart-overlay__tf-label">' +
+                      tf.key + '</span><span class="multioi-coldstart-overlay__tf-value ' + statusClass + '">' +
+                      bestLen + '/' + coldMin + '</span></div>';
+                  } else {
+                    html += '<div class="multioi-coldstart-overlay__tf"><span class="multioi-coldstart-overlay__tf-label">' +
+                      tf.key + '</span><span class="multioi-coldstart-overlay__tf-value ready">&#x2713;</span></div>';
+                  }
+                }
+                coldStartTfs.innerHTML = html;
+                coldStartOverlay.style.display = 'flex';
+              } else {
+                coldStartOverlay.style.display = 'none';
+              }
+            } else if (coldStartOverlay) {
+              coldStartOverlay.style.display = 'none';
+            }
             const Q_MAX_Z = 3.5;
-            const tfKeys = ['1H', '4H', '1D'];
+            const tfKeys = ['30m', '1H', '4H'];
             const tfBubbleClass = {
+              '30m': 'quadrant-bubble--30m',
               '1H': 'quadrant-bubble--1h',
-              '4H': 'quadrant-bubble--4h',
-              '1D': 'quadrant-bubble--1d'
+              '4H': 'quadrant-bubble--4h'
             };
             const tfSizes = {
-              '1H': 29,
-              '4H': 34,
-              '1D': 39
+              '30m': 29,
+              '1H': 34,
+              '4H': 39
             };
             const cellLookup = {
               'pos_pos': 'qCellSU',
@@ -9793,7 +9954,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               if (!bubble._kbNavAdded) {
                 bubble._kbNavAdded = true;
                 bubble.addEventListener('keydown', (e) => {
-                  const tfOrder = ['1H', '4H', '1D'];
+                  const tfOrder = ['30m', '1H', '4H'];
                   const curIdx = tfOrder.indexOf(tfKey);
                   let nextIdx = -1;
                   if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
@@ -9870,10 +10031,15 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             } else if (classifiedCount === 1) {
               const group = Object.values(scenarioGroups)[0];
               const tfList = group.tfs.join(', ');
+              const neutralTfs = tfSignals.filter(s => s.idx === 0).map(s => s.tf);
               if (group.tfs.length === 3) {
                 phrase = '<span class="signal-sym">$' + sym +
                   '<\/span> — <span class="signal-scenario" style="color:' + group.color + '">' + group.name +
                   '<\/span> across all timeframes.';
+              } else if (neutralTfs.length > 0) {
+                phrase = '<span class="signal-sym">$' + sym +
+                  '<\/span> — <span class="signal-scenario" style="color:' + group.color + '">' + group.name +
+                  '<\/span> on <span class="signal-tf">' + tfList + '<\/span> (<span style="color:#6B7280">' + neutralTfs.join(', ') + ' Neutral<\/span>).';
               } else {
                 phrase = '<span class="signal-sym">$' + sym +
                   '<\/span> — <span class="signal-scenario" style="color:' + group.color + '">' + group.name +
@@ -9929,18 +10095,21 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               2: 2,
               4: 1
             };
+            // Iterate in deterministic priority order: 1 (SU), 3 (SD), 2 (WR), 4 (EX)
+            const priorityOrder = [1, 3, 2, 4];
             let best = 0,
               bestScore = -1;
-            const entries = Object.entries(scenarioGroups);
-            for (const [idx, group] of entries) {
+            for (const idx of priorityOrder) {
+              const group = scenarioGroups[idx];
+              if (!group) continue;
               let weightSum = 0;
               for (const tf of group.tfs) {
                 weightSum += (MF_TF_WEIGHTS[tf] || 0);
               }
               const score = weightSum + (SCENARIO_PRIORITY[idx] || 0) * 0.1;
-              // Strict > ensures first-encountered wins ties (SU > SD > WR > EX)
+              // Strict > ensures first in priority order wins ties
               if (score > bestScore) {
-                best = parseInt(idx);
+                best = idx;
                 bestScore = score;
               }
             }
@@ -10009,10 +10178,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 dirWord = 'Mixed Signals';
                 dirClass = 'flat';
               }
-              if (isExhaustionDominant && score > 0 && mixedType !== 'conflicting') {
-                dirWord = 'Mixed Signals';
-                dirClass = 'flat';
-              }
               if (dirEl) {
                 dirEl.textContent = dirWord;
                 dirEl.className = 'composite-direction ' + dirClass;
@@ -10044,6 +10209,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   const idx = sc ? sc.idx : 0;
                   const scDef = MF_SCENARIOS[idx] || MF_SCENARIOS[0];
                   const symbol = dirSymbols[idx] ?? '';
+                  const isColdStart = sc && sc.coldStart;
                   const scClass = {
                     1: 'scenario-su',
                     2: 'scenario-wr',
@@ -10051,8 +10217,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     4: 'scenario-ex',
                     0: 'scenario-neutral'
                   } [idx] || 'scenario-neutral';
+                  const coldStartClass = isColdStart ? ' scenario-coldstart' : '';
+                  const displayName = isColdStart ? 'Warming' : scDef.name;
                   tfSummaryParts.push('<div class="composite-tf-item"><span class="tf-label">' + tf.key +
-                    ':<\/span><span class="tf-scenario ' + scClass + '">' + scDef.name + '<\/span> ' + symbol +
+                    ':<\/span><span class="tf-scenario ' + scClass + coldStartClass + '">' + displayName + '<\/span> ' + symbol +
                     '<\/div>');
                 }
                 summaryEl.innerHTML = tfSummaryParts.join('');
@@ -10113,7 +10281,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 }
               }
             }
-            this.renderContextRow();
             const warnEl = document.getElementById('oiPriceWarning');
             if (warnEl) {
               const warnings = [];
@@ -10184,57 +10351,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             }
             this._isRefreshing = false;
           },
-          renderContextRow() {
-            const ctxEl = document.getElementById('oiPriceContext');
-            if (!ctxEl) return;
-            const items = [];
-            if (Number.isFinite(this.stats.oiCurrent)) {
-              const oi = this.stats.oiCurrent;
-              const currentPrice = state.currentPrice;
-              const oiNotional = Number.isFinite(currentPrice) ? oi * currentPrice : null;
-              let oiStr, oiLabel;
-              if (oiNotional !== null) {
-                oiLabel = 'OI Notional:';
-                if (oiNotional >= 1e9) oiStr = '$' + (oiNotional / 1e9).toFixed(2) + 'B';
-                else if (oiNotional >= 1e6) oiStr = '$' + (oiNotional / 1e6).toFixed(2) + 'M';
-                else if (oiNotional >= 1e3) oiStr = '$' + (oiNotional / 1e3).toFixed(1) + 'K';
-                else oiStr = '$' + oiNotional.toFixed(2);
-              } else {
-                oiLabel = 'OI:';
-                if (oi >= 1e9) oiStr = (oi / 1e9).toFixed(2) + 'B';
-                else if (oi >= 1e6) oiStr = (oi / 1e6).toFixed(2) + 'M';
-                else if (oi >= 1e3) oiStr = (oi / 1e3).toFixed(1) + 'K';
-                else oiStr = oi.toFixed(2);
-              }
-              items.push('<span class="multioi-context-item"><span class="label">' + oiLabel +
-                '<\/span><span class="value" style="color:var(--warn);font-weight:700">' + oiStr +
-                '<\/span><\/span>');
-            }
-            // Prefer real-time funding rate; fall back to last settled rate
-            const displayFr = Number.isFinite(this.stats.realtimeFundingRate)
-              ? this.stats.realtimeFundingRate
-              : this.stats.fundingRate;
-            if (Number.isFinite(displayFr)) {
-              const fr = displayFr;
-              const frPct = (fr * 100).toFixed(6);
-              const sign = fr > 0 ? '+' : '';
-              let frColor = 'var(--text)';
-              if (fr > 0.001) frColor = '#26D4AC';
-              else if (fr > 0.0003) frColor = 'var(--warn)';
-              else if (fr < -0.001) frColor = '#F23645';
-              else if (fr < -0.0003) frColor = '#5B8CFF';
-              let frHtml = '<span class="multioi-context-item"><span class="label">Funding:<\/span><span class="value" style="color:' +
-                frColor + ';font-weight:700">' + sign + frPct + '%<\/span><\/span>';
-              items.push(frHtml);
-            }
-            if (items.length >= 2) {
-              items.splice(1, 0, '<br>');
-            }
-            ctxEl.innerHTML = items.join(' <span style="color:var(--muted-3);font-weight:300">|<\/span> ');
-            ctxEl.innerHTML = ctxEl.innerHTML.replace(/<span[^>]*>\|<\/span>\s*<br>/g, '<br>');
-            ctxEl.innerHTML = ctxEl.innerHTML.replace(/<br>\s*<span[^>]*>\|<\/span>/g, '<br>');
-            ctxEl.style.display = items.length > 0 ? 'block' : 'none';
-          },
+
           renderCompositeSparkline() {
             const canvas = document.getElementById('compositeSparklineCanvas');
             if (!canvas) return;
@@ -10261,10 +10378,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             if (!canvas) return;
             const d = this.tfData['4H'];
             const priceHistory = (d && d.closes) ? d.closes.slice(-MF_SPARKLINE_POINTS) : [];
-            // Replace last point with real-time price if available
-            if (priceHistory.length > 0 && Number.isFinite(state.currentPrice)) {
-              priceHistory[priceHistory.length - 1] = state.currentPrice;
-            }
             const lastPrice = priceHistory.length > 0 ? priceHistory[priceHistory.length - 1] : NaN;
             const firstPrice = priceHistory.length > 0 ? priceHistory[0] : NaN;
             const up = Number.isFinite(lastPrice) && Number.isFinite(firstPrice) && lastPrice >= firstPrice;
@@ -10467,12 +10580,37 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 const rtFr = parseFloat(fundingRes.lastFundingRate);
                 if (Number.isFinite(rtFr)) this.stats.realtimeFundingRate = rtFr;
               }
-              this.renderContextRow();
             } catch (e) {
               console.warn('MultiOI: slow data refresh error', e);
             }
           },
           init() {
+            // Prune stale score history from localStorage for symbols not currently in use
+            try {
+              const currentSymbol = this.symbol || '';
+              const keysToRemove = [];
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('mf_scoreHistory_') && key !== 'mf_scoreHistory_' + currentSymbol) {
+                  try {
+                    const raw = localStorage.getItem(key);
+                    if (raw) {
+                      const parsed = JSON.parse(raw);
+                      // Remove if older than 7 days (no timestamp, so just prune symbols we're not using)
+                      // We keep the current symbol's history intact
+                    }
+                  } catch (e) {}
+                  // Only keep score histories for the current symbol and at most 5 recent others
+                  keysToRemove.push(key);
+                }
+              }
+              // Keep at most 5 symbol histories beyond the current one
+              if (keysToRemove.length > 5) {
+                keysToRemove.slice(5).forEach(k => {
+                  try { localStorage.removeItem(k); } catch (e) {}
+                });
+              }
+            } catch (e) {}
             const infoBtn = document.querySelector('.multioi-info-btn');
             const tooltipPopup = document.querySelector('.multioi-tooltip-popup');
             if (infoBtn && tooltipPopup) {
@@ -11337,7 +11475,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     if (wsFunding && Number.isFinite(wsFunding.fundingRate)) {
                       if (oiPricePanel.stats.realtimeFundingRate !== wsFunding.fundingRate) {
                         oiPricePanel.stats.realtimeFundingRate = wsFunding.fundingRate;
-                        oiPricePanel.renderContextRow();
                         // Update funding title immediately
                         const fr = wsFunding.fundingRate;
                         const frEl = document.getElementById('fundingLastVal');
@@ -12543,7 +12680,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
         about: `<h2>About MultiPerps</h2>
           <div class="modal-section"><p>MultiPerps is a free, real-time Binance Futures dashboard built for crypto traders who need clean, fast market data for USDT perpetual contracts. We provide live price tracking, multi-timeframe candlestick charts with RSI indicators, the Multi OI indicator that reveals what's happening beneath price action by analyzing open interest and price together, and comprehensive market rankings — all in your browser with zero installation and zero sign-up. So, our slogan is "MultiPerps — All Timeframes. All Free."</p></div>
           <div class="modal-section"><p>Our mission is to deliver institutional-grade data visualization in a lightweight, privacy-focused package. No accounts, no tracking, no bloat. Whether you trade Bitcoin, Ethereum, Solana, or any of the 200+ USDT-M perpetual futures on Binance, MultiPerps gives you the edge you need to make informed trading decisions.</p></div>
-          <div class="modal-section"><p>MultiPerps supports nine real-time chart timeframes (1m, 5m, 15m, 30m, 1h, 4h, 1d, 1w, 1M), the Multi OI indicator (classifies market conditions into four clear scenarios — Strong Uptrend, Weak Rally, Strong Downtrend, and Exhaustion — across 1H, 4H, and 1D timeframes, with a Composite Signal Score), live market rankings for volume, gainers, losers, open interest, and funding rates, plus multi-type alerts with audio notifications — set price alerts or funding rate alerts across up to four slots — all powered by direct Binance WebSocket feeds for zero-latency data delivery.</p></div>`,
+          <div class="modal-section"><p>MultiPerps supports nine real-time chart timeframes (1m, 5m, 15m, 30m, 1h, 4h, 1d, 1w, 1M), the Multi OI indicator (classifies market conditions into four clear scenarios — Strong Uptrend, Weak Rally, Strong Downtrend, and Exhaustion — across 30m, 1H, and 4H timeframes, with a Composite Signal Score), live market rankings for volume, gainers, losers, open interest, and funding rates, plus multi-type alerts with audio notifications — set price alerts or funding rate alerts across up to four slots — all powered by direct Binance WebSocket feeds for zero-latency data delivery.</p></div>`,
         disclaimer: `<h2>Disclaimer</h2>
           <div class="modal-section"><p>This dashboard is provided for informational purposes only and does not constitute financial advice. Cryptocurrency futures trading carries substantial risk of loss.</p></div>
           <div class="modal-section"><p>MultiPerps is not responsible for any trading decisions made based on data displayed. Prices are sourced from Binance public APIs and may experience delays. Always verify critical data on official exchange platforms before executing trades.</p></div>`,
@@ -12787,7 +12924,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             candlestick charts simultaneously, all updating in real time.</li>
           <li><strong>Multi OI — Open Interest Price Indicator:</strong> See what's really driving a price move — not
             just the candles, but the positioning behind them. Multi OI tracks the relationship between price and open
-            interest across three timeframes (1H, 4H, 1D) and classifies the market into four easy-to-read scenarios:
+            interest across three timeframes (30m, 1H, 4H) and classifies the market into four easy-to-read scenarios:
             <em>Strong Uptrend</em> (new money pushing price up — bias: Long), <em>Weak Rally</em> (price rising but
             losing steam — bias: Careful Long), <em>Strong Downtrend</em> (fresh short selling driving price down —
             bias: Short), and <em>Exhaustion</em> (positions closing, move may be ending — bias: Watch for Reversal). A
@@ -12907,7 +13044,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               <div class="blog-card-excerpt">Multi OI is a multi-timeframe Robust Z-score indicator that classifies
                 market positioning into 4 scenarios by analyzing price and open interest using outlier-resistant Robust
                 Z-scores (median + MAD). Learn how to read Strong Uptrend, Weak Rally, Strong Downtrend, and Exhaustion
-                signals across 1H, 4H, and 1D timeframes.</div><span class="blog-card-link">Read more &rarr;</span>
+                signals across 30m, 1H, and 4H timeframes.</div><span class="blog-card-link">Read more &rarr;</span>
             </div>
           </div>
         </div>
@@ -13311,22 +13448,22 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               price and OI into <strong>Robust Z-scores</strong> (a statistical measure of how extreme a reading is
               compared to its recent history, using median + MAD to resist outlier distortion) and classifies the result
               into one of four scenarios per timeframe.</p>
-            <p>The Multi OI panel on MultiPerps tracks three timeframes simultaneously — 1H, 4H, and 1D. The 1H and 4H
-              timeframes use a 55-bar lookback window (55 one-hour candles and 55 four-hour candles respectively). The
-              1D timeframe uses a ~30-bar lookback window (~30 daily candles) because the Binance openInterestHist API
-              only provides 30 days of daily OI history — this is a hard API constraint, not a design choice. While the
-              lookback windows differ, the Z-score normalization still allows meaningful cross-timeframe comparison
-              since each TF self-calibrates to its own recent range. Each timeframe classifies independently, and you
+            <p>The Multi OI panel on MultiPerps tracks three timeframes simultaneously — 30m, 1H, and 4H. All three
+              timeframes use a 34-bar lookback window (34 thirty-minute candles, 34 one-hour candles, and 34 four-hour
+              candles respectively). This unified lookback window allows consistent cross-timeframe comparison since each
+              TF self-calibrates to its own recent range via Z-score normalization. The 30m timeframe replaces the
+              previous 1D timeframe to provide faster signal detection in crypto markets where pump-and-dump dynamics
+              often unfold within hours rather than days. Each timeframe classifies independently, and you
               decide how to weigh them based on your trading style. Five sparklines below the composite signal provide
               visual soft context: the composite score trend, 4H price direction, 4H quote volume (USDT), 4H funding
               rate history, and 4H OI notional — use them at your discretion to add conviction or caution to your reading.</p>
             <h2>The Four Scenarios — And What to Do About Each</h2>
             <p>For each timeframe, Multi OI classifies the market into one of four scenarios when both the Robust price
-              Z-score and the Robust OI Z-score breach their respective thresholds (|Z_Price| &gt; 1.5, |Z_OI| &gt;
+              Z-score and the Robust OI Z-score breach their respective thresholds (|Z_Price| &gt; 2.0, |Z_OI| &gt;
               2.0). Each scenario carries a <strong>bias</strong> that tells you the directional lean and the
               appropriate trading posture. When the thresholds are not breached, or when hard filters block
               classification, the result is Neutral.</p>
-            <h3>1. Strong Uptrend (Z_Price &gt; +1.5 AND Z_OI &gt; +2.0) — Bias: Long</h3>
+            <h3>1. Strong Uptrend (Z_Price &gt; +2.0 AND Z_OI &gt; +2.0) — Bias: Long</h3>
             <p>Price is significantly above its recent average and open interest is expanding — new long positions are
               entering the market with genuine capital. This is the healthiest type of uptrend because the move is
               backed by real positioning expansion, not just short covering. The positive Z_OI confirms that the price
@@ -13334,7 +13471,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               begins to normalize or turn negative. <strong>What to do:</strong> This scenario favors long-side
               positioning and momentum continuation strategies. Ride the trend with standard stops — there is no reason
               to tighten unless Z_OI starts declining toward the threshold.</p>
-            <h3>2. Weak Rally (Z_Price &gt; +1.5 AND Z_OI &lt; -2.0) — Bias: Careful Long</h3>
+            <h3>2. Weak Rally (Z_Price &gt; +2.0 AND Z_OI &lt; -2.0) — Bias: Careful Long</h3>
             <p>Price is elevated but open interest is dropping — the rally lacks genuine buying conviction. It is likely
               driven by short sellers closing positions rather than new buyers stepping in, which makes it inherently
               fragile. The move may stall or reverse once the short covering exhausts itself. The critical question is
@@ -13343,7 +13480,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 do:</strong> If you are already long, use tighter stops than you would in a Strong Uptrend. If you are
               considering a new long entry, wait for confirmation that Z_OI is turning upward. Do not chase the price —
               the lack of OI support means the move can reverse quickly.</p>
-            <h3>3. Strong Downtrend (Z_Price &lt; -1.5 AND Z_OI &gt; +2.0) — Bias: Short</h3>
+            <h3>3. Strong Downtrend (Z_Price &lt; -2.0 AND Z_OI &gt; +2.0) — Bias: Short</h3>
             <p>Price is falling while open interest is rising — new short positions are being opened aggressively,
               reinforcing the downward pressure with fresh capital. This is the most sustainable bearish scenario
               because the selling pressure is driven by new positions rather than forced liquidations. A positive Z_OI
@@ -13351,7 +13488,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               scenario favors short-side positioning and momentum continuation. Avoid long trades — fighting a Strong
               Downtrend is one of the most common and costly mistakes. The trend is likely to persist until Z_OI begins
               declining, which would signal that short-side positioning is starting to thin out.</p>
-            <h3>4. Exhaustion (Z_Price &lt; -1.5 AND Z_OI &lt; -2.0) — Bias: Watch for Reversal</h3>
+            <h3>4. Exhaustion (Z_Price &lt; -2.0 AND Z_OI &lt; -2.0) — Bias: Watch for Reversal</h3>
             <p>Both price and open interest are falling — existing long positions are being liquidated or unwound, and
               the selling may be nearing exhaustion. This is not a directional bias in the traditional sense; it signals
               that the current move is running out of fuel. Once the longs have finished capitulating, the selling
@@ -13384,32 +13521,30 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               style="font-family:monospace;font-size:1rem;color:var(--muted-2);background:rgba(255,255,255,0.04);padding:12px 14px;border-radius:6px;line-height:1.9">
               Raw Data (Klines [Price + Volume] + OI Hist + Funding Hist + Current OI/FR)<br>
               &nbsp;&nbsp;│<br>
-              &nbsp;&nbsp;│&nbsp;&nbsp;<span style="color:var(--accent)">For EACH timeframe (1H, 4H, 1D)
+              &nbsp;&nbsp;│&nbsp;&nbsp;<span style="color:var(--accent)">For EACH timeframe (30m, 1H, 4H)
                 independently:</span><br>
               &nbsp;&nbsp;│<br>
-              &nbsp;&nbsp;├─► <b>HARD FILTER 1: Data Readiness?</b> (1H ≥ 55 bars, 4H ≥ 55 bars, 1D ≥ 21 bars, all TFs ≥
-              28 candles for ADX)<br>
+              &nbsp;&nbsp;├─► <b>HARD FILTER 1: Data Readiness?</b> (30m ≥ 34 bars, 1H ≥ 34 bars, 4H ≥ 34 bars, all TFs ≥
+              29 candles for ADX)<br>
               &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (insufficient data — cold start guard active)<br>
-              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Note: 1D lookback is ~30 bars (max); Binance openInterestHist API provides
-              only 30 days of daily OI data<br>
               &nbsp;&nbsp;├─► <b>HARD FILTER 2: Market Trending?</b> (Wilder's ADX ≥ 20, period=14)<br>
               &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (ranging/choppy — no signal in noise)<br>
-              &nbsp;&nbsp;├─► <b>HARD FILTER 3: Both Robust Z-scores Significant?</b> (|Z_Price| &gt; 1.5 AND |Z_OI|
+              &nbsp;&nbsp;├─► <b>HARD FILTER 3: Both Robust Z-scores Significant?</b> (|Z_Price| &gt; 2.0 AND |Z_OI|
               &gt; 2.0)<br>
               &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (price or OI alone is not enough — both must confirm)<br>
               &nbsp;&nbsp;├─► <b>CLASSIFY</b> (using Robust Z-scores — median + MAD, outlier-resistant):<br>
-              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +1.5 &amp; Z_OI &gt; +2.0 → <b style="color:#26D4AC">Strong
+              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +2.0 &amp; Z_OI &gt; +2.0 → <b style="color:#26D4AC">Strong
                 Uptrend (S1=+100)</b><br>
-              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +1.5 &amp; Z_OI &lt; -2.0 → <b style="color:#F3A052">Weak
+              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +2.0 &amp; Z_OI &lt; -2.0 → <b style="color:#F3A052">Weak
                 Rally (S2=+30)</b><br>
-              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -1.5 &amp; Z_OI &gt; +2.0 → <b style="color:#F23645">Strong
+              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -2.0 &amp; Z_OI &gt; +2.0 → <b style="color:#F23645">Strong
                 Downtrend (S3=-100)</b><br>
-              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -1.5 &amp; Z_OI &lt; -2.0 → <b
+              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -2.0 &amp; Z_OI &lt; -2.0 → <b
                 style="color:#A78BFA">Exhaustion (S4=-30)</b><br>
               &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Otherwise → <b style="color:#6B7280">Neutral (0)</b><br>
               &nbsp;&nbsp;└─► <b>COMPOSITE OUTPUT</b> (across all 3 TFs):<br>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Score=(S<sub>1H</sub> × 0.30) + (S<sub>4H</sub> × 0.40) +
-              (S<sub>1D</sub> × 0.30)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Score=(S<sub>30m</sub> × 0.30) + (S<sub>1H</sub> × 0.40) +
+              (S<sub>4H</sub> × 0.30)<br>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Score ≥ +30 → <b style="color:#26D4AC">Bullish Scenario</b> | 0 &lt;
               Score &lt; +30 → Slightly Bullish Scenario | Score=0 → <b style="color:#6B7280">No Clear Scenario</b> |
               -30 &lt; Score &lt; 0 → Slightly Bearish Scenario | Score ≤ -30 → <b style="color:#F23645">Bearish
@@ -13420,26 +13555,23 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               both price and OI confirm the move together.</p>
             <ul>
               <li><strong>Data Readiness Gate (Cold Start Guard):</strong> Classification is blocked until enough
-                historical data is available — minimum 55 bars for 1H, 55 bars for 4H, and 21 bars for 1D. Additionally,
-                all timeframes require at least 28 candles (HLC data) for the ADX calculation to compute — even if
+                historical data is available — minimum 34 bars for 30m, 1H, and 4H. Additionally,
+                all timeframes require at least 29 candles (HLC data) for the ADX calculation to compute — even if
                 closes/OI meet their minimums, insufficient candle data will also trigger the cold start guard. This
                 prevents unreliable readings when the indicator first loads or when a new ticker is selected and data is
                 still being fetched. The guard reports which specific data dimension is insufficient (closes, OI, or
                 candles) so you can tell whether it's a price data gap or an ADX readiness issue. If insufficient data
-                is available, the chart displays an overlay message indicating how many bars are still needed. The 1D
-                lookback is ~30 bars maximum because the Binance openInterestHist API only provides 30 days of daily OI
-                history — this is a hard API constraint, so 55 daily OI bars are never available. The 1D cold start is
-                set to 21 bars to allow classification as soon as enough data accumulates within that 30-day window.
+                is available, the chart displays an overlay message indicating how many bars are still needed. 
               </li>
               <li><strong>Trend Detection Gate (Wilder's ADX ≥ 20):</strong> The Average Directional Index (ADX)
                 measures whether the market is trending. Multi OI uses Wilder's ADX with period=14 (matching
                 Binance/TradingView values) and only classifies scenarios when ADX is at or above 20, indicating a
-                trending market. The ADX calculation requires at least 28 candles (2 × period). In ranging or choppy
+                trending market. The ADX calculation requires at least 29 candles (2 × period + 1). In ranging or choppy
                 conditions where ADX falls below 20, the indicator intentionally stays Neutral to avoid reading noise as
                 signal. Z-score extremes in a range-bound market often produce whipsaws that look like trends but
                 resolve quickly — the ADX gate prevents these false classifications.</li>
               <li><strong>Significance Gate (Robust Z-Score Threshold):</strong> Both the Robust price Z-score and the
-                Robust OI Z-score must breach their respective thresholds (|Z_Price| &gt; 1.5 and |Z_OI| &gt; 2.0) in
+                Robust OI Z-score must breach their respective thresholds (|Z_Price| &gt; 2.0 and |Z_OI| &gt; 2.0) in
                 the same direction for any scenario to be assigned. If only one metric is extreme while the other
                 remains within its normal range, the result is Neutral. This dual-threshold requirement ensures that
                 classifications only occur when both price and positioning confirm a statistically unusual condition
@@ -13456,7 +13588,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             <ul>
               <li><strong>Composite Score Sparkline</strong> — Shows the last 9 composite signal scores at 4H candle intervals. A
                 rising line means conviction is strengthening across timeframes; a falling line means it is
-                deteriorating. Each historical point is backfilled using the same 3-TF (1H, 4H, 1D) Z-score + ADX classification as the live score, enabling direct comparison with price, volume, funding, and OI changes over the same 4H periods. This is particularly useful for spotting transitions before they hit the quadrant — if
+                deteriorating. Each historical point is backfilled using the same 3-TF (30m, 1H, 4H) Z-score + ADX classification as the live score, enabling direct comparison with price, volume, funding, and OI changes over the same 4H periods. This is particularly useful for spotting transitions before they hit the quadrant — if
                 the score line is heading toward zero from bullish territory, a scenario change may be coming.</li>
               <li><strong>Price Sparkline (4H)</strong> — Shows the last 9 four-hour close prices. Use this to gauge
                 whether price is trending, ranging, or at an extreme. A Strong Uptrend signal combined with a price
@@ -13466,7 +13598,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 volume confirms genuine capital flow behind a price move; declining volume during a rally signals
                 weakening conviction. A Strong Uptrend with expanding volume is higher conviction than one with
                 shrinking volume. Volume spikes often precede or coincide with trend changes.</li>
-              <li><strong>Funding Rate Sparkline (4H)</strong> — Shows the last 9 four-hour funding rates. Spikes in
+              <li><strong>Funding Rate Sparkline (4H/8H)</strong> — Shows the last 9 funding rates at their native settlement intervals (4H/8H, varies by contract). Spikes in
                 the funding rate indicate crowded positioning — longs paying extreme rates carry squeeze risk if OI
                 begins to collapse. Flat or moderate funding means positioning costs are normal. This is your early
                 warning for potential liquidation cascades.</li>
@@ -13504,13 +13636,13 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               <li>Each scenario is assigned a numeric value: <strong>Strong Uptrend (S1)=+100</strong>, <strong>Weak
                   Rally (S2)=+30</strong>, <strong>Exhaustion (S4)=-30</strong>, <strong>Strong Downtrend
                   (S3)=-100</strong>, <strong>Neutral=0</strong>.</li>
-              <li>The composite score is a weighted average: <strong>Score=(1H &times; 0.30) + (4H &times; 0.40) + (1D
-                  &times; 0.30)</strong>. The 4H timeframe receives the highest weight (40%) because it balances
-                responsiveness and stability, while 1H and 1D each contribute 30%.</li>
+              <li>The composite score is a weighted average: <strong>Score=(30m &times; 0.30) + (1H &times; 0.40) + (4H
+                  &times; 0.30)</strong>. The 1H timeframe receives the highest weight (40%) because it balances
+                responsiveness and stability as the middle timeframe, while 30m and 4H each contribute 30%.</li>
             </ul>
-            <p>For example, if 1H shows Strong Uptrend (+100), 4H shows Weak Rally (+30), and 1D shows Neutral (0), the
+            <p>For example, if 30m shows Strong Uptrend (+100), 1H shows Weak Rally (+30), and 4H shows Neutral (0), the
               composite score would be: (100 &times; 0.30) + (30 &times; 0.40) + (0 &times; 0.30)=30 + 12 +
-              0=<strong>+42 (Bullish Scenario)</strong>. This tells you there is a moderate long-side lean but the daily
+              0=<strong>+42 (Bullish Scenario)</strong>. This tells you there is a moderate long-side lean but the 4H
               timeframe is not confirming, suggesting caution. If all three timeframes show Strong Uptrend, the score
               would be +100 (maximum bullish conviction). Conversely, all three showing Strong Downtrend yields -100
               (maximum bearish conviction).</p>
@@ -13561,22 +13693,22 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 inconsistent. This is often a developing trend that needs confirmation from the lagging timeframe.</li>
               <li><strong>Timeframes disagree</strong> — Timeframes point in opposite directions. This includes both
                 directly opposing signals (e.g., Strong Uptrend on 1H + Strong Downtrend on 4H) <em>and</em> bullish
-                scenarios combined with Exhaustion (e.g., Strong Uptrend on 1H + Exhaustion on 1D). Exhaustion has price
-                declining (Z_Price &lt; -1.5), which directly opposes the bullish price direction of SU/WR — so EX + SU
+                scenarios combined with Exhaustion (e.g., Strong Uptrend on 30m + Exhaustion on 4H). Exhaustion has price
+                declining (Z_Price &lt; -2.0), which directly opposes the bullish price direction of SU/WR — so EX + SU
                 or EX + WR are classified as conflicting, not fading. This is the most dangerous condition — the market
                 is sending genuinely opposing signals.</li>
               <li><strong>Momentum is fading on one timeframe</strong> — A bearish scenario combined with Exhaustion
-                (e.g., Strong Downtrend on 1H + Exhaustion on 4H). Both share the same price direction (declining), but
+                (e.g., Strong Downtrend on 30m + Exhaustion on 1H). Both share the same price direction (declining), but
                 differ in OI behavior — SD has expanding OI (new shorts) while EX has contracting OI (liquidations).
                 This means the selling pressure may be transitioning from conviction-driven (new positions) to forced
                 (liquidations), which often precedes a reversal or consolidation. This is a warning that the downtrend
                 may be losing its structural support.</li>
             </ul>
-            <h3>Step 4: Check Timeframe Agreement (1D → 4H → 1H)</h3>
-            <p>Always start with 1D (big picture), then 4H (swing), then 1H (timing). The per-TF mini summary in the
+            <h3>Step 4: Check Timeframe Agreement (4H → 1H → 30m)</h3>
+            <p>Always start with 4H (big picture), then 1H (swing), then 30m (timing). The per-TF mini summary in the
               composite row shows each timeframe's current scenario. Note that the dominant scenario selection in the
-              Signal Remark now uses TF-weighted scoring — a signal on 4H (40% weight) carries more influence than one
-              on 1H (30% weight) when determining which scenario dominates.</p>
+              Signal Remark now uses TF-weighted scoring — a signal on 1H (40% weight) carries more influence than one
+              on 30m (30% weight) when determining which scenario dominates.</p>
             <ul>
               <li><strong>All 3 timeframes agree:</strong> HIGH conviction. This is the highest-quality signal the
                 indicator can produce. If all three show Strong Uptrend, the bullish case is at maximum strength.</li>
@@ -13584,8 +13716,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 (Transitional, Conflicting, or Divergent) to understand the nature of the disagreement. Conflicting
                 signals mean no clear edge — wait for alignment before committing. Transitional signals may still be
                 tradeable with caution.</li>
-              <li><strong>1D is Neutral:</strong> The longer-term picture is unclear. Intraday signals (1H, 4H) may be
-                noise rather than real moves. Be cautious and wait for 1D to confirm direction before taking larger
+              <li><strong>4H is Neutral:</strong> The longer-term picture is unclear. Short-term signals (30m, 1H) may be
+                noise rather than real moves. Be cautious and wait for 4H to confirm direction before taking larger
                 positions.</li>
             </ul>
             <h3>Step 5: Check Z-score Values in the Per-TF Summary</h3>
@@ -13617,12 +13749,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               independently, and you must decide how to reconcile conflicting signals based on your own trading style:
             </p>
             <ul>
-              <li><strong>Scalpers:</strong> Weigh the 1H timeframe more heavily — it reacts fastest to intraday
+              <li><strong>Scalpers:</strong> Weigh the 30m timeframe more heavily — it reacts fastest to intraday
                 position changes.</li>
-              <li><strong>Swing traders:</strong> Weigh the 4H timeframe more heavily — it balances responsiveness and
+              <li><strong>Swing traders:</strong> Weigh the 1H timeframe more heavily — it balances responsiveness and
                 stability (which is why it receives 40% weight in the composite).</li>
-              <li><strong>Position traders:</strong> Weigh the 1D timeframe more heavily — it captures structural
-                positioning shifts that unfold over days and weeks.</li>
+              <li><strong>Position traders:</strong> Weigh the 4H timeframe more heavily — it captures structural
+                positioning shifts that unfold over hours and days.</li>
             </ul>
             <h2>Signal Quick Reference</h2>
             <ul>
@@ -13640,7 +13772,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   Bias</b>. Action: "No clear trading edge right now."</li>
               <li><strong>Composite Direction</strong> — Score ≥ +30=Bullish Scenario | 0 &lt; Score &lt; +30=Slightly
                 Bullish Scenario | Score=0=No Clear Scenario | -30 &lt; Score &lt; 0=Slightly Bearish Scenario | Score ≤
-                -30=Bearish Scenario. Weights: 1H 30%, 4H 40%, 1D 30%. <em>Exhaustion Override:</em> When Exhaustion is
+                -30=Bearish Scenario. Weights: 30m 30%, 1H 40%, 4H 30%. <em>Exhaustion Override:</em> When Exhaustion is
                 the dominant scenario, the directional label uses "Potential Reversal" or "Fading Momentum" with
                 flat/slightly-bearish CSS instead of score-driven bullish labels — EX is not a bullish condition, so the
                 label must not imply it is. When the dominant scenario direction contradicts the score direction, the
@@ -13654,7 +13786,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 reversal warning). Each sub-type provides specific, actionable guidance instead of a generic "wait"
                 message.</li>
               <li><strong>Sparklines (Soft Context)</strong> — Score trend (9 pts, 4H intervals, backfilled), Price 4H (9 pts), Volume 4H (9
-                pts, USDT), Funding 4H (9 pts), OI Notional 4H (9 pts). Use at your discretion for conviction and context.</li>
+                pts, USDT), Funding 4H/8H (9 pts), OI Notional 4H (9 pts). Use at your discretion for conviction and context.</li>
             </ul>
             <h2>Important Limitations &amp; Disclaimers</h2>
             <p>Multi OI is built on solid theoretical foundations — Robust Z-score normalization (median + MAD,
@@ -13663,7 +13795,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             <ul>
               <li><strong>Experimental status:</strong> Multi OI is an <b>experimental tool that has not undergone
                   statistical backtesting or forward-validation</b> across multiple market cycles. The thresholds
-                (|Z_Price| &gt; 1.5, |Z_OI| &gt; 2.0, ADX ≥ 20) are theoretically grounded but not empirically
+                (|Z_Price| &gt; 2.0, |Z_OI| &gt; 2.0, ADX ≥ 20) are theoretically grounded but not empirically
                 optimized. Real-world performance may vary. Use it as a <b>confluence tool</b> alongside your own
                 analysis — never as a standalone trading signal.</li>
               <li>Multi OI is an analytical tool, not a trading signal generator. It classifies market conditions based
