@@ -116,7 +116,7 @@
           "url": "https://www.multiperps.com"
         },
         "featureList": ["Real-time multi-timeframe candlestick charts",
-          "Multi OI — Open Interest Price Indicator with Z-score normalization, Wilder's ADX gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars), quadrant grid visualization with per-TF Z-score labels, composite Signal Strength (Bullish/Bearish Scenario + Score) with sparklines (Score, Price, Volume, Funding), optimized for desktop and mobile",
+          "Multi OI — Open Interest Price Indicator with Z-score normalization, Wilder's ADX gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars), quadrant grid visualization with per-TF Z-score labels, composite Signal Strength (Bullish/Bearish Scenario + Score) with sparklines (Score, Price, Volume, Funding, OI Notional), optimized for desktop and mobile",
           "Open interest screener — screen and rank open interest across all Binance USDT-M perpetual contracts",
           "Funding rate screener — monitor and rank funding rates to spot overcrowded positions and potential reversals",
           "Crypto funding rate context — extreme funding rate Z-scores flag crowded positioning and potential reversal risk across timeframes",
@@ -124,7 +124,7 @@
           "Open interest vs price divergence detection across 3 timeframes (1H, 4H, 1D) with 55-bar lookback for 1H/4H and ~30-bar for 1D (Binance OI API 30-day limit)",
           "Crypto market bias and sentiment signals (Strong Uptrend, Weak Rally, Strong Downtrend, Exhaustion)",
           "Independent per-timeframe classification with no voting — users decide how to weigh signals",
-          "Noise filters: Z-score threshold gate, Wilder's ADX gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars), sparklines for visual soft context (Score, Price, Volume, Funding)",
+          "Noise filters: Z-score threshold gate, Wilder's ADX gate, per-TF cold start guard (1H: 55, 4H: 55, 1D: 21 bars), sparklines for visual soft context (Score, Price, Volume, Funding, OI Notional)",
           "Funding rate context analysis",
           "Price alerts with audio notifications",
           "Open interest rankings",
@@ -180,14 +180,14 @@
           "name": "What is Multi OI on MultiPerps?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Multi OI (Open Interest Price Indicator) is a real-time market scenario classifier that reveals what is happening beneath price action by tracking the relationship between price movement and open interest across three timeframes (1H, 4H, 1D). It classifies the market into four scenarios per timeframe: Strong Uptrend (Price up + OI up), Weak Rally (Price up + OI down), Strong Downtrend (Price down + OI up), and Exhaustion (Price down + OI down). Three hard filters prevent false signals: Significance Gate (Z-score threshold), Trend Detection Gate (Wilder's ADX gate), and Data Readiness Gate (per-TF cold start guard: 1H: 55, 4H: 55, 1D: 21 bars). Four sparklines (Composite Score, Price, Volume, Funding Rate) provide visual soft context at the user's discretion. A composite Signal Strength (Score: -100 to +100) with directional label (Bullish/Bearish Scenario) and per-TF mini summary is displayed above the quadrant grid. The Signal Remark is built in 5 steps: (1) classify each TF, (2) group by scenario, (3) pick core phrase, (4) add funding context for crowded positioning and squeeze risk, (5) add action phrase. Mixed signals are split into three sub-types: Moving the same way with different strength, Timeframes disagree, and Momentum is fading on one timeframe. Each timeframe classifies independently — users decide how to weigh signals."
+            "text": "Multi OI (Open Interest Price Indicator) is a real-time market scenario classifier that reveals what is happening beneath price action by tracking the relationship between price movement and open interest across three timeframes (1H, 4H, 1D). It classifies the market into four scenarios per timeframe: Strong Uptrend (Price up + OI up), Weak Rally (Price up + OI down), Strong Downtrend (Price down + OI up), and Exhaustion (Price down + OI down). Three hard filters prevent false signals: Significance Gate (Z-score threshold), Trend Detection Gate (Wilder's ADX gate), and Data Readiness Gate (per-TF cold start guard: 1H: 55, 4H: 55, 1D: 21 bars). Five sparklines (Composite Score, Price, Volume, Funding Rate, OI Notional) provide visual soft context at the user's discretion. A composite Signal Strength (Score: -100 to +100) with directional label (Bullish/Bearish Scenario) and per-TF mini summary is displayed above the quadrant grid. The Signal Remark is built in 3 steps: (1) classify each TF, (2) group by scenario, (3) pick core phrase. Mixed signals are split into three sub-types: Moving the same way with different strength, Timeframes disagree, and Momentum is fading on one timeframe. Each timeframe classifies independently — users decide how to weigh signals."
           }
         }, {
           "@type": "Question",
           "name": "How does the Open Interest Price analysis detect market bias?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Multi OI detects market bias by computing Z-scores for price and open interest across three timeframes (1H, 4H, 1D) using a 55-bar lookback window for 1H and 4H, and a ~30-bar lookback for 1D. Each timeframe independently classifies the market into one of four scenarios based on whether Z_Price and Z_OI breach their thresholds (|Z_Price|>1.5, |Z_OI|>2.0). Hard filters are applied before classification: Significance Gate (Z-score threshold) ensures thresholds are breached, Trend Detection Gate (Wilder's ADX filter) only classifies in trending markets (ADX>=20), and Data Readiness Gate (per-TF cold start guard) requires minimum 55 data points for 1H, 55 for 4H, and 21 for 1D. A composite row above the quadrant grid shows the directional label (Bullish/Bearish Scenario), Signal Strength Score (-100 to +100), and per-TF scenario summary with Z-score values. Four sparklines (Score, Price, Volume, Funding) provide visual soft context at the user's discretion. There is no voting — users decide how to weigh signals across timeframes based on their trading style."
+            "text": "Multi OI detects market bias by computing Z-scores for price and open interest across three timeframes (1H, 4H, 1D) using a 55-bar lookback window for 1H and 4H, and a ~30-bar lookback for 1D. Each timeframe independently classifies the market into one of four scenarios based on whether Z_Price and Z_OI breach their thresholds (|Z_Price|>1.5, |Z_OI|>2.0). Hard filters are applied before classification: Significance Gate (Z-score threshold) ensures thresholds are breached, Trend Detection Gate (Wilder's ADX filter) only classifies in trending markets (ADX>=20), and Data Readiness Gate (per-TF cold start guard) requires minimum 55 data points for 1H, 55 for 4H, and 21 for 1D. A composite row above the quadrant grid shows the directional label (Bullish/Bearish Scenario), Signal Strength Score (-100 to +100), and per-TF scenario summary with Z-score values. Five sparklines (Score, Price, Volume, Funding, OI Notional) provide visual soft context at the user's discretion. There is no voting — users decide how to weigh signals across timeframes based on their trading style."
           }
         }]
       }
@@ -2849,7 +2849,8 @@
         border-radius: 8px;
         padding: 10px;
         position: relative;
-        min-height: 260px
+        min-height: 260px;
+        overflow: hidden
       }
 
       .tracker-card.empty {
@@ -2892,7 +2893,10 @@
         text-decoration: none;
         user-select: none;
         order: 1;
-        white-space: nowrap
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 40%
       }
 
       .tracker-symbol:hover {
@@ -2905,7 +2909,10 @@
         font-weight: 700;
         color: var(--text);
         order: 2;
-        white-space: nowrap
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 40%
       }
 
       .tracker-price.up {
@@ -3097,12 +3104,34 @@
         align-items: center;
         gap: 8px;
         margin-bottom: 4px;
-        flex-wrap: nowrap
+        flex-wrap: wrap
       }
 
       @media (max-width:768px) {
         .multi-ticker-grid {
           grid-template-columns: 1fr
+        }
+
+        .tracker-card {
+          min-height: auto
+        }
+
+        .tracker-card.empty {
+          min-height: 260px
+        }
+
+        .tracker-chart-container {
+          height: 180px
+        }
+
+        .tracker-symbol,
+        .tracker-price {
+          font-size: 0.95rem
+        }
+
+        .tracker-dropdown-input {
+          flex: 0 1 100px;
+          min-width: 60px
         }
 
         .tracker-timeframe-slider {
@@ -3113,6 +3142,32 @@
         .tracker-tf-btn {
           padding: 5px 8px;
           font-size: 0.8rem
+        }
+      }
+
+      @media (max-width:480px) {
+        .tracker-chart-container {
+          height: 150px
+        }
+
+        .tracker-symbol,
+        .tracker-price {
+          font-size: 0.85rem;
+          max-width: 35%
+        }
+
+        .tracker-dropdown-input {
+          flex: 0 1 80px;
+          min-width: 50px;
+          font-size: 0.78rem
+        }
+
+        .tracker-card {
+          padding: 8px
+        }
+
+        .tracker-meta {
+          font-size: 0.75rem
         }
       }
 
@@ -5757,6 +5812,8 @@
           lastTradeTime: null,
           currentPrice: null,
           prevPrice: null,
+          vol24h: null,
+          pct24h: null,
           msgsInWindow: 0,
           chartTimer: null,
           healthTimer: null,
@@ -5833,6 +5890,13 @@
           } catch {
             return `${Math.round(value).toLocaleString('en-US')} USDT`;
           }
+        };
+        const formatOiValue = (oi) => {
+          if (!Number.isFinite(oi)) return '—';
+          if (oi >= 1e9) return (oi / 1e9).toFixed(2) + 'B';
+          if (oi >= 1e6) return (oi / 1e6).toFixed(2) + 'M';
+          if (oi >= 1e3) return (oi / 1e3).toFixed(1) + 'K';
+          return oi.toFixed(2);
         };
         const formatCompact = (value) => {
           if (!Number.isFinite(value)) return '—';
@@ -7117,16 +7181,34 @@ opacity:0.7; transition:opacity 0.2s; }
 //KLINE DATA FETCHING
         const fetchCurrentPrice = async (symbol) => {
           try {
+            // Fetch both price and 24h stats in one call
             const data = await fetchJsonWithTimeout(
-              `https://fapi.binance.com/fapi/v1/ticker/price?symbol=${encodeURIComponent(symbol)}`);
-            const price = parseFloat(data?.price);
+              `https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${encodeURIComponent(symbol)}`);
+            const price = parseFloat(data?.lastPrice);
+            const pct = parseFloat(data?.priceChangePercent);
+            const vol = parseFloat(data?.quoteVolume);
             if (Number.isFinite(price)) {
               state.currentPrice = price;
               state.lastTradeTime = Date.now();
+              if (Number.isFinite(pct)) state.pct24h = pct;
+              if (Number.isFinite(vol)) state.vol24h = vol;
               updatePriceUI();
               renderAlertRtPrices();
             }
-          } catch {}
+          } catch {
+            // Fallback to price-only endpoint
+            try {
+              const data = await fetchJsonWithTimeout(
+                `https://fapi.binance.com/fapi/v1/ticker/price?symbol=${encodeURIComponent(symbol)}`);
+              const price = parseFloat(data?.price);
+              if (Number.isFinite(price)) {
+                state.currentPrice = price;
+                state.lastTradeTime = Date.now();
+                updatePriceUI();
+                renderAlertRtPrices();
+              }
+            } catch {}
+          }
         };
         const fetchBinanceFuturesKlines = async (symbol, interval, limit) => {
           const url =
@@ -7450,40 +7532,33 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
   <span style="font-size:1rem;color:var(--muted-3);font-family:monospace;line-height:1.65">
   <b style="color:var(--text)">1.</b> Read Composite Signal first — direction + score<br>
   <b style="color:var(--text)">2.</b> Check Timeframe Agreement (1D → 4H → 1H) — all 3 agree = high conviction<br>
-  <b style="color:var(--text)">3.</b> Read Signal Remark — now includes conviction (composite) + funding context<br>
+  <b style="color:var(--text)">3.</b> Read Signal Remark — classification + core phrase<br>
   <b style="color:var(--text)">4.</b> Check per-TF Z-scores in the summary — values approaching thresholds = transition incoming<br>
-  <b style="color:var(--text)">5.</b> Check sparklines (Score, Price, Volume, Funding) — visual context for trend direction and extremes<br>
+  <b style="color:var(--text)">5.</b> Check sparklines (Score, Price, Volume, Funding, OI Notional) — visual context for trend direction and extremes<br>
   <b style="color:var(--text)">6.</b> Respect Neutral — no signal IS a signal<br>
   <b style="color:var(--text)">7.</b> You Decide — Scalpers weigh 1H | Swing weigh 4H | Position weigh 1D</span><br><br>
 
   <strong style="color:var(--text)">Signal Remark — How It's Generated</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
-  The remark is built in 5 steps, each adding a layer of meaning:<br>
+  The remark is built in 3 steps, each adding a layer of meaning:<br>
   <b>Step 1:</b> Classify each TF (1H, 4H, 1D) into a scenario using Z_Price and Z_OI (2x2 quadrant)<br>
   <b>Step 2:</b> Group non-neutral TFs by scenario, count how many distinct scenarios appear<br>
   <b>Step 3:</b> Pick the core phrase — all agree? one scenario on some TFs? mixed signals?<br>
-  &nbsp;&nbsp;&nbsp;Mixed signals split into: <b>Moving the same way, different strength</b>, <b>Timeframes disagree</b> (including bull+EX since EX price direction opposes bull), or <b>Momentum is fading</b> (bear+EX)<br>
-  <b>Step 4:</b> Add funding context — are too many traders on one side? could a squeeze happen?<br>
-  <b>Step 5:</b> Add action phrase — what to do based on the dominant scenario and how many TFs agree</span><br><br>
+  &nbsp;&nbsp;&nbsp;Mixed signals split into: <b>Moving the same way, different strength</b> (both bullish or both bearish, but one is weak), <b>Timeframes disagree</b> (including bull+EX since EX price direction opposes bull), or <b>Momentum is fading</b> (bear+EX)</span><br><br>
 
   <strong style="color:var(--text)">Z-score Metrics</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
-  <span style="color:#5B8CFF"><b>Z_Price</b></span> — Robust Z-score of prices (median + MAD, outlier-resistant)<br>
-  <span style="color:#F3A052"><b>Z_OI</b></span> — Robust Z-score of open interest (median + MAD, outlier-resistant)</span><br><br>
-
-  <strong style="color:var(--text)">Funding Rate Thresholds</strong><br>
-  <span style="font-size:1rem;color:var(--muted-3)">
-  Funding context is added to the signal remark when rates are extreme:<br>
-  <b>High positive:</b> &gt; +0.1% → crowded long warning · <b>Moderate:</b> +0.03% to +0.1% → "slightly positive"<br>
-  <b>High negative:</b> &lt; -0.1% → crowded short warning · <b>Moderate:</b> -0.1% to -0.03% → "slightly negative"<br>
-  <b>Neutral:</b> -0.03% to +0.03% → no modifier added</span><br><br>
+  <span style="color:#5B8CFF"><b>Z_Price</b></span> — Robust Z-score of prices (median + MAD, outlier-resistant). Current candle is excluded from its own baseline to avoid self-inclusion bias.<br>
+  <span style="color:#F3A052"><b>Z_OI</b></span> — Robust Z-score of open interest (median + MAD, outlier-resistant). Current candle is excluded from its own baseline to avoid self-inclusion bias.<br>
+  <b>Boundary rule:</b> |Z_Price| > 1.5 and |Z_OI| > 2.0 are <b>strict</b> inequalities — a value exactly at the threshold does NOT trigger classification (e.g., Z_Price = +1.5 stays Neutral, Z_Price = +1.51 classifies as above threshold).</span><br><br>
 
   <strong style="color:var(--text)">Sparklines (Soft Context)</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
-  <b>Score</b> — Composite score history (21 pts). Rising = strengthening signal, falling = deteriorating.<br>
-  <b>Price</b> — 4H close price history (21 pts). Shows price trend direction for context.<br>
-  <b>Volume</b> — 4H quote volume history (21 pts, USDT). Shows capital flow intensity.<br>
-  <b>Funding</b> — 4H funding rate history (21 pts). Spikes = crowded positioning, carry cost extremes.</span><br><br>
+  <b>Score</b> — Composite score history (9 pts, 4H intervals). Rising = strengthening signal, falling = deteriorating.<br>
+  <b>Price</b> — 4H close price history (9 pts). Shows price trend direction for context.<br>
+  <b>Volume</b> — 4H quote volume history (9 pts, USDT). Shows capital flow intensity.<br>
+  <b>Funding</b> — 4H funding rate history (9 pts). Spikes = crowded positioning, carry cost extremes.<br>
+  <b>OI Notional</b> — 4H OI notional value history (9 pts). Rising = new capital entering, falling = unwinding.</span><br><br>
 
   <strong style="color:var(--text)">Data Update Frequency</strong><br>
   <span style="font-size:1rem;color:var(--muted-3);font-family:monospace;line-height:1.7">
@@ -7612,20 +7687,24 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 <div class="multioi-card__body">
                   <div class="multioi-sparklines-section">
                     <div class="multioi-sparkline-card" data-sparkline="composite">
-                      <div class="multioi-sparkline-card__title">Composite Score <span class="multioi-sparkline-hover-val" id="compositeHoverVal"></span><span class="multioi-sparkline-last-val" id="compositeLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">Composite Score (Last 9, 4H) <span class="multioi-sparkline-hover-val" id="compositeHoverVal"></span><span class="multioi-sparkline-last-val" id="compositeLastVal"></span></div>
                       <canvas id="compositeSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="price">
-                      <div class="multioi-sparkline-card__title">Price (4H) <span class="multioi-sparkline-hover-val" id="priceHoverVal"></span><span class="multioi-sparkline-last-val" id="priceLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">Price (Last 9, 4H) <span class="multioi-sparkline-hover-val" id="priceHoverVal"></span><span class="multioi-sparkline-last-val" id="priceLastVal"></span></div>
                       <canvas id="priceSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="volume">
-                      <div class="multioi-sparkline-card__title">Volume (4H) <span class="multioi-sparkline-hover-val" id="volumeHoverVal"></span><span class="multioi-sparkline-last-val" id="volumeLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">Volume (Last 9, 4H) <span class="multioi-sparkline-hover-val" id="volumeHoverVal"></span><span class="multioi-sparkline-last-val" id="volumeLastVal"></span></div>
                       <canvas id="volumeSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="funding">
-                      <div class="multioi-sparkline-card__title">Funding Rate (4H) <span class="multioi-sparkline-hover-val" id="fundingHoverVal"></span><span class="multioi-sparkline-last-val" id="fundingLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">Funding Rate (Last 9, 4H) <span class="multioi-sparkline-hover-val" id="fundingHoverVal"></span><span class="multioi-sparkline-last-val" id="fundingLastVal"></span></div>
                       <canvas id="fundingSparklineCanvas"></canvas>
+                    </div>
+                    <div class="multioi-sparkline-card" data-sparkline="oi">
+                      <div class="multioi-sparkline-card__title">OI Notional (Last 9, 4H) <span class="multioi-sparkline-hover-val" id="oiHoverVal"></span><span class="multioi-sparkline-last-val" id="oiLastVal"></span></div>
+                      <canvas id="oiSparklineCanvas"></canvas>
                     </div>
                   </div>
                   <div id="oiPriceContext" class="multioi-context-row" style="display:none;"></div>
@@ -8149,17 +8228,17 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const chart = state.charts[interval];
             if (!chart) continue;
             if (!chart.dirty) continue;
-            const count = chart.candles.length;
+            const count = chart.candles?.length || 0;
             chart.meta.textContent = count ?
               `${state.symbol.replace('USDT', '')} ${formatPrice(state.currentPrice)}` : '';
+
             if (chart.changeEl) {
               const last = chart.candles[count - 1];
               if (last && Number.isFinite(last.open) && Number.isFinite(last.close) && last.open !== 0) {
                 const diff = last.close - last.open;
                 const pct = (diff / last.open) * 100;
                 const sign = diff > 0 ? '+' : '';
-                const volUsdt = Number.isFinite(last.quoteVolume) ? last.quoteVolume : (Number.isFinite(last.volume) ?
-                  last.volume : null);
+                const volUsdt = Number.isFinite(last.quoteVolume) ? last.quoteVolume : (Number.isFinite(last.volume) ? last.volume : null);
                 const volText = Number.isFinite(volUsdt) ? `, ${formatUsdtVolume(volUsdt)}` : '';
                 chart.changeEl.textContent = `${sign}${pct.toFixed(2)}%${volText}`;
                 chart.changeEl.classList.remove('up', 'down');
@@ -8170,6 +8249,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 chart.changeEl.classList.remove('up', 'down');
               }
             }
+
+            // RSI calculation and display
             if (chart.rsiEl && count >= 15) {
               const rsi = calcRSI(chart.candles);
               if (Number.isFinite(rsi)) {
@@ -8374,13 +8455,24 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 const sym = stream.split('@')[0].toUpperCase();
                 if (stream.endsWith('@miniTicker')) {
                   const price = parseFloat(data.c);
+                  const pct24h = parseFloat(data.P);
+                  const vol24h = parseFloat(data.q);
                   if (Number.isFinite(price)) {
                     if (sym === mainSymUpper) {
                       state.currentPrice = price;
                       state.lastTradeTime = Date.now();
+                      if (Number.isFinite(pct24h)) state.pct24h = pct24h;
+                      if (Number.isFinite(vol24h)) state.vol24h = vol24h;
                       updatePriceUI();
                       state.prevPrice = price;
                       renderAlertRtPrices();
+                      updateChartMetas();
+
+                      const rtOi = parseFloat(oiPricePanel.stats.oiCurrent);
+                      if (Number.isFinite(rtOi)) {
+                        const oiEl = document.getElementById('oiLastVal');
+                        if (oiEl) oiEl.textContent = '$' + formatOiValue(rtOi * price);
+                      }
                     }
                     if (alertSymbolSet.has(sym)) {
                       state.alertWsData[sym] = {
@@ -8392,6 +8484,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     if (trackerSymbolSet.has(sym)) {
                       if (!stateTracker.data[sym]) stateTracker.data[sym] = {};
                       stateTracker.data[sym].price = price;
+                      if (Number.isFinite(pct24h)) stateTracker.data[sym].pct24h = pct24h;
+                      if (Number.isFinite(vol24h)) stateTracker.data[sym].vol24h = vol24h;
                     }
                   }
                   return;
@@ -8403,6 +8497,13 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                       if (oiPricePanel.stats.oiCurrent !== oi) {
                         oiPricePanel.stats.oiCurrent = oi;
                         oiPricePanel.renderContextRow();
+                        // Update OI notional title immediately
+                        const rtPrice = state.currentPrice;
+                        if (Number.isFinite(rtPrice)) {
+                          const oiEl = document.getElementById('oiLastVal');
+                          if (oiEl) oiEl.textContent = '$' + formatOiValue(oi * rtPrice);
+                        }
+                        oiPricePanel.renderOiSparkline();
                       }
                     }
                   }
@@ -8436,18 +8537,60 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     chart.lastUpdate = Date.now();
                   }
                   if (interval === '4h' && oiPricePanel.symbol === mainSymUpper) {
-                    const qv = parseFloat(k.q);
-                    const closePrice = parseFloat(k.c);
-                    if (Number.isFinite(qv)) {
-                      const volEl = document.getElementById('volumeLastVal');
-                      if (volEl) volEl.textContent = '$' + formatUsdtVolume(qv);
+                    // Update 4H sparkline data in real-time
+                    const d = oiPricePanel.tfData['4H'];
+                    if (d) {
+                      const closePrice = parseFloat(k.c);
+                      const qv = parseFloat(k.q);
+                      const vol = parseFloat(k.v);
+                      const highPrice = parseFloat(k.h);
+                      const lowPrice = parseFloat(k.l);
+                      if (Number.isFinite(closePrice) && d.closes.length > 0) {
+                        d.closes[d.closes.length - 1] = closePrice;
+                      }
+                      if (Number.isFinite(qv) && d.quoteVolumes.length > 0) {
+                        d.quoteVolumes[d.quoteVolumes.length - 1] = qv;
+                      }
+                      if (Number.isFinite(vol) && d.volumes.length > 0) {
+                        d.volumes[d.volumes.length - 1] = vol;
+                      }
+                      // Update last candle's high/low/close for accurate ADX
+                      if (d.candles.length > 0) {
+                        const lastCandle = d.candles[d.candles.length - 1];
+                        if (Number.isFinite(highPrice)) lastCandle.high = Math.max(lastCandle.high || 0, highPrice);
+                        if (Number.isFinite(lowPrice)) lastCandle.low = Math.min(lastCandle.low || Infinity, lowPrice);
+                        if (Number.isFinite(closePrice)) lastCandle.close = closePrice;
+                      }
+                      // Update title values immediately (lightweight DOM text updates)
+                      if (Number.isFinite(closePrice)) {
+                        const priceEl = document.getElementById('priceLastVal');
+                        if (priceEl) priceEl.textContent = '$' + closePrice.toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 8
+                        });
+                      }
+                      const volArr = (d.quoteVolumes.length >= 2) ? d.quoteVolumes : d.volumes;
+                      const lastVol = volArr.length > 0 ? volArr[volArr.length - 1] : NaN;
+                      if (Number.isFinite(lastVol)) {
+                        const volEl = document.getElementById('volumeLastVal');
+                        if (volEl) volEl.textContent = '$' + formatUsdtVolume(lastVol);
+                      }
+                      // Update OI notional title if OI data is available
+                      const rtOi = parseFloat(oiPricePanel.stats.oiCurrent);
+                      const rtPrice = state.currentPrice;
+                      if (Number.isFinite(rtOi) && Number.isFinite(rtPrice)) {
+                        const oiEl = document.getElementById('oiLastVal');
+                        if (oiEl) oiEl.textContent = '$' + formatOiValue(rtOi * rtPrice);
+                      }
                     }
-                    if (Number.isFinite(closePrice)) {
-                      const priceEl = document.getElementById('priceLastVal');
-                      if (priceEl) priceEl.textContent = '$' + closePrice.toLocaleString('en-US', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 8
-                      });
+                    // Throttle sparkline canvas re-renders from WS (max once per 2s)
+                    if (!oiPricePanel._wsSparklineTimer) {
+                      oiPricePanel._wsSparklineTimer = setTimeout(() => {
+                        oiPricePanel.renderPriceSparkline();
+                        oiPricePanel.renderVolumeSparkline();
+                        oiPricePanel.renderOiSparkline();
+                        oiPricePanel._wsSparklineTimer = null;
+                      }, 2000);
                     }
                   }
                 }
@@ -8475,7 +8618,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     card.dirty = true;
                   }
                 }
-              } catch {
+              } catch (e) {
+                console.warn('WS parse error:', e);
                 state.wsStatus = {
                   text: 'Parse error',
                   level: 'error'
@@ -8541,6 +8685,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   const sym = stream.split('@')[0].toUpperCase();
                   if (stream.endsWith('@miniTicker')) {
                     const price = parseFloat(data.c);
+                    const pct24h = parseFloat(data.P);
+                    const vol24h = parseFloat(data.q);
                     if (Number.isFinite(price)) {
                       if (alertSymbolSet.has(sym)) {
                         state.alertWsData[sym] = {
@@ -8552,6 +8698,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                       if (trackerSymbolSet.has(sym)) {
                         if (!stateTracker.data[sym]) stateTracker.data[sym] = {};
                         stateTracker.data[sym].price = price;
+                        if (Number.isFinite(pct24h)) stateTracker.data[sym].pct24h = pct24h;
+                        if (Number.isFinite(vol24h)) stateTracker.data[sym].vol24h = vol24h;
                       }
                     }
                     return;
@@ -8702,6 +8850,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           updateCountdowns();
         };
         const MF_LOOKBACK_BARS = 55;
+        const MF_SPARKLINE_POINTS = 9;
         const MF_TIMEFRAMES = [{
           key: '1H',
           lookback: MF_LOOKBACK_BARS,
@@ -8803,6 +8952,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             trs.push(Math.max(hi - lo, Math.abs(hi - prevCl), Math.abs(lo - prevCl)));
           }
           if (plusDMs.length < period) return NaN;
+          // RMA seed = SMA (simple average) — matches TradingView ta.rma()
           let smPlusDM = 0,
             smMinusDM = 0,
             smTR = 0;
@@ -8811,13 +8961,17 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             smMinusDM += minusDMs[i];
             smTR += trs[i];
           }
+          smPlusDM /= period;
+          smMinusDM /= period;
+          smTR /= period;
           const smPlusDMs = [smPlusDM];
           const smMinusDMs = [smMinusDM];
           const smTRs = [smTR];
+          // RMA smoothing: (prev * (period-1) + current) / period
           for (let i = period; i < plusDMs.length; i++) {
-            smPlusDM = smPlusDM - (smPlusDM / period) + plusDMs[i];
-            smMinusDM = smMinusDM - (smMinusDM / period) + minusDMs[i];
-            smTR = smTR - (smTR / period) + trs[i];
+            smPlusDM = (smPlusDM * (period - 1) + plusDMs[i]) / period;
+            smMinusDM = (smMinusDM * (period - 1) + minusDMs[i]) / period;
+            smTR = (smTR * (period - 1) + trs[i]) / period;
             smPlusDMs.push(smPlusDM);
             smMinusDMs.push(smMinusDM);
             smTRs.push(smTR);
@@ -8831,13 +8985,15 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             dxValues.push(dx);
           }
           if (dxValues.length < period) return NaN;
+          // ADX seed = SMA of first period DX values
           let adx = 0;
           for (let i = 0; i < period; i++) {
             adx += dxValues[i];
           }
           adx /= period;
+          // ADX smoothing: RMA (same as TradingView)
           for (let i = period; i < dxValues.length; i++) {
-            adx = adx - (adx / period) + dxValues[i];
+            adx = (adx * (period - 1) + dxValues[i]) / period;
           }
           return adx;
         }
@@ -8850,6 +9006,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           _refreshId: 0,
           _isRefreshing: false,
           _firstLoad: true,
+          _lastComputeTime: 0,
+          _wsSparklineTimer: null,
           _scoreHistory: [],
           tfData: {},
           classification: {
@@ -8859,6 +9017,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           stats: {
             oiCurrent: null,
             fundingRate: null,
+            realtimeFundingRate: null,
             oiDataStale: false,
             klinesStale: false,
             zPrice: {},
@@ -8867,7 +9026,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           async fetchData(symbol) {
             if (this._isRefreshing) {
               this._pendingRefresh = symbol;
-              return;
+              return false; // Deferred — caller should skip rendering
             }
             const myId = ++this._refreshId;
             this._isRefreshing = true;
@@ -8878,9 +9037,11 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             }
             if (this.symbol !== symbol) {
               this._firstLoad = true;
+              this.tfData = {}; // Clear stale data from previous symbol
             }
             this.stats.oiCurrent = null;
             this.stats.fundingRate = null;
+            this.stats.realtimeFundingRate = null;
             this.stats.oiDataStale = false;
             this.stats.klinesStale = false;
             this.stats.zPrice = {};
@@ -8891,8 +9052,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               if (stored) {
                 const parsed = JSON.parse(stored);
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                  this._scoreHistory = parsed.slice(-21);
+                  this._scoreHistory = parsed.slice(-MF_SPARKLINE_POINTS);
+                } else {
+                  this._scoreHistory = [];
                 }
+              } else {
+                this._scoreHistory = [];
               }
             } catch (e) {
               this._scoreHistory = [];
@@ -8902,7 +9067,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const apiLabels = [];
               for (const tf of MF_TIMEFRAMES) {
                 const coldMin = MF_COLD_START_MIN[tf.key] || 21;
-                const fetchLimit = Math.max(coldMin + 5, 30);
+                const fetchLimit = (() => {
+                  // Need enough bars for lookback + SPARKLINE_POINTS historical composite backfill
+                  // 4H needs: 55 lookback + 8 historical points = 63; 1H needs: 55 + 32 = 87; 1D needs: 55 + 2 = 57
+                  const extra = { '1H': 35, '4H': 10, '1D': 35 };
+                  return Math.max(coldMin + 5, 30) + (extra[tf.key] || 0);
+                })();
                 apiCalls.push(fetchJsonWithTimeout(
                   `https://fapi.binance.com/fapi/v1/klines?symbol=${encodeURIComponent(symbol)}&interval=${tf.klineInterval}&limit=${fetchLimit}`
                   ));
@@ -8911,17 +9081,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   `https://fapi.binance.com/futures/data/openInterestHist?symbol=${encodeURIComponent(symbol)}&period=${tf.oiPeriod}&limit=${fetchLimit}`
                   ));
                 apiLabels.push('oiHist_' + tf.key);
-                apiCalls.push(fetchJsonWithTimeout(
-                  `https://fapi.binance.com/fapi/v1/fundingRate?symbol=${encodeURIComponent(symbol)}&limit=${fetchLimit}`
-                  ));
-                apiLabels.push('frHist_' + tf.key);
               }
+              // Funding rate is a contract-level property — fetch once for the sparkline (4H periods)
+              apiCalls.push(fetchJsonWithTimeout(
+                `https://fapi.binance.com/fapi/v1/fundingRate?symbol=${encodeURIComponent(symbol)}&limit=${MF_SPARKLINE_POINTS + 1}`
+                ));
+              apiLabels.push('frHist');
               apiCalls.push(fetchJsonWithTimeout(
                 `https://fapi.binance.com/fapi/v1/openInterest?symbol=${encodeURIComponent(symbol)}`));
               apiLabels.push('oiCurrent');
               apiCalls.push(fetchJsonWithTimeout(
                 `https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${encodeURIComponent(symbol)}`));
-              apiLabels.push('funding');
+              apiLabels.push('premiumIndex');
               const results = await Promise.allSettled(apiCalls);
               if (this._refreshId !== myId) return;
               const dataMap = {};
@@ -8930,10 +9101,29 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               }
               let anyKlineOk = false;
               let anyOiOk = false;
+              // Process funding rate history once (contract-level, not per-TF)
+              const globalFrHist = [];
+              let lastSettledFr = null;
+              const frHistRes = dataMap['frHist'];
+              if (frHistRes && frHistRes.status === 'fulfilled' && Array.isArray(frHistRes.value) && frHistRes.value.length >= 1) {
+                const raw = frHistRes.value;
+                for (let i = 0; i < raw.length - 1; i++) {
+                  const fr = parseFloat(raw[i].fundingRate);
+                  if (Number.isFinite(fr)) globalFrHist.push(fr);
+                }
+                // Last settled rate = second-to-last entry (last full period, excluding current in-progress)
+                // If only 1 entry, use it
+                const settledIdx = raw.length >= 3 ? raw.length - 2 : raw.length - 1;
+                const settledFr = parseFloat(raw[settledIdx].fundingRate);
+                if (Number.isFinite(settledFr)) lastSettledFr = settledFr;
+              }
+              // Use last settled rate for context row (matches Binance funding history page)
+              if (lastSettledFr !== null) {
+                this.stats.fundingRate = lastSettledFr;
+              }
               for (const tf of MF_TIMEFRAMES) {
                 const klinesRes = dataMap['klines_' + tf.key];
                 const oiHistRes = dataMap['oiHist_' + tf.key];
-                const frHistRes = dataMap['frHist_' + tf.key];
                 const tfData = {
                   closes: [],
                   volumes: [],
@@ -8954,16 +9144,16 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     const h = parseFloat(raw[i][2]);
                     const l = parseFloat(raw[i][3]);
                     const ts = parseInt(raw[i][6]);
-                    if (Number.isFinite(c)) tfData.closes.push(c);
-                    if (Number.isFinite(v)) tfData.volumes.push(v);
-                    if (Number.isFinite(qv)) tfData.quoteVolumes.push(qv);
                     if (Number.isFinite(h) && Number.isFinite(l) && Number.isFinite(c)) {
                       tfData.candles.push({
                         high: h,
                         low: l,
                         close: c
                       });
+                      tfData.closes.push(c);
                     }
+                    if (Number.isFinite(v)) tfData.volumes.push(v);
+                    if (Number.isFinite(qv)) tfData.quoteVolumes.push(qv);
                     if (Number.isFinite(ts)) tfData.klineTimestamps.push(ts);
                   }
                   anyKlineOk = true;
@@ -8995,15 +9185,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     `MultiOI: ${tf.key} OI hist returned ${Array.isArray(oiHistRes.value) ? oiHistRes.value.length : 0} bars (need >=3)`
                     );
                 }
-                if (frHistRes.status === 'fulfilled' && Array.isArray(frHistRes.value) && frHistRes.value.length >=
-                  3) {
-                  const raw = frHistRes.value;
-                  for (let i = 0; i < raw.length - 1; i++) {
-                    const fr = parseFloat(raw[i].fundingRate);
-                    const ts = parseInt(raw[i].fundingTime);
-                    if (Number.isFinite(fr)) tfData.fundingRates.push(fr);
-                  }
-                }
+                // Funding rate history is contract-level, assigned once below
                 if (tfData.klineTimestamps.length > 0 && tfData.oiTimestamps.length > 0) {
                   const kStart = tfData.klineTimestamps[0];
                   const kEnd = tfData.klineTimestamps[tfData.klineTimestamps.length - 1];
@@ -9070,16 +9252,21 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 }
                 this.tfData[tf.key] = tfData;
               }
+              // Assign funding rate history to 4H TF (contract-level, fetched once)
+              if (this.tfData['4H'] && globalFrHist.length > 0) {
+                this.tfData['4H'].fundingRates = globalFrHist.slice(-MF_SPARKLINE_POINTS);
+              }
               if (!anyKlineOk) this.stats.klinesStale = true;
               if (!anyOiOk) this.stats.oiDataStale = true;
               if (dataMap.oiCurrent.status === 'fulfilled' && dataMap.oiCurrent.value && dataMap.oiCurrent.value
                 .openInterest) {
                 this.stats.oiCurrent = parseFloat(dataMap.oiCurrent.value.openInterest);
               }
-              if (dataMap.funding.status === 'fulfilled' && dataMap.funding.value && dataMap.funding.value
-                .lastFundingRate !== undefined) {
-                this.stats.fundingRate = parseFloat(dataMap.funding.value.lastFundingRate);
-                if (!Number.isFinite(this.stats.fundingRate)) this.stats.fundingRate = null;
+              // Real-time funding rate from premiumIndex
+              if (dataMap.premiumIndex.status === 'fulfilled' && dataMap.premiumIndex.value &&
+                dataMap.premiumIndex.value.lastFundingRate !== undefined) {
+                const rtFr = parseFloat(dataMap.premiumIndex.value.lastFundingRate);
+                if (Number.isFinite(rtFr)) this.stats.realtimeFundingRate = rtFr;
               }
             } catch (e) {
               if (this._refreshId !== myId) return;
@@ -9090,7 +9277,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 if (this._pendingRefresh) {
                   const pending = this._pendingRefresh;
                   this._pendingRefresh = null;
-                  Promise.resolve().then(() => this.fetchData(pending));
+                  // Only dispatch if the pending symbol is still the current one
+                  if (pending === this.symbol) {
+                    Promise.resolve().then(() => this.fetchData(pending));
+                  }
                 }
               }
             }
@@ -9131,8 +9321,11 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const oiN = oi.slice(-N);
               const curPrice = closesN[closesN.length - 1];
               const curOi = oiN[oiN.length - 1];
-              const zPrice = _zRobust(curPrice, closesN);
-              const zOi = _zRobust(curOi, oiN);
+              // Compute baseline from all bars except current to avoid self-inclusion bias
+              const closesBaseline = closesN.slice(0, -1);
+              const oiBaseline = oiN.slice(0, -1);
+              const zPrice = closesBaseline.length > 0 ? _zRobust(curPrice, closesBaseline) : NaN;
+              const zOi = oiBaseline.length > 0 ? _zRobust(curOi, oiBaseline) : NaN;
               let adxOk = false;
               let adxValue = NaN;
               if (candles.length >= 28) {
@@ -9202,6 +9395,119 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const workingEl = document.getElementById('multioiWorking');
             if (workingEl) workingEl.style.display = 'none';
             return this.classification;
+          },
+          /**
+           * Backfill historical composite scores at 4H candle boundaries.
+           * For each of the last (MF_SPARKLINE_POINTS - 1) completed 4H candles,
+           * compute a full 3-TF composite score using the data available at that point.
+           * The current live score is always the last point.
+           */
+          _backfillCompositeHistory() {
+            const d4h = this.tfData['4H'];
+            const d1h = this.tfData['1H'];
+            const d1d = this.tfData['1D'];
+            if (!d4h || !d4h.closes || d4h.closes.length < 2) return;
+            // Number of historical points to backfill (current live score = last point)
+            const backfillCount = MF_SPARKLINE_POINTS - 1;
+            // We need the 4H data to have enough bars: lookback + backfillCount
+            const N4h = MF_LOOKBACK_BARS;
+            const totalNeeded4h = N4h + backfillCount;
+            if (d4h.closes.length < N4h + 1) return; // Not enough for even 1 point
+            // Determine how many points we can actually compute
+            const maxPoints = Math.min(backfillCount, d4h.closes.length - N4h);
+            const history = [];
+            for (let p = maxPoints; p >= 1; p--) {
+              // For historical point p, the "current" 4H bar is at index closes.length - 1 - p
+              // The lookback window for Z-score is the N bars before that
+              const endIdx = d4h.closes.length - 1 - p; // the bar being classified
+              const startIdx = endIdx - N4h; // lookback start
+              if (startIdx < 0) continue;
+              // 4H Z-scores
+              const closes4h = d4h.closes.slice(startIdx, endIdx + 1);
+              const oi4h = d4h.oi && d4h.oi.length > endIdx ? d4h.oi.slice(startIdx, endIdx + 1) : [];
+              const curPrice4h = closes4h[closes4h.length - 1];
+              const curOi4h = oi4h.length > 0 ? oi4h[oi4h.length - 1] : NaN;
+              const baselineClose4h = closes4h.slice(0, -1);
+              const baselineOi4h = oi4h.length > 1 ? oi4h.slice(0, -1) : [];
+              const zPrice4h = baselineClose4h.length > 0 ? _zRobust(curPrice4h, baselineClose4h) : NaN;
+              const zOi4h = baselineOi4h.length > 0 ? _zRobust(curOi4h, baselineOi4h) : NaN;
+              // 4H ADX
+              const candles4h = d4h.candles && d4h.candles.length > endIdx ? d4h.candles.slice(Math.max(0, endIdx - 27), endIdx + 1) : [];
+              const adx4h = candles4h.length >= 28 ? _wilderAdx(candles4h, 14) : NaN;
+              // 1H Z-scores: each 4H bar = 4 × 1H bars, so we need data up to 4H bar endIdx
+              // 1H bar index for 4H bar endIdx ≈ endIdx * 4 (approximate, aligned by timestamp)
+              let zPrice1h = NaN, zOi1h = NaN, adx1h = NaN;
+              if (d1h && d1h.closes && d1h.closes.length >= MF_COLD_START_MIN['1H']) {
+                const endIdx1h = Math.min(endIdx * 4 + 3, d1h.closes.length - 1);
+                const startIdx1h = endIdx1h - N4h; // same lookback count
+                if (startIdx1h >= 0) {
+                  const closes1h = d1h.closes.slice(startIdx1h, endIdx1h + 1);
+                  const oi1h = d1h.oi && d1h.oi.length > endIdx1h ? d1h.oi.slice(startIdx1h, endIdx1h + 1) : [];
+                  const curPrice1h = closes1h[closes1h.length - 1];
+                  const curOi1h = oi1h.length > 0 ? oi1h[oi1h.length - 1] : NaN;
+                  const blClose1h = closes1h.slice(0, -1);
+                  const blOi1h = oi1h.length > 1 ? oi1h.slice(0, -1) : [];
+                  zPrice1h = blClose1h.length > 0 ? _zRobust(curPrice1h, blClose1h) : NaN;
+                  zOi1h = blOi1h.length > 0 ? _zRobust(curOi1h, blOi1h) : NaN;
+                  const candles1h = d1h.candles && d1h.candles.length > endIdx1h ? d1h.candles.slice(Math.max(0, endIdx1h - 27), endIdx1h + 1) : [];
+                  adx1h = candles1h.length >= 28 ? _wilderAdx(candles1h, 14) : NaN;
+                }
+              }
+              // 1D Z-scores
+              let zPrice1d = NaN, zOi1d = NaN, adx1d = NaN;
+              if (d1d && d1d.closes && d1d.closes.length >= MF_COLD_START_MIN['1D']) {
+                // Each 4H bar is within a single 1D bar; use the 1D bar that contains this 4H bar
+                // Approximate: 1D bar index ≈ floor(endIdx / 6) (6 × 4H = 24H = 1D)
+                const endIdx1d = Math.min(Math.floor(endIdx / 6), d1d.closes.length - 1);
+                const startIdx1d = endIdx1d - MF_COLD_START_MIN['1D']; // use cold start min as lookback for 1D
+                if (startIdx1d >= 0) {
+                  const closes1d = d1d.closes.slice(startIdx1d, endIdx1d + 1);
+                  const oi1d = d1d.oi && d1d.oi.length > endIdx1d ? d1d.oi.slice(startIdx1d, endIdx1d + 1) : [];
+                  const curPrice1d = closes1d[closes1d.length - 1];
+                  const curOi1d = oi1d.length > 0 ? oi1d[oi1d.length - 1] : NaN;
+                  const blClose1d = closes1d.slice(0, -1);
+                  const blOi1d = oi1d.length > 1 ? oi1d.slice(0, -1) : [];
+                  zPrice1d = blClose1d.length > 0 ? _zRobust(curPrice1d, blClose1d) : NaN;
+                  zOi1d = blOi1d.length > 0 ? _zRobust(curOi1d, blOi1d) : NaN;
+                  const candles1d = d1d.candles && d1d.candles.length > endIdx1d ? d1d.candles.slice(Math.max(0, endIdx1d - 27), endIdx1d + 1) : [];
+                  adx1d = candles1d.length >= 28 ? _wilderAdx(candles1d, 14) : NaN;
+                }
+              }
+              // Classify each TF
+              const scenarios = {};
+              for (const [tfKey, zp, zo, adx] of [['1H', zPrice1h, zOi1h, adx1h], ['4H', zPrice4h, zOi4h, adx4h], ['1D', zPrice1d, zOi1d, adx1d]]) {
+                const adxOk = Number.isFinite(adx) && adx >= MF_ADX_THRESH;
+                if (!Number.isFinite(zp) || !Number.isFinite(zo) || !adxOk) {
+                  scenarios[tfKey] = { idx: 0 };
+                } else if (zp > MF_PRICE_THRESH && zo > MF_OI_THRESH) {
+                  scenarios[tfKey] = { idx: 1 };
+                } else if (zp > MF_PRICE_THRESH && zo < -MF_OI_THRESH) {
+                  scenarios[tfKey] = { idx: 2 };
+                } else if (zp < -MF_PRICE_THRESH && zo > MF_OI_THRESH) {
+                  scenarios[tfKey] = { idx: 3 };
+                } else if (zp < -MF_PRICE_THRESH && zo < -MF_OI_THRESH) {
+                  scenarios[tfKey] = { idx: 4 };
+                } else {
+                  scenarios[tfKey] = { idx: 0 };
+                }
+              }
+              // Compute composite score
+              const WEIGHTS = { 0: 0, 1: 100, 2: 30, 3: -100, 4: -30 };
+              let score = 0;
+              for (const tfKey of ['1H', '4H', '1D']) {
+                const sc = scenarios[tfKey];
+                if (sc) score += (WEIGHTS[sc.idx] || 0) * (MF_TF_WEIGHTS[tfKey] || 0);
+              }
+              score = Math.round(Math.max(-100, Math.min(100, score)));
+              history.push(score);
+            }
+            // Append current live score as the last point
+            if (this.classification && Number.isFinite(this.classification.signalStrength)) {
+              history.push(this.classification.signalStrength);
+            }
+            if (history.length > 0) {
+              this._scoreHistory = history.slice(-MF_SPARKLINE_POINTS);
+            }
           },
           renderQuadrant() {
             const wrap = document.getElementById('multioiQuadrantWrap');
@@ -9552,25 +9858,23 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             }
             const classifiedCount = Object.keys(scenarioGroups).length;
             const mixedType = classifiedCount > 1 ? this._getMixedSubType(scenarioGroups) : null;
-            const fundingMod = this._getFundingModifier(this.stats.fundingRate, scenarioGroups);
             let phrase = '';
             let scenarioColor = 'var(--text)';
             if (classifiedCount === 0) {
               phrase = '<span class="signal-sym">$' + sym +
-                '<\/span> — <span class="signal-action">No clear direction<\/span> on any timeframe. <span class="signal-action">Sit this one out or keep positions small.<\/span>';
+                '<\/span> — <span class="signal-action">No clear direction<\/span> on any timeframe.';
               scenarioColor = '#6B7280';
             } else if (classifiedCount === 1) {
               const group = Object.values(scenarioGroups)[0];
               const tfList = group.tfs.join(', ');
-              const action = this._getActionPhrase(group.name, group.tfs.length, null);
               if (group.tfs.length === 3) {
                 phrase = '<span class="signal-sym">$' + sym +
                   '<\/span> — <span class="signal-scenario" style="color:' + group.color + '">' + group.name +
-                  '<\/span> across all timeframes. ' + fundingMod + action;
+                  '<\/span> across all timeframes.';
               } else {
                 phrase = '<span class="signal-sym">$' + sym +
                   '<\/span> — <span class="signal-scenario" style="color:' + group.color + '">' + group.name +
-                  '<\/span> on <span class="signal-tf">' + tfList + '<\/span>. ' + fundingMod + action;
+                  '<\/span> on <span class="signal-tf">' + tfList + '<\/span>.';
               }
               scenarioColor = group.color;
             } else {
@@ -9581,174 +9885,23 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const allParts = [...parts, ...neutralParts].join(' / ');
               const dominantIdx = this._getDominantScenario(scenarioGroups);
               const dominantDef = MF_SCENARIOS[dominantIdx] || MF_SCENARIOS[0];
-              const dominantTfCount = scenarioGroups[dominantIdx] ? scenarioGroups[dominantIdx].tfs.length : 1;
-              const action = this._getActionPhrase(dominantDef.name, dominantTfCount, mixedType);
               if (mixedType === 'transitional') {
                 phrase = '<span class="signal-sym">$' + sym +
                   '<\/span> — <span class="signal-action">Moving the same way but with different strength:<\/span> ' +
-                  allParts + '. ' + fundingMod + action;
+                  allParts + '.';
               } else if (mixedType === 'conflicting') {
                 phrase = '<span class="signal-sym">$' + sym +
-                  '<\/span> — <span class="signal-action">Timeframes disagree:<\/span> ' + allParts +
-                  '. <span class="signal-action">Cut risk — wait for timeframes to line up.<\/span> ' + fundingMod +
-                  action;
+                  '<\/span> — <span class="signal-action">Timeframes disagree:<\/span> ' + allParts + '.';
               } else {
                 phrase = '<span class="signal-sym">$' + sym +
                   '<\/span> — <span class="signal-action">Momentum is fading on one timeframe:<\/span> ' + allParts +
-                  '. ' + fundingMod + action;
+                  '.';
               }
               scenarioColor = dominantDef.color;
             }
             phraseEl.innerHTML = phrase;
           },
-          _getActionPhrase(scenarioName, tfCount, mixedType) {
-            if (mixedType === 'conflicting') {
-              return '<span class="signal-action">No directional edge while timeframes disagree — stay flat or reduce exposure.<\/span>';
-            }
-            if (mixedType === 'divergent') {
-              switch (scenarioName) {
-                case 'Strong Uptrend':
-                  return '<span class="signal-action">Bullish lean but exhaustion on one timeframe — consider tightening stops.<\/span>';
-                case 'Weak Rally':
-                  return '<span class="signal-action">Cautiously bullish but momentum fading — watch for reversal signs.<\/span>';
-                case 'Strong Downtrend':
-                  return '<span class="signal-action">Bearish lean but selling may be fading on one timeframe — watch for reversal.<\/span>';
-                case 'Exhaustion':
-                  return tfCount >= 2 ?
-                    '<span class="signal-action">Reversal possible — forced selling, not new shorts. Don\'t short into exhaustion.<\/span>' :
-                    '<span class="signal-action">Reversal possible — selling pressure may be fading.<\/span>';
-                default:
-                  return '<span class="signal-action">No clear trading edge right now.<\/span>';
-              }
-            }
-            switch (scenarioName) {
-              case 'Strong Uptrend':
-                return tfCount >= 2 ?
-                  '<span class="signal-action">Strong bullish — safe to hold long positions.<\/span>' :
-                  '<span class="signal-action">Bullish — but only one timeframe agrees.<\/span>';
-              case 'Weak Rally':
-                return tfCount >= 2 ?
-                  '<span class="signal-action">Cautiously bullish — needs more buying volume to trust this move.<\/span>' :
-                  '<span class="signal-action">Cautiously bullish — this could just be shorts closing out, not real buying.<\/span>';
-              case 'Strong Downtrend':
-                return tfCount >= 2 ?
-                  '<span class="signal-action">Bearish — sellers dominate, avoid long positions.<\/span>' :
-                  '<span class="signal-action">Bearish — but only one timeframe agrees.<\/span>';
-              case 'Exhaustion':
-                return tfCount >= 2 ?
-                  '<span class="signal-action">Reversal possible — forced selling, not new shorts. Don\'t short into exhaustion.<\/span>' :
-                  '<span class="signal-action">Reversal possible — selling pressure may be fading.<\/span>';
-              default:
-                return '<span class="signal-action">No clear trading edge right now.<\/span>';
-            }
-          },
-          _getConvictionModifier(score, scenarioGroups, mixedType) {
-            const absScore = Math.abs(score);
-            if (absScore === 0) {
-              if (mixedType === 'divergent') {
-                return '<span class="signal-action">The combined score is neutral (0), but exhaustion on one timeframe weakens conviction.<\/span> ';
-              }
-              return '<span class="signal-action">No real bias from the combined score.<\/span>';
-            }
-            const scoreSign = score > 0 ? '+' : '';
-            const scoreStr = scoreSign + score;
-            const hasBullish = Object.keys(scenarioGroups).some(idx => {
-              const i = parseInt(idx);
-              return i === 1 || i === 2;
-            });
-            const hasBearish = Object.keys(scenarioGroups).some(idx => {
-              const i = parseInt(idx);
-              return i === 3;
-            });
-            const hasExhaustion = Object.keys(scenarioGroups).some(idx => {
-              const i = parseInt(idx);
-              return i === 4;
-            });
-            if (mixedType === 'conflicting') {
-              const dirLabel = score > 0 ? 'bullish' : 'bearish';
-              return '<span class="signal-action">The combined score leans ' + dirLabel + ' (' + scoreStr +
-                '), but timeframes disagree.<\/span> ';
-            }
-            if (mixedType === 'divergent') {
-              let dirLabel;
-              if (score > 0) {
-                dirLabel = 'bullish';
-              } else if (hasBearish) {
-                dirLabel = 'bearish';
-              } else {
-                dirLabel = 'fading momentum';
-              }
-              if (absScore >= 30) {
-                return '<span class="signal-action">The combined score leans ' + dirLabel + ' (' + scoreStr +
-                  '), but exhaustion on one timeframe weakens conviction.<\/span> ';
-              } else {
-                return '<span class="signal-action">The combined score barely leans ' + dirLabel + ' (' + scoreStr +
-                  '), but exhaustion on one timeframe weakens conviction.<\/span> ';
-              }
-            }
-            let aligned, dirLabel;
-            if (hasExhaustion && !hasBullish && !hasBearish) {
-              aligned = score < 0;
-              dirLabel = 'fading momentum';
-            } else if (score > 0) {
-              dirLabel = 'bullish';
-              aligned = hasBullish;
-            } else {
-              dirLabel = 'bearish';
-              aligned = hasBearish;
-            }
-            if (aligned) {
-              if (absScore >= 30) {
-                return '<span class="signal-action">The combined score backs the ' + dirLabel + ' view (' + scoreStr +
-                  ').<\/span> ';
-              } else {
-                return '<span class="signal-action">The combined score barely leans ' + dirLabel + ' (' + scoreStr +
-                  ').<\/span> ';
-              }
-            } else {
-              return '<span class="signal-action">The combined score is ' + dirLabel + ' (' + scoreStr +
-                ') — contradicts the pattern above.<\/span> ';
-            }
-          },
-          _getFundingModifier(fundingRate, scenarioGroups) {
-            if (!Number.isFinite(fundingRate)) return '';
-            const hasBullish = Object.keys(scenarioGroups).some(idx => {
-              const i = parseInt(idx);
-              return i === 1 || i === 2;
-            });
-            const hasBearish = Object.keys(scenarioGroups).some(idx => {
-              const i = parseInt(idx);
-              return i === 3;
-            });
-            const hasExhaustion = Object.keys(scenarioGroups).some(idx => {
-              const i = parseInt(idx);
-              return i === 4;
-            });
-            if (fundingRate > 0.001) {
-              if (hasBullish) {
-                return '<span class="signal-action">High funding — too many traders are long. A long squeeze could push price down fast.<\/span> ';
-              } else if (hasBearish) {
-                return '<span class="signal-action">High funding — longs are paying to hold positions. If they give up, selling could accelerate.<\/span> ';
-              } else if (hasExhaustion) {
-                return '<span class="signal-action">High funding despite fading momentum — longs are paying premium in a weakening move.<\/span> ';
-              }
-              return '<span class="signal-action">High funding — long side is crowded.<\/span> ';
-            } else if (fundingRate > 0.0003) {
-              return '<span class="signal-action">Funding slightly positive.<\/span> ';
-            } else if (fundingRate < -0.001) {
-              if (hasBearish) {
-                return '<span class="signal-action">Negative funding — too many traders are short. A short squeeze could push price up fast.<\/span> ';
-              } else if (hasBullish) {
-                return '<span class="signal-action">Negative funding — shorts are paying to stay in. If they get squeezed out, price could jump.<\/span> ';
-              } else if (hasExhaustion) {
-                return '<span class="signal-action">Negative funding with exhaustion — shorts are paying, but selling pressure may be fading regardless.<\/span> ';
-              }
-              return '<span class="signal-action">Negative funding — short side is crowded.<\/span> ';
-            } else if (fundingRate < -0.0003) {
-              return '<span class="signal-action">Funding slightly negative.<\/span> ';
-            }
-            return '';
-          },
+
           _getMixedSubType(scenarioGroups) {
             const dirs = Object.keys(scenarioGroups).map(idx => {
               const i = parseInt(idx);
@@ -9766,6 +9919,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             return 'transitional';
           },
           _getDominantScenario(scenarioGroups) {
+            // Priority for ties: SU > SD > WR > EX (higher priority wins when weights are equal)
             const SCENARIO_PRIORITY = {
               1: 4,
               3: 3,
@@ -9773,15 +9927,16 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               4: 1
             };
             let best = 0,
-              bestScore = 0;
-            const entries = Object.entries(scenarioGroups).reverse();
+              bestScore = -1;
+            const entries = Object.entries(scenarioGroups);
             for (const [idx, group] of entries) {
               let weightSum = 0;
               for (const tf of group.tfs) {
                 weightSum += (MF_TF_WEIGHTS[tf] || 0);
               }
               const score = weightSum + (SCENARIO_PRIORITY[idx] || 0) * 0.1;
-              if (score >= bestScore) {
+              // Strict > ensures first-encountered wins ties (SU > SD > WR > EX)
+              if (score > bestScore) {
                 best = parseInt(idx);
                 bestScore = score;
               }
@@ -9791,6 +9946,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           render(classification) {
             this.renderQuadrant();
             this.renderSignalRemark();
+            this._lastComputeTime = Date.now();
             const compositeEl = document.getElementById('multioiCompositeSignal');
             if (compositeEl) {
               const score = classification.signalStrength || 0;
@@ -9810,18 +9966,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const dominantIdx = Object.keys(scenarioGroups).length > 0 ? this._getDominantScenario(scenarioGroups) :
                 0;
               const isExhaustionDominant = dominantIdx === 4;
-              if (isExhaustionDominant) {
-                if (score <= -30) {
-                  dirWord = 'Potential Reversal';
-                  dirClass = 'slightly-bearish';
-                } else if (score < 0) {
+              const classifiedCount = Object.keys(scenarioGroups).length;
+              const mixedType = classifiedCount > 1 ? this._getMixedSubType(scenarioGroups) : null;
+              if (mixedType === 'conflicting') {
+                // Timeframes genuinely oppose each other — always show Mixed Signals
+                dirWord = 'Mixed Signals';
+                dirClass = 'flat';
+              } else if (isExhaustionDominant) {
+                if (score < 0) {
                   dirWord = 'Potential Reversal';
                   dirClass = 'slightly-bearish';
                 } else if (score === 0) {
                   dirWord = 'Potential Reversal';
-                  dirClass = 'flat';
-                } else if (score < 30) {
-                  dirWord = 'Fading Momentum';
                   dirClass = 'flat';
                 } else {
                   dirWord = 'Fading Momentum';
@@ -9850,7 +10006,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 dirWord = 'Mixed Signals';
                 dirClass = 'flat';
               }
-              if (isExhaustionDominant && score > 0) {
+              if (isExhaustionDominant && score > 0 && mixedType !== 'conflicting') {
                 dirWord = 'Mixed Signals';
                 dirClass = 'flat';
               }
@@ -9862,7 +10018,14 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               if (scoreValueEl) {
                 const sign = score > 0 ? '+' : '';
                 scoreValueEl.textContent = sign + score;
-                scoreValueEl.className = 'composite-score-value ' + dirClass;
+                // Score color always reflects the actual score direction, independent of direction label
+                let scoreClass;
+                if (score >= 30) scoreClass = 'bullish';
+                else if (score > 0) scoreClass = 'slightly-bullish';
+                else if (score === 0) scoreClass = 'flat';
+                else if (score > -30) scoreClass = 'slightly-bearish';
+                else scoreClass = 'bearish';
+                scoreValueEl.className = 'composite-score-value ' + scoreClass;
               }
               if (summaryEl) {
                 const tfSummaryParts = [];
@@ -9953,6 +10116,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const warnings = [];
               if (this.stats.oiDataStale) warnings.push('OI data missing or stale');
               if (this.stats.klinesStale) warnings.push('Price kline data incomplete');
+              if (this._lastComputeTime > 0 && Date.now() - this._lastComputeTime > 60000) {
+                warnings.push('Composite score stale — awaiting REST refresh');
+              }
               if (warnings.length > 0) {
                 warnEl.innerHTML = '&#x26A0; ' + warnings.join(' | ');
                 warnEl.style.display = 'flex';
@@ -9965,16 +10131,20 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const hasAnyScenario = Object.values(classification.scenarios).some(sc => sc && sc.idx > 0);
               discEl.style.display = hasAnyScenario ? 'block' : 'none';
             }
+            this._backfillCompositeHistory();
             this.renderCompositeSparkline();
             this.renderPriceSparkline();
             this.renderFundingSparkline();
+            this.renderOiSparkline();
             this.renderVolumeSparkline();
           },
           async refresh(symbol) {
             if (!symbol) return;
             this.symbol = symbol;
             try {
-              await this.fetchData(symbol);
+              const result = await this.fetchData(symbol);
+              // If fetchData returned early (deferred), skip rendering with stale data
+              if (result === false) return;
               const classification = this.computeClassification();
               this.render(classification);
             } catch (e) {
@@ -10005,6 +10175,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               clearInterval(this._slowTimer);
               this._slowTimer = null;
             }
+            if (this._wsSparklineTimer) {
+              clearTimeout(this._wsSparklineTimer);
+              this._wsSparklineTimer = null;
+            }
             this._isRefreshing = false;
           },
           renderContextRow() {
@@ -10033,8 +10207,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 '<\/span><span class="value" style="color:var(--warn);font-weight:700">' + oiStr +
                 '<\/span><\/span>');
             }
-            if (Number.isFinite(this.stats.fundingRate)) {
-              const fr = this.stats.fundingRate;
+            // Prefer real-time funding rate; fall back to last settled rate
+            const displayFr = Number.isFinite(this.stats.realtimeFundingRate)
+              ? this.stats.realtimeFundingRate
+              : this.stats.fundingRate;
+            if (Number.isFinite(displayFr)) {
+              const fr = displayFr;
               const frPct = (fr * 100).toFixed(6);
               const sign = fr > 0 ? '+' : '';
               let frColor = 'var(--text)';
@@ -10042,9 +10220,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               else if (fr > 0.0003) frColor = 'var(--warn)';
               else if (fr < -0.001) frColor = '#F23645';
               else if (fr < -0.0003) frColor = '#5B8CFF';
-              items.push(
-                '<span class="multioi-context-item"><span class="label">Funding:<\/span><span class="value" style="color:' +
-                frColor + ';font-weight:700">' + sign + frPct + '%<\/span><\/span>');
+              let frHtml = '<span class="multioi-context-item"><span class="label">Funding:<\/span><span class="value" style="color:' +
+                frColor + ';font-weight:700">' + sign + frPct + '%<\/span><\/span>';
+              items.push(frHtml);
             }
             if (items.length >= 2) {
               items.splice(1, 0, '<br>');
@@ -10057,17 +10235,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           renderCompositeSparkline() {
             const canvas = document.getElementById('compositeSparklineCanvas');
             if (!canvas) return;
-            const score = this.classification ? this.classification.signalStrength : 0;
-            if (this._scoreHistory.length === 0 || this._scoreHistory[this._scoreHistory.length - 1] !== score) {
-              this._scoreHistory.push(score);
-              if (this._scoreHistory.length > 21) this._scoreHistory.shift();
-            }
+            // Score history is now managed by _backfillCompositeHistory() — just render it
+            const history = this._scoreHistory;
             try {
               const key = 'mf_scoreHistory_' + (this.symbol || '');
-              localStorage.setItem(key, JSON.stringify(this._scoreHistory));
+              localStorage.setItem(key, JSON.stringify(history));
             } catch (e) {}
-            const history = this._scoreHistory;
-            if (history.length < 2) return;
             this._drawSparkline(canvas, history, {
               zeroLine: true,
               fillPositive: '#26D4AC',
@@ -10075,7 +10248,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               linePositive: '#26D4AC',
               lineNegative: '#F23645',
             });
-            const lastVal = history[history.length - 1];
+            const lastVal = history.length > 0 ? history[history.length - 1] : NaN;
             const lastEl = document.getElementById('compositeLastVal');
             if (lastEl && Number.isFinite(lastVal)) lastEl.textContent = (lastVal >= 0 ? '+' : '') + lastVal.toFixed(
               0);
@@ -10084,13 +10257,15 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const canvas = document.getElementById('priceSparklineCanvas');
             if (!canvas) return;
             const d = this.tfData['4H'];
-            if (!d || !d.closes || d.closes.length < 2) return;
-            const history = d.closes.slice(-21);
-            if (history.length < 2) return;
-            const lastPrice = history[history.length - 1];
-            const firstPrice = history[0];
-            const up = lastPrice >= firstPrice;
-            this._drawSparkline(canvas, history, {
+            const priceHistory = (d && d.closes) ? d.closes.slice(-MF_SPARKLINE_POINTS) : [];
+            // Replace last point with real-time price if available
+            if (priceHistory.length > 0 && Number.isFinite(state.currentPrice)) {
+              priceHistory[priceHistory.length - 1] = state.currentPrice;
+            }
+            const lastPrice = priceHistory.length > 0 ? priceHistory[priceHistory.length - 1] : NaN;
+            const firstPrice = priceHistory.length > 0 ? priceHistory[0] : NaN;
+            const up = Number.isFinite(lastPrice) && Number.isFinite(firstPrice) && lastPrice >= firstPrice;
+            this._drawSparkline(canvas, priceHistory, {
               zeroLine: false,
               fillPositive: up ? '#5B8CFF' : '#F23645',
               fillNegative: up ? '#5B8CFF' : '#F23645',
@@ -10108,20 +10283,65 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const canvas = document.getElementById('fundingSparklineCanvas');
             if (!canvas) return;
             const d = this.tfData['4H'];
-            if (!d || !d.fundingRates || d.fundingRates.length < 2) return;
-            const history = d.fundingRates.slice(-21);
-            if (history.length < 2) return;
-            this._drawSparkline(canvas, history, {
+            const frHistory = (d && d.fundingRates) ? d.fundingRates.slice(-MF_SPARKLINE_POINTS) : [];
+            // Replace last point with real-time funding rate if available
+            if (frHistory.length > 0 && Number.isFinite(this.stats.realtimeFundingRate)) {
+              frHistory[frHistory.length - 1] = this.stats.realtimeFundingRate;
+            }
+            this._drawSparkline(canvas, frHistory, {
               zeroLine: true,
               fillPositive: '#A78BFA',
               fillNegative: '#A78BFA',
               linePositive: '#A78BFA',
               lineNegative: '#A78BFA',
             });
-            const lastFr = history[history.length - 1];
+            const lastFr = frHistory.length > 0 ? frHistory[frHistory.length - 1] : NaN;
             const lastEl = document.getElementById('fundingLastVal');
             if (lastEl && Number.isFinite(lastFr)) lastEl.textContent = (lastFr >= 0 ? '+' : '') + (lastFr * 100)
               .toFixed(6) + '%';
+          },
+          renderOiSparkline() {
+            const canvas = document.getElementById('oiSparklineCanvas');
+            if (!canvas) return;
+            const d = this.tfData['4H'];
+            const rawOi = (d && d.oi) ? d.oi.slice(-MF_SPARKLINE_POINTS) : [];
+            const closes = (d && d.closes) ? d.closes.slice(-MF_SPARKLINE_POINTS) : [];
+            // Align arrays to same length to avoid index mismatch
+            const len = Math.min(rawOi.length, closes.length);
+            // Compute notional values: OI × price for each point
+            const oiNotionalHistory = [];
+            for (let i = 0; i < len; i++) {
+              if (Number.isFinite(rawOi[i]) && Number.isFinite(closes[i])) {
+                oiNotionalHistory.push(rawOi[i] * closes[i]);
+              } else if (Number.isFinite(rawOi[i])) {
+                oiNotionalHistory.push(rawOi[i]);
+              }
+            }
+            // Replace last point with real-time notional if available
+            if (oiNotionalHistory.length > 0) {
+              const rtOi = parseFloat(this.stats.oiCurrent);
+              const rtPrice = state.currentPrice;
+              if (Number.isFinite(rtOi) && Number.isFinite(rtPrice)) {
+                oiNotionalHistory[oiNotionalHistory.length - 1] = rtOi * rtPrice;
+              } else if (Number.isFinite(rtOi)) {
+                oiNotionalHistory[oiNotionalHistory.length - 1] = rtOi;
+              }
+            }
+            const lastOi = oiNotionalHistory.length > 0 ? oiNotionalHistory[oiNotionalHistory.length - 1] : NaN;
+            const firstOi = oiNotionalHistory.length > 0 ? oiNotionalHistory[0] : NaN;
+            const up = Number.isFinite(lastOi) && Number.isFinite(firstOi) && lastOi >= firstOi;
+            this._drawSparkline(canvas, oiNotionalHistory, {
+              zeroLine: false,
+              fillPositive: up ? '#F5A623' : '#E74C3C',
+              fillNegative: up ? '#F5A623' : '#E74C3C',
+              linePositive: up ? '#F5A623' : '#E74C3C',
+              lineNegative: up ? '#F5A623' : '#E74C3C',
+              fillBaseline: 'bottom',
+            });
+            const lastEl = document.getElementById('oiLastVal');
+            if (lastEl && Number.isFinite(lastOi)) {
+              lastEl.textContent = '$' + formatOiValue(lastOi);
+            }
           },
           renderVolumeSparkline() {
             const canvas = document.getElementById('volumeSparklineCanvas');
@@ -10129,10 +10349,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const d = this.tfData['4H'];
             const volArr = (d && d.quoteVolumes && d.quoteVolumes.length >= 2) ? d.quoteVolumes : (d && d.volumes ? d
               .volumes : []);
-            if (volArr.length < 2) return;
-            const history = volArr.slice(-21);
-            if (history.length < 2) return;
-            this._drawSparkline(canvas, history, {
+            const volHistory = volArr.slice(-MF_SPARKLINE_POINTS);
+            this._drawSparkline(canvas, volHistory, {
               zeroLine: false,
               fillPositive: '#5B8CFF',
               fillNegative: '#5B8CFF',
@@ -10141,7 +10359,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               lineWidth: 2,
               fillBaseline: 'bottom',
             });
-            const lastVol = history[history.length - 1];
+            const lastVol = volHistory.length > 0 ? volHistory[volHistory.length - 1] : NaN;
             const lastEl = document.getElementById('volumeLastVal');
             if (lastEl && Number.isFinite(lastVol)) {
               lastEl.textContent = '$' + formatUsdtVolume(lastVol);
@@ -10151,12 +10369,21 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const dpr = window.devicePixelRatio || 1;
             const rect = canvas.getBoundingClientRect();
             if (rect.width === 0 || rect.height === 0) return;
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
+            canvas.width = Math.floor(rect.width * dpr);
+            canvas.height = Math.floor(rect.height * dpr);
             const ctx = canvas.getContext('2d');
             ctx.scale(dpr, dpr);
             const W = rect.width;
             const H = rect.height;
+            // Fallback: draw placeholder when insufficient data
+            if (!history || history.length < 2) {
+              ctx.fillStyle = 'rgba(123, 135, 148, 0.4)';
+              ctx.font = '11px monospace';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText('Awaiting data\u2026', W / 2, H / 2);
+              return;
+            }
             let min = Math.min(...history);
             let max = Math.max(...history);
             if (opts.zeroLine) {
@@ -10221,14 +10448,23 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           },
           async _refreshSlowData(symbol) {
             try {
+              // Fetch latest settled funding rate from history endpoint
+              const frHistRes = await fetchJsonWithTimeout(
+                `https://fapi.binance.com/fapi/v1/fundingRate?symbol=${encodeURIComponent(symbol)}&limit=3`);
+              if (frHistRes && Array.isArray(frHistRes) && frHistRes.length >= 2) {
+                const settledFr = parseFloat(frHistRes[frHistRes.length - 2].fundingRate);
+                if (Number.isFinite(settledFr)) {
+                  this.stats.fundingRate = settledFr;
+                }
+              }
+              // Update real-time funding rate from premiumIndex
               const fundingRes = await fetchJsonWithTimeout(
                 `https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${encodeURIComponent(symbol)}`);
               if (fundingRes && fundingRes.lastFundingRate !== undefined) {
-                this.stats.fundingRate = parseFloat(fundingRes.lastFundingRate);
-                if (!Number.isFinite(this.stats.fundingRate)) this.stats.fundingRate = null;
+                const rtFr = parseFloat(fundingRes.lastFundingRate);
+                if (Number.isFinite(rtFr)) this.stats.realtimeFundingRate = rtFr;
               }
               this.renderContextRow();
-              this.renderSignalRemark();
             } catch (e) {
               console.warn('MultiOI: slow data refresh error', e);
             }
@@ -10414,14 +10650,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               canvasId: 'compositeSparklineCanvas',
               valId: 'compositeHoverVal',
               getHistory: () => this._scoreHistory,
+              // Composite score is already real-time — no last-point override
+              realtimeValue: null,
               format: v => (v >= 0 ? '+' : '') + v.toFixed(0)
             }, {
               canvasId: 'priceSparklineCanvas',
               valId: 'priceHoverVal',
               getHistory: () => {
                 const d = this.tfData['4H'];
-                return d && d.closes ? d.closes.slice(-21) : [];
+                return d && d.closes ? d.closes.slice(-MF_SPARKLINE_POINTS) : [];
               },
+              // Price last close is already the current candle — no override needed
+              realtimeValue: null,
               format: v => '$' + v.toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 8
@@ -10431,18 +10671,50 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               valId: 'volumeHoverVal',
               getHistory: () => {
                 const d = this.tfData['4H'];
-                return (d && d.quoteVolumes && d.quoteVolumes.length >= 2) ? d.quoteVolumes.slice(-21) : (d && d
-                  .volumes ? d.volumes.slice(-21) : []);
+                return (d && d.quoteVolumes && d.quoteVolumes.length >= 2) ? d.quoteVolumes.slice(-MF_SPARKLINE_POINTS) : (d && d
+                  .volumes ? d.volumes.slice(-MF_SPARKLINE_POINTS) : []);
               },
+              realtimeValue: null,
               format: v => '$' + formatUsdtVolume(v)
             }, {
               canvasId: 'fundingSparklineCanvas',
               valId: 'fundingHoverVal',
               getHistory: () => {
                 const d = this.tfData['4H'];
-                return d && d.fundingRates ? d.fundingRates.slice(-21) : [];
+                return d && d.fundingRates ? d.fundingRates.slice(-MF_SPARKLINE_POINTS) : [];
               },
+              // Last point: show real-time estimated next rate
+              realtimeValue: () => Number.isFinite(this.stats.realtimeFundingRate) ? this.stats.realtimeFundingRate : null,
               format: v => (v >= 0 ? '+' : '') + (v * 100).toFixed(6) + '%'
+            }, {
+              canvasId: 'oiSparklineCanvas',
+              valId: 'oiHoverVal',
+              getHistory: () => {
+                const d = this.tfData['4H'];
+                const rawOi = (d && d.oi) ? d.oi.slice(-MF_SPARKLINE_POINTS) : [];
+                const closes = (d && d.closes) ? d.closes.slice(-MF_SPARKLINE_POINTS) : [];
+                // Align arrays to same length to avoid index mismatch
+                const len = Math.min(rawOi.length, closes.length);
+                // Compute notional: OI × price
+                const notional = [];
+                for (let i = 0; i < len; i++) {
+                  if (Number.isFinite(rawOi[i]) && Number.isFinite(closes[i])) {
+                    notional.push(rawOi[i] * closes[i]);
+                  } else if (Number.isFinite(rawOi[i])) {
+                    notional.push(rawOi[i]);
+                  }
+                }
+                return notional;
+              },
+              // Last point: show real-time notional (OI × price)
+              realtimeValue: () => {
+                const rtOi = Number.isFinite(this.stats.oiCurrent) ? parseFloat(this.stats.oiCurrent) : null;
+                const rtPrice = state.currentPrice;
+                if (Number.isFinite(rtOi) && Number.isFinite(rtPrice)) return rtOi * rtPrice;
+                if (Number.isFinite(rtOi)) return rtOi;
+                return null;
+              },
+              format: v => '$' + formatOiValue(v)
             }, ];
             for (const sm of sparklineMap) {
               const canvas = document.getElementById(sm.canvasId);
@@ -10454,7 +10726,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 const x = e.clientX - rect.left;
                 const idx = Math.round((x / rect.width) * (history.length - 1));
                 const clampedIdx = Math.max(0, Math.min(history.length - 1, idx));
-                const val = history[clampedIdx];
+                // For the last point, use the real-time value if available
+                let val = history[clampedIdx];
+                if (clampedIdx === history.length - 1 && sm.realtimeValue) {
+                  const rtv = typeof sm.realtimeValue === 'function' ? sm.realtimeValue() : sm.realtimeValue;
+                  if (Number.isFinite(rtv)) val = rtv;
+                }
                 const valEl = document.getElementById(sm.valId);
                 if (valEl && Number.isFinite(val)) {
                   valEl.textContent = sm.format(val);
@@ -10501,6 +10778,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           else saveStored(STORAGE.symbol, next);
           state.currentPrice = null;
           state.prevPrice = null;
+          state.vol24h = null;
+          state.pct24h = null;
           state.lastTradeTime = null;
           state.lastMessageTime = null;
           state.msgsInWindow = 0;
@@ -11049,17 +11328,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     };
                   }
                   state.rankings.fundingData = Array.from(state.rankings.fundingMap.values());
+                  // Push real-time funding rate to OI Price Panel
                   if (oiPricePanel.symbol) {
                     const wsFunding = state.rankings.fundingMap.get(oiPricePanel.symbol);
                     if (wsFunding && Number.isFinite(wsFunding.fundingRate)) {
-                      if (oiPricePanel.stats.fundingRate !== wsFunding.fundingRate) {
-                        oiPricePanel.stats.fundingRate = wsFunding.fundingRate;
+                      if (oiPricePanel.stats.realtimeFundingRate !== wsFunding.fundingRate) {
+                        oiPricePanel.stats.realtimeFundingRate = wsFunding.fundingRate;
                         oiPricePanel.renderContextRow();
+                        // Update funding title immediately
+                        const fr = wsFunding.fundingRate;
                         const frEl = document.getElementById('fundingLastVal');
-                        if (frEl) {
-                          const fr = wsFunding.fundingRate;
-                          frEl.textContent = (fr >= 0 ? '+' : '') + (fr * 100).toFixed(6) + '%';
-                        }
+                        if (frEl && Number.isFinite(fr)) frEl.textContent = (fr >= 0 ? '+' : '') + (fr * 100).toFixed(6) + '%';
+                        oiPricePanel.renderFundingSparkline();
                       }
                     }
                   }
@@ -11421,6 +11701,29 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           fetchTrackerKlines();
         };
         const fetchTrackerKlines = async () => {
+          // Phase 1: Load from sessionStorage cache for instant display
+          for (let i = 0; i < stateTracker.symbols.length; i++) {
+            const sym = stateTracker.symbols[i];
+            if (!sym) continue;
+            if (stateTracker.cards[i] && stateTracker.cards[i].candles.length > 0) continue; // already have data
+            try {
+              const cacheKey = `pv_tk_${sym}_${stateTracker.interval}`;
+              const cached = sessionStorage.getItem(cacheKey);
+              if (cached) {
+                const parsed = JSON.parse(cached);
+                if (parsed.candles && Array.isArray(parsed.candles) && parsed.candles.length > 0) {
+                  // Only use cache if less than 5 minutes old
+                  if (!parsed.savedAt || (Date.now() - parsed.savedAt) < 300000) {
+                    stateTracker.cards[i].candles = parsed.candles;
+                    stateTracker.cards[i].dirty = true;
+                  }
+                }
+              }
+            } catch {}
+          }
+          // Show cached data immediately before waiting for API
+          updateTrackerUI();
+          // Phase 2: Refresh from REST API
           const fetchPromises = [];
           for (let i = 0; i < stateTracker.symbols.length; i++) {
             const sym = stateTracker.symbols[i];
@@ -11473,10 +11776,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               if (Number.isFinite(last.open) && last.open !== 0) {
                 const diff = last.close - last.open;
                 const pct = (diff / last.open) * 100;
-                const volUsdt = Number.isFinite(last.quoteVolume) ? last.quoteVolume : (Number.isFinite(last.volume) ?
-                  last.volume : null);
+                const volUsdt = Number.isFinite(last.quoteVolume) ? last.quoteVolume : (Number.isFinite(last.volume) ? last.volume : null);
                 const volText = Number.isFinite(volUsdt) ? `, ${formatUsdtVolume(volUsdt)}` : '';
-                changeEl.textContent = `${diff >=0 ? '+' : ''}${pct.toFixed(2)}%${volText}`;
+                changeEl.textContent = `${diff >= 0 ? '+' : ''}${pct.toFixed(2)}%${volText}`;
                 changeEl.style.color = diff >= 0 ? 'var(--good-bright)' : 'var(--bad)';
               }
             }
@@ -11678,6 +11980,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 oiPricePanel.renderCompositeSparkline();
                 oiPricePanel.renderPriceSparkline();
                 oiPricePanel.renderFundingSparkline();
+                oiPricePanel.renderOiSparkline();
                 oiPricePanel.renderVolumeSparkline();
               }
             }, 120);
@@ -12312,6 +12615,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             level: 'error'
           };
           updateStatus();
+          oiPricePanel.stopAutoRefresh();
           clearReconnectTimer();
           if (state.rankings.reconnectTimer) {
             clearTimeout(state.rankings.reconnectTimer);
@@ -12383,6 +12687,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             try {
               await fetchTrackerKlines();
             } catch {}
+          }
+          // Restart OI panel auto-refresh after reconnect
+          if (oiPricePanel.symbol && state.isRunning) {
+            oiPricePanel.startAutoRefresh(oiPricePanel.symbol);
           }
         };
         window.addEventListener('offline', handleNetworkOffline);
@@ -12482,8 +12790,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             bias: Short), and <em>Exhaustion</em> (positions closing, move may be ending — bias: Watch for Reversal). A
             Composite Signal Score summarizes the overall directional lean across all three timeframes at a glance
             (Bullish Scenario, Bearish Scenario, or No Clear Scenario). Built-in noise filters prevent false signals by
-            only classifying when the data is sufficient and the market is trending. Four sparklines (Score, Price,
-            Volume, Funding) provide visual soft context at your discretion. All data is live from Binance with
+            only classifying when the data is sufficient and the market is trending. Five sparklines (Score, Price,
+            Volume, Funding, OI) provide visual soft context at your discretion. All data is live from Binance with
             real-time WebSocket updates.</li>
           <li><strong>Multi-Type Alerts:</strong> Set price alerts or funding rate alerts with audio notifications and
             visual popups. Each of the four alert slots supports any alert type — mix and match as needed. All alerts
@@ -13006,9 +13314,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               only provides 30 days of daily OI history — this is a hard API constraint, not a design choice. While the
               lookback windows differ, the Z-score normalization still allows meaningful cross-timeframe comparison
               since each TF self-calibrates to its own recent range. Each timeframe classifies independently, and you
-              decide how to weigh them based on your trading style. Four sparklines below the composite signal provide
-              visual soft context: the composite score trend, 4H price direction, 4H quote volume (USDT), and 4H funding
-              rate history — use them at your discretion to add conviction or caution to your reading.</p>
+              decide how to weigh them based on your trading style. Five sparklines below the composite signal provide
+              visual soft context: the composite score trend, 4H price direction, 4H quote volume (USDT), 4H funding
+              rate history, and 4H OI notional — use them at your discretion to add conviction or caution to your reading.</p>
             <h2>The Four Scenarios — And What to Do About Each</h2>
             <p>For each timeframe, Multi OI classifies the market into one of four scenarios when both the Robust price
               Z-score and the Robust OI Z-score breach their respective thresholds (|Z_Price| &gt; 1.5, |Z_OI| &gt;
@@ -13139,26 +13447,31 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               it could be because none of the thresholds are breached, the market is not trending (ADX below 20), or
               there is not enough data yet (cold start guard).</p>
             <h3>Sparklines — Visual Soft Context (use at your discretion)</h3>
-            <p>Four sparklines appear below the composite signal row, providing visual context at a glance. Unlike the
+            <p>Five sparklines appear below the composite signal row, providing visual context at a glance. Unlike the
               hard filters, sparklines do not affect classification — they are advisory tools that help you form your
               own judgment about the quality and context of the current signal.</p>
             <ul>
-              <li><strong>Composite Score Sparkline</strong> — Shows the last 21 values of the composite signal score. A
+              <li><strong>Composite Score Sparkline</strong> — Shows the last 9 composite signal scores at 4H candle intervals. A
                 rising line means conviction is strengthening across timeframes; a falling line means it is
-                deteriorating. This is particularly useful for spotting transitions before they hit the quadrant — if
+                deteriorating. Each historical point is backfilled using the same 3-TF (1H, 4H, 1D) Z-score + ADX classification as the live score, enabling direct comparison with price, volume, funding, and OI changes over the same 4H periods. This is particularly useful for spotting transitions before they hit the quadrant — if
                 the score line is heading toward zero from bullish territory, a scenario change may be coming.</li>
-              <li><strong>Price Sparkline (4H)</strong> — Shows the last 21 four-hour close prices. Use this to gauge
+              <li><strong>Price Sparkline (4H)</strong> — Shows the last 9 four-hour close prices. Use this to gauge
                 whether price is trending, ranging, or at an extreme. A Strong Uptrend signal combined with a price
                 sparkline going parabolic may indicate the move is overextended, while a Strong Uptrend with price just
                 turning up suggests an early entry.</li>
-              <li><strong>Volume Sparkline (4H)</strong> — Shows the last 21 four-hour quote volumes (USDT). Rising
+              <li><strong>Volume Sparkline (4H)</strong> — Shows the last 9 four-hour quote volumes (USDT). Rising
                 volume confirms genuine capital flow behind a price move; declining volume during a rally signals
                 weakening conviction. A Strong Uptrend with expanding volume is higher conviction than one with
                 shrinking volume. Volume spikes often precede or coincide with trend changes.</li>
-              <li><strong>Funding Rate Sparkline (4H)</strong> — Shows the last 21 four-hour funding rates. Spikes in
+              <li><strong>Funding Rate Sparkline (4H)</strong> — Shows the last 9 four-hour funding rates. Spikes in
                 the funding rate indicate crowded positioning — longs paying extreme rates carry squeeze risk if OI
                 begins to collapse. Flat or moderate funding means positioning costs are normal. This is your early
                 warning for potential liquidation cascades.</li>
+              <li><strong>OI Notional Sparkline (4H)</strong> — Shows the last 9 four-hour open interest notional values
+                (OI × price in USDT). Rising notional OI confirms new capital entering the market and validates the
+                prevailing trend, while declining notional OI suggests positions are being unwound. A Strong Uptrend with
+                rising notional OI is higher conviction than one with flat or falling notional OI. Sudden drops often
+                signal liquidation events or forced closures.</li>
             </ul>
             <p>These sparklines are soft context — use them at your discretion to add conviction or caution, but never
               as standalone signals.</p>
@@ -13180,11 +13493,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               values displayed are exactly what drives the classification — no discrepancy between displayed values and
               scenario logic.</p>
             <h2>Composite Signal Score</h2>
-            <p>While each timeframe classifies independently and there is no voting, Multi OI provides a
+            <p>While each timeframe classifies independently and there is no voting mechanism, Multi OI provides a
               <strong>Composite Signal Score</strong> that summarizes the directional lean across all three timeframes
-              into a single number. This score is displayed above the quadrant grid alongside a directional label, a
-              per-timeframe mini summary with Z-score values, and four sparklines showing score, price, volume, and
-              funding rate history.</p>
+              into a single number. This score is a weighted sum (not a vote) — each timeframe contributes
+              proportionally to its weight, so a single timeframe cannot outvote the others.</p>
             <ul>
               <li>Each scenario is assigned a numeric value: <strong>Strong Uptrend (S1)=+100</strong>, <strong>Weak
                   Rally (S2)=+30</strong>, <strong>Exhaustion (S4)=-30</strong>, <strong>Strong Downtrend
@@ -13207,9 +13519,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               is coming from, rather than trading solely off the composite number.</p>
             <h2>Decision Framework — Reading Multi OI Step by Step</h2>
             <p>Follow this framework every time you look at the Multi OI panel. It moves from the big picture down to
-              the details, with each step building on the previous one. The Signal Remark now integrates three layers of
-              information — per-TF classification, composite score conviction, and funding rate context — so reading it
-              carefully gives you a comprehensive snapshot of the current market condition.</p>
+              the details, with each step building on the previous one. The Signal Remark provides
+              per-TF classification — so reading it carefully gives you a comprehensive
+              snapshot of the current market condition.</p>
             <h3>Step 1: Read the Composite Signal</h3>
             <p>Look at the composite signal row above the quadrant grid. You will see a directional label and a score.
               This gives you the overall bias at a glance.</p>
@@ -13225,7 +13537,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 begin to align.</li>
             </ul>
             <h3>Step 2: Read the Signal Remark</h3>
-            <p>The Signal Remark is the richest single piece of information on the Multi OI panel. It is built in 5
+            <p>The Signal Remark is the richest single piece of information on the Multi OI panel. It is built in 3
               steps, each adding a layer of meaning. Here is what each layer tells you:</p>
             <ul>
               <li><strong>Steps 1-3 — Core Phrase (Classification):</strong> Each timeframe is classified into a
@@ -13235,18 +13547,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 sub-types: "Moving the same way but with different strength" (same direction, mixed conviction),
                 "Timeframes disagree" (opposite directions — cut risk), or "Momentum is fading on one timeframe"
                 (direction + exhaustion).</li>
-              <li><strong>Step 4 — Funding Context:</strong> Adds a sentence when funding rates are extreme. "High
-                funding — too many traders are long. A long squeeze could push price down fast" warns that the long side
-                is overcrowded. "Negative funding — too many traders are short. A short squeeze could push price up
-                fast" warns that the short side is overcrowded. When funding aligns against the signal, it explains the
-                pressure: "High funding — longs are paying to hold positions. If they give up, selling could accelerate"
-                or "Negative funding — shorts are paying to stay in. If they get squeezed out, price could jump."</li>
-              <li><strong>Step 5 — Action Phrase:</strong> A plain-language recommendation based on the dominant
-                scenario and how many timeframes agree. Examples: "Strong bullish — safe to hold long positions" (SU on
-                2+ TFs), "Cautiously bullish — needs more buying volume to trust this move" (WR on 2+ TFs), "Bearish —
-                sellers dominate, avoid long positions" (SD on 2+ TFs), "Reversal possible — forced selling, not new
-                shorts. Don't short into exhaustion" (EX on 2+ TFs). When only one timeframe agrees, the phrase notes
-                the limited confirmation: "Bullish — but only one timeframe agrees."</li>
             </ul>
             <h3>Step 3: Understand Mixed Signal Sub-Types</h3>
             <p>When timeframes show different scenarios, the Signal Remark does not use a generic "mixed signals"
@@ -13261,10 +13561,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 scenarios combined with Exhaustion (e.g., Strong Uptrend on 1H + Exhaustion on 1D). Exhaustion has price
                 declining (Z_Price &lt; -1.5), which directly opposes the bullish price direction of SU/WR — so EX + SU
                 or EX + WR are classified as conflicting, not fading. This is the most dangerous condition — the market
-                is sending genuinely opposing signals. The phrase says "Cut risk — wait for timeframes to line up." Do
-                not force a position until the conflict resolves.</li>
+                is sending genuinely opposing signals.</li>
               <li><strong>Momentum is fading on one timeframe</strong> — A bearish scenario combined with Exhaustion
-                (e.g., Strong Downtrend on 1H + Exhaustion on 4D). Both share the same price direction (declining), but
+                (e.g., Strong Downtrend on 1H + Exhaustion on 4H). Both share the same price direction (declining), but
                 differ in OI behavior — SD has expanding OI (new shorts) while EX has contracting OI (liquidations).
                 This means the selling pressure may be transitioning from conviction-driven (new positions) to forced
                 (liquidations), which often precedes a reversal or consolidation. This is a warning that the downtrend
@@ -13274,7 +13573,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             <p>Always start with 1D (big picture), then 4H (swing), then 1H (timing). The per-TF mini summary in the
               composite row shows each timeframe's current scenario. Note that the dominant scenario selection in the
               Signal Remark now uses TF-weighted scoring — a signal on 4H (40% weight) carries more influence than one
-              on 1H (30% weight) when determining which scenario dominates the action phrase.</p>
+              on 1H (30% weight) when determining which scenario dominates.</p>
             <ul>
               <li><strong>All 3 timeframes agree:</strong> HIGH conviction. This is the highest-quality signal the
                 indicator can produce. If all three show Strong Uptrend, the bullish case is at maximum strength.</li>
@@ -13298,7 +13597,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               <li><strong>Z-scores crossing thresholds:</strong> A scenario change is happening right now.</li>
             </ul>
             <h3>Step 6: Check Sparklines for Visual Context</h3>
-            <p>Four sparklines below the composite signal provide at-a-glance context. Use them at your discretion —
+            <p>Five sparklines below the composite signal provide at-a-glance context. Use them at your discretion —
               they do not change the classification, but they help you judge conviction and spot extremes.</p>
             <ul>
               <li><strong>Composite Score sparkline:</strong> Is conviction strengthening (rising) or deteriorating
@@ -13343,27 +13642,16 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 flat/slightly-bearish CSS instead of score-driven bullish labels — EX is not a bullish condition, so the
                 label must not imply it is. When the dominant scenario direction contradicts the score direction, the
                 label shows "Mixed Signals" with neutral styling.</li>
-              <li><strong>Signal Remark Generation</strong> — Built in 5 steps: <b>(1)</b> Classify each TF into a
-                scenario, <b>(2)</b> Group by scenario, <b>(3)</b> Pick core phrase (all agree / some agree / mixed),
-                <b>(4)</b> Add funding context (crowded side warnings, squeeze risk), <b>(5)</b> Add action phrase (what
-                to do based on dominant scenario).</li>
+              <li><strong>Signal Remark Generation</strong> — Built in 3 steps: <b>(1)</b> Classify each TF into a
+                scenario, <b>(2)</b> Group by scenario, <b>(3)</b> Pick core phrase (all agree / some agree / mixed).</li>
               <li><strong>Mixed Signal Sub-Types</strong> — <b>Moving the same way, different strength</b> (e.g., SU +
                 WR — same direction, mixed conviction), <b>Timeframes disagree</b> (e.g., SU + SD, or SU + EX, or WR +
                 EX — opposite price directions including EX which opposes bull, cut risk), <b>Momentum is fading on one
                   timeframe</b> (e.g., SD + EX — bearish direction + exhaustion, same price direction but OI diverging,
                 reversal warning). Each sub-type provides specific, actionable guidance instead of a generic "wait"
                 message.</li>
-              <li><strong>Funding Context</strong> — When funding is extreme (> +0.1% or
-
-                < -0.1%), the phrase adds a
-                  warning. "Too many traders are long. A long squeeze could push price down fast"
-                  or "Too many traders are short. A short squeeze could push price up fast." When funding aligns against
-                  the signal: "Longs are paying to hold positions. If they give up, selling could accelerate"
-                  or "Shorts are paying to stay in. If they get squeezed out, price could jump." Moderate funding
-                  (+0.03% to +0.1% or -0.1% to -0.03%) adds a softer note ("Funding slightly positive/negative").
-                  Neutral funding (-0.03% to +0.03%) adds no modifier.</li>
-              <li><strong>Sparklines (Soft Context)</strong> — Score trend (21 pts), Price 4H (21 pts), Volume 4H (21
-                pts, USDT), Funding 4H (21 pts). Use at your discretion for conviction and context.</li>
+              <li><strong>Sparklines (Soft Context)</strong> — Score trend (9 pts, 4H intervals, backfilled), Price 4H (9 pts), Volume 4H (9
+                pts, USDT), Funding 4H (9 pts), OI Notional 4H (9 pts). Use at your discretion for conviction and context.</li>
             </ul>
             <h2>Important Limitations &amp; Disclaimers</h2>
             <p>Multi OI is built on solid theoretical foundations — Robust Z-score normalization (median + MAD,
@@ -13382,9 +13670,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               <li>Robust Z-scores are relative, not absolute. A Robust Z-score of +2.0 means "unusually high compared to
                 the last N bars" — not "guaranteed to keep going up." Markets can remain extreme longer than expected.
               </li>
-              <li>The Composite Signal Score is a summary convenience, not a definitive verdict. No voting means you
-                decide. Unlike some indicators that combine multiple timeframes into a single verdict, Multi OI shows
-                each timeframe independently. You must decide how to reconcile conflicting signals.</li>
+              <li>The Composite Signal Score is a summary convenience, not a definitive verdict. It is a weighted sum — each timeframe contributes proportionally to its weight. You decide how to reconcile conflicting signals.</li>
               <li>Data comes from Binance public APIs. There may be brief delays, gaps, or stale data during
                 high-traffic periods. A warning badge appears when data may be unreliable.</li>
               <li>Past patterns do not guarantee future results. The scenarios are based on historical statistical
