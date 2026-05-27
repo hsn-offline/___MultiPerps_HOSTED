@@ -7593,11 +7593,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                         <span class="composite-score-value" id="compositeScoreValue">0</span>
                       </div>
                       <div class="composite-tf-summary" id="compositeTfSummary">
-                        <div class="composite-tf-item"><span class="tf-label">30m:</span> <span class="tf-scenario">Neutral </span></div>
-                        <div class="composite-tf-item"><span class="tf-label">1H:</span> <span class="tf-scenario">Neutral </span></div>
-                        <div class="composite-tf-item"><span class="tf-label">4H:</span> <span class="tf-scenario">Neutral </span></div>
+                        <div class="composite-tf-item"><span class="tf-label">30m: </span><span class="tf-scenario">Neutral </span></div>
+                        <div class="composite-tf-item"><span class="tf-label">1H: </span><span class="tf-scenario">Neutral </span></div>
+                        <div class="composite-tf-item"><span class="tf-label">4H: </span><span class="tf-scenario">Neutral </span></div>
                       </div>
                       <div class="multioi-signal-remark" id="multioiSignalRemark">Awaiting data...</div>
+                      <div id="oiPriceDisclaimer" style="display:none;text-align:center;margin-top:4px;"><i style="font-size:0.72rem;color:var(--muted-2);opacity:0.85">Not financial advice.</i></div>
                     </div>
                   </div>
                 </div>
@@ -7695,7 +7696,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     </div>
                   </div>
 
-                  <div id="oiPriceDisclaimer" style="display:none;text-align:center;margin-top:4px;"><i style="font-size:0.6rem;color:var(--muted-2);opacity:0.6">Not financial advice.</i></div>
                 </div>
               </div>
 
@@ -10333,7 +10333,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   const coldStartClass = isColdStart ? ' scenario-coldstart' : '';
                   const displayName = isColdStart ? 'Warming' : scDef.name;
                   tfSummaryParts.push('<div class="composite-tf-item"><span class="tf-label">' + tf.key +
-                    ':<\/span><span class="tf-scenario ' + scClass + coldStartClass + '">' + displayName + '<\/span> ' + symbol +
+                    ': <\/span><span class="tf-scenario ' + scClass + coldStartClass + '">' + displayName + '<\/span> ' + symbol +
                     '<\/div>');
                 }
                 summaryEl.innerHTML = tfSummaryParts.join('');
