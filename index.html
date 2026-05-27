@@ -174,14 +174,14 @@
           "name": "What is Multi OI on MultiPerps?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Multi OI (Open Interest Price Indicator) classifies price vs. open interest across 30m, 1H, 4H using Robust Z-scores. Four scenarios per timeframe: Strong Uptrend (Price↑ + OI↑), Weak Rally (Price↑ + OI↓), Strong Downtrend (Price↓ + OI↑), Exhaustion (Price↓ + OI↓). Three hard filters prevent false signals: Significance Gate (|Z|>2.0), ADX Trend Gate, and Data Readiness Gate (34-bar minimum). A composite Signal Strength (-100 to +100) with Bullish/Bearish label and sparklines (Score, Price, Volume, Funding, OI) is shown above the quadrant grid. Each TF classifies independently — no voting."
+            "text": "Multi OI (Open Interest Price Indicator) classifies price vs. open interest across 30m, 1H, 4H using Robust Z-scores. Four scenarios per timeframe: Strong Uptrend (Price↑ + OI↑), Weak Rally (Price↑ + OI↓), Strong Downtrend (Price↓ + OI↑), Exhaustion (Price↓ + OI↓). Three hard filters prevent false signals: Significance Gate (|Z_Price|>1.5, |Z_OI|>2.0), ADX Trend Gate, and Data Readiness Gate (34-bar minimum). A composite Signal Strength (-100 to +100) with Bullish/Bearish label and sparklines (Score, Price, Volume, Funding, OI) is shown above the quadrant grid. Each TF classifies independently — no voting."
           }
         }, {
           "@type": "Question",
           "name": "How does the Open Interest Price analysis detect market bias?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Multi OI computes Robust Z-scores for price and OI across 30m, 1H, 4H (34-bar lookback). Each TF independently classifies into four scenarios when |Z_Price|>2.0 and |Z_OI|>2.0. Hard filters: Z-score significance gate, Wilder's ADX trend gate (ADX≥20), and per-TF cold start guard (34 bars). The composite row shows Bullish/Bearish label, Signal Strength (-100 to +100), and per-TF Z-scores. Five sparklines provide visual soft context. No voting — users weigh signals across timeframes."
+            "text": "Multi OI computes Robust Z-scores for price and OI across 30m, 1H, 4H (34-bar lookback). Each TF independently classifies into four scenarios when |Z_Price|>1.5 and |Z_OI|>2.0. Hard filters: Z-score significance gate, Wilder's ADX trend gate (ADX>20), and per-TF cold start guard (34 bars). The composite row shows Bullish/Bearish label, Signal Strength (-100 to +100), and per-TF Z-scores. Five sparklines provide visual soft context. No voting — users weigh signals across timeframes."
           }
         }]
       }
@@ -5425,7 +5425,7 @@
       <h3>What is Multi OI?</h3>
       <p>Multi OI (Open Interest Price Indicator) classifies price vs. open interest across 30m, 1H, 4H using Robust Z-scores. Four scenarios per timeframe: Strong Uptrend, Weak Rally, Strong Downtrend, Exhaustion. Three hard filters (Z-score gate, ADX trend gate, cold start guard) prevent false signals. Each TF classifies independently — no voting.</p>
       <h3>How does OI Price analysis detect market bias?</h3>
-      <p>Robust Z-scores for price and OI are computed per timeframe (34-bar lookback). When |Z_Price|>2.0 and |Z_OI|>2.0 in a trending market (ADX≥20), the market is classified into one of four scenarios. A composite Signal Strength (-100 to +100) with Bullish/Bearish label summarizes all timeframes. No voting — users weigh signals based on their trading style.</p>
+      <p>Robust Z-scores for price and OI are computed per timeframe (34-bar lookback). When |Z_Price|>1.5 and |Z_OI|>2.0 in a trending market (ADX>20), the market is classified into one of four scenarios. A composite Signal Strength (-100 to +100) with Bullish/Bearish label summarizes all timeframes. No voting — users weigh signals based on their trading style.</p>
     </div>
     <div id="page-dashboard" class="page-section active">
       <nav class="sticky-nav" id="stickyNav" aria-label="Dashboard navigation"><button class="nav-btn active"
@@ -7491,15 +7491,15 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
 &nbsp;&nbsp;│<br>
   &nbsp;&nbsp;├─► <b>HARD FILTER 1:</b> Data Readiness? (30m≥34, 1H≥34, 4H≥34 bars, all TFs ≥29 candles for ADX)<br>
 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (insufficient data — includes specific reason: closes/OI/candles)<br>
-  &nbsp;&nbsp;├─► <b>HARD FILTER 2:</b> Market Trending? (Wilder's ADX ≥ 20)<br>
+  &nbsp;&nbsp;├─► <b>HARD FILTER 2:</b> Market Trending? (Wilder's ADX > 20)<br>
 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (ranging/choppy)<br>
-  &nbsp;&nbsp;├─► <b>HARD FILTER 3:</b> Both Z-scores Significant? (|Z_Price|&gt;2.0 AND |Z_OI|&gt;2.0)<br>
+  &nbsp;&nbsp;├─► <b>HARD FILTER 3:</b> Both Z-scores Significant? (|Z_Price|&gt;1.5 AND |Z_OI|&gt;2.0)<br>
 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (both must confirm)<br>
   &nbsp;&nbsp;├─► <b>CLASSIFY</b> (using Robust Z-scores):<br>
-  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +2.0 &amp; Z_OI &gt; +2.0 → <b style="color:#26D4AC">Strong Uptrend (+100)</b><br>
-  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +2.0 &amp; Z_OI &lt; -2.0 → <b style="color:#F3A052">Weak Rally (+30)</b><br>
-  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -2.0 &amp; Z_OI &gt; +2.0 → <b style="color:#F23645">Strong Downtrend (-100)</b><br>
-  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -2.0 &amp; Z_OI &lt; -2.0 → <b style="color:#A78BFA">Exhaustion (-30)</b><br>
+  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +1.5 &amp; Z_OI &gt; +2.0 → <b style="color:#26D4AC">Strong Uptrend (+100)</b><br>
+  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +1.5 &amp; Z_OI &lt; -2.0 → <b style="color:#F3A052">Weak Rally (+30)</b><br>
+  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -1.5 &amp; Z_OI &gt; +2.0 → <b style="color:#F23645">Strong Downtrend (-100)</b><br>
+  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -1.5 &amp; Z_OI &lt; -2.0 → <b style="color:#A78BFA">Exhaustion (-30)</b><br>
   &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Otherwise → <b style="color:#6B7280">Neutral (0)</b><br>
   &nbsp;&nbsp;└─► <b>COMPOSITE OUTPUT</b>:<br>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Score = (30m × 0.30) + (1H × 0.40) + (4H × 0.30)<br>
@@ -7532,18 +7532,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
   <strong style="color:var(--text)">Signal Remark</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
   Built in 3 steps: (1) Classify each TF → (2) Group by scenario → (3) Pick core phrase.<br>
-  Mixed sub-types: <b>Divergent</b> (same direction, OI diverges e.g. SU+WR), <b>Conflicting</b> (opposite directions incl. bull+EX), <b>Fading</b> (bear+EX, reversal warning)</span><br><br>
+  Mixed sub-types: <b>Divergent</b> (same price direction, OI diverges e.g. SU+WR), <b>Conflicting</b> (opposite directions incl. bull+EX), <b>Fading</b> (bear+EX, reversal warning), <b>Transitional</b> (same direction, different strength)</span><br><br>
 
   <strong style="color:var(--text)">Z-score Metrics</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
   <span style="color:#5B8CFF"><b>Z_Price</b></span> — Robust Z of prices (median + MAD). Current candle excluded from baseline.<br>
   <span style="color:#F3A052"><b>Z_OI</b></span> — Robust Z of OI (median + MAD). Current candle excluded from baseline.<br>
-  <b>Boundary:</b> |Z| &gt; 2.0 is strict — exactly 2.0 does NOT classify.</span><br><br>
+  <b>Boundary:</b> |Z_Price| &gt; 1.5 and |Z_OI| &gt; 2.0 are strict — exactly 1.5/2.0 does NOT classify.</span><br><br>
 
   <strong style="color:var(--text)">Sparklines (Soft Context)</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
   <b>Score</b> — 9 pts, 4H intervals. Rising = strengthening, falling = deteriorating.<br>
-  <b>Price</b> — 4H close prices (9 pts). <b>Volume</b> — 4H quote volume (9 pts).<br>
+  <b>Price</b> — 4H close prices (9 pts). <b>Volume</b> — 4H base volume (9 pts).<br>
   <b>Funding</b> — 9 pts, 4H/8H intervals. Spikes = crowded positioning.<br>
   <b>OI Notional</b> — 4H OI×price (9 pts). Rising = new capital, falling = unwinding.</span><br><br>
 
@@ -8851,7 +8851,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           klineInterval: '4h',
           oiPeriod: '4h'
         }];
-        const MF_PRICE_THRESH = 2.0;
+        const MF_PRICE_THRESH = 1.5;
         const MF_OI_THRESH = 2.0;
         const MF_ADX_THRESH = 20;
         const MF_ADX_PERIOD = 14;
@@ -8919,7 +8919,11 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
         function _zRobust(x, arr) {
           const med = _mfMedian(arr);
           const mad = _mfMad(arr);
-          if (!Number.isFinite(med) || !Number.isFinite(mad) || mad === 0) return NaN;
+          if (!Number.isFinite(med) || !Number.isFinite(mad)) return NaN;
+          if (mad === 0) {
+            if (x === med) return 0;
+            return x > med ? 10 : -10;
+          }
           return (x - med) / (mad * 1.4826);
         }
 
@@ -8993,7 +8997,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
          * Shared TF classification logic — single source of truth.
          */
         function _classifyTf(zPrice, zOi, adx) {
-          const adxOk = Number.isFinite(adx) && adx >= MF_ADX_THRESH;
+          const adxOk = Number.isFinite(adx) && adx > MF_ADX_THRESH;
           if (!Number.isFinite(zPrice) || !Number.isFinite(zOi) || !adxOk) return 0;
           if (zPrice > MF_PRICE_THRESH && zOi > MF_OI_THRESH) return 1;
           if (zPrice > MF_PRICE_THRESH && zOi < -MF_OI_THRESH) return 2;
@@ -9015,6 +9019,26 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           }
           score = Math.round(score / 100);
           return Math.max(-100, Math.min(100, score));
+        }
+
+        function _fmtFr(frPct) {
+          const sign = frPct >= 0 ? '+' : '';
+          return sign + frPct.toFixed(3) + '%';
+        }
+
+        function _findBarIdxByTime(timestamps, targetTime) {
+          if (!timestamps || timestamps.length === 0 || !Number.isFinite(targetTime)) return -1;
+          let lo = 0, hi = timestamps.length - 1, result = -1;
+          while (lo <= hi) {
+            const mid = Math.floor((lo + hi) / 2);
+            if (timestamps[mid] <= targetTime) {
+              result = mid;
+              lo = mid + 1;
+            } else {
+              hi = mid - 1;
+            }
+          }
+          return result;
         }
 
 //MULTI OI INDICATOR
@@ -9469,6 +9493,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const endIdx = d4h.closes.length - 1 - p; // the bar being classified
               const startIdx = endIdx - N; // lookback start
               if (startIdx < 0) continue;
+              // Timestamp of the 4H bar being classified — used for cross-TF alignment
+              const target4hCloseTime = (d4h.klineTimestamps && endIdx < d4h.klineTimestamps.length) ? d4h.klineTimestamps[endIdx] : null;
               // 4H Z-scores — cold-start guard: need at least N closes and N OI, and MF_ADX_MIN_CANDLES for ADX
               let zPrice4h = NaN, zOi4h = NaN, adx4h = NaN;
               const closes4h = d4h.closes.slice(startIdx, endIdx + 1);
@@ -9484,48 +9510,52 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               // 4H ADX
               const candles4h = d4h.candles && d4h.candles.length > endIdx ? d4h.candles.slice(Math.max(0, endIdx - (MF_ADX_MIN_CANDLES - 1)), endIdx + 1) : [];
               adx4h = candles4h.length >= MF_ADX_MIN_CANDLES ? _wilderAdx(candles4h, MF_ADX_PERIOD) : NaN;
-              // 1H Z-scores: each 4H bar = 4 × 1H bars, so we need data up to 4H bar endIdx
+              // 1H Z-scores: find 1H bar matching 4H bar's close time via timestamp alignment
               // Uses N (34) as the lookback count for 1H bars (same as live classification)
               let zPrice1h = NaN, zOi1h = NaN, adx1h = NaN;
-              if (d1h && d1h.closes && d1h.closes.length >= MF_COLD_START_MIN['1H']) {
-                const endIdx1h = Math.min(endIdx * 4 + 3, d1h.closes.length - 1);
-                const startIdx1h = endIdx1h - N; // same lookback count as live classification
-                if (startIdx1h >= 0) {
-                  const closes1h = d1h.closes.slice(startIdx1h, endIdx1h + 1);
-                  const oi1h = d1h.oi && d1h.oi.length > endIdx1h ? d1h.oi.slice(startIdx1h, endIdx1h + 1) : [];
-                  // Cold-start guard for 1H: need at least N bars
-                  if (closes1h.length >= N && oi1h.length >= N) {
-                    const curPrice1h = closes1h[closes1h.length - 1];
-                    const curOi1h = oi1h[oi1h.length - 1];
-                    const blClose1h = closes1h.slice(0, -1);
-                    const blOi1h = oi1h.length > 1 ? oi1h.slice(0, -1) : [];
-                    zPrice1h = blClose1h.length > 0 ? _zRobust(curPrice1h, blClose1h) : NaN;
-                    zOi1h = blOi1h.length > 0 ? _zRobust(curOi1h, blOi1h) : NaN;
+              if (d1h && d1h.closes && d1h.closes.length >= MF_COLD_START_MIN['1H'] && target4hCloseTime !== null) {
+                const endIdx1h = _findBarIdxByTime(d1h.klineTimestamps, target4hCloseTime);
+                if (endIdx1h >= 0) {
+                  const startIdx1h = endIdx1h - N; // same lookback count as live classification
+                  if (startIdx1h >= 0) {
+                    const closes1h = d1h.closes.slice(startIdx1h, endIdx1h + 1);
+                    const oi1h = d1h.oi && d1h.oi.length > endIdx1h ? d1h.oi.slice(startIdx1h, endIdx1h + 1) : [];
+                    // Cold-start guard for 1H: need at least N bars
+                    if (closes1h.length >= N && oi1h.length >= N) {
+                      const curPrice1h = closes1h[closes1h.length - 1];
+                      const curOi1h = oi1h[oi1h.length - 1];
+                      const blClose1h = closes1h.slice(0, -1);
+                      const blOi1h = oi1h.length > 1 ? oi1h.slice(0, -1) : [];
+                      zPrice1h = blClose1h.length > 0 ? _zRobust(curPrice1h, blClose1h) : NaN;
+                      zOi1h = blOi1h.length > 0 ? _zRobust(curOi1h, blOi1h) : NaN;
+                    }
+                    const candles1h = d1h.candles && d1h.candles.length > endIdx1h ? d1h.candles.slice(Math.max(0, endIdx1h - (MF_ADX_MIN_CANDLES - 1)), endIdx1h + 1) : [];
+                    adx1h = candles1h.length >= MF_ADX_MIN_CANDLES ? _wilderAdx(candles1h, MF_ADX_PERIOD) : NaN;
                   }
-                  const candles1h = d1h.candles && d1h.candles.length > endIdx1h ? d1h.candles.slice(Math.max(0, endIdx1h - (MF_ADX_MIN_CANDLES - 1)), endIdx1h + 1) : [];
-                  adx1h = candles1h.length >= MF_ADX_MIN_CANDLES ? _wilderAdx(candles1h, MF_ADX_PERIOD) : NaN;
                 }
               }
-              // 30m Z-scores: each 4H bar = 8 × 30m bars, so we need data up to 4H bar endIdx
+              // 30m Z-scores: find 30m bar matching 4H bar's close time via timestamp alignment
               // Uses N (34) as the lookback count for 30m bars (same as live classification)
               let zPrice30m = NaN, zOi30m = NaN, adx30m = NaN;
-              if (d30m && d30m.closes && d30m.closes.length >= MF_COLD_START_MIN['30m']) {
-                const endIdx30m = Math.min(endIdx * 8 + 7, d30m.closes.length - 1);
-                const startIdx30m = endIdx30m - N; // same lookback count as live classification
-                if (startIdx30m >= 0) {
-                  const closes30m = d30m.closes.slice(startIdx30m, endIdx30m + 1);
-                  const oi30m = d30m.oi && d30m.oi.length > endIdx30m ? d30m.oi.slice(startIdx30m, endIdx30m + 1) : [];
-                  // Cold-start guard for 30m: need at least N bars
-                  if (closes30m.length >= N && oi30m.length >= N) {
-                    const curPrice30m = closes30m[closes30m.length - 1];
-                    const curOi30m = oi30m[oi30m.length - 1];
-                    const blClose30m = closes30m.slice(0, -1);
-                    const blOi30m = oi30m.length > 1 ? oi30m.slice(0, -1) : [];
-                    zPrice30m = blClose30m.length > 0 ? _zRobust(curPrice30m, blClose30m) : NaN;
-                    zOi30m = blOi30m.length > 0 ? _zRobust(curOi30m, blOi30m) : NaN;
+              if (d30m && d30m.closes && d30m.closes.length >= MF_COLD_START_MIN['30m'] && target4hCloseTime !== null) {
+                const endIdx30m = _findBarIdxByTime(d30m.klineTimestamps, target4hCloseTime);
+                if (endIdx30m >= 0) {
+                  const startIdx30m = endIdx30m - N; // same lookback count as live classification
+                  if (startIdx30m >= 0) {
+                    const closes30m = d30m.closes.slice(startIdx30m, endIdx30m + 1);
+                    const oi30m = d30m.oi && d30m.oi.length > endIdx30m ? d30m.oi.slice(startIdx30m, endIdx30m + 1) : [];
+                    // Cold-start guard for 30m: need at least N bars
+                    if (closes30m.length >= N && oi30m.length >= N) {
+                      const curPrice30m = closes30m[closes30m.length - 1];
+                      const curOi30m = oi30m[oi30m.length - 1];
+                      const blClose30m = closes30m.slice(0, -1);
+                      const blOi30m = oi30m.length > 1 ? oi30m.slice(0, -1) : [];
+                      zPrice30m = blClose30m.length > 0 ? _zRobust(curPrice30m, blClose30m) : NaN;
+                      zOi30m = blOi30m.length > 0 ? _zRobust(curOi30m, blOi30m) : NaN;
+                    }
+                    const candles30m = d30m.candles && d30m.candles.length > endIdx30m ? d30m.candles.slice(Math.max(0, endIdx30m - (MF_ADX_MIN_CANDLES - 1)), endIdx30m + 1) : [];
+                    adx30m = candles30m.length >= MF_ADX_MIN_CANDLES ? _wilderAdx(candles30m, MF_ADX_PERIOD) : NaN;
                   }
-                  const candles30m = d30m.candles && d30m.candles.length > endIdx30m ? d30m.candles.slice(Math.max(0, endIdx30m - (MF_ADX_MIN_CANDLES - 1)), endIdx30m + 1) : [];
-                  adx30m = candles30m.length >= MF_ADX_MIN_CANDLES ? _wilderAdx(candles30m, MF_ADX_PERIOD) : NaN;
                 }
               }
               // Classify each TF using shared helper
@@ -9546,10 +9576,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               history.push(this.classification.signalStrength);
             }
             if (history.length > 0) {
-              // Merge with existing history: preserve older points that backfill didn't recompute
               const existing = this._scoreHistory || [];
-              // Replace the last existing points with the new backfill + live score
-              // Keep any older points beyond what backfill produces
               const keepOld = Math.max(0, existing.length - history.length);
               this._scoreHistory = [...existing.slice(0, keepOld), ...history].slice(-MF_SPARKLINE_POINTS);
             }
@@ -9795,8 +9822,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               }
               const labelEl = bubble.querySelector('.quadrant-bubble-label');
               if (labelEl && sc) {
-                const zP = Number.isFinite(sc.zPrice) ? (sc.zPrice >= 0 ? '+' : '') + sc.zPrice.toFixed(1) : '--';
-                const zO = Number.isFinite(sc.zOi) ? (sc.zOi >= 0 ? '+' : '') + sc.zOi.toFixed(1) : '--';
+                const zP = Number.isFinite(sc.zPrice) ? (sc.zPrice >= 0 ? '+' : '') + sc.zPrice.toFixed(2) : '--';
+                const zO = Number.isFinite(sc.zOi) ? (sc.zOi >= 0 ? '+' : '') + sc.zOi.toFixed(2) : '--';
                 labelEl.innerHTML = '<span style="display:block;line-height:1;font-size:1.1em;font-weight:900;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,1),0 0 8px rgba(0,0,0,0.9);">' + tfKey + '<\/span><span style="display:block;line-height:0.95;font-size:0.62em;font-weight:700;margin-top:1px;color:#FFFFFF;text-shadow:0 1px 4px rgba(0,0,0,1),0 0 8px rgba(0,0,0,0.9);">' + zP +
                   '<\/span><span style="display:block;line-height:0.95;font-size:0.62em;font-weight:800;margin-top:1px;color:#FFFFFF;text-shadow:0 1px 4px rgba(0,0,0,1),0 0 8px rgba(0,0,0,0.9);">' + zO + '<\/span>';
               }
@@ -9845,8 +9872,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               }
               if (overlayTip && sc) {
                 const scDef = MF_SCENARIOS[scenarioIdx] || MF_SCENARIOS[0];
-                const zP = Number.isFinite(sc.zPrice) ? (sc.zPrice >= 0 ? '+' : '') + sc.zPrice.toFixed(1) : '--';
-                const zO = Number.isFinite(sc.zOi) ? (sc.zOi >= 0 ? '+' : '') + sc.zOi.toFixed(1) : '--';
+                const zP = Number.isFinite(sc.zPrice) ? (sc.zPrice >= 0 ? '+' : '') + sc.zPrice.toFixed(2) : '--';
+                const zO = Number.isFinite(sc.zOi) ? (sc.zOi >= 0 ? '+' : '') + sc.zOi.toFixed(2) : '--';
                 overlayTip.innerHTML = '<b style="color:' + scDef.color + '">' + tfKey + ': ' + scDef.name +
                   '<\/b><br>' + '<span style="color:#6EA8FE">Z_P:<\/span> ' + zP +
                   ' | <span style="color:#F3A052">Z_OI:<\/span> ' + zO;
@@ -9977,14 +10004,172 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               } else if (mixedType === 'conflicting') {
                 phrase = '<span class="signal-sym">$' + sym +
                   '<\/span> — <span class="signal-action">Timeframes disagree:<\/span> ' + allParts + '.';
-              } else {
+              } else if (mixedType === 'divergent') {
+                phrase = '<span class="signal-sym">$' + sym +
+                  '<\/span> — <span class="signal-action">Same price direction but OI diverges:<\/span> ' + allParts + '.';
+              } else if (mixedType === 'fading') {
                 phrase = '<span class="signal-sym">$' + sym +
                   '<\/span> — <span class="signal-action">Momentum is fading on one timeframe:<\/span> ' + allParts +
                   '.';
               }
-              scenarioColor = dominantDef.color;
+              
+              if (score >= 30) scenarioColor = MF_SCENARIOS[1].color;           // Bullish (SU green)
+              else if (score > 0) scenarioColor = MF_SCENARIOS[2].color;         // Slightly Bullish (WR amber)
+              else if (score === 0) scenarioColor = '#6B7280';                    // Neutral
+              else if (score > -30) scenarioColor = MF_SCENARIOS[4].color;       // Slightly Bearish (EX purple)
+              else scenarioColor = MF_SCENARIOS[3].color;                        // Bearish (SD red)
             }
+            // Append timing + funding context
+            const timingCtx = this._getTimingContext(classifiedCount, scenarioGroups, score, mixedType);
+            if (timingCtx) phrase += ' <span style="opacity:0.8">' + timingCtx + '</span>';
             phraseEl.innerHTML = phrase;
+          },
+
+          _getTimingContext(classifiedCount, scenarioGroups, score, mixedType) {
+            if (classifiedCount === 0) {
+              return 'No signal \u2014 stay flat until conditions develop.';
+            }
+
+            const hasSu = !!scenarioGroups[1];
+            const hasWr = !!scenarioGroups[2];
+            const hasSd = !!scenarioGroups[3];
+            const hasEx = !!scenarioGroups[4];
+            const isBullish = hasSu || hasWr;
+            const isBearish = hasSd;
+
+            // Number of classified TFs (not distinct scenario types)
+            const classifiedTfCount = Object.values(scenarioGroups).reduce((sum, g) => sum + g.tfs.length, 0);
+
+            // Max |Z-score| across classified TFs for timing band
+            let maxAbsZ = 0;
+            for (const tf of MF_TIMEFRAMES) {
+              const sc = this.classification && this.classification.scenarios ? this.classification.scenarios[tf.key] : null;
+              if (sc && sc.idx > 0) {
+                maxAbsZ = Math.max(maxAbsZ,
+                  Math.abs(this.stats.zPrice[tf.key] || 0),
+                  Math.abs(this.stats.zOi[tf.key] || 0));
+              }
+            }
+            const isExtended = maxAbsZ > 3.5;
+
+            // Funding rate (raw decimal → percentage)
+            const frRaw = this.stats.realtimeFundingRate;
+            const frPct = Number.isFinite(frRaw) ? frRaw * 100 : null;
+
+            let timing = '';
+            let fundingCtx = '';
+
+            // ── CONFLICTING ──
+            if (mixedType === 'conflicting') {
+              if (hasEx && isBullish && !isBearish) {
+                timing = 'Bullish but exhaustion on some TFs \u2014 momentum may be peaking.';
+              } else {
+                timing = 'Opposing signals \u2014 wait for clarity.';
+              }
+              if (frPct !== null && Math.abs(frPct) > 0.2) {
+                fundingCtx = ' Extreme funding at ' + _fmtFr(frPct) + ' \u2014 watch for squeeze.';
+              }
+            }
+            // ── FADING (SD + EX) ──
+            else if (mixedType === 'fading') {
+              timing = 'Bearish momentum is fading \u2014 consider tightening stops.';
+              if (frPct !== null && frPct < -0.1) {
+                fundingCtx = ' Shorts crowded at ' + _fmtFr(frPct) + ' \u2014 squeeze risk.';
+              }
+            }
+            // ── DIVERGENT (SU + WR) ──
+            else if (mixedType === 'divergent') {
+              timing = 'OI diverges \u2014 conviction is mixed, cautious entry.';
+              if (frPct !== null && frPct > 0.1) {
+                fundingCtx = ' Funding at ' + _fmtFr(frPct) + ' \u2014 longs paying up despite weak conviction.';
+              }
+            }
+            // ── TRANSITIONAL (rare fallback) ──
+            else if (mixedType === 'transitional') {
+              timing = 'Signals are transitional \u2014 wait for clarity.';
+            }
+            // ── PURE EXHAUSTION ──
+            else if (hasEx && !isBullish && !isBearish) {
+              timing = 'Positions unwinding \u2014 reversal risk is elevated.';
+              if (frPct !== null && Math.abs(frPct) > 0.2) {
+                fundingCtx = ' Extreme funding at ' + _fmtFr(frPct) + ' adds squeeze risk.';
+              }
+            }
+            // ── PURE WEAK RALLY ──
+            else if (hasWr && !hasSu && !isBearish && !hasEx) {
+              timing = 'OI declining \u2014 long conviction is weak, new longs are risky.';
+              if (frPct !== null && frPct > 0.1) {
+                fundingCtx = ' Funding at ' + _fmtFr(frPct) + ' \u2014 remaining longs are overpaying.';
+              }
+            }
+            // ── BULLISH (SU ± WR) ──
+            else if (isBullish && !isBearish && !hasEx) {
+              if (hasSu) {
+                if (classifiedTfCount >= 3) {
+                  timing = isExtended
+                    ? 'Move may be overextended \u2014 new longs carry higher risk.'
+                    : 'Move is well established.';
+                } else if (classifiedTfCount === 2) {
+                  timing = isExtended
+                    ? 'Move may be overextended \u2014 new longs carry higher risk.'
+                    : 'Move is gaining traction.';
+                } else {
+                  timing = isExtended
+                    ? 'Move may be overextended \u2014 new longs carry higher risk.'
+                    : 'Move is just starting.';
+                }
+              } else {
+                timing = 'OI declining \u2014 long conviction is weak.';
+              }
+              // Funding for bullish
+              if (frPct !== null) {
+                if (frPct > 0.2) {
+                  fundingCtx = ' Funding at ' + _fmtFr(frPct) + ' \u2014 longs severely crowded, squeeze risk.';
+                } else if (frPct > 0.1) {
+                  fundingCtx = ' Funding at ' + _fmtFr(frPct) + ' \u2014 longs are crowded, entry may be late.';
+                } else if (frPct < -0.03) {
+                  fundingCtx = ' Oddly, shorts are still paying \u2014 could fuel a squeeze.';
+                }
+              }
+            }
+            // ── BEARISH (SD) ──
+            else if (isBearish && !isBullish) {
+              if (hasSd) {
+                if (classifiedTfCount >= 3) {
+                  timing = isExtended
+                    ? 'Downtrend may be overextended \u2014 new shorts carry higher risk.'
+                    : 'Downtrend is well established.';
+                } else if (classifiedTfCount === 2) {
+                  timing = isExtended
+                    ? 'Downtrend may be overextended \u2014 new shorts carry higher risk.'
+                    : 'Downtrend is gaining traction.';
+                } else {
+                  timing = isExtended
+                    ? 'Downtrend may be overextended \u2014 new shorts carry higher risk.'
+                    : 'Downtrend is just starting.';
+                }
+              }
+              // Funding for bearish
+              if (frPct !== null) {
+                if (frPct < -0.2) {
+                  fundingCtx = ' Funding at ' + _fmtFr(frPct) + ' \u2014 shorts severely crowded, squeeze risk.';
+                } else if (frPct < -0.1) {
+                  fundingCtx = ' Funding at ' + _fmtFr(frPct) + ' \u2014 shorts are crowded, entry may be late.';
+                } else if (frPct > 0.03) {
+                  fundingCtx = ' Oddly, longs are still paying \u2014 trapped, could accelerate or bounce.';
+                }
+              }
+            }
+            // ── EXHAUSTION + BEARISH (shouldn't reach here normally, safe fallback) ──
+            else if (hasEx && isBearish) {
+              timing = 'Bearish with exhaustion \u2014 reversal risk is elevated.';
+            }
+            // ── EXHAUSTION + BULLISH (shouldn't reach here normally, safe fallback) ──
+            else if (hasEx && isBullish) {
+              timing = 'Mixed with unwinding \u2014 conviction is unclear, stay cautious.';
+            }
+
+            return timing + fundingCtx;
           },
 
           _getMixedSubType(scenarioGroups) {
@@ -10005,7 +10190,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const hasExhaust = dirs.includes('exhaust');
             if (hasBull && hasBear) return 'conflicting';
             if (hasBull && hasExhaust) return 'conflicting';
-            if (hasBear && hasExhaust) return 'divergent';
+            if (hasBear && hasExhaust) return 'fading';
             // SU + WR: same price direction (up), opposite OI direction — OI is diverging
             if (hasBullSu && hasBullWr) return 'divergent';
             return 'transitional';
@@ -10102,7 +10287,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const isDominantBullish = dominantIdx === 1 || dominantIdx === 2;
               const isDominantBearish = dominantIdx === 3;
               const scoreConflictsWithDominant = (isDominantBullish && score < 0) || (isDominantBearish && score > 0);
-              if (scoreConflictsWithDominant && !isExhaustionDominant) {
+              if (scoreConflictsWithDominant && !isExhaustionDominant && Math.abs(score) < 15) {
                 dirWord = 'Mixed Signals';
                 dirClass = 'flat';
               }
@@ -13077,90 +13262,55 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             <h1>Open Interest Explained: What It Tells You About Market Sentiment</h1>
             <p>Open interest (OI) is one of the most important yet underutilized metrics in crypto futures trading. It
               represents the total number of outstanding derivative contracts that have not been settled. Unlike volume,
-              which measures trading activity over a period, open interest tells you how much capital is currently
-              committed to a market. This distinction is crucial for understanding market dynamics and predicting
-              potential price moves. In this guide, we explain what open interest is, break down the four Open Interest
-              Price scenarios that form the foundation of market scenario analysis, and show you how to use OI data in
-              your everyday trading.</p>
+              which measures trading activity, OI tells you how much capital is currently committed to a market — whether
+              new money is entering or existing capital is leaving.</p>
             <h2>What Is Open Interest?</h2>
-            <p>Open interest represents the total number of active, unsettled derivative contracts in the market. Every
-              time a buyer and a seller open a new position against each other, open interest increases by one contract.
-              When both parties close their existing positions, open interest decreases. If one party opens a new
-              position while the other closes an existing one, open interest remains unchanged. This three-way dynamic
-              is what makes OI so informative: it tells you not just that trading happened, but whether new capital is
-              entering the market or existing capital is leaving. On Binance USDT-M perpetual futures, open interest is
-              measured in the base currency of the contract (e.g., BTC for BTCUSDT) and is updated in real time as
-              positions are opened and closed.</p>
-            <h2>The Four Open Interest Scenarios</h2>
-            <p>The real power of open interest emerges when you look at it alongside price. Price alone tells you where
-              the market is, but price combined with OI tells you <em>why</em> it's there and <em>whether the move is
-                likely to continue</em>. When you combine these two dimensions — is price rising or falling, and is OI
-              rising or falling — four distinct scenarios emerge, each with a clear directional bias:</p>
+            <p>Every time a buyer and seller open a new position against each other, OI increases. When both close, OI
+              decreases. If one opens while the other closes, OI stays the same. This three-way dynamic is what makes OI
+              so informative: it reveals whether new capital is entering or existing capital is exiting. On Binance USDT-M
+              perpetual futures, OI is measured in the base currency (e.g., BTC for BTCUSDT) and updates in real time.</p>
+            <h2>The Four OI Price Scenarios</h2>
+            <p>The real power of OI emerges when paired with price. Price alone tells you <em>where</em> the market is;
+              price + OI tells you <em>why</em> and <em>whether the move is likely to continue</em>. Four scenarios
+              emerge:</p>
             <ul>
-              <li><strong>Rising price + Rising OI (Strong Uptrend):</strong> New money is entering long positions,
-                pushing prices higher while open interest expands. This is the healthiest uptrend scenario — the move is
-                backed by genuine positioning expansion. Ride the momentum with confidence, as the positive OI confirms
-                real buying pressure, not just short covering. <em>Bias: Long.</em></li>
-              <li><strong>Rising price + Falling OI (Weak Rally):</strong> No new long capital is driving the price
-                increase — only existing shorts closing. Once shorts have covered, the rally may stall or reverse
-                because there is no fresh demand to sustain the price level. Exercise caution on any long bias, use
-                tighter stops, and watch for signs of either a transition to a Strong Uptrend (if OI starts rising) or a
-                reversal. <em>Bias: Careful Long.</em></li>
-              <li><strong>Falling price + Rising OI (Strong Downtrend):</strong> New short positions are being opened
-                aggressively, reinforcing the downward pressure with fresh capital. This is the most sustainable bearish
-                scenario because selling is driven by new positions rather than forced liquidations. Avoid long trades
-                and look for short setups aligned with the trend. <em>Bias: Short.</em></li>
-              <li><strong>Falling price + Falling OI (Exhaustion):</strong> Longs are capitulating and closing
-                positions, causing both price and OI to decline. Once selling pressure exhausts itself and the remaining
-                longs have finished unwinding, the market becomes vulnerable to a reversal. This is not a directional
-                bias in the traditional sense — it signals that the current move may be running out of fuel. <em>Bias:
-                  Watch for Reversal.</em></li>
+              <li><strong>Rising Price + Rising OI (Strong Uptrend):</strong> New longs entering with genuine capital.
+                The healthiest uptrend — backed by positioning expansion, not short covering. <em>Bias: Long.</em></li>
+              <li><strong>Rising Price + Falling OI (Weak Rally):</strong> Rally driven by short covering, not new
+                buyers. Inherently fragile — once shorts are done covering, the rally may stall. <em>Bias: Careful
+                  Long.</em></li>
+              <li><strong>Falling Price + Rising OI (Strong Downtrend):</strong> New shorts opening aggressively. The
+                most sustainable bearish scenario — selling driven by new positions, not forced liquidations. <em>Bias:
+                  Short.</em></li>
+              <li><strong>Falling Price + Falling OI (Exhaustion):</strong> Longs capitulating, selling nearing
+                exhaustion. Not a directional bias — signals the move may be running out of fuel. <em>Bias: Watch for
+                  Reversal.</em></li>
             </ul>
-            <p>When OI and price are not moving with enough significance in either direction, the market is
-              <strong>Neutral</strong> — there is no clear edge. This is valuable information in itself: it tells you to
-              reduce position size, widen stops, or stay flat entirely.</p>
-            <h2>Why Open Interest Matters More Than Volume</h2>
-            <p>Volume tells you how much was traded, but not whether positions are being opened or closed. A high-volume
-              day could be driven entirely by position closing (falling OI), which has very different implications than
-              new positions being opened (rising OI). By tracking OI alongside price, you get a much clearer picture of
-              whether a trend is supported by new capital or running on fumes. OI direction is the key that tells you
-              whether a price move has structural backing or is a thin, low-conviction move that may reverse at any
-              moment.</p>
-            <p>Consider this example: Bitcoin surges 5% on a given day with heavy volume. Without OI data, you might
-              assume strong buying pressure. But if OI actually fell during that move, it means the rally was driven by
-              shorts covering — not new buyers stepping in. Once the shorts are done covering, there is no fresh demand
-              to sustain the price, and the rally is likely to stall or reverse. This is the kind of insight that OI
-              provides and volume alone cannot.</p>
-            <h2>Using OI in Your Trading Strategy</h2>
-            <p>Here are practical ways to incorporate open interest into your daily trading routine on Binance Futures:
-            </p>
+            <p>When neither OI nor price shows enough significance, the market is <strong>Neutral</strong> — no clear
+              edge. Reduce size, widen stops, or stay flat.</p>
+            <h2>Why OI Matters More Than Volume</h2>
+            <p>Volume tells you how much was traded, not whether positions opened or closed. A high-volume day driven by
+              position closing (falling OI) has very different implications than new positions opening (rising OI).
+              Example: Bitcoin surges 5% with heavy volume. Without OI, you'd assume strong buying. But if OI fell, the
+              rally was driven by shorts covering — once they're done, there's no fresh demand to sustain the price. OI
+              reveals this; volume alone cannot.</p>
+            <h2>Practical Tips</h2>
             <ul>
-              <li><strong>Confirm trend strength:</strong> Before entering a long, check if OI is rising alongside
-                price. Rising OI confirms that new money supports the move. If OI is falling while price rises, the
-                trend lacks conviction — use tighter stops or skip the trade.</li>
-              <li><strong>Spot potential reversals:</strong> When both price and OI have been falling (Exhaustion
-                scenario), the selling may be nearing its end. Watch for a reversal candle or a shift in OI direction as
-                an early signal that the tide is turning.</li>
-              <li><strong>Watch for squeeze setups:</strong> When OI and funding rates both reach extremes
-                simultaneously, it frequently precedes a significant price correction as overcrowded positions get
-                liquidated. Extremely negative funding with falling OI can signal a potential short squeeze; extremely
-                positive funding with falling OI can signal a potential long squeeze.</li>
-              <li><strong>Monitor OI spikes before events:</strong> Sudden spikes in open interest before major events
-                often signal an impending volatile move. Traders are positioning heavily on one side, and the resolution
-                can be explosive.</li>
-              <li><strong>Use OI rankings:</strong> MultiPerps tracks OI rankings in real time across all Binance USDT-M
-                perpetual contracts, giving you instant visibility into where the most capital is committed. Coins with
-                rapidly rising OI often signal growing interest that may precede significant moves.</li>
+              <li><strong>Confirm trend strength:</strong> Rising OI alongside price confirms new money supports the
+                move. Falling OI during a rally = low conviction — use tighter stops or skip.</li>
+              <li><strong>Spot reversals:</strong> Falling price + falling OI (Exhaustion) often precedes a reversal.
+                Watch for a shift in OI direction as an early signal.</li>
+              <li><strong>Watch for squeezes:</strong> OI and funding rates at extremes frequently precede sharp
+                corrections as overcrowded positions get liquidated.</li>
+              <li><strong>Monitor OI before events:</strong> Sudden OI spikes before major events signal heavy
+                positioning — the resolution can be explosive.</li>
             </ul>
-            <h2>Putting It All Together</h2>
-            <p>Open interest is not a standalone signal — it is a context layer that makes your existing analysis
-              sharper. A breakout above resistance is more trustworthy when OI is rising. A breakdown below support is
-              more alarming when new shorts are piling in. A rally on declining OI deserves skepticism. A sell-off on
-              falling OI may be nearing exhaustion. By adding OI to your analytical toolkit, you move from reading just
-              the chart to understanding the positioning dynamics behind it.</p>
-            <p>Want to see these four scenarios analyzed automatically across multiple timeframes with built-in noise
-              filtering? Check out our dedicated <a href="#/blog/9">Multi OI Indicator Guide</a> for a complete
-              walkthrough of how MultiPerps automates Open Interest Price analysis for you.</p>
+            <h2>Putting It Together</h2>
+            <p>OI is a context layer that makes your existing analysis sharper. A breakout is more trustworthy with rising
+              OI. A rally on declining OI deserves skepticism. A sell-off on falling OI may be nearing exhaustion. Add OI
+              to your toolkit and you move from reading the chart to understanding the positioning dynamics behind it.</p>
+            <p>Want these four scenarios analyzed automatically across multiple timeframes with built-in noise filtering?
+              Check out the <a href="#/blog/9">Multi OI Indicator Guide</a> for a complete walkthrough.</p>
           </div>
           <div class="blog-full-article" id="blog-article-5"><a class="blog-back-btn" onclick="showBlogListing()">&larr;
               Back to Blog</a>
@@ -13349,16 +13499,16 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             <p>Price tells you where the market is. Open interest tells you <em>why</em>. Multi OI combines both into a multi-timeframe indicator that classifies market conditions into four scenarios, using <strong>Robust Z-score</strong> normalization (median + MAD, outlier-resistant) to self-calibrate thresholds per asset. This guide covers the four scenarios, the processing pipeline, the Composite Signal Score, the Signal Remark system, and a decision framework for reading the indicator.</p>
             <h2>The Core Idea: Price + OI=The Full Story</h2>
             <p>When price moves, the driver is either new capital entering or existing positions closing — price alone cannot tell you which. Rising price + rising OI = new longs entering (sustainable). Rising price + falling OI = shorts covering (fragile). Multi OI normalizes both into <strong>Robust Z-scores</strong> (median + MAD, outlier-resistant) and classifies the result into one of four scenarios per timeframe.</p>
-            <p>The panel tracks three timeframes — <strong style="color:#2E7D32">30m</strong>, <strong style="color:#1565C0">1H</strong>, and <strong style="color:#7B1FA2">4H</strong> — each using a 34-bar lookback window for consistent cross-TF comparison. In the quadrant grid, each timeframe is a color-coded dot: <strong style="color:#2E7D32">green = 30m</strong>, <strong style="color:#1565C0">blue = 1H</strong>, <strong style="color:#7B1FA2">purple = 4H</strong> (4H dot is larger). Five sparklines below the composite signal provide soft context: composite score trend, 4H price, 4H volume (USDT), funding rate history, and 4H OI notional.</p>
+            <p>The panel tracks three timeframes — <strong style="color:#2E7D32">30m</strong>, <strong style="color:#1565C0">1H</strong>, and <strong style="color:#7B1FA2">4H</strong> — each using a 34-bar lookback window for consistent cross-TF comparison. In the quadrant grid, each timeframe is a color-coded dot: <strong style="color:#2E7D32">green = 30m</strong>, <strong style="color:#1565C0">blue = 1H</strong>, <strong style="color:#7B1FA2">purple = 4H</strong> (4H dot is larger). Five sparklines below the composite signal provide soft context: composite score trend, 4H price, 4H volume (base), funding rate history, and 4H OI notional.</p>
             <h2>The Four Scenarios — And What to Do About Each</h2>
-            <p>Each TF classifies when both |Z_Price| &gt; 2.0 and |Z_OI| &gt; 2.0. When thresholds are not breached or hard filters block classification, the result is Neutral.</p>
-            <h3>1. Strong Uptrend (Z_Price &gt; +2.0 AND Z_OI &gt; +2.0) — Bias: Long</h3>
+            <p>Each TF classifies when |Z_Price| &gt; 1.5 and |Z_OI| &gt; 2.0. When thresholds are not breached or hard filters block classification, the result is Neutral.</p>
+            <h3>1. Strong Uptrend (Z_Price &gt; +1.5 AND Z_OI &gt; +2.0) — Bias: Long</h3>
             <p>Price↑ + OI↑ — new longs entering with genuine capital. The healthiest uptrend: backed by positioning expansion, not short covering. <strong>What to do:</strong> Ride the trend with standard stops. Tighten only if Z_OI starts declining toward threshold.</p>
-            <h3>2. Weak Rally (Z_Price &gt; +2.0 AND Z_OI &lt; -2.0) — Bias: Careful Long</h3>
+            <h3>2. Weak Rally (Z_Price &gt; +1.5 AND Z_OI &lt; -2.0) — Bias: Careful Long</h3>
             <p>Price↑ + OI↓ — rally driven by short covering, not new buyers. Inherently fragile. If Z_OI rises above +2.0, it upgrades to Strong Uptrend; if it keeps falling, reversal becomes likely. <strong>What to do:</strong> Use tighter stops than in SU. Wait for Z_OI confirmation before new longs. Do not chase.</p>
-            <h3>3. Strong Downtrend (Z_Price &lt; -2.0 AND Z_OI &gt; +2.0) — Bias: Short</h3>
+            <h3>3. Strong Downtrend (Z_Price &lt; -1.5 AND Z_OI &gt; +2.0) — Bias: Short</h3>
             <p>Price↓ + OI↑ — new shorts opening with conviction. The most sustainable bearish scenario: selling driven by new positions, not forced liquidations. <strong>What to do:</strong> Favor short-side positioning. Avoid longs — fighting SD is a common costly mistake. Persists until Z_OI declines.</p>
-            <h3>4. Exhaustion (Z_Price &lt; -2.0 AND Z_OI &lt; -2.0) — Bias: Watch for Reversal</h3>
+            <h3>4. Exhaustion (Z_Price &lt; -1.5 AND Z_OI &lt; -2.0) — Bias: Watch for Reversal</h3>
             <p>Price↓ + OI↓ — longs being liquidated, selling nearing exhaustion. Not a directional bias; the move is running out of fuel. <strong>What to do:</strong> Do NOT short here — the move is already exhausting. Watch for reversal signals: bottom pattern, Z_OI rising, or transition to SU. Reduce shorts, wait for confirmation before going long.</p>
             <h3>5. Neutral — Bias: No Directional Bias</h3>
             <p>No statistically significant signal detected — Z-scores within normal range, ADX below 20, or cold-start data still warming up. <strong>No signal is itself a signal.</strong> Most trading losses come from forcing positions in low-conviction conditions. <strong>What to do:</strong> Reduce size, widen stops, or stay flat. The best trades often follow a Neutral period once alignment emerges.</p>
@@ -13374,19 +13524,19 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               &nbsp;&nbsp;├─► <b>HARD FILTER 1: Data Readiness?</b> (30m ≥ 34 bars, 1H ≥ 34 bars, 4H ≥ 34 bars, all TFs ≥
               29 candles for ADX)<br>
               &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (insufficient data — cold start guard active)<br>
-              &nbsp;&nbsp;├─► <b>HARD FILTER 2: Market Trending?</b> (Wilder's ADX ≥ 20, period=14)<br>
+              &nbsp;&nbsp;├─► <b>HARD FILTER 2: Market Trending?</b> (Wilder's ADX > 20, period=14)<br>
               &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (ranging/choppy — no signal in noise)<br>
-              &nbsp;&nbsp;├─► <b>HARD FILTER 3: Both Robust Z-scores Significant?</b> (|Z_Price| &gt; 2.0 AND |Z_OI|
+              &nbsp;&nbsp;├─► <b>HARD FILTER 3: Both Robust Z-scores Significant?</b> (|Z_Price| &gt; 1.5 AND |Z_OI|
               &gt; 2.0)<br>
               &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (price or OI alone is not enough — both must confirm)<br>
               &nbsp;&nbsp;├─► <b>CLASSIFY</b> (using Robust Z-scores — median + MAD, outlier-resistant):<br>
-              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +2.0 &amp; Z_OI &gt; +2.0 → <b style="color:#26D4AC">Strong
+              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +1.5 &amp; Z_OI &gt; +2.0 → <b style="color:#26D4AC">Strong
                 Uptrend (S1=+100)</b><br>
-              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +2.0 &amp; Z_OI &lt; -2.0 → <b style="color:#F3A052">Weak
+              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &gt; +1.5 &amp; Z_OI &lt; -2.0 → <b style="color:#F3A052">Weak
                 Rally (S2=+30)</b><br>
-              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -2.0 &amp; Z_OI &gt; +2.0 → <b style="color:#F23645">Strong
+              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -1.5 &amp; Z_OI &gt; +2.0 → <b style="color:#F23645">Strong
                 Downtrend (S3=-100)</b><br>
-              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -2.0 &amp; Z_OI &lt; -2.0 → <b
+              &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Z_Price &lt; -1.5 &amp; Z_OI &lt; -2.0 → <b
                 style="color:#A78BFA">Exhaustion (S4=-30)</b><br>
               &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Otherwise → <b style="color:#6B7280">Neutral (0)</b><br>
               &nbsp;&nbsp;└─► <b>COMPOSITE OUTPUT</b> (across all 3 TFs):<br>
@@ -13400,15 +13550,15 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             <p>If <strong>any</strong> filter fails, the result is Neutral — no exceptions.</p>
             <ul>
               <li><strong>Data Readiness Gate (Cold Start Guard):</strong> Requires ≥34 bars per TF and ≥29 candles for ADX. Reports which dimension is insufficient (closes, OI, or candles). An overlay shows bars still needed.</li>
-              <li><strong>Trend Detection Gate (Wilder's ADX ≥ 20, period=14):</strong> Only classifies in trending markets. In ranging conditions, Z-score extremes often produce whipsaws — the ADX gate prevents these false classifications.</li>
-              <li><strong>Significance Gate (|Z_Price| &gt; 2.0 AND |Z_OI| &gt; 2.0):</strong> Both metrics must breach thresholds simultaneously. One alone is not enough — both price and positioning must confirm. Robust Z-scores (median + MAD) prevent outlier events from producing false signals.</li>
+              <li><strong>Trend Detection Gate (Wilder's ADX > 20, period=14):</strong> Only classifies in trending markets. In ranging conditions, Z-score extremes often produce whipsaws — the ADX gate prevents these false classifications.</li>
+              <li><strong>Significance Gate (|Z_Price| &gt; 1.5 AND |Z_OI| &gt; 2.0):</strong> Both metrics must breach thresholds simultaneously. Price uses a lower threshold (1.5) because it leads the move; OI uses a stricter threshold (2.0) because it is the confirmation signal. One alone is not enough — both price and positioning must confirm. Robust Z-scores (median + MAD) prevent outlier events from producing false signals.</li>
             </ul>
             <h3>Sparklines — Visual Soft Context (use at your discretion)</h3>
             <p>Five sparklines provide at-a-glance context. They do not affect classification — they are advisory tools.</p>
             <ul>
               <li><strong>Composite Score</strong> — Last 9 scores at 4H intervals (backfilled with same 3-TF logic as live). Rising = strengthening; falling = deteriorating. Heading toward zero from either side warns of a transition.</li>
               <li><strong>Price (4H)</strong> — Last 9 four-hour close prices. Parabolic in SU may signal overextension; just turning up suggests early entry.</li>
-              <li><strong>Volume (4H)</strong> — Last 9 quote volumes (USDT). Rising volume confirms conviction; declining volume during a rally signals weakness.</li>
+              <li><strong>Volume (4H)</strong> — Last 9 base volumes (e.g., BTC for BTCUSDT). Rising volume confirms conviction; declining volume during a rally signals weakness.</li>
               <li><strong>Funding Rate (4H/8H)</strong> — Last 9 rates at native settlement intervals. Spikes = crowded positioning and squeeze risk.</li>
               <li><strong>OI Notional (4H)</strong> — Last 9 OI × price values (USDT). Rising = new capital entering; sudden drops often signal liquidation events.</li>
             </ul>
@@ -13430,17 +13580,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             <h3>Step 1: Read the Composite Signal</h3>
             <p>Look at the directional label and score above the quadrant grid. ≥+30 = Bullish, ≤-30 = Bearish, near zero = no clear edge.</p>
             <h3>Step 2: Read the Signal Remark</h3>
-            <p>The Signal Remark is the richest piece of information on the panel. It is built in 3 steps: (1) classify each TF, (2) group non-neutral TFs by scenario, (3) pick a core phrase based on agreement level. If all agree → "[scenario] across all timeframes." If some agree → "[scenario] on [TF list]." If mixed → one of three sub-types.</p>
+            <p>The Signal Remark is the richest piece of information on the panel. It is built in 3 steps: (1) classify each TF, (2) group non-neutral TFs by scenario, (3) pick a core phrase based on agreement level. If all agree → "[scenario] across all timeframes." If some agree → "[scenario] on [TF list]." If mixed → one of four sub-types.</p>
             <h3>Step 3: Understand Mixed Signal Sub-Types</h3>
             <ul>
-              <li><strong>Divergent (same direction, different strength):</strong> e.g., SU + WR — same price direction, but OI diverges (SU: OI↑, WR: OI↓). A developing trend needing confirmation.</li>
+              <li><strong>Divergent (same price direction, OI diverges):</strong> e.g., SU + WR — same price direction, but OI diverges (SU: OI↑, WR: OI↓). A developing trend needing confirmation.</li>
               <li><strong>Conflicting (opposite directions):</strong> e.g., SU + SD, or SU/WR + EX. EX has price declining, opposing bullish price direction. The most dangerous condition — cut risk.</li>
               <li><strong>Fading (bearish + exhaustion):</strong> e.g., SD + EX — same price direction (declining), but OI diverges (SD: new shorts, EX: liquidations). Selling pressure transitioning from conviction to forced — often precedes reversal.</li>
+              <li><strong>Transitional (same direction, different strength):</strong> Multiple scenarios active that do not fit the above patterns. The market is in flux — wait for clearer alignment before acting.</li>
             </ul>
             <h3>Step 4: Check Timeframe Agreement (4H → 1H → 30m)</h3>
             <p>Start with 4H (big picture), then 1H (swing), then 30m (timing). All 3 agree = high conviction. Disagree = transition, check Signal Remark sub-type. 4H Neutral = short-term signals may be noise.</p>
             <h3>Step 5: Check Z-score Values</h3>
-            <p>Z-scores approaching thresholds = transition incoming. Z-scores at +1.4 = almost classified. Z-scores at +3.0 = potentially overextended. Crossing thresholds = scenario change happening now.</p>
+            <p>Z-scores approaching thresholds = transition incoming. Z_Price near 1.3 or Z_OI near 1.8 = almost classified. Z-scores well beyond thresholds (e.g., |Z| > 3.0) = potentially overextended. Crossing thresholds = scenario change happening now.</p>
             <h3>Step 6: Check Sparklines</h3>
             <p>Use at your discretion — they do not change classification. Composite score trend (strengthening/deteriorating?), price (trending/overextended?), volume (rising/falling?), funding (spiking?), OI notional (growing/shrinking?).</p>
             <h3>Step 7: You Decide</h3>
@@ -13454,12 +13605,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               <li><strong style="color:#A78BFA">EX (-30)</strong> — Price↓ + OI↓. Bias: <b>Watch for Reversal</b>.</li>
               <li><strong style="color:#6B7280">Neutral (0)</strong> — No edge. Bias: <b>No Directional Bias</b>.</li>
               <li><strong>Composite:</strong> ≥+30=Bullish | 0→+30=Slightly Bullish | =0=No Clear | -30→0=Slightly Bearish | ≤-30=Bearish. Weights: 30m/30%, 1H/40%, 4H/30%.</li>
-              <li><strong>Signal Remark:</strong> (1) Classify each TF → (2) Group by scenario → (3) Core phrase (all agree / some agree / mixed). Mixed sub-types: Divergent, Conflicting, Fading.</li>
+              <li><strong>Signal Remark:</strong> (1) Classify each TF → (2) Group by scenario → (3) Core phrase (all agree / some agree / mixed). Mixed sub-types: Divergent, Conflicting, Fading, Transitional.</li>
               <li><strong>Sparklines:</strong> Score trend, Price 4H, Volume 4H, Funding 4H/8H, OI Notional 4H — all advisory, not classification inputs.</li>
             </ul>
             <h2>Important Limitations &amp; Disclaimers</h2>
             <ul>
-              <li><strong>Experimental:</strong> Not statistically backtested or forward-validated. Thresholds (|Z| &gt; 2.0, ADX ≥ 20) are theoretically grounded, not empirically optimized. Use as a <b>confluence tool</b> — never as a standalone signal.</li>
+              <li><strong>Experimental:</strong> Not statistically backtested or forward-validated. Thresholds (|Z_Price| &gt; 1.5, |Z_OI| &gt; 2.0, ADX > 20) are theoretically grounded, not empirically optimized. Use as a <b>confluence tool</b> — never as a standalone signal.</li>
               <li>Multi OI classifies market conditions — it does NOT tell you to buy or sell. Bias labels describe directional lean, not recommended trades.</li>
               <li>Robust Z-scores are relative (vs. recent history), not absolute. Markets can remain extreme longer than expected.</li>
               <li>The Composite Score is a weighted sum, not a voting mechanism. You decide how to reconcile conflicting signals.</li>
