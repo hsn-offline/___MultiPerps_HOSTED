@@ -4952,7 +4952,26 @@
 
         .multioi-signal-remark {
           font-size: 1.0rem;
-          line-height: 1.4
+          line-height: 1.4;
+          padding: 6px 10px
+        }
+
+        .composite-ticker-header {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 6px
+        }
+
+        .composite-ticker-title {
+          font-size: 1.2rem;
+          white-space: normal;
+          overflow-wrap: break-word;
+          word-break: break-word
+        }
+
+        .composite-ticker-price {
+          font-size: 1.1rem;
+          white-space: normal
         }
       }
 
@@ -5041,8 +5060,27 @@
         }
 
         .multioi-composite-signal {
-          padding: 10px 8px 6px;
-          margin-top: 2px
+          padding: 10px 6px 6px;
+          margin-top: 2px;
+          overflow: hidden
+        }
+
+        .composite-ticker-header {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 4px
+        }
+
+        .composite-ticker-title {
+          font-size: 1.05rem;
+          white-space: normal;
+          overflow-wrap: break-word;
+          word-break: break-word
+        }
+
+        .composite-ticker-price {
+          font-size: 0.95rem;
+          white-space: normal
         }
 
         .composite-direction {
@@ -5064,6 +5102,13 @@
           font-weight: 600;
           gap: 4px;
           line-height: 1.5
+        }
+
+        .multioi-signal-remark {
+          font-size: 0.92rem;
+          line-height: 1.4;
+          padding: 8px 12px;
+          margin-top: 8px
         }
 
         .multioi-tooltip-popup {
