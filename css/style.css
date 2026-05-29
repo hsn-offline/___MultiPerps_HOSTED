@@ -3877,7 +3877,7 @@
       .composite-ticker-header {
         display: flex;
         justify-content: center;
-        align-items: baseline;
+        align-items: center;
         gap: 10px;
         margin-bottom: 2px;
         position: relative;
@@ -3905,7 +3905,7 @@
       }
 
       .composite-ticker-price {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
         font-weight: 700;
         color: var(--text);
         white-space: nowrap;
@@ -4970,7 +4970,7 @@
         }
 
         .composite-ticker-price {
-          font-size: 1.1rem;
+          font-size: 1.2rem;
           white-space: normal
         }
       }
@@ -5079,7 +5079,7 @@
         }
 
         .composite-ticker-price {
-          font-size: 0.95rem;
+          font-size: 1.05rem;
           white-space: normal
         }
 

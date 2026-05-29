@@ -218,7 +218,7 @@
         </ul>
         <h2>Putting It Together</h2>
         <p>OI is a context layer that makes your existing analysis sharper. A breakout is more trustworthy with rising OI. A rally on declining OI deserves skepticism. A sell-off on falling OI may be nearing exhaustion. Add OI to your toolkit and you move from reading the chart to understanding the positioning dynamics behind it.</p>
-        <p>Want these four scenarios analyzed automatically across multiple timeframes with built-in noise filtering? Check out the <a href="blog.html#9">Multi OI Indicator Guide</a> for a complete walkthrough.</p>
+        <p>Want these four scenarios analyzed automatically across multiple timeframes with built-in noise filtering? Check out the <a href="blog.html#open-interest">Multi OI Indicator Guide</a> for a complete walkthrough.</p>
       </div>
 
       <div class="blog-full-article" id="blog-article-5"><a class="blog-back-btn" onclick="showBlogListing()" href="#listing">&larr; Back to Blog</a>
@@ -375,8 +375,8 @@
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Resources</div>
-        <a href="blog.html#9">Multi OI Indicator Guide</a>
-        <a href="blog.html#10">Dashboard Alerts Guide</a>
+        <a href="blog.html#open-interest">Multi OI Indicator Guide</a>
+        <a href="blog.html#funding-rates">Dashboard Alerts Guide</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">More</div>
@@ -406,12 +406,24 @@
       for (var i = 0; i < articles.length; i++) articles[i].classList.remove('active');
       window.scrollTo(0, 0);
     }
-    // Handle #9 style URLs for deep-linking to articles
+    // Slug-to-article mapping for readable deep-links
+    var slugMap = {
+      'open-interest': 9,
+      'funding-rates': 10
+    };
+    // Handle #9 style URLs or #slug style URLs for deep-linking to articles
     function handleBlogHash() {
       var hash = window.location.hash.replace('#', '');
-      if (hash && !isNaN(hash)) {
+      if (!hash) { showBlogListing(); return; }
+      // Numeric hash (legacy): #9 → article 9
+      if (!isNaN(hash)) {
         showBlogArticle(parseInt(hash));
-      } else {
+      }
+      // Slug hash: #open-interest → article 9
+      else if (slugMap[hash]) {
+        showBlogArticle(slugMap[hash]);
+      }
+      else {
         showBlogListing();
       }
     }

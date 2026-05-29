@@ -4556,7 +4556,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   '<\/span> — <span class="signal-action">Same price direction but OI diverges:<\/span> ' + allParts + '.';
               } else if (mixedType === 'fading') {
                 phrase = '<span class="signal-sym">$' + sym +
-                  '<\/span> — <span class="signal-action">Momentum is fading on one timeframe:<\/span> ' + allParts +
+                  '<\/span> — <span class="signal-action">Momentum is fading across timeframes:<\/span> ' + allParts +
                   '.';
               } else {
                 // Safety fallback for any unclassified mixed combination
@@ -4567,11 +4567,11 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               // Mixed-type color
               if (mixedType === 'conflicting' || mixedType === 'divergent' || mixedType === 'fading') {
                 scenarioColor = MF_SCENARIOS[2].color;                            // Amber — mixed conviction
-              } else if (score >= 30) scenarioColor = MF_SCENARIOS[1].color;     // Bullish (SU green)
-              else if (score > 0) scenarioColor = MF_SCENARIOS[2].color;         // Slightly Bullish (WR amber)
-              else if (score === 0) scenarioColor = '#6B7280';                    // Neutral
-              else if (score > -30) scenarioColor = MF_SCENARIOS[4].color;       // Slightly Bearish (EX purple)
-              else scenarioColor = MF_SCENARIOS[3].color;                        // Bearish (SD red)
+              } else {
+                // 'transitional' — currently unreachable with 4 scenarios;
+                // fallback to neutral if ever triggered
+                scenarioColor = '#6B7280';
+              }
             }
             // Append timing + funding context
             const timingCtx = this._getTimingContext(distinctScenarioCount, scenarioGroups, score, mixedType);
