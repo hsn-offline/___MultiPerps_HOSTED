@@ -125,6 +125,14 @@
           <span class="blog-card-link">Read more &rarr;</span>
         </div>
       </div>
+      <div class="blog-card" onclick="showBlogArticle(10)">
+        <div class="blog-card-body">
+          <div class="blog-card-date">May 30, 2026</div>
+          <div class="blog-card-title">How to Use Price and Funding Rate Alerts on MultiPerps: A Step-by-Step Guide</div>
+          <div class="blog-card-excerpt">Learn how to set up, manage, and act on price alerts and funding rate alerts on MultiPerps. This practical guide walks you through every step — from choosing an alert type to interpreting trigger notifications.</div>
+          <span class="blog-card-link">Read more &rarr;</span>
+        </div>
+      </div>
     </div>
 
     <!-- Blog articles (hidden by default, shown by JS) -->
@@ -313,6 +321,40 @@
         </ul>
       </div>
 
+      <div class="blog-full-article" id="blog-article-10"><a class="blog-back-btn" onclick="showBlogListing()" href="#listing">&larr; Back to Blog</a>
+        <h1>How to Use Price and Funding Rate Alerts on MultiPerps: A Step-by-Step Guide</h1>
+        <p>MultiPerps provides a built-in alert system that monitors price levels and funding rate thresholds in real time via Binance WebSocket feeds. You do not need any external app, Telegram bot, or browser extension — alerts fire directly in the dashboard with audio notifications and visual popups. This guide walks you through the exact steps to set up, manage, and act on alerts so you never miss a critical market condition.</p>
+        <h2>Step 1: Navigate to the Multi Alert Tab</h2>
+        <p>On the MultiPerps dashboard, click the <strong>Multi Alert</strong> tab in the sticky navigation bar at the top of the page. This opens the alert panel where you can configure up to four independent alert slots. Each slot monitors one ticker with one threshold value, and you can mix price alerts and funding rate alerts across the slots in any combination.</p>
+        <h2>Step 2: Enter the Ticker Symbol</h2>
+        <p>In the alert slot, type the ticker symbol into the <strong>Ticker</strong> input field. Enter the base symbol without the USDT suffix — for example, type <strong>BTC</strong> for BTCUSDT or <strong>ETH</strong> for ETHUSDT. The field auto-completes as you type, showing matching Binance USDT-M perpetual contracts. You can also use the star icon in the search dropdown to save tickers as favourites for quick access in the future.</p>
+        <h2>Step 3: Choose the Alert Type</h2>
+        <p>Use the <strong>alert type dropdown</strong> to select what you want to monitor:</p>
+        <ul>
+          <li><strong>Price:</strong> The alert fires when the live price crosses your specified threshold. Use this for breakout levels, support and resistance monitoring, and entry/exit points.</li>
+          <li><strong>Funding %:</strong> The alert fires when the current funding rate crosses your specified percentage threshold in either direction. Use this to detect extreme positioning — very high positive funding means overleveraged longs (potential short squeeze or long liquidation risk), while very negative funding means overleveraged shorts.</li>
+        </ul>
+        <h2>Step 4: Set the Threshold Value</h2>
+        <p>In the <strong>Price</strong> (or <strong>Funding %</strong>) input field, enter the exact value that should trigger the alert. For price alerts, enter the price level in USDT (for example, 70000 for BTC). For funding rate alerts, enter the percentage value (for example, 0.05 for 0.05%). The current real-time value is displayed next to the input so you can see how close the market is to your threshold.</p>
+        <h2>Step 5: Monitor and Receive Alerts</h2>
+        <p>Once configured, the alert slot shows a live status indicator (green dot when active and monitoring). MultiPerps checks your thresholds against real-time Binance WebSocket data continuously. When a threshold is crossed:</p>
+        <ul>
+          <li><strong>Audio notification:</strong> A sound plays to grab your attention (you can grant browser notification permission for system-level alerts).</li>
+          <li><strong>Visual popup:</strong> A toast notification appears on screen with the alert details.</li>
+          <li><strong>Alert log:</strong> The trigger event is recorded in the alert slot's log area with the exact time and value.</li>
+        </ul>
+        <h2>Step 6: Manage and Update Alerts</h2>
+        <p>Alerts persist across browser sessions using your browser's local storage — you will not lose them if you close the tab or refresh the page. To modify an alert, simply update the ticker, type, or threshold in the slot. To remove an alert, click the <strong>✕</strong> button in the alert card header. To quickly load a ticker from an alert slot into the main chart view, click the <strong>Load</strong> button in that slot. Keep the MultiPerps tab open in your browser to receive alerts — they work even when the tab is in the background.</p>
+        <h2>Practical Tips for Effective Alerts</h2>
+        <ul>
+          <li><strong>Place price alerts at structural levels:</strong> Use support and resistance zones from the daily and 4-hour charts, not arbitrary round numbers.</li>
+          <li><strong>Use funding rate alerts to catch extremes:</strong> A funding rate above 0.05% typically signals overcrowded positioning. The higher the funding, the greater the squeeze risk.</li>
+          <li><strong>Mix alert types across slots:</strong> For example, set two price alerts (entry and exit levels) and one funding rate alert (crowding detection) for comprehensive monitoring.</li>
+          <li><strong>Review alerts each session:</strong> Key levels shift as the market moves. Update your thresholds at least once per trading session.</li>
+          <li><strong>Decide your action before the alert fires:</strong> Know exactly what you will do when the alert triggers — enter a position, move a stop-loss, or simply observe. This eliminates hesitation.</li>
+        </ul>
+      </div>
+
     </div>
   </div>
 
@@ -333,8 +375,8 @@
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Resources</div>
-        <a href="blog.html">Multi OI Indicator Guide</a>
-        <a href="blog.html">Dashboard Alerts Guide</a>
+        <a href="blog.html#9">Multi OI Indicator Guide</a>
+        <a href="blog.html#10">Dashboard Alerts Guide</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">More</div>

@@ -2487,21 +2487,24 @@
       }
 
       .kline-rsi.overbought {
-        color: var(--bad);
-        border-color: rgba(242, 54, 69, 0.4);
-        background: rgba(242, 54, 69, 0.08)
+        color: #FF6B78;
+        border-color: rgba(242, 54, 69, 0.55);
+        background: rgba(242, 54, 69, 0.18);
+        text-shadow: 0 0 6px rgba(242, 54, 69, 0.3)
       }
 
       .kline-rsi.oversold {
-        color: var(--good);
-        border-color: rgba(38, 212, 172, 0.4);
-        background: rgba(38, 212, 172, 0.08)
+        color: #4EECC4;
+        border-color: rgba(38, 212, 172, 0.55);
+        background: rgba(38, 212, 172, 0.18);
+        text-shadow: 0 0 6px rgba(38, 212, 172, 0.3)
       }
 
       .kline-rsi.neutral {
-        color: var(--warn);
-        border-color: rgba(243, 160, 82, 0.3);
-        background: rgba(243, 160, 82, 0.06)
+        color: #FFB86C;
+        border-color: rgba(243, 160, 82, 0.45);
+        background: rgba(243, 160, 82, 0.14);
+        text-shadow: 0 0 6px rgba(243, 160, 82, 0.25)
       }
 
       .multi-ticker-section {
@@ -2693,18 +2696,21 @@
       }
 
       .tracker-rsi.overbought {
-        color: var(--bad);
-        background: rgba(242, 54, 69, 0.1)
+        color: #FF6B78;
+        background: rgba(242, 54, 69, 0.2);
+        text-shadow: 0 0 6px rgba(242, 54, 69, 0.3)
       }
 
       .tracker-rsi.oversold {
-        color: var(--good);
-        background: rgba(38, 212, 172, 0.1)
+        color: #4EECC4;
+        background: rgba(38, 212, 172, 0.2);
+        text-shadow: 0 0 6px rgba(38, 212, 172, 0.3)
       }
 
       .tracker-rsi.neutral {
-        color: var(--warn);
-        background: rgba(243, 160, 82, 0.08)
+        color: #FFB86C;
+        background: rgba(243, 160, 82, 0.16);
+        text-shadow: 0 0 6px rgba(243, 160, 82, 0.25)
       }
 
       .tracker-dropdown-input {
@@ -5202,4 +5208,4 @@
     font-size: 0.78rem;
     padding: 4px 8px;
   }
-}
+      }
