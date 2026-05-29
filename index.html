@@ -121,7 +121,7 @@
           "Funding rate screener — spot overcrowded positions & reversal risk",
           "OI price analysis — classify market scenarios via Robust Z-scores (30m, 1H, 4H)",
           "Market bias signals: Strong Uptrend, Weak Rally, Strong Downtrend, Exhaustion",
-          "Noise filters: per-TF cold start guards, Wilder's ADX gate (checked before Z-scores), Z-score significance thresholds",
+          "Noise filters: per-TF cold start guards, Wilder's ADX gate, Z-score significance thresholds",
           "Price & funding rate alerts with audio",
           "Open interest & funding rate rankings",
           "Market rankings (volume, gainers, losers)",
@@ -657,7 +657,8 @@
         color: var(--muted-3)
       }
 
-      .trade-btn {
+      .trade-btn,
+      .search-x-btn {
         display: inline-flex;
         align-items: center;
         height: 32px;
@@ -2662,7 +2663,8 @@
           padding: 6px 10px;
           gap: 6px;
           border-radius: 8px;
-          margin-bottom: 12px
+          margin-top: 12px;
+          margin-bottom: 14px
         }
 
         .fav-tickers-heading {
@@ -2695,6 +2697,7 @@
         .fav-tickers-section {
           padding: 5px 8px;
           gap: 4px;
+          margin-top: 10px;
           margin-bottom: 12px
         }
 
@@ -3334,6 +3337,7 @@
 
       .control-btn,
       .trade-btn,
+      .search-x-btn,
       .share-btn,
       .copy-price-btn,
       .blog-back-btn {
@@ -3351,6 +3355,7 @@
 
       .control-btn:hover,
       .trade-btn:hover,
+      .search-x-btn:hover,
       .share-btn:hover,
       .copy-price-btn:hover,
       .blog-back-btn:hover {
@@ -3375,6 +3380,18 @@
         background: rgba(37, 99, 235, 0.25);
         border-color: rgba(37, 99, 235, 0.7);
         color: #7EAAFF
+      }
+
+      .search-x-btn {
+        border-color: rgba(29, 155, 240, 0.5);
+        background: rgba(29, 155, 240, 0.12);
+        color: #1DA1F2
+      }
+
+      .search-x-btn:hover {
+        background: rgba(29, 155, 240, 0.22);
+        border-color: rgba(29, 155, 240, 0.7);
+        color: #4db8f5
       }
 
       .share-btn {
@@ -3572,12 +3589,24 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 8px 12px;
+        padding: 8px 12px 10px;
         background: var(--subtle-bg);
         border: 1px solid var(--border-3);
         border-radius: 8px;
         flex-wrap: wrap;
-        margin-bottom: 12px
+        margin-top: 12px;
+        margin-bottom: 16px;
+        position: relative
+      }
+
+      .fav-tickers-section::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -9px;
+        height: 1px;
+        background: rgba(34, 171, 148, 0.15)
       }
 
       .fav-tickers-heading {
@@ -3632,10 +3661,6 @@
       .fav-tickers-empty {
         font-size: 0.85rem;
         color: var(--muted-2)
-      }
-
-      #favTickersSectionBottom {
-        margin-top: 12px
       }
 
       .nav-hamburger {
@@ -4277,6 +4302,11 @@
         color: #7B8794
       }
 
+      .composite-score-value.caution {
+        color: #F3A052;
+        text-shadow: 0 0 12px rgba(243, 160, 82, 0.2)
+      }
+
       .composite-direction {
         font-size: 1.5rem;
         font-weight: 900;
@@ -4316,6 +4346,15 @@
         display: inline-block
       }
 
+      .composite-direction.caution {
+        background: linear-gradient(135deg, rgba(243, 160, 82, 0.12), rgba(243, 160, 82, 0.06));
+        border: 1px solid rgba(243, 160, 82, 0.20);
+        border-radius: 8px;
+        padding: 4px 14px;
+        margin: 2px 0;
+        display: inline-block
+      }
+
       .composite-direction.bullish {
         color: #00FFB8;
         text-shadow: 0 0 24px rgba(0, 255, 184, 0.4), 0 0 48px rgba(0, 255, 184, 0.15)
@@ -4338,6 +4377,11 @@
 
       .composite-direction.flat {
         color: #7B8794
+      }
+
+      .composite-direction.caution {
+        color: #F3A052;
+        text-shadow: 0 0 14px rgba(243, 160, 82, 0.25)
       }
 
       .composite-tf-summary {
@@ -5785,38 +5829,35 @@
           renderFavTickers();
         };
         const renderFavTickers = () => {
-          const listEls = [document.getElementById('favTickersList'), document.getElementById(
-          'favTickersListBottom')];
+          const listEl = document.getElementById('favTickersList');
           const favs = Array.from(state.futuresFavorites);
-          for (const listEl of listEls) {
-            if (!listEl) continue;
-            if (favs.length === 0) {
-              listEl.innerHTML =
-                '<span class="fav-tickers-empty">No favourites yet. Use ★ in the search dropdown to add.<\/span>';
-              continue;
-            }
-            listEl.innerHTML = '';
-            for (const ticker of favs) {
-              const chip = document.createElement('span');
-              chip.className = 'fav-ticker-chip';
-              chip.title = `Load ${ticker}`;
-              const name = document.createElement('span');
-              name.textContent = ticker.replace('USDT', '');
-              chip.appendChild(name);
-              const remove = document.createElement('span');
-              remove.className = 'fav-remove';
-              remove.textContent = '✕';
-              remove.title = `Remove ${ticker} from favourites`;
-              remove.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleFavoriteTicker(ticker);
-              });
-              chip.appendChild(remove);
-              chip.addEventListener('click', () => {
-                loadSymbol(ticker);
-              });
-              listEl.appendChild(chip);
-            }
+          if (!listEl) return;
+          if (favs.length === 0) {
+            listEl.innerHTML =
+              '<span class="fav-tickers-empty">No favourites yet. Use ★ in the search dropdown to add.<\/span>';
+            return;
+          }
+          listEl.innerHTML = '';
+          for (const ticker of favs) {
+            const chip = document.createElement('span');
+            chip.className = 'fav-ticker-chip';
+            chip.title = `Load ${ticker}`;
+            const name = document.createElement('span');
+            name.textContent = ticker.replace('USDT', '');
+            chip.appendChild(name);
+            const remove = document.createElement('span');
+            remove.className = 'fav-remove';
+            remove.textContent = '✕';
+            remove.title = `Remove ${ticker} from favourites`;
+            remove.addEventListener('click', (e) => {
+              e.stopPropagation();
+              toggleFavoriteTicker(ticker);
+            });
+            chip.appendChild(remove);
+            chip.addEventListener('click', () => {
+              loadSymbol(ticker);
+            });
+            listEl.appendChild(chip);
           }
         };
         const state = {
@@ -7488,22 +7529,24 @@ opacity:0.7; transition:opacity 0.2s; }
           </div>
           <div class="timestamp" id="timestampText" style="display:none"></div>
         </div>
+        <div class="chart-list">${intervalSections}</div>
+        <div class="chart-share-row">
+          <div class="chart-action-buttons">
+
+            <button id="tradeBtn" class="control-btn trade-btn" title="Open Binance Futures"><img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" class="binance-favicon-btn" alt="" onerror="this.style.display='none'" />Trade</button>
+            <button id="searchXBtn" class="control-btn search-x-btn" title="Search on X">𝕏 Search</button>
+            <button class="control-btn share-btn" id="chartShareBtn" type="button">
+              <span style="margin-right:6px">𝕏</span>Share
+            </button>
+          </div>
+        </div>
+
           <div class="fav-tickers-section" id="favTickersSection">
             <span class="fav-tickers-heading">★ Favourites:</span>
             <div class="fav-tickers-list" id="favTickersList">
               <span class="fav-tickers-empty">No favourites yet. Use ★ in the search dropdown to add.</span>
             </div>
           </div>
-        <div class="chart-list">${intervalSections}</div>
-        <div class="chart-share-row">
-          <div class="chart-action-buttons">
-
-            <button id="tradeBtn" class="control-btn trade-btn" title="Open Binance Futures"><img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" class="binance-favicon-btn" alt="" onerror="this.style.display='none'" />Trade</button>
-            <button class="control-btn share-btn" id="chartShareBtn" type="button">
-              <span style="margin-right:6px">𝕏</span>Share
-            </button>
-          </div>
-        </div>
 
         <!-- OPEN INTEREST PRICE PANEL -->
         <div class="multioi-panel" id="oiPricePanel">
@@ -7725,12 +7768,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           </div>
         </div>
 
-        <div class="fav-tickers-section" id="favTickersSectionBottom">
-          <span class="fav-tickers-heading">★ Favourites:</span>
-          <div class="fav-tickers-list" id="favTickersListBottom">
-            <span class="fav-tickers-empty">No favourites yet. Use ★ in the search dropdown to add.</span>
-          </div>
-        </div>
+
 
         <div class="multi-alert-panel" id="multiAlertPanel">
           <div class="multi-alert-header">
@@ -8989,14 +9027,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
         }
 
         /**
-         * Shared TF classification logic — single source of truth.
-         * Per the documented pipeline, callers should check ADX (Hard Filter 2)
-         * before computing Z-scores (Hard Filter 3). This function serves as a
-         * safety net: if ADX fails or Z-scores are NaN, it returns Neutral (0).
-         */
-        function _classifyTf(zPrice, zOi, adx) {
-          const adxOk = Number.isFinite(adx) && adx > MF_ADX_THRESH;
-          if (!Number.isFinite(zPrice) || !Number.isFinite(zOi) || !adxOk) return 0;
+         * Shared TF classification logic*/
+        function _classifyTf(zPrice, zOi) {
+          if (!Number.isFinite(zPrice) || !Number.isFinite(zOi)) return 0;
           if (zPrice > MF_PRICE_THRESH && zOi > MF_OI_THRESH) return 1;
           if (zPrice > MF_PRICE_THRESH && zOi < -MF_OI_THRESH) return 2;
           if (zPrice < -MF_PRICE_THRESH && zOi > MF_OI_THRESH) return 3;
@@ -9019,8 +9052,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           return Math.max(-100, Math.min(100, score));
         }
 
-        // Utility: format funding rate percentage for display (currently unused in Signal Remark —
-        // funding is now range-based; kept for potential future use and debugging)
         function _fmtFr(frPct) {
           const sign = frPct >= 0 ? '+' : '';
           return sign + frPct.toFixed(3) + '%';
@@ -9085,7 +9116,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             if (this.symbol !== symbol) {
               this._firstLoad = true;
               this.tfData = {}; // Clear stale data from previous symbol
+              // Reset backfill cache on symbol change
+              this._backfillCache = null;
+              this._backfillLast4hTs = null;
+              this._backfillCacheTime = null;
             }
+            this.symbol = symbol;
             this.stats.oiCurrent = null;
             this.stats.fundingRate = null;
             this.stats.realtimeFundingRate = null;
@@ -9093,10 +9129,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             this.stats.klinesStale = false;
             this.stats.zPrice = {};
             this.stats.zOi = {};
-            // Reset backfill cache on symbol change
-            this._backfillCache = null;
-            this._backfillLast4hTs = null;
-            this._backfillCacheTime = null;
             try {
               const key = 'mf_scoreHistory_' + symbol;
               const stored = localStorage.getItem(key);
@@ -9244,10 +9276,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   const oEnd = tfData.oiTimestamps[tfData.oiTimestamps.length - 1];
                   // klineTimestamps store close times, oiTimestamps store start times.
                   // For the same period, close_time ≈ start_time + period_duration.
-                  // Adjust alignment bounds so we don't incorrectly exclude the
-                  // most recent kline (whose close time is ~1 period after the
-                  // last OI start time) or the first OI entry (whose start time
-                  // is ~1 period before the first kline close time).
                   const oiPeriodMs = tfData.oiTimestamps.length >= 2
                     ? tfData.oiTimestamps[1] - tfData.oiTimestamps[0]
                     : 0;
@@ -9412,7 +9440,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               this.stats.zPrice[tf.key] = NaN;
               this.stats.zOi[tf.key] = NaN;
               if (!adxOk) {
-                // ADX gate failed — skip Z-score computation entirely (matches tooltip pipeline: Filter 2 before Filter 3)
+
                 scenarios[tf.key] = {
                   idx: 0,
                   zPrice: NaN,
@@ -9437,11 +9465,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const zOi = oiBaseline.length > 0 ? _zRobust(curOi, oiBaseline) : NaN;
               this.stats.zPrice[tf.key] = zPrice;
               this.stats.zOi[tf.key] = zOi;
-              // Classify using shared helper (Z-score significance gate is inside _classifyTf)
-              const finalScenario = _classifyTf(zPrice, zOi, adxValue);
+              const finalScenario = _classifyTf(zPrice, zOi);
               let reason = '';
               if (finalScenario === 0) {
-                // ADX already passed — only reason for Neutral here is Z-score insufficiency
+
                 if (!Number.isFinite(zPrice) || !Number.isFinite(zOi)) {
                   reason = 'Z-score not computable';
                 } else {
@@ -9473,36 +9500,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
            * For each of the last (MF_SPARKLINE_POINTS - 1) completed 4H candles,
            * compute a full 3-TF composite score using the data available at that point.
            * The current live score is always the last point.
-           *
-           * Consistency with computeClassification() — verified per-TF:
-           *
-           *   1. Data windowing:
-           *      - 4H: closes/oi sliced [startIdx..endIdx] (N bars inclusive),
-           *        identical to live's closes.slice(-N). OI uses same indices
-           *        because fetchData() enforces closes.length === oi.length.
-           *      - 1H/30m: timestamp-aligned via _findBarIdxByTime to the 4H
-           *        close time, then N bars inclusive ending at the aligned bar,
-           *        identical to live's closes.slice(-N) for the aligned position.
-           *
-           *   2. Unified cold-start guard (per historical SLICE, not total array):
-           *      if (closesSlice.length < coldMin || oiSlice.length < coldMin
-           *          || candlesSlice.length < MF_ADX_MIN_CANDLES)
-           *        → TF = Neutral (idx:0), no ADX, no Z-scores computed
-           *      This matches computeClassification's guard exactly:
-           *      - Same constant: coldMin = MF_COLD_START_MIN[tfKey] (34)
-           *      - Same constant: MF_ADX_MIN_CANDLES (29)
-           *      - Same effect: entire TF neutral if ANY condition fails
-           *
-           *   3. ADX gate (Hard Filter 2): _wilderAdx(candlesSlice, MF_ADX_PERIOD)
-           *      computed FIRST, before Z-scores. If ADX < 20 or NaN, TF = Neutral
-           *      and Z-scores are NOT computed. Same order as computeClassification.
-           *
-           *   4. Z-score computation (Hard Filter 3): _zRobust(current, baseline)
-           *      where baseline = slice[0..-2] (all except current). Only computed
-           *      if ADX passed. Same as live.
-           *
-           *   5. Classification & scoring: shared _classifyTf() and
-           *      _computeCompositeScore() helpers.
            */
           _backfillCompositeHistory() {
             const d4h = this.tfData['4H'];
@@ -9513,8 +9510,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const current4hTs = d4h.klineTimestamps && d4h.klineTimestamps.length > 0
               ? d4h.klineTimestamps[d4h.klineTimestamps.length - 1]
               : null;
-            // Use cached backfill if 4H candle hasn't closed and cache exists and is fresh (<5 min)
-            const CACHE_STALE_MS = 5 * 60 * 1000;
+            const CACHE_STALE_MS = 2 * 60 * 1000;
             if (this._backfillCache && this._backfillLast4hTs !== null && current4hTs === this._backfillLast4hTs
                 && this._backfillCacheTime !== null && (Date.now() - this._backfillCacheTime) < CACHE_STALE_MS) {
               // Just append live score to cached backfill
@@ -9555,7 +9551,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const oi4h = d4h.oi && d4h.oi.length > endIdx ? d4h.oi.slice(startIdx, endIdx + 1) : [];
               const candles4h = d4h.candles && d4h.candles.length > endIdx
                 ? d4h.candles.slice(Math.max(0, endIdx - (MF_ADX_MIN_CANDLES - 1)), endIdx + 1) : [];
-              // Unified cold-start guard: matches computeClassification exactly —
               // ALL three conditions must pass before computing ADX or Z-scores.
               if (closes4h.length >= coldMin4h && oi4h.length >= coldMin4h && candles4h.length >= MF_ADX_MIN_CANDLES) {
                 // HARD FILTER 2: ADX gate — compute ADX first, before Z-scores (matches tooltip pipeline)
@@ -9642,10 +9637,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
 
               // Classify each TF using shared helper (same as computeClassification)
               const scenarios = {};
-              for (const [tfKey, zp, zo, adx] of [['30m', zPrice30m, zOi30m, adx30m], ['1H', zPrice1h, zOi1h, adx1h], ['4H', zPrice4h, zOi4h, adx4h]]) {
-                scenarios[tfKey] = { idx: _classifyTf(zp, zo, adx) };
+              for (const [tfKey, zp, zo] of [['30m', zPrice30m, zOi30m], ['1H', zPrice1h, zOi1h], ['4H', zPrice4h, zOi4h]]) {
+                scenarios[tfKey] = { idx: _classifyTf(zp, zo) };
               }
-              // Compute composite score using shared helper (same as computeClassification)
+              // Compute composite score using shared helper 
               const score = _computeCompositeScore(scenarios);
               history.push(score);
             }
@@ -9681,11 +9676,14 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   if (sc && sc.coldStart) {
                     const closesLen = d ? d.closes.length : 0;
                     const oiLen = d ? d.oi.length : 0;
-                    const bestLen = Math.min(closesLen, oiLen);
-                    const statusClass = bestLen >= coldMin ? 'ready' : (bestLen > 0 ? 'partial' : 'empty');
+                    const candlesLen = d ? d.candles.length : 0;
+                    const bestLen = Math.min(closesLen, oiLen, candlesLen);
+                    const adxReady = candlesLen >= MF_ADX_MIN_CANDLES;
+                    const statusClass = bestLen >= coldMin && adxReady ? 'ready' : (bestLen > 0 ? 'partial' : 'empty');
+                    const displayMin = Math.max(coldMin, MF_ADX_MIN_CANDLES);
                     html += '<div class="multioi-coldstart-overlay__tf"><span class="multioi-coldstart-overlay__tf-label">' +
                       tf.key + '</span><span class="multioi-coldstart-overlay__tf-value ' + statusClass + '">' +
-                      bestLen + '/' + coldMin + '</span></div>';
+                      bestLen + '/' + displayMin + '</span></div>';
                   } else {
                     html += '<div class="multioi-coldstart-overlay__tf"><span class="multioi-coldstart-overlay__tf-label">' +
                       tf.key + '</span><span class="multioi-coldstart-overlay__tf-value ready">&#x2713;</span></div>';
@@ -10091,11 +10089,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   '<\/span> — <span class="signal-action">Mixed signals:<\/span> ' + allParts + '.';
               }
               
-              // Mixed-type color override: when timeframes disagree or conviction is mixed,
-              // the composite score alone is misleading — e.g., 30m=SU,1H=SU,4H=SD gives
-              // score=+40 which would show GREEN, but the text says "Timeframes disagree".
-              // Always use amber (caution) for conflicting/divergent to match the warning tone.
-              if (mixedType === 'conflicting' || mixedType === 'divergent') {
+              // Mixed-type color
+              if (mixedType === 'conflicting' || mixedType === 'divergent' || mixedType === 'fading') {
                 scenarioColor = MF_SCENARIOS[2].color;                            // Amber — mixed conviction
               } else if (score >= 30) scenarioColor = MF_SCENARIOS[1].color;     // Bullish (SU green)
               else if (score > 0) scenarioColor = MF_SCENARIOS[2].color;         // Slightly Bullish (WR amber)
@@ -10112,7 +10107,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
 
           _getTimingContext(distinctScenarioCount, scenarioGroups, score, mixedType) {
             if (distinctScenarioCount === 0) {
-              // Action already embedded in core phrase for the no-signal case
               return '';
             }
 
@@ -10121,12 +10115,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const hasSd = !!scenarioGroups[3];
             const hasEx = !!scenarioGroups[4];
             const isBullish = hasSu || hasWr;
-            const isBearish = hasSd;
-
-            // Number of classified TFs (sum across all scenario groups, not distinct types)
+            const isBearish = hasSd || hasEx;
             const classifiedTfCount = Object.values(scenarioGroups).reduce((sum, g) => sum + g.tfs.length, 0);
 
-            // Max |Z-score| across classified TFs for overextension detection
             let maxAbsZ = 0;
             for (const tf of MF_TIMEFRAMES) {
               const sc = this.classification && this.classification.scenarios ? this.classification.scenarios[tf.key] : null;
@@ -10147,9 +10138,11 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             let timing = '';
             let fundingCtx = '';
 
-            // ── CONFLICTING (bull + bear, or bull + exhaustion) ──
+            // ── CONFLICTING
             if (mixedType === 'conflicting') {
-              if (hasEx && isBullish && !isBearish) {
+
+              const isBullVsExhaustion = hasEx && isBullish && !hasSd;
+              if (isBullVsExhaustion) {
                 timing = 'Momentum peaking \u2014 tighten stops.';
               } else {
                 timing = 'TFs oppose \u2014 stay out.';
@@ -10187,8 +10180,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 fundingCtx = ' Extreme funding \u2014 squeeze risk.';
               }
             }
-            // ── PURE EXHAUSTION (EX only, no other scenarios) ──
-            else if (hasEx && !isBullish && !isBearish) {
+            // ── PURE EXHAUSTION (EX only, no SU/SD/WR — price↓+OI↓ unwinding)
+            //   Reached when EX is the only non-neutral scenario.
+            //   isBearish includes EX, so condition uses hasEx && !hasSd to isolate EX-only.
+            else if (hasEx && !hasSu && !hasSd && !hasWr) {
               if (classifiedTfCount >= 2) {
                 timing = isExtended
                   ? 'Overextended unwinding \u2014 prepare for reversal.'
@@ -10198,12 +10193,20 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   ? 'Overextended unwinding \u2014 prepare for reversal.'
                   : 'Unwinding \u2014 reversal risk.';
               }
-              if (frPct !== null && Math.abs(frPct) > 0.2) {
-                fundingCtx = ' Extreme funding \u2014 squeeze risk.';
+              // Granular funding context — EX is bearish-side (price↓), same granularity as SD
+              if (frPct !== null) {
+                if (frPct < -0.2) {
+                  fundingCtx = ' Extreme negative funding \u2014 shorts crowded, reversal risk.';
+                } else if (frPct < -0.1) {
+                  fundingCtx = ' Elevated short funding amid unwinding \u2014 squeeze risk.';
+                } else if (frPct > 0.1) {
+                  fundingCtx = ' Positive funding amid unwinding \u2014 trapped longs.';
+                }
               }
             }
             // ── PURE WEAK RALLY (WR only, no SU/SD/EX) ──
-            else if (hasWr && !hasSu && !isBearish && !hasEx) {
+            //   !isBearish covers both !hasSd && !hasEx (since isBearish = hasSd || hasEx)
+            else if (hasWr && !hasSu && !isBearish) {
               if (isExtended) {
                 timing = 'Overextended weak rally \u2014 avoid new longs.';
               } else if (classifiedTfCount >= 2) {
@@ -10220,7 +10223,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               }
             }
             // ── PURE BULLISH (SU only — SU+WR goes to divergent, SU+EX/SD to conflicting) ──
-            else if (isBullish && !isBearish && !hasEx) {
+            //   !isBearish covers both !hasSd && !hasEx (since isBearish = hasSd || hasEx)
+            else if (isBullish && !isBearish) {
               if (isExtended) {
                 timing = 'Overextended \u2014 avoid new longs.';
               } else if (classifiedTfCount >= 3) {
@@ -10242,7 +10246,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               }
             }
             // ── PURE BEARISH (SD only — SD+EX goes to fading, SD+WR/SU to conflicting) ──
-            else if (isBearish && !isBullish) {
+            //   !hasEx ensures EX-only is handled by the EX branch above, not here.
+            else if (hasSd && !isBullish && !hasEx) {
               if (isExtended) {
                 timing = 'Overextended \u2014 avoid new shorts.';
               } else if (classifiedTfCount >= 3) {
@@ -10365,19 +10370,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const mixedType = classifiedCount > 1 ? this._getMixedSubType(scenarioGroups) : null;
               if (mixedType === 'conflicting') {
                 // Timeframes genuinely oppose each other — always show Mixed Signals
+                // Use 'caution' (amber) to match signal remark color for mixed conviction
                 dirWord = 'Mixed Signals';
-                dirClass = 'flat';
+                dirClass = 'caution';
+              } else if (mixedType === 'fading') {
+                // SD+EX: momentum is fading, not a clean bearish signal
+                // Use 'caution' (amber) to match signal remark color for mixed conviction
+                dirWord = 'Fading Momentum';
+                dirClass = 'caution';
               } else if (isExhaustionDominant) {
-                if (score < 0) {
-                  dirWord = 'Potential Reversal';
-                  dirClass = 'slightly-bearish';
-                } else if (score === 0) {
-                  dirWord = 'Potential Reversal';
-                  dirClass = 'flat';
-                } else {
-                  dirWord = 'Fading Momentum';
-                  dirClass = 'flat';
-                }
+                // EX dominant always implies score < 0 (EX contributes -30 per TF, no SU/SD/WR can be present)
+                dirWord = 'Potential Reversal';
+                dirClass = score <= -30 ? 'bearish' : 'slightly-bearish';
               } else if (score >= 30) {
                 dirWord = 'Bullish Scenario';
                 dirClass = 'bullish';
@@ -10393,13 +10397,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               } else {
                 dirWord = 'Bearish Scenario';
                 dirClass = 'bearish';
-              }
-              const isDominantBullish = dominantIdx === 1 || dominantIdx === 2;
-              const isDominantBearish = dominantIdx === 3;
-              const scoreConflictsWithDominant = (isDominantBullish && score < 0) || (isDominantBearish && score > 0);
-              if (scoreConflictsWithDominant && !isExhaustionDominant && Math.abs(score) < 15) {
-                dirWord = 'Mixed Signals';
-                dirClass = 'flat';
               }
               if (dirEl) {
                 dirEl.textContent = dirWord;
@@ -10637,6 +10634,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const key = 'mf_scoreHistory_' + (this.symbol || '');
               localStorage.setItem(key, JSON.stringify(history));
             } catch (e) {}
+            // History is provided to _initSparklineHover() via getHistory() closure — no canvas property needed
             this._drawSparkline(canvas, history, {
               zeroLine: true,
               fillPositive: '#26D4AC',
@@ -10657,6 +10655,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const lastPrice = priceHistory.length > 0 ? priceHistory[priceHistory.length - 1] : NaN;
             const firstPrice = priceHistory.length > 0 ? priceHistory[0] : NaN;
             const up = Number.isFinite(lastPrice) && Number.isFinite(firstPrice) && lastPrice >= firstPrice;
+            // History is provided to _initSparklineHover() via getHistory() closure — no canvas property needed
             this._drawSparkline(canvas, priceHistory, {
               zeroLine: false,
               fillPositive: up ? '#5B8CFF' : '#F23645',
@@ -12380,6 +12379,21 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           if (state.elements.tradeBtn) {
             state.elements.tradeBtn.addEventListener('click', () => {
               const url = getBinanceFuturesUrl(state.symbol);
+              try {
+                const w = window.open(url, '_blank', 'noopener,noreferrer');
+                if (w) w.opener = null;
+              } catch {
+                window.location.href = url;
+              }
+            });
+          }
+          // Search X button — open X search for the current ticker
+          const searchXBtn = document.getElementById('searchXBtn');
+          if (searchXBtn) {
+            searchXBtn.addEventListener('click', () => {
+              const ticker = (state.symbol || '').replace('USDT', '');
+              if (!ticker) return;
+              const url = `https://x.com/search?q=%24${encodeURIComponent(ticker)}&src=typed_query`;
               try {
                 const w = window.open(url, '_blank', 'noopener,noreferrer');
                 if (w) w.opener = null;
