@@ -1374,7 +1374,7 @@ opacity:0.7; transition:opacity 0.2s; }
           const out = [];
           for (const s of list) {
             if (!s || s.status !== 'TRADING') continue;
-            if (s.contractType && s.contractType !== 'PERPETUAL') continue;
+            if (s.contractType === 'CURRENT_QUARTER' || s.contractType === 'NEXT_QUARTER') continue;
             if (s.quoteAsset !== 'USDT') continue;
             const sym = String(s.symbol || '').toUpperCase();
             if (!sym.endsWith('USDT')) continue;
