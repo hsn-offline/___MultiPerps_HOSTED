@@ -7820,7 +7820,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               Service</a>
           </div>
           <div class="footer-col">
-            <div class="footer-col-title">Resources</div><a href="blog.html#9">Multi OI Indicator Guide</a><a href="blog.html"
+            <div class="footer-col-title">Resources</div><a href="blog.html#9">Multi OI Indicator Guide</a><a href="blog.html#10"
               >Dashboard Alerts Guide</a>
           </div>
           <div class="footer-col">
@@ -7833,6 +7833,34 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               href="https://www.binance.com/en/futures/home" target="_blank" rel="noopener">Binance Futures
               API</a></span></div>
       </footer>
+    </div>
+    <div id="shareModal" class="share-modal" role="dialog" aria-label="Share Charts" aria-modal="true">
+      <div class="share-modal-backdrop" id="shareModalBackdrop"></div>
+      <div class="share-modal-box"><button class="share-modal-close" id="shareModalClose"
+          aria-label="Close share modal">&times;</button>
+        <div class="share-modal-title">Two-step Share</div>
+        <div class="share-step">
+          <div class="share-step-num" id="shareStep1Num">1</div>
+          <div class="share-step-body">
+            <div class="share-step-label">Copy Multi Chart</div><button class="share-copy-btn" id="shareCopyChartBtn"
+              type="button">⧉</button>
+          </div>
+        </div>
+        <div class="share-step">
+          <div class="share-step-num" id="shareStep2Num">2</div>
+          <div class="share-step-body">
+            <div class="share-step-label">Copy Share Text</div><button class="share-copy-btn" id="shareOpenPostBtn"
+              type="button">⧉</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="blogModal" class="page-modal blog-modal" role="dialog" aria-label="Trading Blog" aria-modal="true">
+      <div class="page-modal-backdrop" id="blogModalBackdrop"></div>
+      <div class="page-modal-content blog-modal-content"><button class="page-modal-close" id="blogModalClose"
+          aria-label="Close blog modal">&times;</button>
+        <div id="blogModalBody"></div>
+      </div>
     </div>
 
 </body>

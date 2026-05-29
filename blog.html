@@ -407,12 +407,18 @@
       window.scrollTo(0, 0);
     }
     // Handle #9 style URLs for deep-linking to articles
-    (function() {
+    function handleBlogHash() {
       var hash = window.location.hash.replace('#', '');
       if (hash && !isNaN(hash)) {
         showBlogArticle(parseInt(hash));
+      } else {
+        showBlogListing();
       }
-    })();
+    }
+    // Run on initial load
+    handleBlogHash();
+    // Also run when hash changes (e.g. footer links clicked while on blog.html)
+    window.addEventListener('hashchange', handleBlogHash);
   </script>
 
 </body>
