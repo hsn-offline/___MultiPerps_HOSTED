@@ -4201,8 +4201,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 for (const tf of MF_TIMEFRAMES) {
                   const d = this.tfData[tf.key];
                   const sc = this.classification.scenarios[tf.key];
-                  const coldMin = MF_COLD_START_MIN[tf.key] || MF_COLD_START_FALLBACK;
                   if (sc && sc.coldStart) {
+                    const coldMin = MF_COLD_START_MIN[tf.key] || MF_COLD_START_FALLBACK;
                     const closesLen = d ? d.closes.length : 0;
                     const oiLen = d ? d.oi.length : 0;
                     const candlesLen = d ? d.candles.length : 0;
@@ -4210,18 +4210,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     const adxReady = candlesLen >= MF_ADX_MIN_CANDLES;
                     const statusClass = bestLen >= coldMin && adxReady ? 'ready' : (bestLen > 0 ? 'partial' : 'empty');
                     const displayMin = Math.max(coldMin, MF_ADX_MIN_CANDLES);
-                    // Show which data source is the bottleneck when cold start is not yet ready
-                    let bottleneck = '';
-                    if (bestLen < displayMin || !adxReady) {
-                      const parts = [];
-                      if (closesLen < coldMin) parts.push('closes:' + closesLen);
-                      if (oiLen < coldMin) parts.push('OI:' + oiLen);
-                      if (candlesLen < MF_ADX_MIN_CANDLES) parts.push('candles:' + candlesLen + ' (ADX)');
-                      if (parts.length > 0) bottleneck = ' \u2014 ' + parts.join(', ');
-                    }
                     html += '<div class="multioi-coldstart-overlay__tf"><span class="multioi-coldstart-overlay__tf-label">' +
                       tf.key + '</span><span class="multioi-coldstart-overlay__tf-value ' + statusClass + '">' +
-                      bestLen + '/' + displayMin + bottleneck + '</span></div>';
+                      (statusClass === 'ready' ? '&#x2713;' : bestLen + '/' + displayMin) + '</span></div>';
                   } else {
                     html += '<div class="multioi-coldstart-overlay__tf"><span class="multioi-coldstart-overlay__tf-label">' +
                       tf.key + '</span><span class="multioi-coldstart-overlay__tf-value ready">&#x2713;</span></div>';
