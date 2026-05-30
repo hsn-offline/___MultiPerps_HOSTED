@@ -3121,6 +3121,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     // Throttle sparkline canvas re-renders from WS (max once per 2s)
                     if (!oiPricePanel._wsSparklineTimer) {
                       oiPricePanel._wsSparklineTimer = setTimeout(() => {
+                        // Skip if tfData hasn't been populated yet (e.g. after ticker switch,
+                        // fetchData hasn't completed — avoid rendering with empty/old data).
+                        if (!oiPricePanel.tfData['1H'] || !oiPricePanel.tfData['1H'].closes || oiPricePanel.tfData['1H'].closes.length === 0) {
+                          oiPricePanel._wsSparklineTimer = null;
+                          return;
+                        }
                         // Recompute classification with the latest 1H WS data so the
                         // composite sparkline's live point stays current. Without this,
                         // the composite sparkline only updates on full REST refresh cycles
@@ -5127,7 +5133,24 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           },
           startAutoRefresh(symbol) {
             this.stopAutoRefresh();
+            const prevSymbol = this.symbol;
             this.symbol = symbol;
+            // If symbol changed, clear stale data immediately so that render calls
+            // during the async fetchData() don't draw the old symbol's sparklines.
+            // (fetchData() has its own check, but it compares this.symbol === symbol
+            // which is now true because we just set it above, so it would skip clearing.)
+            if (prevSymbol !== symbol) {
+              this.tfData = {};
+              this._backfillCache = null;
+              this._backfillZPriceCache = null;
+              this._backfillZOiCache = null;
+              this._backfillLast1hTs = null;
+              this._backfillCacheTime = null;
+              this._zPrice1hHistory = [];
+              this._zOi1hHistory = [];
+              this._scoreHistory = [];
+              this.classification = { scenarios: {}, signalStrength: 0 };
+            }
             this.refresh(symbol);
             this.timer = setInterval(() => {
               if (this.symbol && state.isRunning) {
