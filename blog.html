@@ -375,8 +375,8 @@
         <h2>The Processing Pipeline</h2>
         <p>Multi OI uses three hard filters checked in order:</p>
         <ol>
-          <li><strong>Data Readiness Gate</strong> — requires 34+ bars per TF</li>
-          <li><strong>Trend Detection Gate</strong> — Wilder's ADX &gt; 20 (if ADX fails, Z-scores are not computed at all)</li>
+          <li><strong>Data Readiness Gate</strong> — requires 34+ bars per TF (and ≥29 candles for ADX computation)</li>
+          <li><strong>Trend Detection Gate</strong> — Wilder's ADX &gt; 20 (if ADX fails, classification defaults to Neutral, but Z-scores are still computed and displayed)</li>
           <li><strong>Significance Gate</strong> — both |Z_Price| &gt; 1.5 <strong>AND</strong> |Z_OI| &gt; 2.0 must be breached simultaneously</li>
         </ol>
         <blockquote>
@@ -417,11 +417,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td>≥ +30</td><td>Bullish</td></tr>
-            <tr><td>0 to +30</td><td>Slightly Bullish</td></tr>
-            <tr><td>0</td><td>No Clear</td></tr>
-            <tr><td>−30 to 0</td><td>Slightly Bearish</td></tr>
-            <tr><td>≤ −30</td><td>Bearish</td></tr>
+            <tr><td>≥ +30</td><td>Bullish Scenario</td></tr>
+            <tr><td>0 to +30</td><td>Slightly Bullish Scenario</td></tr>
+            <tr><td>0</td><td>No Clear Scenario</td></tr>
+            <tr><td>−30 to 0</td><td>Slightly Bearish Scenario</td></tr>
+            <tr><td>≤ −30</td><td>Bearish Scenario</td></tr>
           </tbody>
         </table>
 
@@ -439,6 +439,7 @@
           <tbody>
             <tr><td>EX-dominant (score ≤ −30)</td><td>Exhaustion Reversal</td><td>Bearish</td></tr>
             <tr><td>EX-dominant (score &gt; −30)</td><td>Mild Exhaustion</td><td>Slightly bearish</td></tr>
+            <tr><td>Divergent (SU + WR — same price direction, OI diverges)</td><td>Score-based label (e.g. Bullish Scenario)</td><td>Per score</td></tr>
             <tr><td>Conflicting (bull + bear or bull + EX)</td><td>Mixed Signals</td><td>Caution (amber)</td></tr>
             <tr><td>Fading (SD + EX only)</td><td>Fading Momentum</td><td>Caution (amber)</td></tr>
           </tbody>
@@ -456,7 +457,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td>Extreme</td><td>|FR| &gt; 0.2%</td><td>|FR| &gt; 0.2%</td></tr>
+            <tr><td>Extreme</td><td>|FR| &gt; 0.2%</td><td>|FR| &gt; 0.2% (in mixed scenarios) / |FR| &gt; 0.03% (in pure scenarios)</td></tr>
             <tr><td>Elevated</td><td>|FR| &gt; 0.1%</td><td>|FR| &gt; 0.03%</td></tr>
           </tbody>
         </table>
@@ -468,7 +469,7 @@
           <li><strong>Step 1:</strong> Read the Composite Signal and directional label.</li>
           <li><strong>Step 2:</strong> Check per-TF breakdown — do all 3 timeframes agree?</li>
           <li><strong>Step 3:</strong> Check Z-score values — approaching thresholds = transition incoming.</li>
-          <li><strong>Step 4:</strong> Use sparklines in Trend View for advisory context (score trend, price 1H).</li>
+          <li><strong>Step 4:</strong> Use sparklines in Trend View for advisory context (1H Composite Score, Price, Z_Price, Z_OI — each showing the last 9 values).</li>
           <li><strong>Step 5:</strong> You decide —
             <ul>
               <li><strong>Scalpers</strong> → weigh 30m more</li>
