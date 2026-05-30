@@ -2086,6 +2086,15 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
   Timing context uses <b>[Stage] — [Action]</b> format for quick decisions. Funding shown as range indicator (e.g. "Elevated funding — longs crowded"), not exact value.<br>
   Mixed sub-types: <b>Divergent</b> (same price direction, OI diverges e.g. SU+WR), <b>Conflicting</b> (opposite directions incl. bull+EX), <b>Fading</b> (bear+EX, reversal warning), <b>Transitional</b> (same direction, different strength)</span><br><br>
 
+  <strong style="color:var(--text)">Direction Label Overrides</strong><br>
+  <span style="font-size:1rem;color:var(--muted-3)">
+  Score thresholds: &ge;+30 = Bullish, +1 to +29 = Slightly Bullish, 0 = No Clear, &minus;1 to &minus;29 = Slightly Bearish, &le;&minus;30 = Bearish.<br>
+  Overrides: <b>EX-dominant</b> &rarr; Exhaustion Reversal (score &le;&minus;30) or Mild Exhaustion (score &gt;&minus;30). <b>Conflicting</b> (bull+bear or bull+EX) &rarr; Mixed Signals (caution/amber). <b>Fading</b> (SD+EX only) &rarr; Fading Momentum (caution/amber).</span><br><br>
+
+  <strong style="color:var(--text)">Funding Rate Context</strong><br>
+  <span style="font-size:1rem;color:var(--muted-3)">
+  Elevated thresholds: |FR| &gt; 0.1% (overcrowding). Contrarian thresholds: |FR| &gt; 0.03% (squeeze fuel &mdash; lower threshold because counter-trend funding is more significant). Extreme: |FR| &gt; 0.2%. Positive FR in downtrend = long squeeze fuel; negative FR in uptrend = short squeeze fuel.</span><br><br>
+
   <strong style="color:var(--text)">Z-score Metrics</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
   <span style="color:#5B8CFF"><b>Z_Price</b></span> — Robust Z of prices (median + MAD). Current candle excluded from baseline.<br>
@@ -4175,9 +4184,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     const adxReady = candlesLen >= MF_ADX_MIN_CANDLES;
                     const statusClass = bestLen >= coldMin && adxReady ? 'ready' : (bestLen > 0 ? 'partial' : 'empty');
                     const displayMin = Math.max(coldMin, MF_ADX_MIN_CANDLES);
+                    // Show which data source is the bottleneck when cold start is not yet ready
+                    let bottleneck = '';
+                    if (bestLen < displayMin || !adxReady) {
+                      const parts = [];
+                      if (closesLen < coldMin) parts.push('closes:' + closesLen);
+                      if (oiLen < coldMin) parts.push('OI:' + oiLen);
+                      if (candlesLen < MF_ADX_MIN_CANDLES) parts.push('candles:' + candlesLen + ' (ADX)');
+                      if (parts.length > 0) bottleneck = ' \u2014 ' + parts.join(', ');
+                    }
                     html += '<div class="multioi-coldstart-overlay__tf"><span class="multioi-coldstart-overlay__tf-label">' +
                       tf.key + '</span><span class="multioi-coldstart-overlay__tf-value ' + statusClass + '">' +
-                      bestLen + '/' + displayMin + '</span></div>';
+                      bestLen + '/' + displayMin + bottleneck + '</span></div>';
                   } else {
                     html += '<div class="multioi-coldstart-overlay__tf"><span class="multioi-coldstart-overlay__tf-label">' +
                       tf.key + '</span><span class="multioi-coldstart-overlay__tf-value ready">&#x2713;</span></div>';
@@ -4874,7 +4892,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 dirClass = 'caution';
               } else if (isExhaustionDominant) {
                 // EX dominant always implies score < 0 (EX contributes -30 per TF, no SU/SD/WR can be present)
-                dirWord = 'Potential Reversal';
+                // Label strength matches score severity for perceptual consistency
+                dirWord = score <= -30 ? 'Exhaustion Reversal' : 'Mild Exhaustion';
                 dirClass = score <= -30 ? 'bearish' : 'slightly-bearish';
               } else if (score >= 30) {
                 dirWord = 'Bullish Scenario';
@@ -5169,12 +5188,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           renderZPriceSparkline() {
             const canvas = document.getElementById('zPriceSparklineCanvas');
             if (!canvas) return;
-            // Filter out NaN values — only plot finite data points
-            const rawHistory = this._zPrice1hHistory;
-            const history = rawHistory.filter(v => Number.isFinite(v));
-            // Blue (#5B8CFF) when up, red (#F23645) when down — uses filtered history for accurate up/down
-            const lastVal = history.length > 0 ? history[history.length - 1] : NaN;
-            const firstVal = history.length > 0 ? history[0] : NaN;
+            // Pass raw history including NaN — _drawSparkline handles NaN gaps for uniform X-axis spacing
+            const history = this._zPrice1hHistory;
+            // Blue (#5B8CFF) when up, red (#F23645) when down — uses finite values for up/down detection
+            const finiteVals = history.filter(v => Number.isFinite(v));
+            const lastVal = finiteVals.length > 0 ? finiteVals[finiteVals.length - 1] : NaN;
+            const firstVal = finiteVals.length > 0 ? finiteVals[0] : NaN;
             const up = Number.isFinite(lastVal) && Number.isFinite(firstVal) && lastVal >= firstVal;
             const lineColor = up ? '#5B8CFF' : '#F23645';
             this._drawSparkline(canvas, history, {
@@ -5190,9 +5209,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           renderOiSparkline() {
             const canvas = document.getElementById('zOiSparklineCanvas');
             if (!canvas) return;
-            // Filter out NaN values — only plot finite data points
-            const rawHistory = this._zOi1hHistory;
-            const history = rawHistory.filter(v => Number.isFinite(v));
+            // Pass raw history including NaN — _drawSparkline handles NaN gaps for uniform X-axis spacing
+            const history = this._zOi1hHistory;
             // Amber / orange — same as Z_OI tooltip colour #F3A052
             const lineColor = '#F3A052';
             this._drawSparkline(canvas, history, {
@@ -5202,7 +5220,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               linePositive: lineColor,
               lineNegative: lineColor,
             });
-            const lastVal = history.length > 0 ? history[history.length - 1] : NaN;
+            const finiteVals = history.filter(v => Number.isFinite(v));
+            const lastVal = finiteVals.length > 0 ? finiteVals[finiteVals.length - 1] : NaN;
             const lastEl = document.getElementById('zOiLastVal');
             if (lastEl && Number.isFinite(lastVal)) lastEl.textContent = (lastVal >= 0 ? '+' : '') + lastVal.toFixed(2);
           },
@@ -5216,8 +5235,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             ctx.scale(dpr, dpr);
             const W = rect.width;
             const H = rect.height;
-            // Fallback: draw placeholder when insufficient data
-            if (!history || history.length < 2) {
+            // Extract finite values for range calculation and placeholder check
+            const finiteVals = history ? history.filter(v => Number.isFinite(v)) : [];
+            // Fallback: draw placeholder when insufficient finite data
+            if (finiteVals.length < 2) {
               ctx.fillStyle = 'rgba(123, 135, 148, 0.4)';
               ctx.font = '11px monospace';
               ctx.textAlign = 'center';
@@ -5225,8 +5246,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               ctx.fillText('Awaiting data\u2026', W / 2, H / 2);
               return;
             }
-            let min = Math.min(...history);
-            let max = Math.max(...history);
+            let min = Math.min(...finiteVals);
+            let max = Math.max(...finiteVals);
             if (opts.zeroLine) {
               min = Math.min(min, 0);
               max = Math.max(max, 0);
@@ -5235,6 +5256,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const pad = range * 0.15;
             min -= pad;
             max += pad;
+            // X positions use total history length (including NaN slots) for uniform 1H spacing
             const toX = (i) => (i / (history.length - 1)) * W;
             const toY = (v) => H * (1 - (v - min) / (max - min));
             if (opts.zeroLine) {
@@ -5245,54 +5267,96 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               ctx.lineTo(W, toY(0));
               ctx.stroke();
             }
-            const lastVal = history[history.length - 1];
-            const isPositive = lastVal >= 0;
+            const lastFiniteVal = finiteVals[finiteVals.length - 1];
+            const isPositive = lastFiniteVal >= 0;
             const fillColor = isPositive ? opts.fillPositive : opts.fillNegative;
             const lineColor = isPositive ? opts.linePositive : opts.lineNegative;
             const baseline = opts.fillBaseline === 'bottom' ? H : toY(0);
-            const fillGrad = ctx.createLinearGradient(0, 0, 0, baseline);
-            fillGrad.addColorStop(0, fillColor + '30');
-            fillGrad.addColorStop(0.5, fillColor + '18');
-            fillGrad.addColorStop(1, fillColor + '00');
-            ctx.fillStyle = fillGrad;
-            ctx.beginPath();
-            ctx.moveTo(toX(0), baseline);
-            for (let i = 0; i < history.length; i++) {
-              ctx.lineTo(toX(i), toY(history[i]));
+            // Fill area — only draw when no NaN gaps (skip fill if any NaN to avoid visual artifacts)
+            const hasNaN = history.some(v => !Number.isFinite(v));
+            if (!hasNaN) {
+              const fillGrad = ctx.createLinearGradient(0, 0, 0, baseline);
+              fillGrad.addColorStop(0, fillColor + '30');
+              fillGrad.addColorStop(0.5, fillColor + '18');
+              fillGrad.addColorStop(1, fillColor + '00');
+              ctx.fillStyle = fillGrad;
+              ctx.beginPath();
+              ctx.moveTo(toX(0), baseline);
+              for (let i = 0; i < history.length; i++) {
+                ctx.lineTo(toX(i), toY(history[i]));
+              }
+              ctx.lineTo(toX(history.length - 1), baseline);
+              ctx.closePath();
+              ctx.fill();
+            } else {
+              // Draw per-segment fill for continuous finite runs
+              const fillGrad = ctx.createLinearGradient(0, 0, 0, baseline);
+              fillGrad.addColorStop(0, fillColor + '30');
+              fillGrad.addColorStop(0.5, fillColor + '18');
+              fillGrad.addColorStop(1, fillColor + '00');
+              ctx.fillStyle = fillGrad;
+              let segStart = -1;
+              for (let i = 0; i <= history.length; i++) {
+                const finite = i < history.length && Number.isFinite(history[i]);
+                if (finite && segStart < 0) {
+                  segStart = i;
+                } else if (!finite && segStart >= 0) {
+                  // Draw fill for segment [segStart, i-1]
+                  ctx.beginPath();
+                  ctx.moveTo(toX(segStart), baseline);
+                  for (let j = segStart; j < i; j++) {
+                    ctx.lineTo(toX(j), toY(history[j]));
+                  }
+                  ctx.lineTo(toX(i - 1), baseline);
+                  ctx.closePath();
+                  ctx.fill();
+                  segStart = -1;
+                }
+              }
             }
-            ctx.lineTo(toX(history.length - 1), baseline);
-            ctx.closePath();
-            ctx.fill();
+            // Line — break at NaN positions to preserve uniform X-axis spacing
             ctx.strokeStyle = lineColor;
             ctx.lineWidth = opts.lineWidth || 1.5;
             ctx.lineJoin = 'round';
             ctx.beginPath();
+            let drawing = false;
             for (let i = 0; i < history.length; i++) {
+              if (!Number.isFinite(history[i])) {
+                drawing = false;
+                continue;
+              }
               const x = toX(i);
               const y = toY(history[i]);
-              if (i === 0) ctx.moveTo(x, y);
-              else ctx.lineTo(x, y);
+              if (!drawing) { ctx.moveTo(x, y); drawing = true; }
+              else { ctx.lineTo(x, y); }
             }
             ctx.stroke();
-            // Draw small dots at each data point 
+            // Draw small dots at each finite data point (skip NaN and last point)
             for (let i = 0; i < history.length - 1; i++) {
+              if (!Number.isFinite(history[i])) continue;
               ctx.fillStyle = lineColor + '99';
               ctx.beginPath();
               ctx.arc(toX(i), toY(history[i]), 2, 0, Math.PI * 2);
               ctx.fill();
             }
-            ctx.save();
-            ctx.shadowColor = lineColor;
-            ctx.shadowBlur = 8;
-            ctx.fillStyle = lineColor;
-            ctx.beginPath();
-            ctx.arc(toX(history.length - 1), toY(lastVal), 3, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(toX(history.length - 1), toY(lastVal), 1.2, 0, Math.PI * 2);
-            ctx.fill();
+            // Glowing dot at the last finite data point (live value)
+            // Find the last finite index for the glow dot position
+            let lastFiniteIdx = history.length - 1;
+            while (lastFiniteIdx >= 0 && !Number.isFinite(history[lastFiniteIdx])) lastFiniteIdx--;
+            if (lastFiniteIdx >= 0) {
+              ctx.save();
+              ctx.shadowColor = lineColor;
+              ctx.shadowBlur = 8;
+              ctx.fillStyle = lineColor;
+              ctx.beginPath();
+              ctx.arc(toX(lastFiniteIdx), toY(history[lastFiniteIdx]), 3, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.restore();
+              ctx.fillStyle = '#ffffff';
+              ctx.beginPath();
+              ctx.arc(toX(lastFiniteIdx), toY(history[lastFiniteIdx]), 1.2, 0, Math.PI * 2);
+              ctx.fill();
+            }
           },
           async _refreshSlowData(symbol) {
             try {
