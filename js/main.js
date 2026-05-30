@@ -4127,11 +4127,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 }
               }
 
-              // Classify each TF using shared helper (same as computeClassification — including ADX gate)
+              // Classify each TF using shared helper (same as computeClassification)
               const scenarios = {};
-              for (const [tfKey, zp, zo, adxVal] of [['30m', zPrice30m, zOi30m, adx30m], ['1H', zPrice1h, zOi1h, adx1h], ['4H', zPrice4h, zOi4h, adx4h]]) {
-                const adxOk = Number.isFinite(adxVal) && adxVal > MF_ADX_THRESH;
-                scenarios[tfKey] = { idx: adxOk ? _classifyTf(zp, zo) : 0 };
+              for (const [tfKey, zp, zo] of [['30m', zPrice30m, zOi30m], ['1H', zPrice1h, zOi1h], ['4H', zPrice4h, zOi4h]]) {
+                scenarios[tfKey] = { idx: _classifyTf(zp, zo) };
               }
               // Compute composite score using shared helper
               const score = _computeCompositeScore(scenarios);
