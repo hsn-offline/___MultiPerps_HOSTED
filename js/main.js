@@ -3661,9 +3661,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   ));
                 apiLabels.push('oiHist_' + tf.key);
               }
-              // Funding rate is a contract-level property — fetch once for the sparkline (8H settlement interval, varies by contract)
+              
               apiCalls.push(fetchJsonWithTimeout(
-                `https://fapi.binance.com/fapi/v1/fundingRate?symbol=${encodeURIComponent(symbol)}&limit=${MF_SPARKLINE_POINTS + 1}`
+                `https://fapi.binance.com/fapi/v1/fundingRate?symbol=${encodeURIComponent(symbol)}&limit=3`
                 ));
               apiLabels.push('frHist');
               apiCalls.push(fetchJsonWithTimeout(
@@ -3680,23 +3680,17 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               }
               let anyKlineOk = false;
               let anyOiOk = false;
-              // Process funding rate history once (contract-level, not per-TF)
-              const globalFrHist = [];
+              // Extract last settled funding rate for context row
               let lastSettledFr = null;
               const frHistRes = dataMap['frHist'];
               if (frHistRes && frHistRes.status === 'fulfilled' && Array.isArray(frHistRes.value) && frHistRes.value.length >= 1) {
                 const raw = frHistRes.value;
-                for (let i = 0; i < raw.length - 1; i++) {
-                  const fr = parseFloat(raw[i].fundingRate);
-                  if (Number.isFinite(fr)) globalFrHist.push(fr);
-                }
                 // Last settled rate = second-to-last entry (last full period, excluding current in-progress)
                 // If only 1 entry, use it
                 const settledIdx = raw.length >= 3 ? raw.length - 2 : raw.length - 1;
                 const settledFr = parseFloat(raw[settledIdx].fundingRate);
                 if (Number.isFinite(settledFr)) lastSettledFr = settledFr;
               }
-              // Use last settled rate for context row (matches Binance funding history page)
               if (lastSettledFr !== null) {
                 this.stats.fundingRate = lastSettledFr;
               }
@@ -3709,8 +3703,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   quoteVolumes: [],
                   oi: [],
                   candles: [],
-                  fundingRates: [],
-                  fundingTimestamps: [],
                   klineTimestamps: [],
                   oiTimestamps: []
                 };
@@ -3824,8 +3816,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 if (tfData.klineTimestamps.length > maxKeep) tfData.klineTimestamps = tfData.klineTimestamps.slice(-maxKeep);
                 if (tfData.oi.length > maxKeep) tfData.oi = tfData.oi.slice(-maxKeep);
                 if (tfData.oiTimestamps.length > maxKeep) tfData.oiTimestamps = tfData.oiTimestamps.slice(-maxKeep);
-                if (tfData.fundingRates && tfData.fundingRates.length > maxKeep) tfData.fundingRates = tfData.fundingRates.slice(-maxKeep);
-                if (tfData.fundingTimestamps && tfData.fundingTimestamps.length > maxKeep) tfData.fundingTimestamps = tfData.fundingTimestamps.slice(-maxKeep);
                 if (tfData.closes.length > 0 && tfData.oi.length > 0 && tfData.closes.length !== tfData.oi.length) {
                   // Trim from the start to keep the most recent aligned data
                   const minLen = Math.min(tfData.closes.length, tfData.oi.length);
@@ -3861,10 +3851,6 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   console.warn(`MultiOI: ${tf.key} post-alignment data low — ${parts.join(', ')}`);
                 }
                 this.tfData[tf.key] = tfData;
-              }
-              // Assign funding rate history to 1H TF (contract-level, fetched once)
-              if (this.tfData['1H'] && globalFrHist.length > 0) {
-                this.tfData['1H'].fundingRates = globalFrHist.slice(-MF_SPARKLINE_POINTS);
               }
               if (!anyKlineOk) this.stats.klinesStale = true;
               if (!anyOiOk) this.stats.oiDataStale = true;
