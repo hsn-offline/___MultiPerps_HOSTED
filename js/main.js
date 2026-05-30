@@ -2032,7 +2032,7 @@ opacity:0.7; transition:opacity 0.2s; }
                 <span class="multioi-info-btn" title="How Multi OI works">?</span>
                 <span class="multioi-tooltip-popup">
   <strong style="font-size:1.2rem">Multi OI — Open Interest Price Indicator</strong><br>
-  <span style="color:var(--muted-2);font-size:1.0rem">Classifies price vs. OI across 30m, 1H, 4H using Robust Z-scores (median + MAD), ADX filtering, and cold start guards.</span><br><br>
+  <span style="color:var(--muted-2);font-size:1.0rem">Classifies price vs. OI across 30m, 1H, 4H using Robust Z-scores (median + MAD), ADX-gated classification, and cold start guards.</span><br><br>
 
   <strong style="color:var(--text)">Processing Pipeline</strong><br>
   <span style="font-size:1rem;color:var(--muted-3);font-family:monospace;line-height:1.7">
@@ -2043,7 +2043,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
   &nbsp;&nbsp;├─► <b>HARD FILTER 1:</b> Data Readiness? (30m≥34, 1H≥34, 4H≥34 bars, all TFs ≥29 candles for ADX)<br>
 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (insufficient data — includes specific reason: closes/OI/candles)<br>
   &nbsp;&nbsp;├─► <b>HARD FILTER 2:</b> Market Trending? (Wilder's ADX &gt; 20)<br>
-&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (ranging/choppy — Z-scores not computed)<br>
+&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (ranging/choppy — classification skipped, Z-scores still shown)<br>
   &nbsp;&nbsp;├─► <b>HARD FILTER 3:</b> Both Z-scores Significant? (|Z_Price|&gt;1.5 AND |Z_OI|&gt;2.0)<br>
 &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;Fail → Neutral (both must confirm)<br>
   &nbsp;&nbsp;├─► <b>CLASSIFY</b> (using Robust Z-scores):<br>
@@ -3923,29 +3923,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 };
                 continue;
               }
-              // HARD FILTER 2: ADX gate — check trend before computing Z-scores (matches tooltip pipeline)
-              let adxValue = NaN;
-              if (candles.length >= MF_ADX_MIN_CANDLES) {
-                adxValue = _wilderAdx(candles.slice(-MF_ADX_MIN_CANDLES), MF_ADX_PERIOD);
-              }
-              const adxOk = Number.isFinite(adxValue) && adxValue > MF_ADX_THRESH;
-              this.stats.zPrice[tf.key] = NaN;
-              this.stats.zOi[tf.key] = NaN;
-              if (!adxOk) {
-
-                scenarios[tf.key] = {
-                  idx: 0,
-                  zPrice: NaN,
-                  zOi: NaN,
-                  adx: adxValue,
-                  coldStart: false,
-                  reason: !Number.isFinite(adxValue) ?
-                    'No trend detected (ADX returned NaN — possibly insufficient price data)' :
-                    'No trend detected (ADX ' + adxValue.toFixed(1) + ' < ' + MF_ADX_THRESH + ')'
-                };
-                continue;
-              }
-              // HARD FILTER 3: Compute Robust Z-scores only if ADX passed
+              // Compute Z-scores unconditionally — they are statistical measurements
+              // that are meaningful regardless of trend strength. ADX only gates classification.
               const closesN = closes.slice(-N);
               const oiN = oi.slice(-N);
               const curPrice = closesN[closesN.length - 1];
@@ -3957,6 +3936,25 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const zOi = oiBaseline.length > 0 ? _zRobust(curOi, oiBaseline) : NaN;
               this.stats.zPrice[tf.key] = zPrice;
               this.stats.zOi[tf.key] = zOi;
+              // ADX gate — only gates classification (which scenario), not the Z-score values
+              let adxValue = NaN;
+              if (candles.length >= MF_ADX_MIN_CANDLES) {
+                adxValue = _wilderAdx(candles.slice(-MF_ADX_MIN_CANDLES), MF_ADX_PERIOD);
+              }
+              const adxOk = Number.isFinite(adxValue) && adxValue > MF_ADX_THRESH;
+              if (!adxOk) {
+                scenarios[tf.key] = {
+                  idx: 0,
+                  zPrice: zPrice,
+                  zOi: zOi,
+                  adx: adxValue,
+                  coldStart: false,
+                  reason: !Number.isFinite(adxValue) ?
+                    'No trend detected (ADX returned NaN — possibly insufficient price data)' :
+                    'No trend detected (ADX ' + adxValue.toFixed(1) + ' < ' + MF_ADX_THRESH + ')'
+                };
+                continue;
+              }
               const finalScenario = _classifyTf(zPrice, zOi);
               let reason = '';
               if (finalScenario === 0) {
@@ -4053,17 +4051,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               const oi1h = d1h.oi && d1h.oi.length > endIdx ? d1h.oi.slice(startIdx, endIdx + 1) : [];
               const candles1h = d1h.candles && d1h.candles.length > endIdx
                 ? d1h.candles.slice(Math.max(0, endIdx - (MF_ADX_MIN_CANDLES - 1)), endIdx + 1) : [];
-              if (closes1h.length >= coldMin1h && oi1h.length >= coldMin1h && candles1h.length >= MF_ADX_MIN_CANDLES) {
+              // Compute Z-scores unconditionally — they are meaningful regardless of ADX
+              if (closes1h.length >= coldMin1h && oi1h.length >= coldMin1h) {
+                const curPrice1h = closes1h[closes1h.length - 1];
+                const curOi1h = oi1h[oi1h.length - 1];
+                const baselineClose1h = closes1h.slice(0, -1);
+                const baselineOi1h = oi1h.length > 1 ? oi1h.slice(0, -1) : [];
+                zPrice1h = baselineClose1h.length > 0 ? _zRobust(curPrice1h, baselineClose1h) : NaN;
+                zOi1h = baselineOi1h.length > 0 ? _zRobust(curOi1h, baselineOi1h) : NaN;
+              }
+              // ADX computed separately — only gates classification, not Z-score values
+              if (candles1h.length >= MF_ADX_MIN_CANDLES) {
                 adx1h = _wilderAdx(candles1h, MF_ADX_PERIOD);
-                const adxOk1h = Number.isFinite(adx1h) && adx1h > MF_ADX_THRESH;
-                if (adxOk1h) {
-                  const curPrice1h = closes1h[closes1h.length - 1];
-                  const curOi1h = oi1h[oi1h.length - 1];
-                  const baselineClose1h = closes1h.slice(0, -1);
-                  const baselineOi1h = oi1h.length > 1 ? oi1h.slice(0, -1) : [];
-                  zPrice1h = baselineClose1h.length > 0 ? _zRobust(curPrice1h, baselineClose1h) : NaN;
-                  zOi1h = baselineOi1h.length > 0 ? _zRobust(curOi1h, baselineOi1h) : NaN;
-                }
               }
 
               // ─── 30m ───
@@ -4080,17 +4079,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     const oi30m = d30m.oi && d30m.oi.length > endIdx30m ? d30m.oi.slice(startIdx30m, endIdx30m + 1) : [];
                     const candles30m = d30m.candles && d30m.candles.length > endIdx30m
                       ? d30m.candles.slice(Math.max(0, endIdx30m - (MF_ADX_MIN_CANDLES - 1)), endIdx30m + 1) : [];
-                    if (closes30m.length >= coldMin30m && oi30m.length >= coldMin30m && candles30m.length >= MF_ADX_MIN_CANDLES) {
+                    // Compute Z-scores unconditionally — they are meaningful regardless of ADX
+                    if (closes30m.length >= coldMin30m && oi30m.length >= coldMin30m) {
+                      const curPrice30m = closes30m[closes30m.length - 1];
+                      const curOi30m = oi30m[oi30m.length - 1];
+                      const blClose30m = closes30m.slice(0, -1);
+                      const blOi30m = oi30m.length > 1 ? oi30m.slice(0, -1) : [];
+                      zPrice30m = blClose30m.length > 0 ? _zRobust(curPrice30m, blClose30m) : NaN;
+                      zOi30m = blOi30m.length > 0 ? _zRobust(curOi30m, blOi30m) : NaN;
+                    }
+                    // ADX computed separately — only gates classification, not Z-score values
+                    if (candles30m.length >= MF_ADX_MIN_CANDLES) {
                       adx30m = _wilderAdx(candles30m, MF_ADX_PERIOD);
-                      const adxOk30m = Number.isFinite(adx30m) && adx30m > MF_ADX_THRESH;
-                      if (adxOk30m) {
-                        const curPrice30m = closes30m[closes30m.length - 1];
-                        const curOi30m = oi30m[oi30m.length - 1];
-                        const blClose30m = closes30m.slice(0, -1);
-                        const blOi30m = oi30m.length > 1 ? oi30m.slice(0, -1) : [];
-                        zPrice30m = blClose30m.length > 0 ? _zRobust(curPrice30m, blClose30m) : NaN;
-                        zOi30m = blOi30m.length > 0 ? _zRobust(curOi30m, blOi30m) : NaN;
-                      }
                     }
                   }
                 }
@@ -4110,17 +4110,18 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     const oi4h = d4h.oi && d4h.oi.length > endIdx4h ? d4h.oi.slice(startIdx4h, endIdx4h + 1) : [];
                     const candles4h = d4h.candles && d4h.candles.length > endIdx4h
                       ? d4h.candles.slice(Math.max(0, endIdx4h - (MF_ADX_MIN_CANDLES - 1)), endIdx4h + 1) : [];
-                    if (closes4h.length >= coldMin4h && oi4h.length >= coldMin4h && candles4h.length >= MF_ADX_MIN_CANDLES) {
+                    // Compute Z-scores unconditionally — they are meaningful regardless of ADX
+                    if (closes4h.length >= coldMin4h && oi4h.length >= coldMin4h) {
+                      const curPrice4h = closes4h[closes4h.length - 1];
+                      const curOi4h = oi4h[oi4h.length - 1];
+                      const blClose4h = closes4h.slice(0, -1);
+                      const blOi4h = oi4h.length > 1 ? oi4h.slice(0, -1) : [];
+                      zPrice4h = blClose4h.length > 0 ? _zRobust(curPrice4h, blClose4h) : NaN;
+                      zOi4h = blOi4h.length > 1 ? _zRobust(curOi4h, blOi4h) : NaN;
+                    }
+                    // ADX computed separately — only gates classification, not Z-score values
+                    if (candles4h.length >= MF_ADX_MIN_CANDLES) {
                       adx4h = _wilderAdx(candles4h, MF_ADX_PERIOD);
-                      const adxOk4h = Number.isFinite(adx4h) && adx4h > MF_ADX_THRESH;
-                      if (adxOk4h) {
-                        const curPrice4h = closes4h[closes4h.length - 1];
-                        const curOi4h = oi4h[oi4h.length - 1];
-                        const blClose4h = closes4h.slice(0, -1);
-                        const blOi4h = oi4h.length > 1 ? oi4h.slice(0, -1) : [];
-                        zPrice4h = blClose4h.length > 0 ? _zRobust(curPrice4h, blClose4h) : NaN;
-                        zOi4h = blOi4h.length > 1 ? _zRobust(curOi4h, blOi4h) : NaN;
-                      }
                     }
                   }
                 }
@@ -5235,10 +5236,13 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             ctx.scale(dpr, dpr);
             const W = rect.width;
             const H = rect.height;
-            // Extract finite values for range calculation and placeholder check
-            const finiteVals = history ? history.filter(v => Number.isFinite(v)) : [];
+            // Build list of finite-indexed points (handles NaN gracefully)
+            const finitePoints = [];
+            for (let i = 0; i < history.length; i++) {
+              if (Number.isFinite(history[i])) finitePoints.push({ i, v: history[i] });
+            }
             // Fallback: draw placeholder when insufficient finite data
-            if (finiteVals.length < 2) {
+            if (finitePoints.length < 2) {
               ctx.fillStyle = 'rgba(123, 135, 148, 0.4)';
               ctx.font = '11px monospace';
               ctx.textAlign = 'center';
@@ -5246,8 +5250,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               ctx.fillText('Awaiting data\u2026', W / 2, H / 2);
               return;
             }
-            let min = Math.min(...finiteVals);
-            let max = Math.max(...finiteVals);
+            let min = Math.min(...finitePoints.map(p => p.v));
+            let max = Math.max(...finitePoints.map(p => p.v));
             if (opts.zeroLine) {
               min = Math.min(min, 0);
               max = Math.max(max, 0);
@@ -5256,8 +5260,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const pad = range * 0.15;
             min -= pad;
             max += pad;
-            // X positions use total history length (including NaN slots) for uniform 1H spacing
-            const toX = (i) => (i / (history.length - 1)) * W;
+            // Use raw history length for x-positioning to preserve temporal positions
+            const rawLen = history.length;
+            const toX = (i) => (i / (rawLen - 1)) * W;
             const toY = (v) => H * (1 - (v - min) / (max - min));
             if (opts.zeroLine) {
               ctx.strokeStyle = 'rgba(255,255,255,0.1)';
@@ -5267,96 +5272,74 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               ctx.lineTo(W, toY(0));
               ctx.stroke();
             }
-            const lastFiniteVal = finiteVals[finiteVals.length - 1];
+            const lastFiniteVal = finitePoints[finitePoints.length - 1].v;
             const isPositive = lastFiniteVal >= 0;
             const fillColor = isPositive ? opts.fillPositive : opts.fillNegative;
             const lineColor = isPositive ? opts.linePositive : opts.lineNegative;
             const baseline = opts.fillBaseline === 'bottom' ? H : toY(0);
-            // Fill area — only draw when no NaN gaps (skip fill if any NaN to avoid visual artifacts)
-            const hasNaN = history.some(v => !Number.isFinite(v));
-            if (!hasNaN) {
-              const fillGrad = ctx.createLinearGradient(0, 0, 0, baseline);
-              fillGrad.addColorStop(0, fillColor + '30');
-              fillGrad.addColorStop(0.5, fillColor + '18');
-              fillGrad.addColorStop(1, fillColor + '00');
-              ctx.fillStyle = fillGrad;
-              ctx.beginPath();
-              ctx.moveTo(toX(0), baseline);
-              for (let i = 0; i < history.length; i++) {
-                ctx.lineTo(toX(i), toY(history[i]));
-              }
-              ctx.lineTo(toX(history.length - 1), baseline);
-              ctx.closePath();
-              ctx.fill();
-            } else {
-              // Draw per-segment fill for continuous finite runs
-              const fillGrad = ctx.createLinearGradient(0, 0, 0, baseline);
-              fillGrad.addColorStop(0, fillColor + '30');
-              fillGrad.addColorStop(0.5, fillColor + '18');
-              fillGrad.addColorStop(1, fillColor + '00');
-              ctx.fillStyle = fillGrad;
-              let segStart = -1;
-              for (let i = 0; i <= history.length; i++) {
-                const finite = i < history.length && Number.isFinite(history[i]);
-                if (finite && segStart < 0) {
-                  segStart = i;
-                } else if (!finite && segStart >= 0) {
-                  // Draw fill for segment [segStart, i-1]
-                  ctx.beginPath();
-                  ctx.moveTo(toX(segStart), baseline);
-                  for (let j = segStart; j < i; j++) {
-                    ctx.lineTo(toX(j), toY(history[j]));
-                  }
-                  ctx.lineTo(toX(i - 1), baseline);
-                  ctx.closePath();
-                  ctx.fill();
-                  segStart = -1;
+            // Draw fill area — break at NaN (each contiguous segment gets its own fill)
+            const fillGrad = ctx.createLinearGradient(0, 0, 0, baseline);
+            fillGrad.addColorStop(0, fillColor + '30');
+            fillGrad.addColorStop(0.5, fillColor + '18');
+            fillGrad.addColorStop(1, fillColor + '00');
+            ctx.fillStyle = fillGrad;
+            let segStart = -1;
+            for (let i = 0; i <= rawLen; i++) {
+              const isFinite = i < rawLen && Number.isFinite(history[i]);
+              if (isFinite && segStart < 0) {
+                segStart = i;
+              } else if (!isFinite && segStart >= 0) {
+                // Draw fill for segment [segStart..i-1]
+                ctx.beginPath();
+                ctx.moveTo(toX(segStart), baseline);
+                for (let j = segStart; j < i; j++) {
+                  ctx.lineTo(toX(j), toY(history[j]));
                 }
+                ctx.lineTo(toX(i - 1), baseline);
+                ctx.closePath();
+                ctx.fill();
+                segStart = -1;
               }
             }
-            // Line — break at NaN positions to preserve uniform X-axis spacing
+            // Draw line — break at NaN (moveTo after gap, lineTo when contiguous)
             ctx.strokeStyle = lineColor;
             ctx.lineWidth = opts.lineWidth || 1.5;
             ctx.lineJoin = 'round';
             ctx.beginPath();
-            let drawing = false;
-            for (let i = 0; i < history.length; i++) {
+            let penDown = false;
+            for (let i = 0; i < rawLen; i++) {
               if (!Number.isFinite(history[i])) {
-                drawing = false;
+                penDown = false;
                 continue;
               }
               const x = toX(i);
               const y = toY(history[i]);
-              if (!drawing) { ctx.moveTo(x, y); drawing = true; }
-              else { ctx.lineTo(x, y); }
+              if (!penDown) { ctx.moveTo(x, y); penDown = true; }
+              else ctx.lineTo(x, y);
             }
             ctx.stroke();
-            // Draw small dots at each finite data point (skip NaN and last point)
-            for (let i = 0; i < history.length - 1; i++) {
-              if (!Number.isFinite(history[i])) continue;
+            // Draw small dots at each finite data point (except last)
+            for (const p of finitePoints) {
+              if (p.i === finitePoints[finitePoints.length - 1].i) continue;
               ctx.fillStyle = lineColor + '99';
               ctx.beginPath();
-              ctx.arc(toX(i), toY(history[i]), 2, 0, Math.PI * 2);
+              ctx.arc(toX(p.i), toY(p.v), 2, 0, Math.PI * 2);
               ctx.fill();
             }
-            // Glowing dot at the last finite data point (live value)
-            // Find the last finite index for the glow dot position
-            let lastFiniteIdx = history.length - 1;
-            while (lastFiniteIdx >= 0 && !Number.isFinite(history[lastFiniteIdx])) lastFiniteIdx--;
-            if (lastFiniteIdx >= 0) {
-              ctx.save();
-              ctx.shadowColor = lineColor;
-              ctx.shadowBlur = 8;
-              ctx.fillStyle = lineColor;
-              ctx.beginPath();
-              ctx.arc(toX(lastFiniteIdx), toY(history[lastFiniteIdx]), 3, 0, Math.PI * 2);
-              ctx.fill();
-              ctx.restore();
-              ctx.fillStyle = '#ffffff';
-              ctx.beginPath();
-              ctx.arc(toX(lastFiniteIdx), toY(history[lastFiniteIdx]), 1.2, 0, Math.PI * 2);
-              ctx.fill();
-            }
+            // Draw highlighted dot at last finite point
+            const lastFP = finitePoints[finitePoints.length - 1];
+            ctx.save();
+            ctx.shadowColor = lineColor;
+            ctx.shadowBlur = 8;
+            ctx.fillStyle = lineColor;
+            ctx.beginPath();
+            ctx.arc(toX(lastFP.i), toY(lastFP.v), 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(toX(lastFP.i), toY(lastFP.v), 1.2, 0, Math.PI * 2);
+            ctx.fill();
           },
           async _refreshSlowData(symbol) {
             try {
@@ -5597,14 +5580,14 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             }, {
               canvasId: 'zPriceSparklineCanvas',
               valId: 'zPriceHoverVal',
-              getHistory: () => this._zPrice1hHistory.filter(v => Number.isFinite(v)),
+              getHistory: () => this._zPrice1hHistory,
               // Live Z_Price 1H is the last point — use stats for real-time override
               realtimeValue: () => this.stats.zPrice['1H'],
               format: v => 'Z_P ' + (v >= 0 ? '+' : '') + v.toFixed(2)
             }, {
               canvasId: 'zOiSparklineCanvas',
               valId: 'zOiHoverVal',
-              getHistory: () => this._zOi1hHistory.filter(v => Number.isFinite(v)),
+              getHistory: () => this._zOi1hHistory,
               // Live Z_OI 1H is the last point — use stats for real-time override
               realtimeValue: () => this.stats.zOi['1H'],
               format: v => 'Z_O ' + (v >= 0 ? '+' : '') + v.toFixed(2)
