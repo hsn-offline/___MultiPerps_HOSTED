@@ -2094,10 +2094,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
 
   <strong style="color:var(--text)">Sparklines (Soft Context)</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
-  <b>Score</b> — 9 pts, 4H intervals. Rising = strengthening, falling = deteriorating.<br>
-  <b>Price</b> — 4H close prices (9 pts).<br>
-  <b>Z_Price</b> — 4H Robust Z-score of price (9 pts, 8 historical + 1 live).<br>
-  <b>Z_OI</b> — 4H Robust Z-score of OI (9 pts, 8 historical + 1 live).</span><br><br>
+  <b>Score</b> — 9 pts, 1H intervals. Rising = strengthening, falling = deteriorating.<br>
+  <b>Price</b> — 1H close prices (9 pts).<br>
+  <b>Z_Price</b> — 1H Robust Z-score of price (9 pts, 8 historical + 1 live).<br>
+  <b>Z_OI</b> — 1H Robust Z-score of OI (9 pts, 8 historical + 1 live).</span><br><br>
 
   <strong style="color:var(--text)">Data Update Frequency</strong><br>
   <span style="font-size:1rem;color:var(--muted-3);font-family:monospace;line-height:1.7">
@@ -2228,19 +2228,19 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 <div class="multioi-card__body">
                   <div class="multioi-sparklines-section">
                     <div class="multioi-sparkline-card" data-sparkline="composite">
-                      <div class="multioi-sparkline-card__title">4H Composite Score (Last 9) <span class="multioi-sparkline-hover-val" id="compositeHoverVal"></span><span class="multioi-sparkline-last-val" id="compositeLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">1H Composite Score (Last 9) <span class="multioi-sparkline-hover-val" id="compositeHoverVal"></span><span class="multioi-sparkline-last-val" id="compositeLastVal"></span></div>
                       <canvas id="compositeSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="price">
-                      <div class="multioi-sparkline-card__title">4H Price (Last 9) <span class="multioi-sparkline-hover-val" id="priceHoverVal"></span><span class="multioi-sparkline-last-val" id="priceLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">1H Price (Last 9) <span class="multioi-sparkline-hover-val" id="priceHoverVal"></span><span class="multioi-sparkline-last-val" id="priceLastVal"></span></div>
                       <canvas id="priceSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="zprice">
-                      <div class="multioi-sparkline-card__title">4H Z_Price (Last 9) <span class="multioi-sparkline-hover-val" id="zPriceHoverVal"></span><span class="multioi-sparkline-last-val" id="zPriceLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">1H Z_Price (Last 9) <span class="multioi-sparkline-hover-val" id="zPriceHoverVal"></span><span class="multioi-sparkline-last-val" id="zPriceLastVal"></span></div>
                       <canvas id="zPriceSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="zoi">
-                      <div class="multioi-sparkline-card__title">4H Z_OI (Last 9) <span class="multioi-sparkline-hover-val" id="zOiHoverVal"></span><span class="multioi-sparkline-last-val" id="zOiLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">1H Z_OI (Last 9) <span class="multioi-sparkline-hover-val" id="zOiHoverVal"></span><span class="multioi-sparkline-last-val" id="zOiLastVal"></span></div>
                       <canvas id="zOiSparklineCanvas"></canvas>
                     </div>
 
@@ -3050,9 +3050,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     chart.dirty = true;
                     chart.lastUpdate = Date.now();
                   }
-                  if (interval === '4h' && oiPricePanel.symbol === mainSymUpper) {
-                    // Update 4H sparkline data in real-time
-                    const d = oiPricePanel.tfData['4H'];
+                  if (interval === '1h' && oiPricePanel.symbol === mainSymUpper) {
+                    // Update 1H sparkline data in real-time
+                    const d = oiPricePanel.tfData['1H'];
                     if (d) {
                       const closePrice = parseFloat(k.c);
                       const qv = parseFloat(k.q);
@@ -3066,7 +3066,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                       const lastKlineCloseTime = d.klineTimestamps.length > 0 ? d.klineTimestamps[d.klineTimestamps.length - 1] : 0;
                       const isNewCandle = wsOpenTime > lastKlineCloseTime;
                       if (isNewCandle) {
-                        // A new 4H candle has started — push new entries
+                        // A new 1H candle has started — push new entries
                         if (Number.isFinite(closePrice)) d.closes.push(closePrice);
                         if (Number.isFinite(vol)) d.volumes.push(vol);
                         if (Number.isFinite(qv)) d.quoteVolumes.push(qv);
@@ -3571,12 +3571,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           _wsSparklineTimer: null,
           _wsRemarkTimer: null,
           _scoreHistory: [],
-          _zPrice4hHistory: [],        // Last 9 Z_Price values at 4H boundaries (8 backfilled + 1 live)
-          _zOi4hHistory: [],           // Last 9 Z_OI values at 4H boundaries (8 backfilled + 1 live)
+          _zPrice1hHistory: [],        // Last 9 Z_Price values at 1H boundaries (8 backfilled + 1 live)
+          _zOi1hHistory: [],           // Last 9 Z_OI values at 1H boundaries (8 backfilled + 1 live)
           _backfillCache: null,       // Cached backfill history points (without live score)
-          _backfillZPriceCache: null,  // Cached backfill Z_Price 4H history (without live value)
-          _backfillZOiCache: null,     // Cached backfill Z_OI 4H history (without live value)
-          _backfillLast4hTs: null,    // Last 4H kline timestamp when backfill was computed
+          _backfillZPriceCache: null,  // Cached backfill Z_Price 1H history (without live value)
+          _backfillZOiCache: null,     // Cached backfill Z_OI 1H history (without live value)
+          _backfillLast1hTs: null,    // Last 1H kline timestamp when backfill was computed
           _backfillCacheTime: null,   // Timestamp when backfill cache was last computed
           tfData: {},
           classification: {
@@ -3611,10 +3611,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               this._backfillCache = null;
               this._backfillZPriceCache = null;
               this._backfillZOiCache = null;
-              this._backfillLast4hTs = null;
+              this._backfillLast1hTs = null;
               this._backfillCacheTime = null;
-              this._zPrice4hHistory = [];
-              this._zOi4hHistory = [];
+              this._zPrice1hHistory = [];
+              this._zOi1hHistory = [];
             }
             this.symbol = symbol;
             this.stats.oiCurrent = null;
@@ -3646,8 +3646,10 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               for (const tf of MF_TIMEFRAMES) {
                 const coldMin = MF_COLD_START_MIN[tf.key] || MF_COLD_START_FALLBACK;
                 // Fetch limits: klines API supports up to 1500, OI hist API supports up to 500
-                const klineLimits = { '30m': 360, '1H': 180, '4H': 50 };
-                const oiLimits = { '30m': 350, '1H': 180, '4H': 50 };
+                // With 1H sparkline cadence: 1H needs 42 bars (base), 30m needs 51, 4H needs 37
+                // Fetch with generous buffer for alignment gaps and cold-start resilience
+                const klineLimits = { '30m': 80, '1H': 60, '4H': 50 };
+                const oiLimits = { '30m': 80, '1H': 60, '4H': 50 };
                 const klineLimit = klineLimits[tf.key] || 50;
                 const oiLimit = oiLimits[tf.key] || 50;
                 apiCalls.push(fetchJsonWithTimeout(
@@ -3659,7 +3661,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   ));
                 apiLabels.push('oiHist_' + tf.key);
               }
-              // Funding rate is a contract-level property — fetch once for the sparkline (4H/8H settlement intervals, varies by contract)
+              // Funding rate is a contract-level property — fetch once for the sparkline (8H settlement interval, varies by contract)
               apiCalls.push(fetchJsonWithTimeout(
                 `https://fapi.binance.com/fapi/v1/fundingRate?symbol=${encodeURIComponent(symbol)}&limit=${MF_SPARKLINE_POINTS + 1}`
                 ));
@@ -3805,14 +3807,14 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                   }
                 }
                 const N = tf.lookback;
-                // Each TF needs enough bars for lookback + backfill at the 4H cadence
-                // 4H: N + (SPARKLINE_POINTS-1) = 34 + 8 = 42
-                // 1H: (N + SPARKLINE_POINTS-1) × 4 + 3 = 42×4+3 = 171
-                // 30m: (N + SPARKLINE_POINTS-1) × 8 + 7 = 42×8+7 = 343
+                // Each TF needs enough bars for lookback + backfill at the 1H cadence
+                // 1H (base): N + (SPARKLINE_POINTS-1) = 34 + 8 = 42
+                // 30m (2× finer): N + (SPARKLINE_POINTS-1)×2 + 1 = 34 + 16 + 1 = 51
+                // 4H (4× coarser): N + ceil((SPARKLINE_POINTS-1)/4) + 1 = 34 + 2 + 1 = 37
                 const maxKeepMap = {
-                  '4H': N + (MF_SPARKLINE_POINTS - 1),           // 42
-                  '1H': (N + MF_SPARKLINE_POINTS - 1) * 4 + 3,   // 171
-                  '30m': (N + MF_SPARKLINE_POINTS - 1) * 8 + 7    // 343
+                  '1H': N + (MF_SPARKLINE_POINTS - 1),                              // 42
+                  '30m': N + (MF_SPARKLINE_POINTS - 1) * 2 + 1,                     // 51
+                  '4H': N + Math.ceil((MF_SPARKLINE_POINTS - 1) / 4) + 1             // 37
                 };
                 const maxKeep = maxKeepMap[tf.key] || (N + MF_SPARKLINE_POINTS - 1);
                 if (tfData.closes.length > maxKeep) tfData.closes = tfData.closes.slice(-maxKeep);
@@ -3860,9 +3862,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 }
                 this.tfData[tf.key] = tfData;
               }
-              // Assign funding rate history to 4H TF (contract-level, fetched once)
-              if (this.tfData['4H'] && globalFrHist.length > 0) {
-                this.tfData['4H'].fundingRates = globalFrHist.slice(-MF_SPARKLINE_POINTS);
+              // Assign funding rate history to 1H TF (contract-level, fetched once)
+              if (this.tfData['1H'] && globalFrHist.length > 0) {
+                this.tfData['1H'].fundingRates = globalFrHist.slice(-MF_SPARKLINE_POINTS);
               }
               if (!anyKlineOk) this.stats.klinesStale = true;
               if (!anyOiOk) this.stats.oiDataStale = true;
@@ -3991,8 +3993,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             return this.classification;
           },
           /**
-           * Backfill historical composite scores at 4H candle boundaries.
-           * For each of the last (MF_SPARKLINE_POINTS - 1) completed 4H candles,
+           * Backfill historical composite scores at 1H candle boundaries.
+           * For each of the last (MF_SPARKLINE_POINTS - 1) completed 1H candles,
            * compute a full 3-TF composite score using the data available at that point.
            * The current live score is always the last point.
            */
@@ -4000,13 +4002,13 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const d4h = this.tfData['4H'];
             const d1h = this.tfData['1H'];
             const d30m = this.tfData['30m'];
-            if (!d4h || !d4h.closes || d4h.closes.length < 2) return;
-            // Check if 4H candle boundary has changed since last backfill
-            const current4hTs = d4h.klineTimestamps && d4h.klineTimestamps.length > 0
-              ? d4h.klineTimestamps[d4h.klineTimestamps.length - 1]
+            if (!d1h || !d1h.closes || d1h.closes.length < 2) return;
+            // Check if 1H candle boundary has changed since last backfill
+            const current1hTs = d1h.klineTimestamps && d1h.klineTimestamps.length > 0
+              ? d1h.klineTimestamps[d1h.klineTimestamps.length - 1]
               : null;
             const CACHE_STALE_MS = 2 * 60 * 1000;
-            if (this._backfillCache && this._backfillLast4hTs !== null && current4hTs === this._backfillLast4hTs
+            if (this._backfillCache && this._backfillLast1hTs !== null && current1hTs === this._backfillLast1hTs
                 && this._backfillCacheTime !== null && (Date.now() - this._backfillCacheTime) < CACHE_STALE_MS) {
               // Just append live score to cached backfill
               const cached = this._backfillCache;
@@ -4017,105 +4019,65 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               if (history.length > 0) {
                 this._scoreHistory = history.slice(-MF_SPARKLINE_POINTS);
               }
-              // Also append live Z_Price/Z_OI 4H to cached backfill
+              // Also append live Z_Price/Z_OI 1H to cached backfill
               const cachedZP = this._backfillZPriceCache || [];
               const cachedZO = this._backfillZOiCache || [];
               const zpHistory = [...cachedZP];
               const zoHistory = [...cachedZO];
-              const liveZP = this.stats.zPrice['4H'];
-              const liveZO = this.stats.zOi['4H'];
+              const liveZP = this.stats.zPrice['1H'];
+              const liveZO = this.stats.zOi['1H'];
               if (Number.isFinite(liveZP)) zpHistory.push(liveZP);
               if (Number.isFinite(liveZO)) zoHistory.push(liveZO);
-              if (zpHistory.length > 0) this._zPrice4hHistory = zpHistory.slice(-MF_SPARKLINE_POINTS);
-              if (zoHistory.length > 0) this._zOi4hHistory = zoHistory.slice(-MF_SPARKLINE_POINTS);
+              if (zpHistory.length > 0) this._zPrice1hHistory = zpHistory.slice(-MF_SPARKLINE_POINTS);
+              if (zoHistory.length > 0) this._zOi1hHistory = zoHistory.slice(-MF_SPARKLINE_POINTS);
               return;
             }
-            // Full recomputation needed (new 4H candle or first run)
+            // Full recomputation needed (new 1H candle or first run)
             // Number of historical points to backfill (current live score = last point)
             const backfillCount = MF_SPARKLINE_POINTS - 1;
             const N = MF_LOOKBACK_BARS;
-            const coldMin4h = MF_COLD_START_MIN['4H'] || MF_COLD_START_FALLBACK;
-            if (d4h.closes.length < N + 1) return; // Not enough for even 1 point
+            const coldMin1h = MF_COLD_START_MIN['1H'] || MF_COLD_START_FALLBACK;
+            if (d1h.closes.length < N + 1) return; // Not enough for even 1 point
             // Determine how many points we can actually compute
-            const maxPoints = Math.min(backfillCount, d4h.closes.length - N);
+            const maxPoints = Math.min(backfillCount, d1h.closes.length - N);
             const history = [];
-            const zpHistory = [];  // Z_Price 4H backfill
-            const zoHistory = [];  // Z_OI 4H backfill
+            const zpHistory = [];  // Z_Price 1H backfill
+            const zoHistory = [];  // Z_OI 1H backfill
             for (let p = maxPoints; p >= 1; p--) {
-              // For historical point p, the "current" 4H bar is at index closes.length - 1 - p
+              // For historical point p, the "current" 1H bar is at index closes.length - 1 - p
               // The lookback window for Z-score is the N bars before that
-              const endIdx = d4h.closes.length - 1 - p; // the bar being classified
+              const endIdx = d1h.closes.length - 1 - p; // the bar being classified
               const startIdx = endIdx - N + 1; // lookback start (N bars inclusive)
               if (startIdx < 0) continue;
-              // Timestamp of the 4H bar being classified — used for cross-TF alignment
-              const target4hCloseTime = (d4h.klineTimestamps && endIdx < d4h.klineTimestamps.length) ? d4h.klineTimestamps[endIdx] : null;
-
-              // ─── 4H ───
-              // fetchData() already aligns d4h.closes and d4h.oi to matching periods
-              // (same timestamps, same length). Using the same index range for both
-              // is identical to how computeClassification() uses d.closes/d.oi.
-              let zPrice4h = NaN, zOi4h = NaN, adx4h = NaN;
-              const closes4h = d4h.closes.slice(startIdx, endIdx + 1);
-              const oi4h = d4h.oi && d4h.oi.length > endIdx ? d4h.oi.slice(startIdx, endIdx + 1) : [];
-              const candles4h = d4h.candles && d4h.candles.length > endIdx
-                ? d4h.candles.slice(Math.max(0, endIdx - (MF_ADX_MIN_CANDLES - 1)), endIdx + 1) : [];
-              // ALL three conditions must pass before computing ADX or Z-scores.
-              if (closes4h.length >= coldMin4h && oi4h.length >= coldMin4h && candles4h.length >= MF_ADX_MIN_CANDLES) {
-                // HARD FILTER 2: ADX gate — compute ADX first, before Z-scores (matches tooltip pipeline)
-                adx4h = _wilderAdx(candles4h, MF_ADX_PERIOD);
-                const adxOk4h = Number.isFinite(adx4h) && adx4h > MF_ADX_THRESH;
-                if (adxOk4h) {
-                  // HARD FILTER 3: Compute Z-scores only if ADX passed
-                  const curPrice4h = closes4h[closes4h.length - 1];
-                  const curOi4h = oi4h[oi4h.length - 1];
-                  const baselineClose4h = closes4h.slice(0, -1);
-                  const baselineOi4h = oi4h.length > 1 ? oi4h.slice(0, -1) : [];
-                  zPrice4h = baselineClose4h.length > 0 ? _zRobust(curPrice4h, baselineClose4h) : NaN;
-                  zOi4h = baselineOi4h.length > 0 ? _zRobust(curOi4h, baselineOi4h) : NaN;
-                }
-              }
+              // Timestamp of the 1H bar being classified — used for cross-TF alignment
+              const target1hCloseTime = (d1h.klineTimestamps && endIdx < d1h.klineTimestamps.length) ? d1h.klineTimestamps[endIdx] : null;
 
               // ─── 1H ───
-              // Timestamp-aligned: find 1H bar whose close time <= 4H bar's close time.
-              // Lookback = N bars inclusive ending at the aligned bar (same as live).
               let zPrice1h = NaN, zOi1h = NaN, adx1h = NaN;
-              const coldMin1h = MF_COLD_START_MIN['1H'] || MF_COLD_START_FALLBACK;
-              if (d1h && d1h.closes && target4hCloseTime !== null) {
-                const endIdx1h = _findBarIdxByTime(d1h.klineTimestamps, target4hCloseTime);
-                if (endIdx1h >= 0) {
-                  const startIdx1h = endIdx1h - N + 1;
-                  if (startIdx1h >= 0) {
-                    const closes1h = d1h.closes.slice(startIdx1h, endIdx1h + 1);
-                    const oi1h = d1h.oi && d1h.oi.length > endIdx1h ? d1h.oi.slice(startIdx1h, endIdx1h + 1) : [];
-                    const candles1h = d1h.candles && d1h.candles.length > endIdx1h
-                      ? d1h.candles.slice(Math.max(0, endIdx1h - (MF_ADX_MIN_CANDLES - 1)), endIdx1h + 1) : [];
-                    // Unified cold-start guard for 1H slice: matches computeClassification —
-                    // checks SLICE lengths (not total array), all 3 conditions together.
-                    if (closes1h.length >= coldMin1h && oi1h.length >= coldMin1h && candles1h.length >= MF_ADX_MIN_CANDLES) {
-                      // HARD FILTER 2: ADX gate — compute ADX first, before Z-scores (matches tooltip pipeline)
-                      adx1h = _wilderAdx(candles1h, MF_ADX_PERIOD);
-                      const adxOk1h = Number.isFinite(adx1h) && adx1h > MF_ADX_THRESH;
-                      if (adxOk1h) {
-                        // HARD FILTER 3: Compute Z-scores only if ADX passed
-                        const curPrice1h = closes1h[closes1h.length - 1];
-                        const curOi1h = oi1h[oi1h.length - 1];
-                        const blClose1h = closes1h.slice(0, -1);
-                        const blOi1h = oi1h.length > 1 ? oi1h.slice(0, -1) : [];
-                        zPrice1h = blClose1h.length > 0 ? _zRobust(curPrice1h, blClose1h) : NaN;
-                        zOi1h = blOi1h.length > 0 ? _zRobust(curOi1h, blOi1h) : NaN;
-                      }
-                    }
-                  }
+              const closes1h = d1h.closes.slice(startIdx, endIdx + 1);
+              const oi1h = d1h.oi && d1h.oi.length > endIdx ? d1h.oi.slice(startIdx, endIdx + 1) : [];
+              const candles1h = d1h.candles && d1h.candles.length > endIdx
+                ? d1h.candles.slice(Math.max(0, endIdx - (MF_ADX_MIN_CANDLES - 1)), endIdx + 1) : [];
+              if (closes1h.length >= coldMin1h && oi1h.length >= coldMin1h && candles1h.length >= MF_ADX_MIN_CANDLES) {
+                adx1h = _wilderAdx(candles1h, MF_ADX_PERIOD);
+                const adxOk1h = Number.isFinite(adx1h) && adx1h > MF_ADX_THRESH;
+                if (adxOk1h) {
+                  const curPrice1h = closes1h[closes1h.length - 1];
+                  const curOi1h = oi1h[oi1h.length - 1];
+                  const baselineClose1h = closes1h.slice(0, -1);
+                  const baselineOi1h = oi1h.length > 1 ? oi1h.slice(0, -1) : [];
+                  zPrice1h = baselineClose1h.length > 0 ? _zRobust(curPrice1h, baselineClose1h) : NaN;
+                  zOi1h = baselineOi1h.length > 0 ? _zRobust(curOi1h, baselineOi1h) : NaN;
                 }
               }
 
               // ─── 30m ───
-              // Timestamp-aligned: find 30m bar whose close time <= 4H bar's close time.
+              // Timestamp-aligned: find 30m bar whose close time <= 1H bar's close time.
               // Lookback = N bars inclusive ending at the aligned bar (same as live).
               let zPrice30m = NaN, zOi30m = NaN, adx30m = NaN;
               const coldMin30m = MF_COLD_START_MIN['30m'] || MF_COLD_START_FALLBACK;
-              if (d30m && d30m.closes && target4hCloseTime !== null) {
-                const endIdx30m = _findBarIdxByTime(d30m.klineTimestamps, target4hCloseTime);
+              if (d30m && d30m.closes && target1hCloseTime !== null) {
+                const endIdx30m = _findBarIdxByTime(d30m.klineTimestamps, target1hCloseTime);
                 if (endIdx30m >= 0) {
                   const startIdx30m = endIdx30m - N + 1;
                   if (startIdx30m >= 0) {
@@ -4123,20 +4085,46 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     const oi30m = d30m.oi && d30m.oi.length > endIdx30m ? d30m.oi.slice(startIdx30m, endIdx30m + 1) : [];
                     const candles30m = d30m.candles && d30m.candles.length > endIdx30m
                       ? d30m.candles.slice(Math.max(0, endIdx30m - (MF_ADX_MIN_CANDLES - 1)), endIdx30m + 1) : [];
-                    // Unified cold-start guard for 30m slice: matches computeClassification —
-                    // checks SLICE lengths (not total array), all 3 conditions together.
                     if (closes30m.length >= coldMin30m && oi30m.length >= coldMin30m && candles30m.length >= MF_ADX_MIN_CANDLES) {
-                      // HARD FILTER 2: ADX gate — compute ADX first, before Z-scores (matches tooltip pipeline)
                       adx30m = _wilderAdx(candles30m, MF_ADX_PERIOD);
                       const adxOk30m = Number.isFinite(adx30m) && adx30m > MF_ADX_THRESH;
                       if (adxOk30m) {
-                        // HARD FILTER 3: Compute Z-scores only if ADX passed
                         const curPrice30m = closes30m[closes30m.length - 1];
                         const curOi30m = oi30m[oi30m.length - 1];
                         const blClose30m = closes30m.slice(0, -1);
                         const blOi30m = oi30m.length > 1 ? oi30m.slice(0, -1) : [];
                         zPrice30m = blClose30m.length > 0 ? _zRobust(curPrice30m, blClose30m) : NaN;
                         zOi30m = blOi30m.length > 0 ? _zRobust(curOi30m, blOi30m) : NaN;
+                      }
+                    }
+                  }
+                }
+              }
+
+              // ─── 4H ───
+              // Timestamp-aligned: find 4H bar whose close time <= 1H bar's close time.
+              // Lookback = N bars inclusive ending at the aligned bar (same as live).
+              let zPrice4h = NaN, zOi4h = NaN, adx4h = NaN;
+              const coldMin4h = MF_COLD_START_MIN['4H'] || MF_COLD_START_FALLBACK;
+              if (d4h && d4h.closes && target1hCloseTime !== null) {
+                const endIdx4h = _findBarIdxByTime(d4h.klineTimestamps, target1hCloseTime);
+                if (endIdx4h >= 0) {
+                  const startIdx4h = endIdx4h - N + 1;
+                  if (startIdx4h >= 0) {
+                    const closes4h = d4h.closes.slice(startIdx4h, endIdx4h + 1);
+                    const oi4h = d4h.oi && d4h.oi.length > endIdx4h ? d4h.oi.slice(startIdx4h, endIdx4h + 1) : [];
+                    const candles4h = d4h.candles && d4h.candles.length > endIdx4h
+                      ? d4h.candles.slice(Math.max(0, endIdx4h - (MF_ADX_MIN_CANDLES - 1)), endIdx4h + 1) : [];
+                    if (closes4h.length >= coldMin4h && oi4h.length >= coldMin4h && candles4h.length >= MF_ADX_MIN_CANDLES) {
+                      adx4h = _wilderAdx(candles4h, MF_ADX_PERIOD);
+                      const adxOk4h = Number.isFinite(adx4h) && adx4h > MF_ADX_THRESH;
+                      if (adxOk4h) {
+                        const curPrice4h = closes4h[closes4h.length - 1];
+                        const curOi4h = oi4h[oi4h.length - 1];
+                        const blClose4h = closes4h.slice(0, -1);
+                        const blOi4h = oi4h.length > 1 ? oi4h.slice(0, -1) : [];
+                        zPrice4h = blClose4h.length > 0 ? _zRobust(curPrice4h, blClose4h) : NaN;
+                        zOi4h = blOi4h.length > 1 ? _zRobust(curOi4h, blOi4h) : NaN;
                       }
                     }
                   }
@@ -4151,15 +4139,15 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               // Compute composite score using shared helper
               const score = _computeCompositeScore(scenarios);
               history.push(score);
-              // Also store 4H Z_Price and Z_OI for their sparklines
-              zpHistory.push(Number.isFinite(zPrice4h) ? zPrice4h : NaN);
-              zoHistory.push(Number.isFinite(zOi4h) ? zOi4h : NaN);
+              // Also store 1H Z_Price and Z_OI for their sparklines
+              zpHistory.push(Number.isFinite(zPrice1h) ? zPrice1h : NaN);
+              zoHistory.push(Number.isFinite(zOi1h) ? zOi1h : NaN);
             }
-            // Cache the backfill history (without live score) for reuse until 4H candle closes
+            // Cache the backfill history (without live score) for reuse until 1H candle closes
             this._backfillCache = history.slice();
             this._backfillZPriceCache = zpHistory.slice();
             this._backfillZOiCache = zoHistory.slice();
-            this._backfillLast4hTs = current4hTs;
+            this._backfillLast1hTs = current1hTs;
             this._backfillCacheTime = Date.now();
             // Append current live score as the last point
             if (this.classification && Number.isFinite(this.classification.signalStrength)) {
@@ -4168,13 +4156,13 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             if (history.length > 0) {
               this._scoreHistory = history.slice(-MF_SPARKLINE_POINTS);
             }
-            // Append current live Z_Price/Z_OI 4H as the last point
-            const liveZP = this.stats.zPrice['4H'];
-            const liveZO = this.stats.zOi['4H'];
+            // Append current live Z_Price/Z_OI 1H as the last point
+            const liveZP = this.stats.zPrice['1H'];
+            const liveZO = this.stats.zOi['1H'];
             if (Number.isFinite(liveZP)) zpHistory.push(liveZP);
             if (Number.isFinite(liveZO)) zoHistory.push(liveZO);
-            if (zpHistory.length > 0) this._zPrice4hHistory = zpHistory.slice(-MF_SPARKLINE_POINTS);
-            if (zoHistory.length > 0) this._zOi4hHistory = zoHistory.slice(-MF_SPARKLINE_POINTS);
+            if (zpHistory.length > 0) this._zPrice1hHistory = zpHistory.slice(-MF_SPARKLINE_POINTS);
+            if (zoHistory.length > 0) this._zOi1hHistory = zoHistory.slice(-MF_SPARKLINE_POINTS);
           },
           renderQuadrant() {
             const wrap = document.getElementById('multioiQuadrantWrap');
@@ -5172,7 +5160,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           renderPriceSparkline() {
             const canvas = document.getElementById('priceSparklineCanvas');
             if (!canvas) return;
-            const d = this.tfData['4H'];
+            const d = this.tfData['1H'];
             const priceHistory = (d && d.closes) ? d.closes.slice(-MF_SPARKLINE_POINTS) : [];
             const lastPrice = priceHistory.length > 0 ? priceHistory[priceHistory.length - 1] : NaN;
             const firstPrice = priceHistory.length > 0 ? priceHistory[0] : NaN;
@@ -5196,7 +5184,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const canvas = document.getElementById('zPriceSparklineCanvas');
             if (!canvas) return;
             // Filter out NaN values — only plot finite data points
-            const rawHistory = this._zPrice4hHistory;
+            const rawHistory = this._zPrice1hHistory;
             const history = rawHistory.filter(v => Number.isFinite(v));
             // Blue (#5B8CFF) when up, red (#F23645) when down — uses filtered history for accurate up/down
             const lastVal = history.length > 0 ? history[history.length - 1] : NaN;
@@ -5217,7 +5205,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const canvas = document.getElementById('zOiSparklineCanvas');
             if (!canvas) return;
             // Filter out NaN values — only plot finite data points
-            const rawHistory = this._zOi4hHistory;
+            const rawHistory = this._zOi1hHistory;
             const history = rawHistory.filter(v => Number.isFinite(v));
             // Amber / orange — same as Z_OI tooltip colour #F3A052
             const lineColor = '#F3A052';
@@ -5547,7 +5535,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               canvasId: 'priceSparklineCanvas',
               valId: 'priceHoverVal',
               getHistory: () => {
-                const d = this.tfData['4H'];
+                const d = this.tfData['1H'];
                 return d && d.closes ? d.closes.slice(-MF_SPARKLINE_POINTS) : [];
               },
               // Price last close is already the current candle — no override needed
@@ -5559,16 +5547,16 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             }, {
               canvasId: 'zPriceSparklineCanvas',
               valId: 'zPriceHoverVal',
-              getHistory: () => this._zPrice4hHistory.filter(v => Number.isFinite(v)),
-              // Live Z_Price 4H is the last point — use stats for real-time override
-              realtimeValue: () => this.stats.zPrice['4H'],
+              getHistory: () => this._zPrice1hHistory.filter(v => Number.isFinite(v)),
+              // Live Z_Price 1H is the last point — use stats for real-time override
+              realtimeValue: () => this.stats.zPrice['1H'],
               format: v => 'Z_P ' + (v >= 0 ? '+' : '') + v.toFixed(2)
             }, {
               canvasId: 'zOiSparklineCanvas',
               valId: 'zOiHoverVal',
-              getHistory: () => this._zOi4hHistory.filter(v => Number.isFinite(v)),
-              // Live Z_OI 4H is the last point — use stats for real-time override
-              realtimeValue: () => this.stats.zOi['4H'],
+              getHistory: () => this._zOi1hHistory.filter(v => Number.isFinite(v)),
+              // Live Z_OI 1H is the last point — use stats for real-time override
+              realtimeValue: () => this.stats.zOi['1H'],
               format: v => 'Z_O ' + (v >= 0 ? '+' : '') + v.toFixed(2)
             }, ];
             for (const sm of sparklineMap) {
