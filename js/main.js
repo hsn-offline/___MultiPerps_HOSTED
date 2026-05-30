@@ -3121,6 +3121,34 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     // Throttle sparkline canvas re-renders from WS (max once per 2s)
                     if (!oiPricePanel._wsSparklineTimer) {
                       oiPricePanel._wsSparklineTimer = setTimeout(() => {
+                        // Recompute classification with the latest 1H WS data so the
+                        // composite sparkline's live point stays current. Without this,
+                        // the composite sparkline only updates on full REST refresh cycles
+                        // (every ~60s), causing the card score and sparkline to diverge.
+                        if (oiPricePanel.classification) {
+                          oiPricePanel.computeClassification();
+                          // Re-append the fresh live score to the cached backfill history
+                          const cached = oiPricePanel._backfillCache || [];
+                          const history = [...cached];
+                          if (Number.isFinite(oiPricePanel.classification.signalStrength)) {
+                            history.push(oiPricePanel.classification.signalStrength);
+                          }
+                          if (history.length > 0) {
+                            oiPricePanel._scoreHistory = history.slice(-MF_SPARKLINE_POINTS);
+                          }
+                          // Also update Z_Price/Z_OI 1H live values
+                          const cachedZP = oiPricePanel._backfillZPriceCache || [];
+                          const cachedZO = oiPricePanel._backfillZOiCache || [];
+                          const zpHist = [...cachedZP];
+                          const zoHist = [...cachedZO];
+                          const liveZP = oiPricePanel.stats.zPrice['1H'];
+                          const liveZO = oiPricePanel.stats.zOi['1H'];
+                          if (Number.isFinite(liveZP)) zpHist.push(liveZP);
+                          if (Number.isFinite(liveZO)) zoHist.push(liveZO);
+                          if (zpHist.length > 0) oiPricePanel._zPrice1hHistory = zpHist.slice(-MF_SPARKLINE_POINTS);
+                          if (zoHist.length > 0) oiPricePanel._zOi1hHistory = zoHist.slice(-MF_SPARKLINE_POINTS);
+                        }
+                        oiPricePanel.renderCompositeSparkline();
                         oiPricePanel.renderPriceSparkline();
                         oiPricePanel.renderZPriceSparkline();
                         oiPricePanel.renderOiSparkline();
@@ -3633,22 +3661,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             this.stats.klinesStale = false;
             this.stats.zPrice = {};
             this.stats.zOi = {};
-            try {
-              const key = 'mf_scoreHistory_' + symbol;
-              const stored = localStorage.getItem(key);
-              if (stored) {
-                const parsed = JSON.parse(stored);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                  this._scoreHistory = parsed.slice(-MF_SPARKLINE_POINTS);
-                } else {
-                  this._scoreHistory = [];
-                }
-              } else {
-                this._scoreHistory = [];
-              }
-            } catch (e) {
-              this._scoreHistory = [];
-            }
+            // Always start fresh — _backfillCompositeHistory() will compute the correct
+            // historical composite scores from the API data. Loading stale localStorage
+            // scores causes the sparkline to briefly show wrong shapes on page reload,
+            // because the old session's live point (computed from mid-candle state) no
+            // longer matches the fresh backfill recomputation.
+            this._scoreHistory = [];
             try {
               const apiCalls = [];
               const apiLabels = [];
