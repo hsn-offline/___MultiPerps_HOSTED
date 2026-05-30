@@ -425,52 +425,20 @@
           </tbody>
         </table>
 
-        <br><p><strong>Direction Label Overrides:</strong></p>
-        <p>When multiple timeframes disagree or when exhaustion dominates, the direction label overrides the default score-based label:</p>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Condition</th>
-              <th>Label</th>
-              <th>Color</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>EX-dominant (score ≤ −30)</td><td>Exhaustion Reversal</td><td>Bearish</td></tr>
-            <tr><td>EX-dominant (score &gt; −30)</td><td>Mild Exhaustion</td><td>Slightly bearish</td></tr>
-            <tr><td>Divergent (SU + WR — same price direction, OI diverges)</td><td>Score-based label (e.g. Bullish Scenario)</td><td>Per score</td></tr>
-            <tr><td>Conflicting (bull + bear or bull + EX)</td><td>Mixed Signals</td><td>Caution (amber)</td></tr>
-            <tr><td>Fading (SD + EX only)</td><td>Fading Momentum</td><td>Caution (amber)</td></tr>
-          </tbody>
-        </table>
-
-        <br><p><strong>Funding Rate Context Thresholds:</strong></p>
-        <p>Funding rate context is added to signal remarks. The contrarian thresholds (0.03%) are lower than elevated thresholds (0.1%) because counter-trend funding is more significant — it represents traders paying to hold positions against the prevailing move, which signals potential squeeze fuel.</p>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Level</th>
-              <th>Same-direction (overcrowding)</th>
-              <th>Contrarian (squeeze fuel)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Extreme</td><td>|FR| &gt; 0.2%</td><td>|FR| &gt; 0.2% (in mixed scenarios) / |FR| &gt; 0.03% (in pure scenarios)</td></tr>
-            <tr><td>Elevated</td><td>|FR| &gt; 0.1%</td><td>|FR| &gt; 0.03%</td></tr>
-          </tbody>
-        </table>
+        <br><p><strong>Signal Remark:</strong></p>
+        <p>The Signal Remark is a short annotation displayed alongside the Composite Signal that adds context beyond the raw score. It is determined by two factors: <strong>(1) multi-timeframe agreement</strong> — when all three timeframes align, the remark confirms the direction; when they conflict (e.g. bullish + bearish mix), the remark flags "Mixed Signals" as a caution; and <strong>(2) funding rate context</strong> — if the funding rate is extreme in the same direction as the signal, it warns of overcrowding; if contrarian, it highlights potential squeeze fuel. In short, the Remark tells you whether the score is clean and trustworthy or comes with caveats.</p>
+        <p><strong>How to use it:</strong> Treat the Signal Remark as a confidence filter, not a trade signal. A clean remark (all TFs agree, no funding extremes) means the Composite Score can be taken at face value. A cautious remark ("Mixed Signals", "Exhaustion", or funding warnings) means you should reduce position size, widen stops, or wait for confirmation before acting.</p>
 
         <hr />
 
         <h2>Decision Framework</h2>
         <ul>
           <li><strong>Step 1:</strong> Read the Composite Signal and directional label.</li>
-          <li><strong>Step 2:</strong> Check per-TF breakdown — do all 3 timeframes agree?</li>
-          <li><strong>Step 3:</strong> Check Z-score values — approaching thresholds = transition incoming.</li>
-          <li><strong>Step 4:</strong> Use sparklines in Trend View for advisory context (1H Composite Score, Price, Z_Price, Z_OI — each showing the last 9 values).</li>
-          <li><strong>Step 5:</strong> You decide —
+          <li><strong>Step 2:</strong> Read the Signal Remark — it tells you whether the score is clean and trustworthy or comes with caveats. A clean remark (all TFs agree, no funding extremes) means trust the score. A cautious remark ("Mixed Signals", "Exhaustion", or funding warnings) means reduce size, widen stops, or wait for confirmation.</li>
+          <li><strong>Step 3:</strong> Check per-TF breakdown — do all 3 timeframes agree?</li>
+          <li><strong>Step 4:</strong> Check Z-score values — approaching thresholds = transition incoming.</li>
+          <li><strong>Step 5:</strong> Use sparklines in Trend View for advisory context (1H Composite Score, Price, Z_Price, Z_OI — each showing the last 9 values).</li>
+          <li><strong>Step 6:</strong> You decide —
             <ul>
               <li><strong>Scalpers</strong> → weigh 30m more</li>
               <li><strong>Swing traders</strong> → weigh 1H more</li>

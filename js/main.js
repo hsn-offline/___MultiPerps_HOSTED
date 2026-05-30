@@ -2082,18 +2082,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
 
   <strong style="color:var(--text)">Signal Remark</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
-  Built in 3 steps: (1) Classify each TF → (2) Group by scenario → (3) Pick core phrase + timing context.<br>
-  Timing context uses <b>[Stage] — [Action]</b> format for quick decisions. Funding shown as range indicator (e.g. "Elevated funding — longs crowded"), not exact value.<br>
-  Mixed sub-types: <b>Divergent</b> (same price direction, OI diverges e.g. SU+WR), <b>Conflicting</b> (opposite directions incl. bull+EX), <b>Fading</b> (bear+EX, reversal warning), <b>Transitional</b> (same direction, different strength)</span><br><br>
-
-  <strong style="color:var(--text)">Direction Label Overrides</strong><br>
+  A short annotation next to the Composite Signal that adds context beyond the raw score. Determined by: <b>(1) Multi-timeframe agreement</b> &mdash; all TFs aligned = clean confirmation; conflicting (bull+bear or bull+EX) = &ldquo;Mixed Signals&rdquo; caution; fading (SD+EX) = &ldquo;Fading Momentum&rdquo; warning; EX-dominant = &ldquo;Exhaustion Reversal&rdquo; or &ldquo;Mild Exhaustion&rdquo;. <b>(2) Funding rate context</b> &mdash; same-direction extreme funding warns of overcrowding; contrarian funding highlights squeeze fuel.</span><br>
   <span style="font-size:1rem;color:var(--muted-3)">
-  Score thresholds: &ge;+30 = Bullish, +1 to +29 = Slightly Bullish, 0 = No Clear, &minus;1 to &minus;29 = Slightly Bearish, &le;&minus;30 = Bearish.<br>
-  Overrides: <b>EX-dominant</b> &rarr; Exhaustion Reversal (score &le;&minus;30) or Mild Exhaustion (score &gt;&minus;30). <b>Conflicting</b> (bull+bear or bull+EX) &rarr; Mixed Signals (caution/amber). <b>Fading</b> (SD+EX only) &rarr; Fading Momentum (caution/amber).</span><br><br>
-
-  <strong style="color:var(--text)">Funding Rate Context</strong><br>
-  <span style="font-size:1rem;color:var(--muted-3)">
-  Elevated thresholds: |FR| &gt; 0.1% (overcrowding). Contrarian thresholds: |FR| &gt; 0.03% (squeeze fuel &mdash; lower threshold because counter-trend funding is more significant). Extreme: |FR| &gt; 0.2%. Positive FR in downtrend = long squeeze fuel; negative FR in uptrend = short squeeze fuel.</span><br><br>
+  <b>How to use:</b> Treat the Remark as a confidence filter. Clean remark = trust the score. Cautious remark = reduce size, widen stops, or wait for confirmation.</span><br><br>
 
   <strong style="color:var(--text)">Z-score Metrics</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
