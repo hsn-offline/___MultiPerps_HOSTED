@@ -2095,7 +2095,9 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
   <strong style="color:var(--text)">Sparklines (Soft Context)</strong><br>
   <span style="font-size:1rem;color:var(--muted-3)">
   <b>Score</b> — 9 pts, 4H intervals. Rising = strengthening, falling = deteriorating.<br>
-  <b>Price</b> — 4H close prices (9 pts).</span><br><br>
+  <b>Price</b> — 4H close prices (9 pts).<br>
+  <b>Z_Price</b> — 4H Robust Z-score of price (9 pts, 8 historical + 1 live).<br>
+  <b>Z_OI</b> — 4H Robust Z-score of OI (9 pts, 8 historical + 1 live).</span><br><br>
 
   <strong style="color:var(--text)">Data Update Frequency</strong><br>
   <span style="font-size:1rem;color:var(--muted-3);font-family:monospace;line-height:1.7">
@@ -2232,6 +2234,14 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     <div class="multioi-sparkline-card" data-sparkline="price">
                       <div class="multioi-sparkline-card__title">Price (Last 9, 4H) <span class="multioi-sparkline-hover-val" id="priceHoverVal"></span><span class="multioi-sparkline-last-val" id="priceLastVal"></span></div>
                       <canvas id="priceSparklineCanvas"></canvas>
+                    </div>
+                    <div class="multioi-sparkline-card" data-sparkline="zprice">
+                      <div class="multioi-sparkline-card__title">Z_Price 4H (Last 9) <span class="multioi-sparkline-hover-val" id="zPriceHoverVal"></span><span class="multioi-sparkline-last-val" id="zPriceLastVal"></span></div>
+                      <canvas id="zPriceSparklineCanvas"></canvas>
+                    </div>
+                    <div class="multioi-sparkline-card" data-sparkline="zoi">
+                      <div class="multioi-sparkline-card__title">Z_OI 4H (Last 9) <span class="multioi-sparkline-hover-val" id="zOiHoverVal"></span><span class="multioi-sparkline-last-val" id="zOiLastVal"></span></div>
+                      <canvas id="zOiSparklineCanvas"></canvas>
                     </div>
 
                   </div>
@@ -3103,6 +3113,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                     if (!oiPricePanel._wsSparklineTimer) {
                       oiPricePanel._wsSparklineTimer = setTimeout(() => {
                         oiPricePanel.renderPriceSparkline();
+                        oiPricePanel.renderZPriceSparkline();
+                        oiPricePanel.renderOiSparkline();
                         oiPricePanel.renderContextRow();
                         oiPricePanel._wsSparklineTimer = null;
                       }, 2000);
@@ -3559,7 +3571,11 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
           _wsSparklineTimer: null,
           _wsRemarkTimer: null,
           _scoreHistory: [],
+          _zPrice4hHistory: [],        // Last 9 Z_Price values at 4H boundaries (8 backfilled + 1 live)
+          _zOi4hHistory: [],           // Last 9 Z_OI values at 4H boundaries (8 backfilled + 1 live)
           _backfillCache: null,       // Cached backfill history points (without live score)
+          _backfillZPriceCache: null,  // Cached backfill Z_Price 4H history (without live value)
+          _backfillZOiCache: null,     // Cached backfill Z_OI 4H history (without live value)
           _backfillLast4hTs: null,    // Last 4H kline timestamp when backfill was computed
           _backfillCacheTime: null,   // Timestamp when backfill cache was last computed
           tfData: {},
@@ -3593,8 +3609,12 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               this.tfData = {}; // Clear stale data from previous symbol
               // Reset backfill cache on symbol change
               this._backfillCache = null;
+              this._backfillZPriceCache = null;
+              this._backfillZOiCache = null;
               this._backfillLast4hTs = null;
               this._backfillCacheTime = null;
+              this._zPrice4hHistory = [];
+              this._zOi4hHistory = [];
             }
             this.symbol = symbol;
             this.stats.oiCurrent = null;
@@ -3997,6 +4017,17 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               if (history.length > 0) {
                 this._scoreHistory = history.slice(-MF_SPARKLINE_POINTS);
               }
+              // Also append live Z_Price/Z_OI 4H to cached backfill
+              const cachedZP = this._backfillZPriceCache || [];
+              const cachedZO = this._backfillZOiCache || [];
+              const zpHistory = [...cachedZP];
+              const zoHistory = [...cachedZO];
+              const liveZP = this.stats.zPrice['4H'];
+              const liveZO = this.stats.zOi['4H'];
+              if (Number.isFinite(liveZP)) zpHistory.push(liveZP);
+              if (Number.isFinite(liveZO)) zoHistory.push(liveZO);
+              if (zpHistory.length > 0) this._zPrice4hHistory = zpHistory.slice(-MF_SPARKLINE_POINTS);
+              if (zoHistory.length > 0) this._zOi4hHistory = zoHistory.slice(-MF_SPARKLINE_POINTS);
               return;
             }
             // Full recomputation needed (new 4H candle or first run)
@@ -4008,6 +4039,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             // Determine how many points we can actually compute
             const maxPoints = Math.min(backfillCount, d4h.closes.length - N);
             const history = [];
+            const zpHistory = [];  // Z_Price 4H backfill
+            const zoHistory = [];  // Z_OI 4H backfill
             for (let p = maxPoints; p >= 1; p--) {
               // For historical point p, the "current" 4H bar is at index closes.length - 1 - p
               // The lookback window for Z-score is the N bars before that
@@ -4115,12 +4148,17 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               for (const [tfKey, zp, zo] of [['30m', zPrice30m, zOi30m], ['1H', zPrice1h, zOi1h], ['4H', zPrice4h, zOi4h]]) {
                 scenarios[tfKey] = { idx: _classifyTf(zp, zo) };
               }
-              // Compute composite score using shared helper 
+              // Compute composite score using shared helper
               const score = _computeCompositeScore(scenarios);
               history.push(score);
+              // Also store 4H Z_Price and Z_OI for their sparklines
+              zpHistory.push(Number.isFinite(zPrice4h) ? zPrice4h : NaN);
+              zoHistory.push(Number.isFinite(zOi4h) ? zOi4h : NaN);
             }
             // Cache the backfill history (without live score) for reuse until 4H candle closes
             this._backfillCache = history.slice();
+            this._backfillZPriceCache = zpHistory.slice();
+            this._backfillZOiCache = zoHistory.slice();
             this._backfillLast4hTs = current4hTs;
             this._backfillCacheTime = Date.now();
             // Append current live score as the last point
@@ -4130,6 +4168,13 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             if (history.length > 0) {
               this._scoreHistory = history.slice(-MF_SPARKLINE_POINTS);
             }
+            // Append current live Z_Price/Z_OI 4H as the last point
+            const liveZP = this.stats.zPrice['4H'];
+            const liveZO = this.stats.zOi['4H'];
+            if (Number.isFinite(liveZP)) zpHistory.push(liveZP);
+            if (Number.isFinite(liveZO)) zoHistory.push(liveZO);
+            if (zpHistory.length > 0) this._zPrice4hHistory = zpHistory.slice(-MF_SPARKLINE_POINTS);
+            if (zoHistory.length > 0) this._zOi4hHistory = zoHistory.slice(-MF_SPARKLINE_POINTS);
           },
           renderQuadrant() {
             const wrap = document.getElementById('multioiQuadrantWrap');
@@ -4999,6 +5044,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             this._backfillCompositeHistory();
             this.renderCompositeSparkline();
             this.renderPriceSparkline();
+            this.renderZPriceSparkline();
+            this.renderOiSparkline();
             this.renderContextRow();
           },
           renderContextRow() {
@@ -5129,14 +5176,14 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             const priceHistory = (d && d.closes) ? d.closes.slice(-MF_SPARKLINE_POINTS) : [];
             const lastPrice = priceHistory.length > 0 ? priceHistory[priceHistory.length - 1] : NaN;
             const firstPrice = priceHistory.length > 0 ? priceHistory[0] : NaN;
-            const up = Number.isFinite(lastPrice) && Number.isFinite(firstPrice) && lastPrice >= firstPrice;
+            const lineColor = '#B8C4D4';
             // History is provided to _initSparklineHover() via getHistory() closure — no canvas property needed
             this._drawSparkline(canvas, priceHistory, {
               zeroLine: false,
-              fillPositive: up ? '#5B8CFF' : '#F23645',
-              fillNegative: up ? '#5B8CFF' : '#F23645',
-              linePositive: up ? '#5B8CFF' : '#F23645',
-              lineNegative: up ? '#5B8CFF' : '#F23645',
+              fillPositive: lineColor,
+              fillNegative: lineColor,
+              linePositive: lineColor,
+              lineNegative: lineColor,
               fillBaseline: 'bottom',
             });
             const lastEl = document.getElementById('priceLastVal');
@@ -5144,6 +5191,46 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               minimumFractionDigits: 2,
               maximumFractionDigits: 8
             });
+          },
+          renderZPriceSparkline() {
+            const canvas = document.getElementById('zPriceSparklineCanvas');
+            if (!canvas) return;
+            // Filter out NaN values — only plot finite data points
+            const rawHistory = this._zPrice4hHistory;
+            const history = rawHistory.filter(v => Number.isFinite(v));
+            // Blue (#5B8CFF) when up, red (#F23645) when down — same as former Price sparkline colour
+            const lastVal = rawHistory.length > 0 ? rawHistory[rawHistory.length - 1] : NaN;
+            const firstVal = history.length > 0 ? history[0] : NaN;
+            const up = Number.isFinite(lastVal) && Number.isFinite(firstVal) && lastVal >= firstVal;
+            const lineColor = up ? '#5B8CFF' : '#F23645';
+            this._drawSparkline(canvas, history, {
+              zeroLine: true,
+              fillPositive: lineColor,
+              fillNegative: lineColor,
+              linePositive: lineColor,
+              lineNegative: lineColor,
+            });
+            const lastEl = document.getElementById('zPriceLastVal');
+            if (lastEl && Number.isFinite(lastVal)) lastEl.textContent = (lastVal >= 0 ? '+' : '') + lastVal.toFixed(2);
+          },
+          renderOiSparkline() {
+            const canvas = document.getElementById('zOiSparklineCanvas');
+            if (!canvas) return;
+            // Filter out NaN values — only plot finite data points
+            const rawHistory = this._zOi4hHistory;
+            const history = rawHistory.filter(v => Number.isFinite(v));
+            // Amber / orange — same as Z_OI tooltip colour #F3A052
+            const lineColor = '#F3A052';
+            this._drawSparkline(canvas, history, {
+              zeroLine: true,
+              fillPositive: lineColor,
+              fillNegative: lineColor,
+              linePositive: lineColor,
+              lineNegative: lineColor,
+            });
+            const lastVal = rawHistory.length > 0 ? rawHistory[rawHistory.length - 1] : NaN;
+            const lastEl = document.getElementById('zOiLastVal');
+            if (lastEl && Number.isFinite(lastVal)) lastEl.textContent = (lastVal >= 0 ? '+' : '') + lastVal.toFixed(2);
           },
           _drawSparkline(canvas, history, opts) {
             const dpr = window.devicePixelRatio || 1;
@@ -5469,6 +5556,20 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 8
               })
+            }, {
+              canvasId: 'zPriceSparklineCanvas',
+              valId: 'zPriceHoverVal',
+              getHistory: () => this._zPrice4hHistory.filter(v => Number.isFinite(v)),
+              // Live Z_Price 4H is the last point — use stats for real-time override
+              realtimeValue: () => this.stats.zPrice['4H'],
+              format: v => 'Z_P ' + (v >= 0 ? '+' : '') + v.toFixed(2)
+            }, {
+              canvasId: 'zOiSparklineCanvas',
+              valId: 'zOiHoverVal',
+              getHistory: () => this._zOi4hHistory.filter(v => Number.isFinite(v)),
+              // Live Z_OI 4H is the last point — use stats for real-time override
+              realtimeValue: () => this.stats.zOi['4H'],
+              format: v => 'Z_O ' + (v >= 0 ? '+' : '') + v.toFixed(2)
             }, ];
             for (const sm of sparklineMap) {
               const canvas = document.getElementById(sm.canvasId);
@@ -6734,6 +6835,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 oiPricePanel.renderQuadrant();
                 oiPricePanel.renderCompositeSparkline();
                 oiPricePanel.renderPriceSparkline();
+                oiPricePanel.renderZPriceSparkline();
+                oiPricePanel.renderOiSparkline();
                 oiPricePanel.renderContextRow();
               }
             }, 120);

@@ -174,14 +174,14 @@
           "name": "What is Multi OI on MultiPerps?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Multi OI (Open Interest Price Indicator) classifies price vs. open interest across 30m, 1H, 4H using Robust Z-scores. Four scenarios per timeframe: Strong Uptrend (Price↑ + OI↑), Weak Rally (Price↑ + OI↓), Strong Downtrend (Price↓ + OI↑), Exhaustion (Price↓ + OI↓). Three hard filters are checked in order: Data Readiness Gate (34-bar minimum), ADX Trend Gate (Wilder's ADX > 20), and Significance Gate (|Z_Price|>1.5, |Z_OI|>2.0). If ADX fails, Z-scores are not computed. A composite Signal Strength (-100 to +100) with Bullish/Bearish label and sparklines (Score, Price) is shown above the quadrant grid. Each TF classifies independently — no voting."
+            "text": "Multi OI (Open Interest Price Indicator) classifies price vs. open interest across 30m, 1H, 4H using Robust Z-scores. Four scenarios per timeframe: Strong Uptrend (Price↑ + OI↑), Weak Rally (Price↑ + OI↓), Strong Downtrend (Price↓ + OI↑), Exhaustion (Price↓ + OI↓). Three hard filters are checked in order: Data Readiness Gate (34-bar minimum), ADX Trend Gate (Wilder's ADX > 20), and Significance Gate (|Z_Price|>1.5, |Z_OI|>2.0). If ADX fails, Z-scores are not computed. A composite Signal Strength (-100 to +100) with Bullish/Bearish label and sparklines (Score, Price, Z_Price, Z_OI) is shown above the quadrant grid. Each TF classifies independently — no voting."
           }
         }, {
           "@type": "Question",
           "name": "How does the Open Interest Price analysis detect market bias?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Multi OI computes Robust Z-scores for price and OI across 30m, 1H, 4H (34-bar lookback). Each TF independently classifies into four scenarios when |Z_Price|>1.5 and |Z_OI|>2.0. Hard filters are checked in pipeline order: per-TF cold start guard (34 bars), Wilder's ADX trend gate (ADX>20 — checked before Z-scores are computed), and Z-score significance gate. The composite row shows Bullish/Bearish label, Signal Strength (-100 to +100), and per-TF Z-scores. Sparklines provide visual soft context."
+            "text": "Multi OI computes Robust Z-scores for price and OI across 30m, 1H, 4H (34-bar lookback). Each TF independently classifies into four scenarios when |Z_Price|>1.5 and |Z_OI|>2.0. Hard filters are checked in pipeline order: per-TF cold start guard (34 bars), Wilder's ADX trend gate (ADX>20 — checked before Z-scores are computed), and Z-score significance gate. The composite row shows Bullish/Bearish label, Signal Strength (-100 to +100), and per-TF Z-scores. Sparklines (Score, Price, Z_Price, Z_OI) provide visual soft context."
           }
         }]
       }

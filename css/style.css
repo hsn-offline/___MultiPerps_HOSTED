@@ -4686,7 +4686,7 @@
         border: 1px solid rgba(34, 171, 148, 0.10);
         border-radius: 10px;
         padding: 8px 10px 6px;
-        min-height: 114px;
+        min-height: 104px;
         overflow: hidden;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
         position: relative;
@@ -4757,7 +4757,7 @@
       .multioi-sparkline-card canvas {
         width: 100%;
         flex: 1 1 0;
-        min-height: 78px;
+        min-height: 68px;
         border-radius: 2px;
         background: rgba(0, 0, 0, 0.15);
         display: block
