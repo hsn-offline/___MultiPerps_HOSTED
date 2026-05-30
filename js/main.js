@@ -2228,19 +2228,19 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
                 <div class="multioi-card__body">
                   <div class="multioi-sparklines-section">
                     <div class="multioi-sparkline-card" data-sparkline="composite">
-                      <div class="multioi-sparkline-card__title">Composite Score (Last 9, 4H) <span class="multioi-sparkline-hover-val" id="compositeHoverVal"></span><span class="multioi-sparkline-last-val" id="compositeLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">4H Composite Score (Last 9) <span class="multioi-sparkline-hover-val" id="compositeHoverVal"></span><span class="multioi-sparkline-last-val" id="compositeLastVal"></span></div>
                       <canvas id="compositeSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="price">
-                      <div class="multioi-sparkline-card__title">Price (Last 9, 4H) <span class="multioi-sparkline-hover-val" id="priceHoverVal"></span><span class="multioi-sparkline-last-val" id="priceLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">4H Price (Last 9) <span class="multioi-sparkline-hover-val" id="priceHoverVal"></span><span class="multioi-sparkline-last-val" id="priceLastVal"></span></div>
                       <canvas id="priceSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="zprice">
-                      <div class="multioi-sparkline-card__title">Z_Price 4H (Last 9) <span class="multioi-sparkline-hover-val" id="zPriceHoverVal"></span><span class="multioi-sparkline-last-val" id="zPriceLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">4H Z_Price (Last 9) <span class="multioi-sparkline-hover-val" id="zPriceHoverVal"></span><span class="multioi-sparkline-last-val" id="zPriceLastVal"></span></div>
                       <canvas id="zPriceSparklineCanvas"></canvas>
                     </div>
                     <div class="multioi-sparkline-card" data-sparkline="zoi">
-                      <div class="multioi-sparkline-card__title">Z_OI 4H (Last 9) <span class="multioi-sparkline-hover-val" id="zOiHoverVal"></span><span class="multioi-sparkline-last-val" id="zOiLastVal"></span></div>
+                      <div class="multioi-sparkline-card__title">4H Z_OI (Last 9) <span class="multioi-sparkline-hover-val" id="zOiHoverVal"></span><span class="multioi-sparkline-last-val" id="zOiLastVal"></span></div>
                       <canvas id="zOiSparklineCanvas"></canvas>
                     </div>
 
