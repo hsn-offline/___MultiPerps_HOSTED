@@ -5198,8 +5198,8 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
             // Filter out NaN values — only plot finite data points
             const rawHistory = this._zPrice4hHistory;
             const history = rawHistory.filter(v => Number.isFinite(v));
-            // Blue (#5B8CFF) when up, red (#F23645) when down — same as former Price sparkline colour
-            const lastVal = rawHistory.length > 0 ? rawHistory[rawHistory.length - 1] : NaN;
+            // Blue (#5B8CFF) when up, red (#F23645) when down — uses filtered history for accurate up/down
+            const lastVal = history.length > 0 ? history[history.length - 1] : NaN;
             const firstVal = history.length > 0 ? history[0] : NaN;
             const up = Number.isFinite(lastVal) && Number.isFinite(firstVal) && lastVal >= firstVal;
             const lineColor = up ? '#5B8CFF' : '#F23645';
@@ -5228,7 +5228,7 @@ Raw Data (Price + Volume + OI Hist + Funding Hist + Current OI/FR)<br>
               linePositive: lineColor,
               lineNegative: lineColor,
             });
-            const lastVal = rawHistory.length > 0 ? rawHistory[rawHistory.length - 1] : NaN;
+            const lastVal = history.length > 0 ? history[history.length - 1] : NaN;
             const lastEl = document.getElementById('zOiLastVal');
             if (lastEl && Number.isFinite(lastVal)) lastEl.textContent = (lastVal >= 0 ? '+' : '') + lastVal.toFixed(2);
           },
